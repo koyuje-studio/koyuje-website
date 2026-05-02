@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예약확정 | 고유재 한옥스튜디오</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;
+  --gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;
+  --line:rgba(28,24,20,0.1);--red:#8b2e2e;--green:#3a6b3a;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;}
+
+/* NAV */
+.nav{
+  background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);
+  padding:18px 40px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.nav-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.12em;color:var(--ink);text-decoration:none;}
+.nav-logo em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.25em;margin-top:1px;}
+.nav-back{font-size:12px;color:var(--muted);letter-spacing:0.12em;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.nav-back:hover{color:var(--ink);}
+
+/* GUIDE BANNER */
+.guide{background:var(--ink);padding:36px 40px;}
+.guide-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold2);letter-spacing:0.28em;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.guide-label::before{content:'';width:24px;height:0.5px;background:var(--gold);}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:24px;}
+.step{background:rgba(247,242,234,0.04);border:0.5px solid rgba(247,242,234,0.07);padding:20px 18px;}
+.step.active{background:rgba(160,120,64,0.12);border-color:rgba(160,120,64,0.3);}
+.step-n{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.2em;margin-bottom:6px;}
+.step-t{font-size:13px;color:rgba(247,242,234,0.85);margin-bottom:4px;}
+.step-d{font-size:11px;color:rgba(247,242,234,0.38);line-height:1.7;}
+.step-badge{display:inline-block;font-size:9px;letter-spacing:0.15em;background:var(--gold);color:var(--ink);padding:2px 7px;margin-bottom:8px;}
+.account{background:rgba(160,120,64,0.1);border:0.5px solid rgba(160,120,64,0.22);padding:18px 22px;display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
+.account-label{font-size:10px;letter-spacing:0.2em;color:var(--gold2);margin-bottom:5px;}
+.account-num{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--paper);letter-spacing:0.08em;}
+.account-name{font-size:11px;color:rgba(247,242,234,0.4);margin-top:3px;letter-spacing:0.1em;}
+.account-note{font-size:12px;color:rgba(247,242,234,0.38);line-height:1.9;letter-spacing:0.03em;}
+
+/* FORM WRAP */
+.form-wrap{max-width:720px;margin:0 auto;padding:48px 40px;}
+
+.sec{margin-bottom:48px;}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:14px;border-bottom:0.5px solid var(--line);}
+.sec-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:0.15em;min-width:24px;}
+.sec-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:400;letter-spacing:0.06em;}
+
+.field{margin-bottom:20px;}
+.f-label{display:block;font-size:11px;letter-spacing:0.18em;color:var(--muted);margin-bottom:7px;}
+.f-label .req{color:var(--gold);margin-left:2px;}
+.f-input,.f-select,.f-textarea{
+  width:100%;border:none;border-bottom:0.5px solid var(--line);
+  background:transparent;padding:10px 0;
+  font-family:'Noto Sans KR',sans-serif;font-size:14px;
+  color:var(--ink);font-weight:300;outline:none;
+  transition:border-color .3s;-webkit-appearance:none;appearance:none;
+}
+.f-input:focus,.f-select:focus,.f-textarea:focus{border-bottom-color:var(--gold);}
+.f-input::placeholder,.f-textarea::placeholder{color:rgba(28,24,20,0.22);}
+.f-textarea{resize:vertical;min-height:72px;line-height:1.8;}
+.f-select option{background:var(--paper);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+
+.radio-group,.check-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+.r-item,.c-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink);cursor:pointer;letter-spacing:0.02em;}
+.r-item input[type=radio],.c-item input[type=checkbox]{
+  -webkit-appearance:none;appearance:none;
+  width:15px;height:15px;border:0.5px solid rgba(28,24,20,0.3);
+  border-radius:50%;cursor:pointer;position:relative;
+  transition:border-color .2s;flex-shrink:0;
+}
+.c-item input[type=checkbox]{border-radius:2px;}
+.r-item input[type=radio]:checked,.c-item input[type=checkbox]:checked{border-color:var(--gold);background:var(--gold);}
+.r-item input[type=radio]:checked::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5px;height:5px;border-radius:50%;background:var(--paper);}
+.c-item input[type=checkbox]:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);font-size:9px;color:var(--paper);}
+.price-tag{color:var(--gold);font-size:11px;margin-left:4px;}
+
+.add-card{border:0.5px solid var(--line);padding:14px 16px;margin-bottom:6px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;}
+.add-card:hover{border-color:rgba(160,120,64,0.3);background:rgba(160,120,64,0.03);}
+.add-card input[type=checkbox]{-webkit-appearance:none;appearance:none;width:15px;height:15px;border:0.5px solid rgba(28,24,20,0.25);border-radius:2px;cursor:pointer;position:relative;margin-top:2px;flex-shrink:0;transition:border-color .2s;}
+.add-card input:checked{border-color:var(--gold);background:var(--gold);}
+.add-card input:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);font-size:9px;color:var(--paper);}
+.add-name{font-size:13px;margin-bottom:2px;}
+.add-price{font-size:12px;color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;}
+
+.hint{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.04em;line-height:1.7;}
+.extra-in{border:none;border-bottom:0.5px solid var(--line);background:transparent;font-family:'Noto Sans KR',sans-serif;font-size:12px;color:var(--ink);font-weight:300;outline:none;padding:4px 0;width:160px;transition:border-color .3s;}
+.extra-in:focus{border-bottom-color:var(--gold);}
+.extra-in::placeholder{color:rgba(28,24,20,0.2);}
+
+.agree-box{background:var(--paper2);border:0.5px solid var(--line);padding:20px;margin-bottom:20px;}
+.agree-text{font-size:12px;color:var(--muted);line-height:1.9;letter-spacing:0.03em;}
+
+.submit-area{text-align:center;padding-top:8px;}
+.submit-note{font-size:12px;color:var(--muted);letter-spacing:0.04em;margin-bottom:20px;line-height:1.9;}
+.submit-note strong{color:var(--red);font-weight:400;}
+.btn-submit{
+  background:var(--ink);color:var(--paper);border:none;
+  padding:17px 80px;font-family:'Noto Sans KR',sans-serif;
+  font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .35s;
+  width:100%;max-width:400px;
+}
+.btn-submit:hover{background:var(--gold);}
+.btn-submit:disabled{background:var(--muted);cursor:not-allowed;}
+
+/* SUCCESS PAGE */
+.success-wrap{display:none;max-width:500px;margin:80px auto;padding:0 40px;text-align:center;}
+.success-icon{font-size:48px;margin-bottom:24px;color:var(--gold);}
+.success-title{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:300;margin-bottom:16px;line-height:1.4;}
+.success-desc{font-size:14px;color:var(--muted);line-height:2;letter-spacing:0.04em;margin-bottom:40px;}
+.success-box{background:var(--paper2);border:0.5px solid var(--line);padding:24px;margin-bottom:32px;text-align:left;}
+.success-box-title{font-size:11px;letter-spacing:0.2em;color:var(--muted);margin-bottom:12px;}
+.success-info{font-size:14px;line-height:2.1;}
+.success-info span{color:var(--gold);}
+.btn-check{display:inline-block;background:transparent;border:0.5px solid var(--gold);color:var(--gold);padding:13px 36px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.2em;cursor:pointer;text-decoration:none;transition:all .3s;}
+.btn-check:hover{background:var(--gold);color:var(--paper);}
+
+/* LOADING */
+.loading{display:none;position:fixed;inset:0;background:rgba(247,242,234,0.9);z-index:100;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.loading.show{display:flex;}
+.spinner{width:36px;height:36px;border:1px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--muted);letter-spacing:0.1em;}
+
+@media(max-width:600px){
+  .steps{grid-template-columns:1fr;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .form-wrap{padding:36px 20px;}
+  .guide{padding:28px 20px;}
+  .nav{padding:16px 20px;}
+  .btn-submit{padding:17px 40px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">예약 정보를 저장하는 중입니다...</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">
+    고유재 한옥스튜디오
+    <em>Koyuje Hanok Studio</em>
+  </a>
+  <a href="/" class="nav-back">← 홈으로</a>
+</nav>
+
+<!-- GUIDE BANNER -->
+<div class="guide">
+  <div class="guide-label">예약 확정 안내</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">STEP 01</div>
+      <div class="step-t">촬영일 확인</div>
+      <div class="step-d">카카오톡 또는 전화로 원하시는 촬영 일정을 먼저 확인해 주세요.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">STEP 02</div>
+      <div class="step-t">예약금 입금</div>
+      <div class="step-d">아래 계좌로 예약금 20만원을 입금해 주세요.</div>
+    </div>
+    <div class="step active">
+      <div class="step-badge">현재 단계</div>
+      <div class="step-n">STEP 03</div>
+      <div class="step-t">예약확정 작성</div>
+      <div class="step-d">입금 후 이 페이지를 작성하시면 예약이 최종 확정됩니다.</div>
+    </div>
+  </div>
+  <div class="account">
+    <div>
+      <div class="account-label">예약금 입금 계좌</div>
+      <div class="account-num">농협 302-1742-5215-41</div>
+      <div class="account-name">예금주 : 조현호 (고유재)</div>
+    </div>
+    <div class="account-note">
+      예약금 20만원 입금 후 아래 양식을 작성해 주세요.<br>
+      입금 후 48시간 이내 확인 연락이 없으면<br>
+      <span style="color:var(--gold2)">010-7635-9689</span>로 문의 주세요.
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="formSection">
+<form id="resForm" class="form-wrap" onsubmit="return false;">
+
+  <!-- 01 아기 정보 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">01</div><div class="sec-title">아기 정보</div></div>
+    <div class="grid2">
+      <div class="field">
+        <label class="f-label">아기 이름 <span class="req">*</span></label>
+        <input type="text" class="f-input" id="babyName" placeholder="홍길동" required>
+      </div>
+      <div class="field">
+        <label class="f-label">아기 생년월일 <span class="req">*</span></label>
+        <input type="date" class="f-input" id="babyBirth" required>
+      </div>
+    </div>
+    <div class="field">
+      <label class="f-label">아기 성별 <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="r-item"><input type="radio" name="babyGender" value="남아" required> 남아</label>
+        <label class="r-item"><input type="radio" name="babyGender" value="여아"> 여아</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 형제 정보 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">02</div><div class="sec-title">형제 / 자매 정보</div></div>
+    <p class="hint" style="margin-bottom:14px;">* 형제 한복은 직접 준비 (신발 포함)</p>
+    <div class="field">
+      <label class="f-label">형제 관계 <span class="req">*</span></label>
+      <div class="radio-group" style="flex-direction:column;gap:10px;">
+        <label class="r-item"><input type="radio" name="sibling" value="형제없음" checked> 형제 없음</label>
+        <label class="r-item"><input type="radio" name="sibling" value="형제자매기념컷추가"> 형제·자매 기념컷 추가 <span class="price-tag">+ 10만원</span></label>
+        <label class="r-item"><input type="radio" name="sibling" value="쌍둥이"> 쌍둥이 <span class="price-tag">+ 50만원 (상품 ×2)</span></label>
+        <label class="r-item"><input type="radio" name="sibling" value="가족촬영자녀추가실내"> 가족 촬영 자녀 추가 — 실내 <span class="price-tag">+ 10만원 / 1인</span></label>
+        <label class="r-item"><input type="radio" name="sibling" value="가족촬영자녀추가야외"> 가족 촬영 자녀 추가 — 야외 <span class="price-tag">+ 20만원 / 1인</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label class="f-label">형제 정보 (이름 / 성별 / 나이)</label>
+      <input type="text" class="f-input" id="siblingInfo" placeholder="예) 홍길순 / 여 / 5세">
+    </div>
+    <div class="field">
+      <label class="f-label">야외 촬영 시 형제 신발 대여</label>
+      <div class="radio-group">
+        <label class="r-item"><input type="radio" name="siblingShoes" value="필요없음" checked> 필요 없음</label>
+        <label class="r-item"><input type="radio" name="siblingShoes" value="대여신청"> 대여 신청 <span class="price-tag">+ 2만원</span></label>
+        <label class="r-item"><input type="radio" name="siblingShoes" value="기타"> 기타 &nbsp;<input type="text" class="extra-in" id="siblingShoesSz" placeholder="발 사이즈"></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 부모님 정보 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">03</div><div class="sec-title">부모님 정보</div></div>
+    <div class="grid2">
+      <div class="field">
+        <label class="f-label">부모님 성함 <span class="req">*</span></label>
+        <input type="text" class="f-input" id="parentName" placeholder="홍길동 / 김영희" required>
+      </div>
+      <div class="field">
+        <label class="f-label">연락처 <span class="req">*</span></label>
+        <input type="tel" class="f-input" id="phone" placeholder="010-0000-0000" required>
+      </div>
+    </div>
+    <div class="field">
+      <label class="f-label">이메일 <span class="req">*</span></label>
+      <input type="email" class="f-input" id="email" placeholder="촬영 원본 및 수정본 발송용" required>
+    </div>
+  </div>
+
+  <!-- 04 엄마 사이즈 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">04</div><div class="sec-title">엄마 한복 사이즈</div></div>
+    <p class="hint" style="margin-bottom:16px;">엄마 헤어가 짧아 가발 사용(+2만원) 또는 큰아이 헤어 손질 시 추가 비용(+1만원)이 발생할 수 있습니다.</p>
+    <div class="grid3">
+      <div class="field">
+        <label class="f-label">엄마 키 (cm) <span class="req">*</span></label>
+        <input type="number" class="f-input" id="momHeight" placeholder="예) 162" required>
+      </div>
+      <div class="field">
+        <label class="f-label">엄마 한복 사이즈 <span class="req">*</span></label>
+        <div class="radio-group" style="flex-wrap:wrap;gap:8px;padding-top:6px;">
+          <label class="r-item"><input type="radio" name="momSize" value="55"> 55</label>
+          <label class="r-item"><input type="radio" name="momSize" value="66"> 66</label>
+          <label class="r-item"><input type="radio" name="momSize" value="77"> 77</label>
+          <label class="r-item"><input type="radio" name="momSize" value="기타"> 기타&nbsp;<input type="text" class="extra-in" id="momSizeEtc" placeholder="입력" style="width:80px;"></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="f-label">엄마 신발 사이즈 (mm) <span class="req">*</span></label>
+        <input type="number" class="f-input" id="momShoes" placeholder="예) 240" required>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 아빠 사이즈 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">05</div><div class="sec-title">아빠 한복 사이즈</div></div>
+    <p class="hint" style="margin-bottom:16px;">아빠 신발은 295 이하만 대여 가능합니다.</p>
+    <div class="grid3">
+      <div class="field">
+        <label class="f-label">아빠 키 (cm) <span class="req">*</span></label>
+        <input type="number" class="f-input" id="dadHeight" placeholder="예) 178" required>
+      </div>
+      <div class="field">
+        <label class="f-label">아빠 한복 사이즈 <span class="req">*</span></label>
+        <div class="radio-group" style="flex-wrap:wrap;gap:8px;padding-top:6px;">
+          <label class="r-item"><input type="radio" name="dadSize" value="90"> 90</label>
+          <label class="r-item"><input type="radio" name="dadSize" value="95"> 95</label>
+          <label class="r-item"><input type="radio" name="dadSize" value="100"> 100</label>
+          <label class="r-item"><input type="radio" name="dadSize" value="105"> 105</label>
+          <label class="r-item"><input type="radio" name="dadSize" value="110"> 110</label>
+          <label class="r-item"><input type="radio" name="dadSize" value="기타"> 기타&nbsp;<input type="text" class="extra-in" id="dadSizeEtc" placeholder="입력" style="width:80px;"></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="f-label">아빠 신발 사이즈 (mm) <span class="req">*</span></label>
+        <input type="number" class="f-input" id="dadShoes" placeholder="예) 270" required>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 촬영 일정 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">06</div><div class="sec-title">촬영 일정 & 상품</div></div>
+    <div class="field">
+      <label class="f-label">촬영 요일 구분 <span class="req">*</span></label>
+      <p class="hint" style="margin-bottom:12px;">* 주말 및 공휴일은 추가 10만원이 발생합니다.</p>
+      <div class="radio-group">
+        <label class="r-item"><input type="radio" name="weekday" value="평일" required> 평일</label>
+        <label class="r-item"><input type="radio" name="weekday" value="주말/공휴일"> 주말 / 공휴일 <span class="price-tag">+ 10만원</span></label>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label class="f-label">촬영 날짜 <span class="req">*</span></label>
+        <input type="date" class="f-input" id="shootDate" required>
+      </div>
+      <div class="field">
+        <label class="f-label">촬영 시간 <span class="req">*</span></label>
+        <input type="time" class="f-input" id="shootTime" required>
+      </div>
+    </div>
+    <div class="field">
+      <label class="f-label">촬영 상품 <span class="req">*</span></label>
+      <div class="radio-group" style="flex-direction:column;gap:10px;">
+        <label class="r-item"><input type="radio" name="product" value="아기앨범형" required> 아기 앨범형</label>
+        <label class="r-item"><input type="radio" name="product" value="가족실내앨범형"> 가족 실내 앨범형</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 추가 구성 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">07</div><div class="sec-title">추가 구성 (선택)</div></div>
+    <p class="hint" style="margin-bottom:16px;">아기 컨디션 및 날씨에 따라 야외 촬영이 불가할 수 있습니다.</p>
+    <label class="add-card">
+      <input type="checkbox" name="extra" value="야외가족한옥스냅(+30만원)">
+      <div><div class="add-name">야외 가족 한옥스냅</div><div class="add-price">+ 300,000원</div></div>
+    </label>
+    <label class="add-card">
+      <input type="checkbox" name="extra" value="야외가족문화재스냅(+30만원)">
+      <div><div class="add-name">야외 가족 문화재스냅</div><div class="add-price">+ 300,000원</div></div>
+    </label>
+    <label class="add-card">
+      <input type="checkbox" name="extra" value="야외아기컨셉(+20만원)">
+      <div><div class="add-name">야외 아기 컨셉</div><div class="add-price">+ 200,000원</div></div>
+    </label>
+    <label class="add-card">
+      <input type="checkbox" name="extra" value="추가구성없음">
+      <div><div class="add-name">추가 구성 없이 진행</div><div class="add-price" style="color:var(--muted)">실내 촬영만 진행</div></div>
+    </label>
+  </div>
+
+  <!-- 08 입금 & 배송 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">08</div><div class="sec-title">입금 및 배송 정보</div></div>
+    <div class="grid2">
+      <div class="field">
+        <label class="f-label">예약금 입금자명 <span class="req">*</span></label>
+        <input type="text" class="f-input" id="depositor" placeholder="입금하신 분 성함" required>
+      </div>
+      <div class="field">
+        <label class="f-label">상품 받으실 주소 <span class="req">*</span></label>
+        <input type="text" class="f-input" id="address" placeholder="상세 주소까지 입력해 주세요" required>
+      </div>
+    </div>
+    <div class="field">
+      <label class="f-label">스튜디오를 알게 된 경로</label>
+      <div class="radio-group" style="flex-wrap:wrap;gap:10px;">
+        <label class="r-item"><input type="radio" name="channel" value="SNS"> SNS</label>
+        <label class="r-item"><input type="radio" name="channel" value="맘카페"> 맘카페</label>
+        <label class="r-item"><input type="radio" name="channel" value="포털검색"> 포털 검색</label>
+        <label class="r-item"><input type="radio" name="channel" value="지인소개"> 지인 소개</label>
+        <label class="r-item"><input type="radio" name="channel" value="기타"> 기타&nbsp;<input type="text" class="extra-in" id="channelEtc" placeholder="직접 입력"></label>
+      </div>
+    </div>
+    <div class="field">
+      <label class="f-label">남기고 싶은 말씀</label>
+      <textarea class="f-textarea" id="memo" placeholder="궁금하신 점이나 요청 사항을 자유롭게 적어 주세요."></textarea>
+    </div>
+  </div>
+
+  <!-- 09 약관 -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-num">09</div><div class="sec-title">예약 약관 동의</div></div>
+    <div class="agree-box" style="max-height:320px;overflow-y:auto;">
+      <div class="agree-text">
+        "고유재"에서 제공하는 촬영 및 서비스를 이용함에 있어, 본 약관동의서는 전반적 계약사항에 대해 이용자의 동의를 확인하고자 함입니다.<br>
+        계약 신청은 아래의 약관을 모두 읽어 숙지하고 동의하였다는 의사 표현으로 간주됩니다.<br>
+        (상품가격과 구성, 공지사항의 내용을 꼼꼼히 꼭 읽어보시고 신중한 예약진행을 부탁드립니다.)<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 1조 【예약금】</strong><br>
+        계약금은 서비스제공자 고유재스튜디오가 정한 금액 입금을 원칙으로 하며, 예약금 입금순으로 예약을 확정해드리고 간혹 순서에서 밀리시거나 예약정보가 없는 예약은 무효가 될 수 있습니다.<br>
+        서비스 이용자는 예약금 입금 후 7일내에 환불(계약의 무효)을 요청할 수 있으며, 예약금 입금 7일이후에는 환불진행이 되지 않습니다.<br>
+        · 예약금 입금계좌: 농협은행 302-1742-5215-41 조현호(고유재) / 촬영예약금 20만원<br>
+        · 대체휴무일/주말/공휴일(달력의 빨간날)은 추가요금 10만원이 발생합니다<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 2조 【계약의 성립】</strong><br>
+        서비스 이용자는 정보를 제공 및 예약금이 입금확인 후 홈페이지에서 스케줄 확정이 되었다면, 고유재스튜디오의 직접적인 서비스 제공 계약 관계가 성립되었음을 의미합니다.<br>
+        촬영 날짜 변경은 촬영 30일 전까지 연락시 1회에 한하여 가능하고, 촬영 30일 미만일 경우나 당일 변경은 어떠한 경우라도 위약금 20만원이 발생합니다.<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 3조 【결제 및 잔금 입금】</strong><br>
+        촬영당일 카드와 현금 모두 결제가 가능합니다. (부가세포함)<br>
+        결재수단의 변경은 회계분기 기간이내에 가능하며 서비스 이용자는 촬영 당일 모든 잔금을 결제 하여야 합니다. (단, 총 잔금중 메이크업 비용은 출장 선생님께 별도 이체해야 함)<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 4조 【원본 보존】</strong><br>
+        고유재스튜디오는 서비스 이용자의 상품 또는 데이터를 발송 이후 6개월간 원본을 보관 후 삭제되니, 서비스 이용자는 상품 수령 후 반드시 데이터를 백업하며, 사진셀렉을 마치시기 바랍니다. 촬영 파일은 jpg 파일로만 제공됩니다. 원본보관기간(6개월) 이후에는 앨범진행이 불가능합니다. 원본발송 6개월 후 고객데이터 분실시 책임을 지지 않습니다.<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 5조 【리터칭 작업범위】</strong><br>
+        앨범에 들어가는 컷들은 간단한 피부 잡티 보정, 색감과 밝기 보정까지이며, 미용을 위한 과도한 몸매 보정은 진행하지 않습니다.(치아미백, 입술붉게, 합성 등)<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 6조 【상품 제작 기간】</strong><br>
+        상품은 셀렉해 주신 날짜 기준 약 6주의 제작 기간이 소요됩니다. 상품이 발송된 이후에는 수정이나 재작업이 불가능합니다.<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 7조 【피해보상 규정】</strong><br>
+        소비자피해 보상규정에 의거하여 촬영원본의 멸실 및 재해로 인한 사고 발생 시 재촬영을 진행하거나 계약한 촬영상품의 총 금액을 환불해드립니다.<br>
+        · 우천으로 인해 촬영이 어려우면 가장 가까운 다른 날짜로 변경해 드리거나 실내 상품으로 진행합니다.<br>
+        · 고객님의 사정으로 약속시간보다 도착이 늦어진 경우 촬영 컷이나 컨셉이 부족해질 수 있으며, 이에 대하여 스튜디오에서는 일체 책임을 지지 않습니다.<br>
+        · 한복의 오염·손상·파손 등 발생 시 패널티가 발생할 수 있습니다. (5~40만원)<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 8조 【재촬영 규정】</strong><br>
+        · 촬영 당일 아가의 컨디션이나 낯가림 등 표정으로 인한 재촬영은 불가합니다.<br>
+        · 협의 후 재촬영·추가촬영은 1회에 한하며 최초 촬영 날짜로부터 2개월이내 진행합니다. (한복 1인당 10만원 / 컨셉당 5만원 추가)<br>
+        · 촬영당일 한복셀렉 또는 아기수면 등으로 예정된 촬영시간보다 30분이상 딜레이 된 경우 컨셉을 보장해드리지 못합니다.<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 9조 【저작권 및 초상권】</strong><br>
+        촬영된 모든 데이터의 저작권은 고유재스튜디오와 촬영을 의뢰한 아기 부모님의 공동 소유이며, 촬영 후 사진은 스튜디오 홈페이지 및 SNS에 올라갈 수 있습니다. 원치 않으시는 분은 예약 시 미리 말씀해주세요.<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 10조 【노쇼 처리】</strong><br>
+        촬영당일 약속시간보다 30분이상 늦을 경우 노쇼처리되어 예약은 취소처리되며, 예약금 반환이 불가능합니다.<br><br>
+
+        <strong style="color:var(--ink);font-weight:400;">제 11조 【한복셀렉 및 사이즈】</strong><br>
+        한복은 촬영 당일에 셀렉을 진행합니다.<br>
+        엄마사이즈 88, 아빠사이즈 115이상인 경우 별도 문의 바랍니다.<br>
+        부정확한 사이즈를 입력하여 촬영당일 한복이 맞지 않은 경우 촬영이 불가능할 수 있습니다.
+      </div>
+    </div>
+    <label class="c-item" style="gap:10px;">
+      <input type="checkbox" id="agree">
+      <span style="font-size:14px;letter-spacing:0.03em;">예약 약관을 읽었으며, 내용에 동의합니다.</span>
+    </label>
+  </div>
+
+  <!-- 제출 -->
+  <div class="submit-area">
+    <p class="submit-note">
+      작성 완료 후 <strong>48시간 이내</strong>에 예약 확정 연락을 드립니다.<br>
+      연락이 없으실 경우 <strong>010-7635-9689</strong>로 꼭 문의 주세요.
+    </p>
+    <button type="button" class="btn-submit" id="submitBtn" onclick="submitForm()">예약 확정 신청하기</button>
+  </div>
+
+</form>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-wrap" id="successSection">
+  <div class="success-icon">✦</div>
+  <h2 class="success-title">예약 신청이<br>완료되었습니다</h2>
+  <p class="success-desc">
+    입력하신 정보를 확인 후<br>
+    <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 연락드리겠습니다.<br>
+    문의사항은 카카오톡 또는 전화로 연락 주세요.
+  </p>
+  <div class="success-box">
+    <div class="success-box-title">예약 정보 요약</div>
+    <div class="success-info" id="successInfo"></div>
+  </div>
+  <a href="/RnC" class="btn-check">예약 현황 확인하기</a>
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxw6SJr24RXTlQFRnT71kSNHnCVm-AoIQzBNd-08xFFV-wdIzqkcQqso-06DahZFFmf/exec';
+
+function getRadio(name) {
+  const el = document.querySelector('input[name="'+name+'"]:checked');
+  return el ? el.value : '';
+}
+function getCheckboxes(name) {
+  const els = document.querySelectorAll('input[name="'+name+'"]:checked');
+  return Array.from(els).map(e=>e.value).join(', ');
+}
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function submitForm() {
+  // 약관 확인
+  if (!document.getElementById('agree').checked) {
+    alert('예약 약관에 동의해 주세요.');
+    document.getElementById('agree').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  // 필수값 확인
+  const required = ['babyName','babyBirth','parentName','phone','email','momHeight','momShoes','dadHeight','dadShoes','shootDate','shootTime','depositor','address'];
+  for (const id of required) {
+    if (!val(id)) {
+      alert('필수 항목을 모두 입력해 주세요.');
+      document.getElementById(id).scrollIntoView({behavior:'smooth', block:'center'});
+      document.getElementById(id).focus();
+      return;
+    }
+  }
+  if (!getRadio('babyGender')) { alert('아기 성별을 선택해 주세요.'); return; }
+  if (!getRadio('weekday')) { alert('촬영 요일 구분을 선택해 주세요.'); return; }
+  if (!getRadio('product')) { alert('촬영 상품을 선택해 주세요.'); return; }
+
+  // 사이즈 기타 처리
+  const momSize = getRadio('momSize') === '기타' ? '기타: ' + val('momSizeEtc') : getRadio('momSize');
+  const dadSize = getRadio('dadSize') === '기타' ? '기타: ' + val('dadSizeEtc') : getRadio('dadSize');
+  const siblingShoes = getRadio('siblingShoes') === '기타' ? '기타: ' + val('siblingShoesSz') : getRadio('siblingShoes');
+  const channel = getRadio('channel') === '기타' ? '기타: ' + val('channelEtc') : getRadio('channel');
+
+  const payload = {
+    babyName: val('babyName'),
+    babyGender: getRadio('babyGender'),
+    babyBirth: val('babyBirth'),
+    sibling: getRadio('sibling'),
+    siblingInfo: val('siblingInfo'),
+    parentName: val('parentName'),
+    phone: val('phone'),
+    email: val('email'),
+    momHeight: val('momHeight'),
+    momSize: momSize,
+    momShoes: val('momShoes'),
+    dadHeight: val('dadHeight'),
+    dadSize: dadSize,
+    dadShoes: val('dadShoes'),
+    weekday: getRadio('weekday'),
+    shootDate: val('shootDate'),
+    shootTime: val('shootTime'),
+    product: getRadio('product'),
+    extra: getCheckboxes('extra'),
+    siblingShoes: siblingShoes,
+    depositor: val('depositor'),
+    address: val('address'),
+    channel: channel,
+    memo: val('memo')
+  };
+
+  // 로딩 표시
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('submitBtn').disabled = true;
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('loading').classList.remove('show');
+    if (data.result === 'success') {
+      // 성공 화면
+      document.getElementById('formSection').style.display = 'none';
+      const s = document.getElementById('successSection');
+      s.style.display = 'block';
+      document.getElementById('successInfo').innerHTML =
+        '아기 이름 &nbsp;<span>' + payload.babyName + '</span><br>' +
+        '촬영 날짜 &nbsp;<span>' + payload.shootDate + ' ' + payload.shootTime + '</span><br>' +
+        '선택 상품 &nbsp;<span>' + payload.product + '</span><br>' +
+        '연락처 &nbsp;&nbsp;&nbsp;&nbsp;<span>' + payload.phone + '</span>';
+      window.scrollTo({top:0, behavior:'smooth'});
+    } else {
+      alert('오류가 발생했습니다. 다시 시도해 주세요.\n' + (data.message || ''));
+      document.getElementById('submitBtn').disabled = false;
+    }
+  })
+  .catch(err => {
+    document.getElementById('loading').classList.remove('show');
+    alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    document.getElementById('submitBtn').disabled = false;
+  });
+}
+</script>
+</body>
+</html>
