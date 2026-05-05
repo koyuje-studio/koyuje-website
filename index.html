@@ -956,7 +956,7 @@ mobileMenu.style.cssText = `
   gap:8px;
 `;
 mobileMenu.innerHTML = `
-  <button id="mobileClose" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:24px;color:var(--ink);cursor:pointer;">✕</button>
+  <button id="mobileClose" style="position:absolute;top:24px;left:24px;background:none;border:none;font-size:20px;color:var(--ink);cursor:pointer;letter-spacing:0.1em;display:flex;align-items:center;gap:8px;font-family:'Noto Sans KR',sans-serif;font-weight:300;">✕ 닫기</button>
   <a href="#about" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">스튜디오 소개</a>
   <a href="#gallery" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">갤러리</a>
   <a href="#packages" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">상품구성</a>
@@ -970,11 +970,13 @@ function openMenu() {
   mobileMenuOpen = true;
   mobileMenu.style.display = 'flex';
   document.body.style.overflow = 'hidden';
+  navToggle.style.display = 'none';
 }
 function closeMenu() {
   mobileMenuOpen = false;
   mobileMenu.style.display = 'none';
   document.body.style.overflow = '';
+  navToggle.style.display = 'flex';
 }
 
 navToggle.addEventListener('click', openMenu);
