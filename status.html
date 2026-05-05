@@ -97,17 +97,17 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <div class="phone-fixed">010</div>
         <div class="phone-dash">—</div>
         <div class="pin-group">
-          <input type="number" class="pin-input" id="d1" min="0" max="9">
-          <input type="number" class="pin-input" id="d2" min="0" max="9">
-          <input type="number" class="pin-input" id="d3" min="0" max="9">
-          <input type="number" class="pin-input" id="d4" min="0" max="9">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d1">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d2">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d3">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d4">
         </div>
         <div class="phone-dash">—</div>
         <div class="pin-group">
-          <input type="number" class="pin-input" id="d5" min="0" max="9">
-          <input type="number" class="pin-input" id="d6" min="0" max="9">
-          <input type="number" class="pin-input" id="d7" min="0" max="9">
-          <input type="number" class="pin-input" id="d8" min="0" max="9">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d5">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d6">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d7">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d8">
         </div>
       </div>
       <div class="phone-hint">예) 010 — <strong>1234</strong> — <strong>5678</strong></div>
@@ -134,21 +134,41 @@ const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxw6SJr24RXTlQFRnT71kS
 const ids=['d1','d2','d3','d4','d5','d6','d7','d8'];
 ids.forEach((id,i)=>{
   const el=document.getElementById(id);
-  el.addEventListener('input',function(){
-    if(this.value.length>1)this.value=this.value.slice(-1);
-    if(this.value){this.classList.add('filled');if(i<7)document.getElementById(ids[i+1]).focus();}
-    else this.classList.remove('filled');
-  });
   el.addEventListener('keydown',function(e){
-    if(e.key==='Backspace'&&!this.value&&i>0)document.getElementById(ids[i-1]).focus();
-    if(e.key==='Enter')doSearch();
+    // 숫자만 허용
+    if(!/[0-9]/.test(e.key)&&!['Backspace','Delete','Tab','ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();return;}
+    if(e.key==='Backspace'){
+      if(this.value){this.value='';this.classList.remove('filled');}
+      else if(i>0){document.getElementById(ids[i-1]).focus();}
+      e.preventDefault();
+      return;
+    }
+    if(e.key==='Enter'){doSearch();return;}
+  });
+  el.addEventListener('input',function(){
+    // 숫자만 남기기
+    this.value=this.value.replace(/[^0-9]/g,'');
+    if(this.value.length>1)this.value=this.value.slice(-1);
+    if(this.value){
+      this.classList.add('filled');
+      if(i<7)document.getElementById(ids[i+1]).focus();
+    } else {
+      this.classList.remove('filled');
+    }
   });
   el.addEventListener('focus',function(){this.select();});
 });
-function getPhone8(){return ids.map(id=>document.getElementById(id).value).join('');}
+function getPhone8(){
+  return ids.map(id=>document.getElementById(id).value.trim()).join('');
+}
 function doSearch(){
   const p=getPhone8();
-  if(p.length!==8||p.includes('')){alert('010 제외 8자리를 모두 입력해 주세요.');document.getElementById('d1').focus();return;}
+  if(p.length!==8){
+    alert('010 제외 8자리를 모두 입력해 주세요.');
+    // 비어있는 첫 칸으로 포커스
+    for(let id of ids){if(!document.getElementById(id).value){document.getElementById(id).focus();break;}}
+    return;
+  }
   document.getElementById('searchBtn').disabled=true;
   document.getElementById('loading').classList.add('show');
   fetch(SCRIPT_URL+'?phone8='+p)
