@@ -35,7 +35,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   border-bottom:0.5px solid var(--line);
 }
 .nav-logo{text-decoration:none;display:flex;align-items:center;gap:12px;}
-.nav-logo img{height:32px;filter:none;transition:filter 0.5s;}
+.nav-logo img{height:52px;filter:brightness(0) invert(1);transition:filter 0.5s;}
+.nav.scrolled .nav-logo img{filter:brightness(0) invert(0);}
 .nav.scrolled .nav-logo-text{color:var(--ink)!important;}
 .nav-links{display:flex;gap:36px;list-style:none;}
 .nav-links a{
@@ -512,8 +513,8 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 <!-- NAV -->
 <nav class="nav" id="navbar">
   <a href="/" class="nav-logo">
-    <img src="/logo.png" alt="고유재 한옥스튜디오" style="height:32px;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-    <span style="display:none;font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.12em;color:var(--paper);" class="nav-logo-text">고유재 한옥스튜디오</span>
+    <img src="/logo.png" alt="고유재 한옥스튜디오" style="height:52px;" id="navLogoImg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span style="display:none;font-family:'Noto Serif KR',serif;font-size:18px;font-weight:400;letter-spacing:0.12em;color:var(--paper);" class="nav-logo-text">고유재</span>
   </a>
   <ul class="nav-links">
     <li><a href="#about">스튜디오 소개</a></li>
@@ -852,7 +853,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   <div class="footer-top">
     <div>
       <div class="footer-brand">
-        <img src="/logo.png" alt="고유재 한옥스튜디오" onerror="this.style.display='none'">
+        <img src="/logo.png" alt="고유재 한옥스튜디오" style="height:48px;filter:brightness(0) invert(0.7);margin-bottom:12px;" onerror="this.style.display='none'">
       </div>
       <div class="footer-brand-en">Koyuje Hanok Studio</div>
       <p class="footer-tagline">변하지 않는 고유함으로 아이의 가장 빛나는 순간을 담아드립니다.</p>
