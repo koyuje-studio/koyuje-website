@@ -223,12 +223,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <p class="hint" style="margin-bottom:14px;">* 형제 한복은 직접 준비 (신발 포함)</p>
     <div class="field">
       <label class="f-label">형제 관계 <span class="req">*</span></label>
+      <p class="hint" style="margin-bottom:10px;">* 해당하는 항목 모두 선택해 주세요</p>
       <div class="radio-group" style="flex-direction:column;gap:10px;">
-        <label class="r-item"><input type="radio" name="sibling" value="형제없음" checked> 형제 없음</label>
-        <label class="r-item"><input type="radio" name="sibling" value="형제자매기념컷추가"> 형제·자매 기념컷 추가 <span class="price-tag">+ 10만원</span></label>
-        <label class="r-item"><input type="radio" name="sibling" value="쌍둥이"> 쌍둥이 <span class="price-tag">+ 50만원 (상품 ×2)</span></label>
-        <label class="r-item"><input type="radio" name="sibling" value="가족촬영자녀추가실내"> 가족 촬영 자녀 추가 — 실내 <span class="price-tag">+ 10만원 / 1인</span></label>
-        <label class="r-item"><input type="radio" name="sibling" value="가족촬영자녀추가야외"> 가족 촬영 자녀 추가 — 야외 <span class="price-tag">+ 20만원 / 1인</span></label>
+        <label class="c-item"><input type="checkbox" name="sibling" value="형제없음"> 형제 없음</label>
+        <label class="c-item"><input type="checkbox" name="sibling" value="형제자매기념컷추가"> 형제·자매 기념컷 추가 <span class="price-tag">+ 10만원</span></label>
+        <label class="c-item"><input type="checkbox" name="sibling" value="쌍둥이"> 쌍둥이 <span class="price-tag">+ 50만원 (상품 ×2)</span></label>
+        <label class="c-item"><input type="checkbox" name="sibling" value="가족촬영자녀추가실내"> 가족 촬영 자녀 추가 — 실내 <span class="price-tag">+ 10만원 / 1인</span></label>
+        <label class="c-item"><input type="checkbox" name="sibling" value="가족촬영자녀추가야외"> 가족 촬영 자녀 추가 — 야외 <span class="price-tag">+ 20만원 / 1인</span></label>
       </div>
     </div>
     <div class="field">
@@ -390,11 +391,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="field">
       <label class="f-label">스튜디오를 알게 된 경로</label>
       <div class="radio-group" style="flex-wrap:wrap;gap:10px;">
-        <label class="r-item"><input type="radio" name="channel" value="SNS"> SNS</label>
-        <label class="r-item"><input type="radio" name="channel" value="맘카페"> 맘카페</label>
-        <label class="r-item"><input type="radio" name="channel" value="포털검색"> 포털 검색</label>
-        <label class="r-item"><input type="radio" name="channel" value="지인소개"> 지인 소개</label>
-        <label class="r-item"><input type="radio" name="channel" value="기타"> 기타&nbsp;<input type="text" class="extra-in" id="channelEtc" placeholder="직접 입력"></label>
+        <label class="c-item"><input type="checkbox" name="channel" value="SNS"> SNS</label>
+        <label class="c-item"><input type="checkbox" name="channel" value="맘카페"> 맘카페</label>
+        <label class="c-item"><input type="checkbox" name="channel" value="포털검색"> 포털 검색</label>
+        <label class="c-item"><input type="checkbox" name="channel" value="지인소개"> 지인 소개</label>
+        <label class="c-item"><input type="checkbox" name="channel" value="기타"> 기타&nbsp;<input type="text" class="extra-in" id="channelEtc" placeholder="직접 입력"></label>
       </div>
     </div>
     <div class="field">
@@ -579,13 +580,16 @@ function submitForm() {
   const momSize = getRadio('momSize') === '기타' ? '기타: ' + val('momSizeEtc') : getRadio('momSize');
   const dadSize = getRadio('dadSize') === '기타' ? '기타: ' + val('dadSizeEtc') : getRadio('dadSize');
   const siblingShoes = getRadio('siblingShoes') === '기타' ? '기타: ' + val('siblingShoesSz') : getRadio('siblingShoes');
-  const channel = getRadio('channel') === '기타' ? '기타: ' + val('channelEtc') : getRadio('channel');
+  // 체크박스 — 복수 선택
+  const siblingChecked = getCheckboxes('sibling');
+  const channelChecked = getCheckboxes('channel');
+  const channel = channelChecked.includes('기타') ? channelChecked.replace('기타', '기타: '+val('channelEtc')) : channelChecked;
 
   const payload = {
     babyName: val('babyName'),
     babyGender: getRadio('babyGender'),
     babyBirth: val('babyBirth'),
-    sibling: getRadio('sibling'),
+    sibling: siblingChecked,
     siblingInfo: val('siblingInfo'),
     parentName: val('parentName'),
     phone: val('phone'),
