@@ -230,16 +230,22 @@ function getStatusClass(s){
 
 function fDate(d){
   if(!d)return'-';
+  if(String(d).includes('년')&&String(d).includes('('))return d;
   const dt=new Date(d);
-  if(isNaN(dt))return d;
-  return (dt.getMonth()+1)+'월 '+dt.getDate()+'일';
+  if(isNaN(dt))return String(d);
+  const days=['일','월','화','수','목','금','토'];
+  return dt.getFullYear()+'년 '+(dt.getMonth()+1)+'월 '+dt.getDate()+'일 ('+days[dt.getDay()]+')';
 }
 
 function fTime(t){
   if(!t)return'';
-  const p=String(t).split(':');
-  if(p.length>=2){const h=parseInt(p[0]),m=p[1];return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+':'+m;}
-  return t;
+  const s=String(t).trim();
+  const match=s.match(/^(\d{1,2}):(\d{2})/);
+  if(match){
+    const h=parseInt(match[1]),m=match[2];
+    return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';
+  }
+  return s;
 }
 
 function renderCards(){
