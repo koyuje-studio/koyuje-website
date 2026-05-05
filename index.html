@@ -75,7 +75,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 /* ─── HERO ─── */
 .hero{
   position:relative;height:100vh;min-height:600px;
-  overflow:hidden;
+  overflow:hidden;background:#1c1814;
 }
 .hero-video{
   position:absolute;inset:0;
@@ -943,15 +943,43 @@ const io=new IntersectionObserver(entries=>{
 reveals.forEach(el=>io.observe(el));
 
 // Mobile nav toggle
-document.getElementById('navToggle').addEventListener('click',function(){
-  const links=document.querySelector('.nav-links');
-  const cta=document.querySelector('.nav-cta');
-  if(links){
-    const isOpen=links.style.display==='flex';
-    links.style.cssText=isOpen?'':'display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(247,242,234,0.97);padding:20px 24px;border-bottom:0.5px solid var(--line);gap:16px;';
-    if(cta)cta.style.cssText=isOpen?'':'display:block;position:absolute;top:calc(100% + 140px);left:0;right:0;margin:0 24px;text-align:center;';
-  }
-});
+const navToggle = document.getElementById('navToggle');
+let mobileMenuOpen = false;
+
+// 모바일 메뉴 DOM 생성
+const mobileMenu = document.createElement('div');
+mobileMenu.id = 'mobileMenu';
+mobileMenu.style.cssText = `
+  display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(247,242,234,0.98);z-index:99;
+  flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;
+`;
+mobileMenu.innerHTML = `
+  <button id="mobileClose" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:24px;color:var(--ink);cursor:pointer;">✕</button>
+  <a href="#about" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">스튜디오 소개</a>
+  <a href="#gallery" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">갤러리</a>
+  <a href="#packages" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">상품구성</a>
+  <a href="#notice" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">공지사항</a>
+  <a href="#location" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">오시는 길</a>
+  <a href="/reservation.html" style="margin-top:16px;background:var(--gold);color:var(--paper);padding:14px 40px;font-size:13px;letter-spacing:0.2em;text-decoration:none;">예약 문의</a>
+`;
+document.body.appendChild(mobileMenu);
+
+function openMenu() {
+  mobileMenuOpen = true;
+  mobileMenu.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu() {
+  mobileMenuOpen = false;
+  mobileMenu.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+navToggle.addEventListener('click', openMenu);
+document.getElementById('mobileClose').addEventListener('click', closeMenu);
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 </script>
 </body>
 </html>
