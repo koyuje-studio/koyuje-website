@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 | 고유재 한옥스튜디오</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;--line:rgba(28,24,20,0.1);--green:#3a6b3a;--red:#8b2e2e;--dark:#0f0d0b;}
+body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper);font-weight:300;line-height:1.7;min-height:100vh;}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.login-card{background:rgba(247,242,234,0.04);border:0.5px solid rgba(247,242,234,0.1);padding:56px 48px;width:100%;max-width:360px;text-align:center;}
+.login-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.15em;color:var(--paper);margin-bottom:4px;}
+.login-logo em{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.25em;display:block;margin-bottom:36px;}
+.login-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--gold2);letter-spacing:0.2em;margin-bottom:32px;}
+.pw-input{width:100%;background:rgba(247,242,234,0.05);border:0.5px solid rgba(247,242,234,0.15);color:var(--paper);padding:14px 16px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:300;outline:none;text-align:center;letter-spacing:0.2em;margin-bottom:16px;transition:border-color .3s;}
+.pw-input:focus{border-color:var(--gold);}
+.pw-input::placeholder{color:rgba(247,242,234,0.25);letter-spacing:0.05em;}
+.btn-login{width:100%;background:var(--gold);color:var(--ink);border:none;padding:15px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .3s;}
+.btn-login:hover{background:var(--gold2);}
+.login-err{font-size:12px;color:#e07070;margin-top:12px;letter-spacing:0.05em;display:none;}
+
+/* ADMIN LAYOUT */
+.admin-wrap{display:none;min-height:100vh;}
+.admin-nav{background:rgba(15,13,11,0.95);border-bottom:0.5px solid rgba(247,242,234,0.08);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.admin-brand{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:400;letter-spacing:0.12em;color:var(--paper);}
+.admin-brand em{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.2em;margin-left:8px;}
+.admin-nav-right{display:flex;align-items:center;gap:20px;}
+.admin-today{font-size:12px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;}
+.btn-logout{font-size:11px;letter-spacing:0.15em;color:rgba(247,242,234,0.4);background:none;border:0.5px solid rgba(247,242,234,0.15);padding:6px 14px;cursor:pointer;transition:all .3s;}
+.btn-logout:hover{color:var(--paper);border-color:rgba(247,242,234,0.4);}
+.btn-refresh{font-size:11px;letter-spacing:0.15em;color:var(--gold);background:none;border:0.5px solid rgba(160,120,64,0.3);padding:6px 14px;cursor:pointer;transition:all .3s;}
+.btn-refresh:hover{background:rgba(160,120,64,0.1);}
+
+.admin-body{padding:32px;}
+
+/* 통계 */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:32px;}
+.stat-card{background:rgba(247,242,234,0.04);border:0.5px solid rgba(247,242,234,0.08);padding:20px 24px;}
+.stat-label{font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);margin-bottom:8px;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;line-height:1;}
+.stat-num.gold{color:var(--gold);}
+.stat-num.green{color:#6aaa6a;}
+.stat-num.orange{color:#e0a050;}
+.stat-num.red{color:#e07070;}
+
+/* 필터 */
+.filter-row{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center;}
+.filter-btn{font-size:11px;letter-spacing:0.15em;padding:7px 16px;background:none;border:0.5px solid rgba(247,242,234,0.15);color:rgba(247,242,234,0.5);cursor:pointer;transition:all .3s;}
+.filter-btn:hover,.filter-btn.active{background:rgba(160,120,64,0.15);border-color:rgba(160,120,64,0.4);color:var(--gold2);}
+.search-input{background:rgba(247,242,234,0.05);border:0.5px solid rgba(247,242,234,0.12);color:var(--paper);padding:7px 14px;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:300;outline:none;margin-left:auto;width:200px;transition:border-color .3s;}
+.search-input:focus{border-color:var(--gold);}
+.search-input::placeholder{color:rgba(247,242,234,0.25);}
+
+/* 예약 카드 */
+.cards-wrap{display:flex;flex-direction:column;gap:2px;}
+.res-card{background:rgba(247,242,234,0.03);border:0.5px solid rgba(247,242,234,0.07);transition:background .2s;}
+.res-card:hover{background:rgba(247,242,234,0.06);}
+.res-card-head{display:grid;grid-template-columns:160px 1fr auto auto;align-items:center;gap:16px;padding:16px 20px;cursor:pointer;}
+.res-date{font-size:12px;color:rgba(247,242,234,0.45);letter-spacing:0.05em;}
+.res-name-wrap{}
+.res-name{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;letter-spacing:0.05em;margin-bottom:2px;}
+.res-sub{font-size:11px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;}
+.res-product{font-size:12px;color:rgba(247,242,234,0.5);letter-spacing:0.05em;text-align:right;}
+.status-select{appearance:none;-webkit-appearance:none;border:0.5px solid;padding:5px 12px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.08em;cursor:pointer;outline:none;transition:all .3s;min-width:110px;text-align:center;}
+.status-select.waiting{color:#c49a20;border-color:rgba(196,154,32,0.4);background:rgba(196,154,32,0.08);}
+.status-select.done{color:#6aaa6a;border-color:rgba(106,170,106,0.4);background:rgba(106,170,106,0.08);}
+.status-select.cancel{color:#e07070;border-color:rgba(224,112,112,0.4);background:rgba(224,112,112,0.08);}
+.status-select option{background:#1a1714;color:var(--paper);}
+
+/* 상세 펼침 */
+.res-detail{display:none;padding:0 20px 20px;border-top:0.5px solid rgba(247,242,234,0.06);}
+.res-detail.open{display:block;}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;}
+.detail-item{background:rgba(247,242,234,0.03);padding:12px 14px;}
+.detail-key{font-size:10px;letter-spacing:0.18em;color:rgba(247,242,234,0.35);margin-bottom:5px;}
+.detail-val{font-size:13px;color:rgba(247,242,234,0.8);letter-spacing:0.03em;}
+
+/* 저장 피드백 */
+.save-toast{position:fixed;bottom:32px;right:32px;background:var(--green);color:var(--paper);padding:12px 24px;font-size:12px;letter-spacing:0.1em;display:none;z-index:200;}
+.save-toast.show{display:block;}
+
+/* LOADING */
+.loading-wrap{text-align:center;padding:80px 0;color:rgba(247,242,234,0.3);font-size:13px;letter-spacing:0.1em;}
+.spinner{display:inline-block;width:28px;height:28px;border:1px solid rgba(247,242,234,0.1);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.empty-wrap{text-align:center;padding:80px 0;}
+.empty-icon{font-size:40px;opacity:0.2;margin-bottom:16px;}
+.empty-text{font-size:13px;color:rgba(247,242,234,0.3);letter-spacing:0.1em;}
+
+@media(max-width:768px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .res-card-head{grid-template-columns:1fr auto;}
+  .res-date,.res-product{display:none;}
+  .detail-grid{grid-template-columns:1fr 1fr;}
+  .admin-body{padding:20px 16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="login-logo">고유재 한옥스튜디오<em>Admin</em></div>
+    <div class="login-title">관리자 로그인</div>
+    <input type="password" class="pw-input" id="pwInput" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-login" onclick="doLogin()">로그인</button>
+    <div class="login-err" id="loginErr">비밀번호가 올바르지 않습니다.</div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="admin-wrap" id="adminWrap">
+  <nav class="admin-nav">
+    <div>
+      <span class="admin-brand">고유재 한옥스튜디오<em>관리자</em></span>
+    </div>
+    <div class="admin-nav-right">
+      <span class="admin-today" id="todayLabel"></span>
+      <button class="btn-refresh" onclick="loadData()">↻ 새로고침</button>
+      <button class="btn-logout" onclick="doLogout()">로그아웃</button>
+    </div>
+  </nav>
+
+  <div class="admin-body">
+    <!-- 통계 -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">전체 예약</div><div class="stat-num gold" id="statTotal">—</div></div>
+      <div class="stat-card"><div class="stat-label">예약완료</div><div class="stat-num green" id="statDone">—</div></div>
+      <div class="stat-card"><div class="stat-label">확인중</div><div class="stat-num orange" id="statWaiting">—</div></div>
+      <div class="stat-card"><div class="stat-label">취소</div><div class="stat-num red" id="statCancel">—</div></div>
+    </div>
+
+    <!-- 필터 -->
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">전체</button>
+      <button class="filter-btn" data-filter="waiting" onclick="setFilter('waiting',this)">⏳ 확인중</button>
+      <button class="filter-btn" data-filter="done" onclick="setFilter('done',this)">✅ 예약완료</button>
+      <button class="filter-btn" data-filter="cancel" onclick="setFilter('cancel',this)">❌ 취소</button>
+      <input type="text" class="search-input" id="searchInput" placeholder="이름 · 연락처 검색" oninput="renderCards()">
+    </div>
+
+    <!-- 카드 목록 -->
+    <div class="cards-wrap" id="cardsWrap">
+      <div class="loading-wrap"><div class="spinner"></div><br>예약 데이터를 불러오는 중...</div>
+    </div>
+  </div>
+</div>
+
+<!-- 저장 토스트 -->
+<div class="save-toast" id="saveToast">✓ 상태가 저장되었습니다</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxw6SJr24RXTlQFRnT71kSNHnCVm-AoIQzBNd-08xFFV-wdIzqkcQqso-06DahZFFmf/exec';
+const ADMIN_PW='koyuje2024!';
+
+let allData=[];
+let currentFilter='all';
+let adminPw='';
+
+// 오늘 날짜
+const now=new Date();
+document.getElementById('todayLabel').textContent=now.getFullYear()+'년 '+(now.getMonth()+1)+'월 '+now.getDate()+'일';
+
+function doLogin(){
+  const pw=document.getElementById('pwInput').value;
+  if(pw===ADMIN_PW){
+    adminPw=pw;
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('adminWrap').style.display='block';
+    loadData();
+  } else {
+    document.getElementById('loginErr').style.display='block';
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function doLogout(){
+  adminPw='';
+  allData=[];
+  document.getElementById('adminWrap').style.display='none';
+  document.getElementById('loginWrap').style.display='flex';
+  document.getElementById('pwInput').value='';
+  document.getElementById('loginErr').style.display='none';
+}
+
+function loadData(){
+  document.getElementById('cardsWrap').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>예약 데이터를 불러오는 중...</div>';
+  fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(adminPw))
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result==='error'){alert('데이터 로드 실패: '+data.message);return;}
+      allData=data.data||[];
+      updateStats();
+      renderCards();
+    })
+    .catch(()=>{ document.getElementById('cardsWrap').innerHTML='<div class="loading-wrap"><div class="empty-icon">⚠️</div><br><div class="empty-text">데이터 로드 실패. 새로고침 해주세요.</div></div>'; });
+}
+
+function updateStats(){
+  const total=allData.length;
+  const done=allData.filter(d=>d.status&&(d.status.includes('완료')||d.status.includes('✅'))).length;
+  const waiting=allData.filter(d=>!d.status||d.status.includes('확인중')).length;
+  const cancel=allData.filter(d=>d.status&&(d.status.includes('취소')||d.status.includes('❌'))).length;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('statDone').textContent=done;
+  document.getElementById('statWaiting').textContent=waiting;
+  document.getElementById('statCancel').textContent=cancel;
+}
+
+function setFilter(f,el){
+  currentFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderCards();
+}
+
+function getStatusClass(s){
+  if(!s||s.includes('확인중'))return'waiting';
+  if(s.includes('완료')||s.includes('✅'))return'done';
+  if(s.includes('취소')||s.includes('❌'))return'cancel';
+  return'waiting';
+}
+
+function fDate(d){
+  if(!d)return'-';
+  const dt=new Date(d);
+  if(isNaN(dt))return d;
+  return (dt.getMonth()+1)+'월 '+dt.getDate()+'일';
+}
+
+function fTime(t){
+  if(!t)return'';
+  const p=String(t).split(':');
+  if(p.length>=2){const h=parseInt(p[0]),m=p[1];return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+':'+m;}
+  return t;
+}
+
+function renderCards(){
+  const keyword=(document.getElementById('searchInput').value||'').toLowerCase();
+  let filtered=allData.filter(d=>{
+    const sc=getStatusClass(d.status||'');
+    if(currentFilter!=='all'&&sc!==currentFilter)return false;
+    if(keyword&&!((d.babyName||'').includes(keyword)&&true)&&!(d.babyName||'').toLowerCase().includes(keyword)&&!(d.parentName||'').toLowerCase().includes(keyword)&&!(d.phone||'').includes(keyword))return false;
+    return true;
+  });
+
+  // 최신순 정렬
+  filtered=filtered.slice().reverse();
+
+  if(filtered.length===0){
+    document.getElementById('cardsWrap').innerHTML='<div class="empty-wrap"><div class="empty-icon">📋</div><div class="empty-text">해당하는 예약이 없습니다</div></div>';
+    return;
+  }
+
+  const html=filtered.map((item,idx)=>{
+    const sc=getStatusClass(item.status||'');
+    const statusLabel=item.status||'⏳ 확인중';
+    return `
+    <div class="res-card" id="card_${idx}">
+      <div class="res-card-head" onclick="toggleDetail('detail_${idx}')">
+        <div class="res-date">${fDate(item.shootDate)} ${fTime(item.shootTime)}</div>
+        <div class="res-name-wrap">
+          <div class="res-name">${item.babyName||'-'} <span style="font-size:11px;color:rgba(247,242,234,0.35);font-family:'Cormorant Garamond',serif;font-style:italic;">아기</span></div>
+          <div class="res-sub">${item.parentName||''} · ${item.phone||''}</div>
+        </div>
+        <div class="res-product">${item.product||''}</div>
+        <select class="status-select ${sc}" onchange="updateStatus(this,'${item.rowId}')" onclick="event.stopPropagation()">
+          <option value="⏳ 확인중" ${!item.status||item.status.includes('확인중')?'selected':''}>⏳ 확인중</option>
+          <option value="✅ 예약완료" ${item.status&&item.status.includes('✅')?'selected':''}>✅ 예약완료</option>
+          <option value="❌ 취소" ${item.status&&item.status.includes('❌')?'selected':''}>❌ 취소</option>
+        </select>
+      </div>
+      <div class="res-detail" id="detail_${idx}">
+        <div class="detail-grid">
+          <div class="detail-item"><div class="detail-key">아기 성별</div><div class="detail-val">${item.babyGender||'-'}</div></div>
+          <div class="detail-item"><div class="detail-key">연락처</div><div class="detail-val">${item.phone||'-'}</div></div>
+          <div class="detail-item"><div class="detail-key">이메일</div><div class="detail-val" style="font-size:12px;">${item.email||'-'}</div></div>
+          <div class="detail-item"><div class="detail-key">촬영 날짜</div><div class="detail-val">${fDate(item.shootDate)}</div></div>
+          <div class="detail-item"><div class="detail-key">촬영 시간</div><div class="detail-val">${fTime(item.shootTime)}</div></div>
+          <div class="detail-item"><div class="detail-key">선택 상품</div><div class="detail-val">${item.product||'-'}</div></div>
+          <div class="detail-item"><div class="detail-key">추가 구성</div><div class="detail-val" style="font-size:12px;">${item.extra||'없음'}</div></div>
+          <div class="detail-item"><div class="detail-key">입금자명</div><div class="detail-val">${item.depositor||'-'}</div></div>
+          <div class="detail-item"><div class="detail-key">제출 일시</div><div class="detail-val" style="font-size:12px;">${item.rowId||'-'}</div></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('cardsWrap').innerHTML=html;
+}
+
+function toggleDetail(id){
+  const el=document.getElementById(id);
+  if(el)el.classList.toggle('open');
+}
+
+function updateStatus(select,rowId){
+  const newStatus=select.value;
+  const sc=getStatusClass(newStatus);
+  select.className='status-select '+sc;
+
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({action:'updateStatus',adminPw:adminPw,rowId:rowId,status:newStatus})
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.result==='success'){
+      // 로컬 데이터 업데이트
+      const item=allData.find(d=>String(d.rowId)===String(rowId));
+      if(item)item.status=newStatus;
+      updateStats();
+      showToast();
+    } else {
+      alert('저장 실패: '+data.message);
+    }
+  })
+  .catch(()=>alert('저장 중 오류가 발생했습니다.'));
+}
+
+function showToast(){
+  const t=document.getElementById('saveToast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+document.getElementById('pwInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter')doLogin();
+});
+</script>
+</body>
+</html>
