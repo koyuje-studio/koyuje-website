@@ -198,12 +198,20 @@ function fDate(d){
 function fTime(t){
   if(!t)return'-';
   const s=String(t).trim();
+  // ISO 날짜 형식: 1899-12-30T01:32:08.000Z
+  const isoMatch=s.match(/T(\d{2}):(\d{2})/);
+  if(isoMatch){
+    const h=parseInt(isoMatch[1]),m=isoMatch[2];
+    return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';
+  }
+  // 구글 시트 소수 형식
   const num=parseFloat(s);
   if(!isNaN(num)&&num>=0&&num<1){
     const totalMin=Math.round(num*24*60);
     const h=Math.floor(totalMin/60),m=String(totalMin%60).padStart(2,'0');
     return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';
   }
+  // HH:MM 문자열 형식
   const match=s.match(/^(\d{1,2}):(\d{2})/);
   if(match){const h=parseInt(match[1]),m=match[2];return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';}
   return s;
