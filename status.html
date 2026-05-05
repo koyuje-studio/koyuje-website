@@ -182,8 +182,32 @@ function badge(s){
   if(s.includes('취소')||s.includes('❌'))return'<span class="status-badge cancel">❌ 취소</span>';
   return'<span class="status-badge waiting">'+s+'</span>';
 }
-function fDate(d){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return d;return dt.getFullYear()+'년 '+(dt.getMonth()+1)+'월 '+dt.getDate()+'일';}
-function fTime(t){if(!t)return'-';const p=String(t).split(':');if(p.length>=2){const h=parseInt(p[0]),m=p[1];return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';}return t;}
+function fDate(d){
+  if(!d)return'-';
+  const s=String(d).trim();
+  const days=['일','월','화','수','목','금','토'];
+  const num=parseFloat(s);
+  if(!isNaN(num)&&num>40000&&num<60000){
+    const dt=new Date((num-25569)*86400*1000);
+    return dt.getUTCFullYear()+'년 '+(dt.getUTCMonth()+1)+'월 '+dt.getUTCDate()+'일 ('+days[dt.getUTCDay()]+')';
+  }
+  const dt=new Date(s);
+  if(!isNaN(dt.getTime()))return dt.getFullYear()+'년 '+(dt.getMonth()+1)+'월 '+dt.getDate()+'일 ('+days[dt.getDay()]+')';
+  return s;
+}
+function fTime(t){
+  if(!t)return'-';
+  const s=String(t).trim();
+  const num=parseFloat(s);
+  if(!isNaN(num)&&num>=0&&num<1){
+    const totalMin=Math.round(num*24*60);
+    const h=Math.floor(totalMin/60),m=String(totalMin%60).padStart(2,'0');
+    return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';
+  }
+  const match=s.match(/^(\d{1,2}):(\d{2})/);
+  if(match){const h=parseInt(match[1]),m=match[2];return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';}
+  return s;
+}
 function showResults(data,p){
   document.getElementById('searchSection').style.display='none';
   document.getElementById('resultsSection').style.display='block';

@@ -230,16 +230,36 @@ function getStatusClass(s){
 
 function fDate(d){
   if(!d)return'-';
-  if(String(d).includes('년')&&String(d).includes('('))return d;
-  const dt=new Date(d);
-  if(isNaN(dt))return String(d);
+  const s=String(d).trim();
+  if(s.includes('년')&&s.includes('('))return s;
   const days=['일','월','화','수','목','금','토'];
-  return dt.getFullYear()+'년 '+(dt.getMonth()+1)+'월 '+dt.getDate()+'일 ('+days[dt.getDay()]+')';
+  // 구글 시트 날짜 일련번호 (정수, 40000~60000 범위)
+  const num=parseFloat(s);
+  if(!isNaN(num)&&num>40000&&num<60000){
+    // 구글 시트 기준일: 1899-12-30
+    const dt=new Date((num-25569)*86400*1000);
+    return dt.getUTCFullYear()+'년 '+(dt.getUTCMonth()+1)+'월 '+dt.getUTCDate()+'일 ('+days[dt.getUTCDay()]+')';
+  }
+  // YYYY-MM-DD 또는 일반 날짜 문자열
+  const dt=new Date(s);
+  if(!isNaN(dt.getTime())){
+    return dt.getFullYear()+'년 '+(dt.getMonth()+1)+'월 '+dt.getDate()+'일 ('+days[dt.getDay()]+')';
+  }
+  return s;
 }
 
 function fTime(t){
   if(!t)return'';
   const s=String(t).trim();
+  // 구글 시트 소수 형식 (0~1 사이 소수)
+  const num=parseFloat(s);
+  if(!isNaN(num)&&num>=0&&num<1){
+    const totalMin=Math.round(num*24*60);
+    const h=Math.floor(totalMin/60);
+    const m=String(totalMin%60).padStart(2,'0');
+    return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';
+  }
+  // HH:MM 문자열 형식
   const match=s.match(/^(\d{1,2}):(\d{2})/);
   if(match){
     const h=parseInt(match[1]),m=match[2];
