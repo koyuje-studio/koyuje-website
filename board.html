@@ -186,11 +186,35 @@ loadBoard();
 
 function loadBoard(){
   document.getElementById('boardList').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>게시글을 불러오는 중...</div>';
-  fetch(SCRIPT_URL+'?action=board')
+  
+  // 1페이지 먼저 가져오고 total 확인 후 나머지 병렬 로드
+  fetch(SCRIPT_URL+'?action=board&page=1')
     .then(r=>r.json())
-    .then(data=>{
+    .then(async data=>{
       if(data.result!=='success'){showEmpty();return;}
-      allItems=data.data||[];
+      
+      const total = data.total || 0;
+      const limit = data.limit || 15;
+      const totalPages = Math.ceil(total / limit);
+      
+      let allData = [...(data.data||[])];
+      
+      // 2페이지 이상 있으면 병렬로 가져오기
+      if(totalPages > 1){
+        const promises = [];
+        for(let p=2; p<=totalPages; p++){
+          promises.push(
+            fetch(SCRIPT_URL+'?action=board&page='+p)
+              .then(r=>r.json())
+              .then(d=>d.data||[])
+              .catch(()=>[])
+          );
+        }
+        const results = await Promise.all(promises);
+        results.forEach(r=>{ allData = allData.concat(r); });
+      }
+      
+      allItems = allData;
       applyFilter();
     })
     .catch(()=>showEmpty());
