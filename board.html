@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예약확정 게시판 | 고유재 한옥스튜디오</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;--line:rgba(28,24,20,0.1);--green:#3a6b3a;--red:#8b2e2e;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;min-height:100vh;}
+
+.nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.nav-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.12em;color:var(--ink);text-decoration:none;}
+.nav-logo em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.25em;margin-top:1px;}
+.nav-back{font-size:12px;color:var(--muted);letter-spacing:0.12em;text-decoration:none;}
+.nav-back:hover{color:var(--ink);}
+
+.hero{background:var(--ink);padding:56px 40px 48px;text-align:center;}
+.hero-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold2);letter-spacing:0.3em;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:12px;}
+.hero-label::before,.hero-label::after{content:'';width:24px;height:0.5px;background:var(--gold);}
+.hero-title{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:300;color:var(--paper);margin-bottom:10px;}
+.hero-desc{font-size:13px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;line-height:1.8;}
+
+.board-wrap{max-width:800px;margin:0 auto;padding:48px 40px 80px;}
+
+/* 필터 */
+.board-filter{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.filter-btn{font-size:11px;letter-spacing:0.15em;padding:7px 16px;background:none;border:0.5px solid var(--line);color:var(--muted);cursor:pointer;transition:all .3s;}
+.filter-btn.active,.filter-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* 게시판 목록 */
+.board-list{display:flex;flex-direction:column;}
+.board-item{
+  display:grid;grid-template-columns:48px 1fr 80px;
+  align-items:center;gap:16px;
+  padding:18px 0;border-bottom:0.5px solid var(--line);
+  cursor:pointer;transition:all .2s;
+  text-decoration:none;color:var(--ink);
+}
+.board-item:first-child{border-top:0.5px solid var(--line);}
+.board-item:hover{padding-left:6px;}
+.board-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:0.1em;text-align:center;}
+.board-title-wrap{}
+.board-title{font-size:14px;letter-spacing:0.03em;margin-bottom:3px;display:flex;align-items:center;gap:8px;}
+.board-meta{font-size:11px;color:var(--muted);letter-spacing:0.05em;}
+.cat-badge{
+  display:inline-block;font-size:9px;letter-spacing:0.15em;
+  padding:2px 8px;border:0.5px solid;
+}
+.cat-badge.reservation{color:var(--gold);border-color:rgba(160,120,64,0.3);background:rgba(160,120,64,0.05);}
+.cat-badge.notice{color:var(--red);border-color:rgba(139,46,46,0.3);background:rgba(139,46,46,0.05);}
+.status-done{color:var(--green);font-size:13px;}
+.status-wait{color:#8b6914;font-size:13px;}
+.board-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:0.05em;}
+
+/* 페이지네이션 */
+.pagination{display:flex;justify-content:center;gap:6px;margin-top:40px;}
+.page-btn{
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  border:0.5px solid var(--line);
+  font-size:13px;color:var(--muted);
+  cursor:pointer;transition:all .3s;background:none;
+}
+.page-btn.active,.page-btn:hover{border-color:var(--gold);color:var(--gold);}
+.page-btn:disabled{opacity:0.3;cursor:not-allowed;}
+
+/* 글 상세 모달 */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(28,24,20,0.6);z-index:100;
+  align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-bg.show{display:flex;}
+.modal{
+  background:var(--paper);
+  width:100%;max-width:520px;
+  max-height:80vh;overflow-y:auto;
+  padding:40px;position:relative;
+}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;font-size:20px;
+  color:var(--muted);cursor:pointer;
+}
+.modal-cat{font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;}
+.modal-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:6px;line-height:1.4;}
+.modal-meta{font-size:12px;color:var(--muted);margin-bottom:24px;padding-bottom:20px;border-bottom:0.5px solid var(--line);}
+.modal-body{font-size:14px;line-height:2;color:var(--muted);}
+
+/* 비밀번호 입력 */
+.pw-form{text-align:center;padding:20px 0;}
+.pw-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;margin-bottom:8px;}
+.pw-desc{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.8;}
+.pw-input{
+  width:100%;border:none;border-bottom:0.5px solid var(--line);
+  background:transparent;padding:12px 0;
+  font-size:20px;text-align:center;letter-spacing:0.3em;
+  outline:none;transition:border-color .3s;
+  font-family:'Cormorant Garamond',serif;
+}
+.pw-input:focus{border-bottom-color:var(--gold);}
+.pw-hint{font-size:11px;color:var(--muted);margin-top:10px;letter-spacing:0.1em;}
+.btn-pw{
+  margin-top:24px;width:100%;
+  background:var(--ink);color:var(--paper);border:none;
+  padding:14px;font-family:'Noto Sans KR',sans-serif;
+  font-size:12px;letter-spacing:0.2em;cursor:pointer;transition:all .3s;
+}
+.btn-pw:hover{background:var(--gold);}
+.pw-error{font-size:12px;color:var(--red);margin-top:8px;display:none;}
+
+/* 로딩 */
+.loading-wrap{text-align:center;padding:60px 0;color:var(--muted);font-size:13px;letter-spacing:0.1em;}
+.spinner{display:inline-block;width:24px;height:24px;border:1px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.empty-wrap{text-align:center;padding:60px 0;}
+.empty-text{font-size:13px;color:var(--muted);letter-spacing:0.1em;}
+
+.bottom-link{text-align:center;padding:24px 0 0;font-size:12px;color:var(--muted);}
+.bottom-link a{color:var(--gold);text-decoration:none;}
+
+@media(max-width:600px){
+  .nav{padding:16px 20px;}
+  .hero{padding:40px 20px 36px;}
+  .board-wrap{padding:32px 16px 60px;}
+  .board-item{grid-template-columns:36px 1fr;}
+  .board-date{display:none;}
+  .modal{padding:28px 20px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">고유재 한옥스튜디오<em>Koyuje Hanok Studio</em></a>
+  <a href="/" class="nav-back">← 홈으로</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">예약확정 게시판</div>
+  <h1 class="hero-title">고유재와 함께한<br>소중한 순간들</h1>
+  <p class="hero-desc">실제 예약 확정 내역을 확인하실 수 있습니다.<br>비밀글은 예약 시 입력하신 전화번호 끝 4자리로 열람 가능합니다.</p>
+</div>
+
+<div class="board-wrap">
+  <div class="board-filter">
+    <button class="filter-btn active" data-cat="all" onclick="setFilter('all',this)">전체</button>
+    <button class="filter-btn" data-cat="예약확정" onclick="setFilter('예약확정',this)">예약확정</button>
+    <button class="filter-btn" data-cat="공지" onclick="setFilter('공지',this)">공지</button>
+  </div>
+
+  <div class="board-list" id="boardList">
+    <div class="loading-wrap"><div class="spinner"></div><br>게시글을 불러오는 중...</div>
+  </div>
+
+  <div class="pagination" id="pagination"></div>
+
+  <div class="bottom-link">
+    예약 문의 · <a href="https://pf.kakao.com/_xiRxjhxj">카카오톡 채널</a> · <a href="tel:010-7635-9689">010-7635-9689</a>
+  </div>
+</div>
+
+<!-- 모달 -->
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxw6SJr24RXTlQFRnT71kSNHnCVm-AoIQzBNd-08xFFV-wdIzqkcQqso-06DahZFFmf/exec';
+let currentPage=1;
+let currentFilter='all';
+let allItems=[];
+let filteredItems=[];
+const PAGE_SIZE=15;
+
+// 초기 로드
+loadBoard();
+
+function loadBoard(){
+  document.getElementById('boardList').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>게시글을 불러오는 중...</div>';
+  fetch(SCRIPT_URL+'?action=board&page=1')
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result!=='success'){showEmpty();return;}
+      allItems=data.data||[];
+      applyFilter();
+    })
+    .catch(()=>showEmpty());
+}
+
+function setFilter(cat,el){
+  currentFilter=cat;
+  currentPage=1;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  applyFilter();
+}
+
+function applyFilter(){
+  if(currentFilter==='all'){
+    filteredItems=[...allItems];
+  } else {
+    filteredItems=allItems.filter(i=>i.category===currentFilter);
+  }
+  renderPage(1);
+}
+
+function renderPage(page){
+  currentPage=page;
+  const start=(page-1)*PAGE_SIZE;
+  const items=filteredItems.slice(start,start+PAGE_SIZE);
+  const list=document.getElementById('boardList');
+
+  if(items.length===0){showEmpty();return;}
+
+  list.innerHTML=items.map((item,idx)=>{
+    const globalNum=filteredItems.length-(start+idx);
+    const isNotice=item.category==='공지';
+    const isDone=item.title&&item.title.includes('✅');
+    const isWait=item.title&&item.title.includes('⏳');
+    const catClass=isNotice?'notice':'reservation';
+    const catLabel=isNotice?'공지':'예약확정';
+    return `
+    <div class="board-item" onclick="openPost('${item.num}','${item.hasPassword}')">
+      <div class="board-num">${isNotice?'📌':globalNum}</div>
+      <div class="board-title-wrap">
+        <div class="board-title">
+          <span class="cat-badge ${catClass}">${catLabel}</span>
+          ${item.title||''}
+          ${item.hasPassword?'🔒':''}
+        </div>
+        <div class="board-meta">${item.author||'고유재'}</div>
+      </div>
+      <div class="board-date">${formatDate(item.date)}</div>
+    </div>`;
+  }).join('');
+
+  renderPagination();
+}
+
+function renderPagination(){
+  const total=Math.ceil(filteredItems.length/PAGE_SIZE);
+  if(total<=1){document.getElementById('pagination').innerHTML='';return;}
+  let html='';
+  const start=Math.max(1,currentPage-2);
+  const end=Math.min(total,currentPage+2);
+  if(currentPage>1)html+=`<button class="page-btn" onclick="renderPage(${currentPage-1})">‹</button>`;
+  for(let i=start;i<=end;i++){
+    html+=`<button class="page-btn ${i===currentPage?'active':''}" onclick="renderPage(${i})">${i}</button>`;
+  }
+  if(currentPage<total)html+=`<button class="page-btn" onclick="renderPage(${currentPage+1})">›</button>`;
+  document.getElementById('pagination').innerHTML=html;
+}
+
+function formatDate(d){
+  if(!d)return'';
+  const s=String(d).slice(0,10);
+  const parts=s.split('-');
+  if(parts.length===3)return parts[1]+'월 '+parts[2]+'일';
+  return s;
+}
+
+function showEmpty(){
+  document.getElementById('boardList').innerHTML='<div class="empty-wrap"><div class="empty-text">게시글이 없습니다.</div></div>';
+  document.getElementById('pagination').innerHTML='';
+}
+
+// 글 열기
+function openPost(num, hasPw){
+  const modal=document.getElementById('modal');
+  const bg=document.getElementById('modalBg');
+  bg.classList.add('show');
+
+  if(hasPw==='true'){
+    showPwForm(num);
+  } else {
+    fetchPost(num,'');
+  }
+}
+
+function showPwForm(num){
+  document.getElementById('modalContent').innerHTML=`
+    <div class="pw-form">
+      <div class="pw-title">🔒 비밀글입니다</div>
+      <p class="pw-desc">예약 시 입력하신<br><strong style="color:var(--ink);font-weight:400;">전화번호 끝 4자리</strong>를 입력해 주세요.</p>
+      <input type="number" class="pw-input" id="pwInput" placeholder="0000" maxlength="4" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)">
+      <p class="pw-hint">예) 010-1234-<strong>5678</strong> → 5678 입력</p>
+      <div class="pw-error" id="pwError">비밀번호가 올바르지 않습니다.</div>
+      <button class="btn-pw" onclick="submitPw('${num}')">확인</button>
+    </div>`;
+  setTimeout(()=>document.getElementById('pwInput').focus(),100);
+  document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitPw(num);});
+}
+
+function submitPw(num){
+  const pw=document.getElementById('pwInput').value;
+  if(!pw||pw.length<4){document.getElementById('pwError').style.display='block';return;}
+  fetchPost(num,pw);
+}
+
+function fetchPost(num,pw){
+  document.getElementById('modalContent').innerHTML='<div class="loading-wrap"><div class="spinner"></div></div>';
+  fetch(SCRIPT_URL+`?action=boardDetail&num=${num}&pw=${pw}`)
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result==='needPassword'){
+        showPwForm(num);
+        setTimeout(()=>{
+          const err=document.getElementById('pwError');
+          if(err)err.style.display='block';
+        },100);
+        return;
+      }
+      if(data.result!=='success'){
+        document.getElementById('modalContent').innerHTML='<p style="text-align:center;color:var(--muted);padding:40px 0;">글을 불러올 수 없습니다.</p>';
+        return;
+      }
+      const d=data.data;
+      const isDone=d.title&&d.title.includes('✅');
+      const isWait=d.title&&d.title.includes('⏳');
+      document.getElementById('modalContent').innerHTML=`
+        <div class="modal-cat">${d.category||'예약확정'}</div>
+        <div class="modal-title">${d.title||''}</div>
+        <div class="modal-meta">${d.author||'고유재'} · ${d.date||''}</div>
+        <div class="modal-body">${d.content||
+          (isDone?'예약이 완료되었습니다. 촬영 당일 뵙겠습니다! 감사합니다 😊':
+          isWait?'예약 신청이 접수되었습니다. 입금 확인 후 48시간 이내에 확정 연락을 드리겠습니다.':
+          '내용이 없습니다.')
+        }</div>`;
+    })
+    .catch(()=>{
+      document.getElementById('modalContent').innerHTML='<p style="text-align:center;color:var(--muted);padding:40px 0;">오류가 발생했습니다.</p>';
+    });
+}
+
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modalBg')&&e.type!=='click')return;
+  if(e&&e.currentTarget===document.getElementById('modalBg')&&e.target!==e.currentTarget)return;
+  document.getElementById('modalBg').classList.remove('show');
+}
+document.querySelector('.modal-close') && document.querySelector('.modal-close').addEventListener('click',()=>{
+  document.getElementById('modalBg').classList.remove('show');
+});
+</script>
+</body>
+</html>

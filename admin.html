@@ -34,6 +34,26 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .btn-logout:hover{color:var(--paper);border-color:rgba(247,242,234,0.4);}
 .btn-refresh{font-size:11px;letter-spacing:0.15em;color:var(--gold);background:none;border:0.5px solid rgba(160,120,64,0.3);padding:6px 14px;cursor:pointer;transition:all .3s;}
 .btn-refresh:hover{background:rgba(160,120,64,0.1);}
+.btn-write{font-size:11px;letter-spacing:0.15em;color:var(--ink);background:var(--gold);border:none;padding:6px 16px;cursor:pointer;transition:all .3s;}
+.btn-write:hover{background:var(--gold2);}
+
+/* 글쓰기 모달 */
+.write-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.write-modal-bg.show{display:flex;}
+.write-modal{background:#1a1714;border:0.5px solid rgba(247,242,234,0.1);width:100%;max-width:500px;padding:36px;position:relative;max-height:90vh;overflow-y:auto;}
+.write-modal-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;color:var(--paper);margin-bottom:28px;letter-spacing:0.05em;}
+.write-field{margin-bottom:20px;}
+.write-label{display:block;font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);margin-bottom:8px;}
+.write-input,.write-select,.write-textarea{width:100%;background:rgba(247,242,234,0.05);border:0.5px solid rgba(247,242,234,0.12);color:var(--paper);padding:11px 14px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:300;outline:none;transition:border-color .3s;-webkit-appearance:none;}
+.write-input:focus,.write-select:focus,.write-textarea:focus{border-color:var(--gold);}
+.write-input::placeholder,.write-textarea::placeholder{color:rgba(247,242,234,0.2);}
+.write-textarea{resize:vertical;min-height:100px;line-height:1.8;}
+.write-select option{background:#1a1714;}
+.write-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.btn-write-submit{width:100%;background:var(--gold);color:var(--ink);border:none;padding:14px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .3s;margin-top:8px;}
+.btn-write-submit:hover{background:var(--gold2);}
+.write-close{position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(247,242,234,0.4);font-size:18px;cursor:pointer;}
+.write-hint{font-size:11px;color:rgba(247,242,234,0.3);margin-top:6px;letter-spacing:0.05em;line-height:1.7;}
 
 .admin-body{padding:32px;}
 
@@ -122,6 +142,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
     </div>
     <div class="admin-nav-right">
       <span class="admin-today" id="todayLabel"></span>
+      <button class="btn-write" onclick="openWriteModal()">✎ 게시글 작성</button>
+      <a href="/board.html" target="_blank" class="btn-refresh" style="text-decoration:none;">게시판 보기</a>
       <button class="btn-refresh" onclick="loadData()">↻ 새로고침</button>
       <button class="btn-logout" onclick="doLogout()">로그아웃</button>
     </div>
@@ -154,6 +176,48 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 
 <!-- 저장 토스트 -->
 <div class="save-toast" id="saveToast">✓ 상태가 저장되었습니다</div>
+
+<!-- 글쓰기 모달 -->
+<div class="write-modal-bg" id="writeModalBg">
+  <div class="write-modal">
+    <button class="write-close" onclick="closeWriteModal()">✕</button>
+    <div class="write-modal-title">✎ 게시글 작성</div>
+    <div class="write-field">
+      <label class="write-label">카테고리</label>
+      <select class="write-select" id="wCategory">
+        <option value="예약확정">예약확정</option>
+        <option value="공지">공지</option>
+      </select>
+    </div>
+    <div class="write-field">
+      <label class="write-label">제목 *</label>
+      <input type="text" class="write-input" id="wTitle" placeholder="예) 김시우님 예약완료 ✅">
+      <div class="write-hint">
+        · 예약확정: 홍길동님 예약완료 ✅<br>
+        · 쌍둥이: 김시우, 김시아님 예약완료 ✅<br>
+        · 공지: [공지] 휴무 안내
+      </div>
+    </div>
+    <div class="write-field">
+      <label class="write-label">내용 (선택)</label>
+      <textarea class="write-textarea" id="wContent" placeholder="내용을 입력하세요. 비워두면 기본 메시지가 표시됩니다."></textarea>
+    </div>
+    <div class="write-grid">
+      <div class="write-field">
+        <label class="write-label">공개 여부</label>
+        <select class="write-select" id="wPublic">
+          <option value="공개">공개</option>
+          <option value="비공개">비공개</option>
+        </select>
+      </div>
+      <div class="write-field">
+        <label class="write-label">비밀번호 (비밀글 시)</label>
+        <input type="text" class="write-input" id="wPassword" placeholder="전화번호 끝 4자리">
+      </div>
+    </div>
+    <button class="btn-write-submit" onclick="submitPost()">게시글 등록하기</button>
+  </div>
+</div>
 
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxw6SJr24RXTlQFRnT71kSNHnCVm-AoIQzBNd-08xFFV-wdIzqkcQqso-06DahZFFmf/exec';
@@ -360,6 +424,51 @@ function showToast(){
   const t=document.getElementById('saveToast');
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// 글쓰기 모달
+function openWriteModal(){
+  document.getElementById('writeModalBg').classList.add('show');
+  document.getElementById('wTitle').focus();
+}
+function closeWriteModal(){
+  document.getElementById('writeModalBg').classList.remove('show');
+  document.getElementById('wTitle').value='';
+  document.getElementById('wContent').value='';
+  document.getElementById('wPassword').value='';
+}
+function submitPost(){
+  const title=document.getElementById('wTitle').value.trim();
+  if(!title){alert('제목을 입력해주세요.');document.getElementById('wTitle').focus();return;}
+  const btn=document.querySelector('.btn-write-submit');
+  btn.disabled=true;btn.textContent='등록 중...';
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({
+      action:'writePost',
+      adminPw:adminPw,
+      title:title,
+      content:document.getElementById('wContent').value.trim(),
+      category:document.getElementById('wCategory').value,
+      isPublic:document.getElementById('wPublic').value,
+      password:document.getElementById('wPassword').value.trim(),
+      author:'고유재'
+    })
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    btn.disabled=false;btn.textContent='게시글 등록하기';
+    if(data.result==='success'){
+      closeWriteModal();
+      const t=document.getElementById('saveToast');
+      t.textContent='✓ 게시글이 등록되었습니다';
+      t.classList.add('show');
+      setTimeout(()=>{t.classList.remove('show');t.textContent='✓ 상태가 저장되었습니다';},2500);
+    } else {
+      alert('등록 실패: '+(data.message||''));
+    }
+  })
+  .catch(()=>{btn.disabled=false;btn.textContent='게시글 등록하기';alert('오류가 발생했습니다.');});
 }
 
 document.getElementById('pwInput').addEventListener('keydown',function(e){
