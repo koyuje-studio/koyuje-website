@@ -32,14 +32,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 /* 게시판 목록 */
 .board-list{display:flex;flex-direction:column;}
 .board-item{
-  display:grid;grid-template-columns:48px 1fr 80px;
+  display:grid;grid-template-columns:48px 1fr;
   align-items:center;gap:16px;
-  padding:18px 0;border-bottom:0.5px solid var(--line);
+  padding:16px 0;border-bottom:0.5px solid var(--line);
   cursor:pointer;transition:all .2s;
   text-decoration:none;color:var(--ink);
 }
 .board-item:first-child{border-top:0.5px solid var(--line);}
 .board-item:hover{padding-left:6px;}
+.board-date{display:none;}
 .board-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:0.1em;text-align:center;}
 .board-title-wrap{}
 .board-title{font-size:14px;letter-spacing:0.03em;margin-bottom:3px;display:flex;align-items:center;gap:8px;}
@@ -180,12 +181,13 @@ let allItems=[];
 let filteredItems=[];
 const PAGE_SIZE=15;
 
-// 초기 로드
+// 초기 로드 — 전체 데이터 한번에 가져오기
 loadBoard();
 
 function loadBoard(){
   document.getElementById('boardList').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>게시글을 불러오는 중...</div>';
-  fetch(SCRIPT_URL+'?action=board&page=1')
+  // total 먼저 확인 후 전체 로드
+  fetch(SCRIPT_URL+'?action=board&page=1&limit=999')
     .then(r=>r.json())
     .then(data=>{
       if(data.result!=='success'){showEmpty();return;}
@@ -226,21 +228,48 @@ function renderPage(page){
     const catClass=isNotice?'notice':'reservation';
     const catLabel=isNotice?'공지':'예약확정';
     const isPrivate=item.isPublic==='비공개'||item.hasPassword;
-    // 비공개 글은 제목 대신 🔒 표시
-    const displayTitle = isPrivate
-      ? '<span style="color:var(--muted);">🔒 비밀글입니다</span>'
+
+    // 이름 추출 (제목에서 "님" 앞까지 전체)
+    const nameMatch = item.title && item.title.match(/^(.+?)님/);
+    const displayName = nameMatch ? nameMatch[1] : '';
+
+    // 상태 추출
+    const isDone = item.title && item.title.includes('✅');
+    const isWait = item.title && item.title.includes('⏳');
+    const statusBadge = isDone
+      ? '<span style="font-size:11px;color:#3a6b3a;background:rgba(58,107,58,0.08);border:0.5px solid rgba(58,107,58,0.25);padding:2px 8px;letter-spacing:0.08em;white-space:nowrap;">✅ 예약완료</span>'
+      : isWait
+      ? '<span style="font-size:11px;color:#8b6914;background:rgba(139,105,20,0.08);border:0.5px solid rgba(139,105,20,0.25);padding:2px 8px;letter-spacing:0.08em;white-space:nowrap;">⏳ 예약접수</span>'
+      : '';
+
+    // NEW 뱃지 (10일 이내)
+    let isNew = false;
+    if (item.date) {
+      const diffDays = (new Date() - new Date(item.date)) / (1000*60*60*24);
+      isNew = diffDays <= 10;
+    }
+    const newBadge = isNew
+      ? '<span style="font-size:9px;color:#fff;background:#c0392b;padding:2px 7px;letter-spacing:0.1em;font-weight:400;">N</span>'
+      : '';
+
+    // 제목
+    const displayTitle = isPrivate && displayName
+      ? `${displayName}님 <span style="color:var(--muted);font-size:12px;">🔒</span>`
+      : isPrivate
+      ? '<span style="color:var(--muted);">🔒 비밀글</span>'
       : (item.title||'');
+
     return `
     <div class="board-item" onclick="openPost('${item.num}','${item.hasPassword}')">
       <div class="board-num">${isNotice?'📌':globalNum}</div>
       <div class="board-title-wrap">
-        <div class="board-title">
+        <div class="board-title" style="gap:8px;align-items:center;">
           <span class="cat-badge ${catClass}">${catLabel}</span>
-          ${displayTitle}
+          <span style="font-size:14px;letter-spacing:0.03em;">${displayTitle}</span>
+          ${statusBadge}
+          ${newBadge}
         </div>
-        <div class="board-meta">${item.author||'고유재'} · ${formatDate(item.date)}</div>
       </div>
-      <div class="board-date">${formatDate(item.date)}</div>
     </div>`;
   }).join('');
 
