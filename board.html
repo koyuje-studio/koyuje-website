@@ -223,20 +223,22 @@ function renderPage(page){
   list.innerHTML=items.map((item,idx)=>{
     const globalNum=filteredItems.length-(start+idx);
     const isNotice=item.category==='공지';
-    const isDone=item.title&&item.title.includes('✅');
-    const isWait=item.title&&item.title.includes('⏳');
     const catClass=isNotice?'notice':'reservation';
     const catLabel=isNotice?'공지':'예약확정';
+    const isPrivate=item.isPublic==='비공개'||item.hasPassword;
+    // 비공개 글은 제목 대신 🔒 표시
+    const displayTitle = isPrivate
+      ? '<span style="color:var(--muted);">🔒 비밀글입니다</span>'
+      : (item.title||'');
     return `
     <div class="board-item" onclick="openPost('${item.num}','${item.hasPassword}')">
       <div class="board-num">${isNotice?'📌':globalNum}</div>
       <div class="board-title-wrap">
         <div class="board-title">
           <span class="cat-badge ${catClass}">${catLabel}</span>
-          ${item.title||''}
-          ${item.hasPassword?'🔒':''}
+          ${displayTitle}
         </div>
-        <div class="board-meta">${item.author||'고유재'}</div>
+        <div class="board-meta">${item.author||'고유재'} · ${formatDate(item.date)}</div>
       </div>
       <div class="board-date">${formatDate(item.date)}</div>
     </div>`;
@@ -300,9 +302,11 @@ function showPwForm(num){
 }
 
 function submitPw(num){
-  const pw=document.getElementById('pwInput').value;
-  if(!pw||pw.length<4){document.getElementById('pwError').style.display='block';return;}
-  fetchPost(num,pw);
+  const pw = document.getElementById('pwInput').value;
+  if(!pw || pw.length < 4){ document.getElementById('pwError').style.display='block'; return; }
+  // 4자리 맞춰서 앞에 0 채우기
+  const pwPadded = pw.padStart(4,'0');
+  fetchPost(num, pwPadded);
 }
 
 function fetchPost(num,pw){
