@@ -181,30 +181,19 @@ let allItems=[];
 let filteredItems=[];
 const PAGE_SIZE=15;
 
-// 초기 로드 — 전체 데이터 모두 가져오기
+// 초기 로드
 loadBoard();
 
-async function loadBoard(){
+function loadBoard(){
   document.getElementById('boardList').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>게시글을 불러오는 중...</div>';
-  try {
-    let allData = [];
-    let page = 1;
-    let total = 999;
-    // 페이지별로 순차적으로 가져오기
-    while(allData.length < total) {
-      const res = await fetch(SCRIPT_URL+'?action=board&page='+page);
-      const data = await res.json();
-      if(data.result !== 'success') break;
-      allData = allData.concat(data.data || []);
-      total = data.total || 0;
-      if(data.data.length < (data.limit || 15)) break;
-      page++;
-    }
-    allItems = allData;
-    applyFilter();
-  } catch(e) {
-    showEmpty();
-  }
+  fetch(SCRIPT_URL+'?action=board')
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result!=='success'){showEmpty();return;}
+      allItems=data.data||[];
+      applyFilter();
+    })
+    .catch(()=>showEmpty());
 }
 
 function setFilter(cat,el){
