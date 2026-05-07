@@ -10,6 +10,7 @@
 <meta property="og:description" content="충청남도 공주시 전통 한옥에서 만나는 프리미엄 돌촬영 스튜디오">
 <meta property="og:image" content="/_0049.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3a3bea54fcc2f18a85036be7b91e3b4e"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -809,13 +810,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 
 <!-- LOCATION -->
 <section class="location" id="location">
-  <div class="location-map">
-    <iframe
-      src="https://map.kakao.com/link/map/고유재 한옥스튜디오,36.4569,127.1194"
-      style="width:100%;height:100%;border:none;"
-      allowfullscreen loading="lazy">
-    </iframe>
-  </div>
+  <div class="location-map" id="kakaoMap"></div>
   <div class="location-info">
     <div class="sec-eyebrow reveal" style="padding-left:0;">Location</div>
     <h2 class="sec-title reveal reveal-delay-1">오시는 길</h2>
@@ -906,6 +901,43 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 </div>
 
 <script>
+// 카카오맵 초기화
+function initKakaoMap() {
+  const container = document.getElementById('kakaoMap');
+  if (!container || typeof kakao === 'undefined') return;
+
+  const options = {
+    center: new kakao.maps.LatLng(36.4635, 127.1156),
+    level: 4
+  };
+  const map = new kakao.maps.Map(container, options);
+
+  // 마커
+  const markerPosition = new kakao.maps.LatLng(36.4635, 127.1156);
+  const marker = new kakao.maps.Marker({ position: markerPosition });
+  marker.setMap(map);
+
+  // 인포윈도우
+  const infowindow = new kakao.maps.InfoWindow({
+    content: '<div style="padding:10px 14px;font-family:\'Noto Sans KR\',sans-serif;font-size:13px;font-weight:400;color:#1c1814;white-space:nowrap;">📍 고유재 한옥스튜디오</div>'
+  });
+  infowindow.open(map, marker);
+
+  // 마커 클릭시 카카오맵으로 이동
+  kakao.maps.event.addListener(marker, 'click', function() {
+    window.open('https://kko.to/wbVqE4BGHD', '_blank');
+  });
+}
+
+// 카카오맵 SDK 로드 후 실행
+if (typeof kakao !== 'undefined' && kakao.maps) {
+  kakao.maps.load(initKakaoMap);
+} else {
+  window.addEventListener('load', function() {
+    if (typeof kakao !== 'undefined') kakao.maps.load(initKakaoMap);
+  });
+}
+
 // 홈페이지 공지사항 — 게시판 API 연동
 const BOARD_URL = 'https://script.google.com/macros/s/AKfycbyZC9PJMXCvl9gg349MVI495OB5bhjiZR-pZ_EMtorZfdu7muzD4MN3NUEfka2BIaKE/exec';
 
