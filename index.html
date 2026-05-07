@@ -357,11 +357,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 /* ─── INSTAGRAM ─── */
 .instagram{padding:80px 60px;border-bottom:0.5px solid var(--line);}
 .instagram-header{margin-bottom:40px;display:flex;justify-content:space-between;align-items:flex-end;}
-.insta-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:3px;
-}
+.insta-grid{display:block;width:100%;}
+behold-widget{--behold-columns:5;--behold-gap:3px;--behold-border-radius:0;width:100%;display:block;}
 .insta-item{
   aspect-ratio:1;overflow:hidden;
   background:#e8e0d4;position:relative;cursor:pointer;
@@ -554,7 +551,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   .process-step:nth-child(2) .step-arrow,.process-step:nth-child(4) .step-arrow{display:none;}
   .notice{padding:60px 24px;}
   .instagram{padding:60px 24px;}
-  .insta-grid{grid-template-columns:repeat(3,1fr);}
+  .insta-grid behold-widget{--behold-columns:3;}
   .location{grid-template-columns:1fr;}
   .location-map{min-height:280px;}
   .location-info{padding:40px 24px;}
@@ -565,7 +562,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 }
 @media(max-width:600px){
   .gallery-grid{grid-template-columns:1fr 1fr;padding:0 16px;}
-  .insta-grid{grid-template-columns:repeat(2,1fr);}
+  .insta-grid behold-widget{--behold-columns:2;}
   .process-steps{grid-template-columns:1fr;}
   .process-step .step-arrow{display:none;}
   .footer-top{grid-template-columns:1fr;}
@@ -863,27 +860,14 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
     </div>
     <a href="https://www.instagram.com/koyuje_studio/" target="_blank" class="btn-more reveal">팔로우하기 →</a>
   </div>
-  <div class="insta-grid">
-    <div class="insta-item reveal">
-      <img src="/_0049.jpg" alt="인스타그램">
-      <div class="insta-overlay"><div class="insta-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></div></div>
-    </div>
-    <div class="insta-item reveal reveal-delay-1">
-      <img src="/0057.jpg" alt="인스타그램">
-      <div class="insta-overlay"><div class="insta-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></div></div>
-    </div>
-    <div class="insta-item reveal reveal-delay-2">
-      <img src="/0073.jpg" alt="인스타그램">
-      <div class="insta-overlay"><div class="insta-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></div></div>
-    </div>
-    <div class="insta-item reveal reveal-delay-3">
-      <img src="/0075.jpg" alt="인스타그램">
-      <div class="insta-overlay"><div class="insta-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></div></div>
-    </div>
-    <div class="insta-item reveal reveal-delay-4">
-      <img src="/0138_.jpg" alt="인스타그램">
-      <div class="insta-overlay"><div class="insta-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></div></div>
-    </div>
+  <div class="insta-grid" id="instaGrid">
+    <behold-widget feed-id="JUWsfWHCav1KX2Rt10xe"></behold-widget>
+    <script>
+      (() => {
+        const d=document,s=d.createElement("script");s.type="module";
+        s.src="https://w.behold.so/widget.js";d.head.append(s);
+      })();
+    </script>
   </div>
   <div class="insta-cta reveal">
     <a href="https://www.instagram.com/koyuje_studio/" target="_blank" class="btn-insta">
