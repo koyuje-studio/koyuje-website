@@ -237,11 +237,20 @@ function setFilter(cat,el){
 }
 
 function applyFilter(){
-  if(currentFilter==='all'){
-    filteredItems=[...allItems];
+  let base = [...allItems];
+
+  // 공지는 항상 최상단 고정
+  const notices = base.filter(i => i.category === '공지');
+  const others = base.filter(i => i.category !== '공지');
+
+  if(currentFilter === 'all'){
+    filteredItems = [...notices, ...others];
+  } else if(currentFilter === '공지'){
+    filteredItems = notices;
   } else {
-    filteredItems=allItems.filter(i=>i.category===currentFilter);
+    filteredItems = others.filter(i => i.category === currentFilter);
   }
+
   renderPage(1);
 }
 

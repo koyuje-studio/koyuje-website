@@ -531,8 +531,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
     <li><a href="#about">스튜디오 소개</a></li>
     <li><a href="#gallery">갤러리</a></li>
     <li><a href="#packages">상품구성</a></li>
-    <li><a href="/board.html">예약확정</a></li>
-    <li><a href="#notice">공지사항</a></li>
+    <li><a href="/board.html">게시판</a></li>
     <li><a href="#location">오시는 길</a></li>
   </ul>
   <a href="/reservation.html" class="nav-cta">예약 문의</a>
@@ -754,36 +753,18 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   </div>
 </section>
 
-<!-- NOTICE -->
+<!-- NOTICE + BOARD -->
 <section class="notice" id="notice">
   <div class="notice-header">
     <div>
-      <div class="sec-eyebrow reveal" style="padding-left:0;">Notice</div>
-      <h2 class="sec-title reveal reveal-delay-1" style="margin-bottom:0;">공지사항</h2>
+      <div class="sec-eyebrow reveal" style="padding-left:0;">Notice & Board</div>
+      <h2 class="sec-title reveal reveal-delay-1" style="margin-bottom:0;">공지사항 &amp; 예약확정</h2>
     </div>
-    <a href="#" class="btn-more reveal">전체보기 →</a>
+    <a href="/board.html" class="btn-more reveal">전체보기 →</a>
   </div>
-  <div class="notice-list">
-    <a href="#" class="notice-item reveal">
-      <div class="notice-num">공지</div>
-      <div class="notice-title">2026년 하반기 예약 오픈 안내 <span class="notice-badge">NEW</span></div>
-      <div class="notice-date">2026.05.01</div>
-    </a>
-    <a href="#" class="notice-item reveal reveal-delay-1">
-      <div class="notice-num">공지</div>
-      <div class="notice-title">주말 및 공휴일 추가 요금 안내</div>
-      <div class="notice-date">2026.03.15</div>
-    </a>
-    <a href="#" class="notice-item reveal reveal-delay-2">
-      <div class="notice-num">공지</div>
-      <div class="notice-title">2026년 상품가 및 구성 변경 안내</div>
-      <div class="notice-date">2026.01.02</div>
-    </a>
-    <a href="#" class="notice-item reveal reveal-delay-3">
-      <div class="notice-num">안내</div>
-      <div class="notice-title">한복 대여 사이즈 및 신발 안내</div>
-      <div class="notice-date">2025.11.20</div>
-    </a>
+  <div class="notice-list" id="homeNoticeList">
+    <!-- 게시판 API에서 동적 로드 -->
+    <div style="padding:32px 0;text-align:center;color:var(--muted);font-size:13px;letter-spacing:0.1em;">불러오는 중...</div>
   </div>
 </section>
 
@@ -920,8 +901,67 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 </div>
 
 <script>
-// Nav scroll
-const nav=document.getElementById('navbar');
+// 홈페이지 공지사항 — 게시판 API 연동
+const BOARD_URL = 'https://script.google.com/macros/s/AKfycbyZC9PJMXCvl9gg349MVI495OB5bhjiZR-pZ_EMtorZfdu7muzD4MN3NUEfka2BIaKE/exec';
+
+function loadHomeNotice() {
+  fetch(BOARD_URL + '?action=board&page=1')
+    .then(r => r.json())
+    .then(data => {
+      if (data.result !== 'success' || !data.data) return;
+
+      const all = data.data || [];
+      // 공지 먼저, 그다음 예약확정 최신 3개
+      const notices = all.filter(i => i.category === '공지').slice(0, 3);
+      const reservations = all.filter(i => i.category === '예약확정').slice(0, 3);
+      const items = [...notices, ...reservations].slice(0, 5);
+
+      if (items.length === 0) return;
+
+      const list = document.getElementById('homeNoticeList');
+      list.innerHTML = items.map((item, idx) => {
+        const isNotice = item.category === '공지';
+        const isPrivate = item.isPublic === '비공개' || item.hasPassword;
+        const isDone = item.title && item.title.includes('✅');
+        const isWait = item.title && item.title.includes('⏳');
+
+        // NEW 뱃지
+        let isNew = false;
+        if (item.date) {
+          const diff = (new Date() - new Date(item.date)) / (1000*60*60*24);
+          isNew = diff <= 10;
+        }
+
+        // 제목
+        let displayTitle = item.title || '';
+        if (isPrivate) {
+          const nameMatch = item.title && item.title.match(/^(.+?)님/);
+          displayTitle = nameMatch ? nameMatch[1] + '님 🔒' : '🔒 비밀글';
+        }
+
+        // 날짜 포맷
+        const d = item.date ? item.date.replace(/-/g, '.') : '';
+
+        return `
+        <a href="/board.html" class="notice-item" style="animation-delay:${idx*0.1}s">
+          <div class="notice-num" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);">${isNotice ? '📌 공지' : '예약확정'}</div>
+          <div class="notice-title">
+            ${displayTitle}
+            ${isNew ? '<span class="notice-badge">NEW</span>' : ''}
+            ${isDone ? '<span style="font-size:11px;color:#3a6b3a;margin-left:6px;">✅ 완료</span>' : ''}
+            ${isWait ? '<span style="font-size:11px;color:#8b6914;margin-left:6px;">⏳ 접수</span>' : ''}
+          </div>
+          <div class="notice-date">${d}</div>
+        </a>`;
+      }).join('');
+    })
+    .catch(() => {
+      // 실패 시 조용히 처리
+      document.getElementById('homeNoticeList').innerHTML = '';
+    });
+}
+
+loadHomeNotice();
 window.addEventListener('scroll',()=>{
   nav.classList.toggle('scrolled',window.scrollY>60);
 });
@@ -965,8 +1005,7 @@ mobileMenu.innerHTML = `
   <a href="#about" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">스튜디오 소개</a>
   <a href="#gallery" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">갤러리</a>
   <a href="#packages" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">상품구성</a>
-  <a href="/board.html" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">예약확정</a>
-  <a href="#notice" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">공지사항</a>
+  <a href="/board.html" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">게시판</a>
   <a href="#location" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">오시는 길</a>
   <a href="/reservation.html" style="margin-top:16px;background:var(--gold);color:var(--paper);padding:14px 40px;font-size:13px;letter-spacing:0.2em;text-decoration:none;">예약 문의</a>
 `;
