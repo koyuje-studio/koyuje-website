@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예약 안내 | 고유재 한옥스튜디오</title>
+<meta name="description" content="고유재 한옥스튜디오 예약 안내. 카카오톡 상담부터 예약확정까지 단계별로 안내해드립니다.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;
+  --gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;
+  --line:rgba(28,24,20,0.1);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;overflow-x:hidden;}
+
+/* NAV */
+.nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.nav-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.12em;color:var(--ink);text-decoration:none;}
+.nav-logo em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.25em;margin-top:1px;}
+.nav-back{font-size:12px;color:var(--muted);letter-spacing:0.12em;text-decoration:none;transition:color .3s;}
+.nav-back:hover{color:var(--ink);}
+
+/* HERO */
+.hero{
+  background:var(--ink);
+  padding:72px 40px 64px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(160,120,64,0.12) 0%, transparent 70%);
+}
+.hero-eyebrow{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:13px;color:var(--gold2);letter-spacing:0.3em;
+  margin-bottom:20px;
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  opacity:0;animation:fadeUp .8s .2s ease forwards;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:28px;height:0.5px;background:var(--gold);}
+.hero-title{
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(32px,5vw,52px);font-weight:300;
+  color:var(--paper);line-height:1.3;margin-bottom:16px;
+  opacity:0;animation:fadeUp .8s .4s ease forwards;
+}
+.hero-desc{
+  font-size:14px;color:rgba(247,242,234,0.5);
+  letter-spacing:0.06em;line-height:1.9;
+  max-width:480px;margin:0 auto;
+  opacity:0;animation:fadeUp .8s .6s ease forwards;
+}
+
+/* WRAP */
+.wrap{max-width:760px;margin:0 auto;padding:72px 40px 100px;}
+
+/* NOTICE BOX */
+.notice-box{
+  background:rgba(160,120,64,0.06);
+  border:0.5px solid rgba(160,120,64,0.25);
+  padding:24px 28px;margin-bottom:56px;
+  display:flex;gap:16px;align-items:flex-start;
+}
+.notice-icon{font-size:18px;margin-top:2px;flex-shrink:0;}
+.notice-text{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:0.04em;}
+.notice-text strong{color:var(--ink);font-weight:400;}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{
+  display:grid;grid-template-columns:80px 1fr;
+  gap:0;position:relative;
+}
+.step:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  left:40px;top:80px;
+  width:0.5px;height:calc(100% - 40px);
+  background:var(--line);
+}
+.step-left{
+  display:flex;flex-direction:column;align-items:center;
+  padding-top:28px;
+}
+.step-num{
+  width:44px;height:44px;
+  border:0.5px solid var(--gold);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:18px;color:var(--gold);
+  background:var(--paper);
+  position:relative;z-index:1;
+  flex-shrink:0;
+}
+.step-body{
+  padding:24px 0 48px 32px;
+  border-bottom:0.5px solid var(--line);
+}
+.step:last-child .step-body{border-bottom:none;padding-bottom:0;}
+.step-tag{
+  font-size:10px;letter-spacing:0.22em;color:var(--gold);
+  margin-bottom:10px;
+}
+.step-title{
+  font-family:'Noto Serif KR',serif;
+  font-size:22px;font-weight:300;
+  margin-bottom:12px;letter-spacing:0.03em;
+}
+.step-desc{
+  font-size:13px;color:var(--muted);
+  line-height:2;letter-spacing:0.04em;
+  margin-bottom:20px;
+}
+.step-detail{
+  background:var(--paper2);
+  border:0.5px solid var(--line);
+  padding:16px 20px;
+  font-size:12px;color:var(--muted);
+  line-height:1.9;letter-spacing:0.04em;
+  margin-bottom:20px;
+}
+.step-detail strong{color:var(--ink);font-weight:400;}
+.step-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#FAE300;color:#3A1D1D;
+  padding:13px 28px;font-size:12px;letter-spacing:0.12em;
+  text-decoration:none;transition:all .3s;
+  font-family:'Noto Sans KR',sans-serif;font-weight:400;
+}
+.step-cta:hover{background:#f0d800;transform:translateY(-1px);}
+.step-cta-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  border:0.5px solid var(--gold);color:var(--gold);
+  padding:12px 24px;font-size:12px;letter-spacing:0.12em;
+  text-decoration:none;transition:all .3s;
+}
+.step-cta-ghost:hover{background:var(--gold);color:var(--paper);}
+.step-btns{display:flex;gap:12px;flex-wrap:wrap;}
+
+/* ACCOUNT BOX */
+.account-box{
+  background:var(--ink);color:var(--paper);
+  padding:28px 32px;margin-top:16px;
+}
+.account-label{font-size:10px;letter-spacing:0.22em;color:var(--gold);margin-bottom:10px;}
+.account-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:300;letter-spacing:0.08em;
+  margin-bottom:4px;
+}
+.account-name{font-size:12px;color:rgba(247,242,234,0.5);letter-spacing:0.1em;}
+
+/* FAQ */
+.faq{margin-top:72px;}
+.faq-title{
+  font-family:'Noto Serif KR',serif;
+  font-size:22px;font-weight:300;
+  margin-bottom:32px;letter-spacing:0.03em;
+}
+.faq-item{border-bottom:0.5px solid var(--line);overflow:hidden;}
+.faq-item:first-of-type{border-top:0.5px solid var(--line);}
+.faq-q{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px 0;cursor:pointer;
+  font-size:14px;letter-spacing:0.03em;
+  user-select:none;
+}
+.faq-q:hover{color:var(--gold);}
+.faq-icon{
+  font-size:18px;color:var(--muted);
+  transition:transform .3s;flex-shrink:0;
+}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s ease,padding .4s ease;
+  font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:0.04em;
+}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:20px;}
+
+/* BOTTOM CTA */
+.bottom-cta{
+  margin-top:72px;
+  background:var(--ink);
+  padding:48px 40px;text-align:center;
+}
+.bottom-cta-title{
+  font-family:'Noto Serif KR',serif;
+  font-size:24px;font-weight:300;color:var(--paper);
+  margin-bottom:8px;
+}
+.bottom-cta-desc{font-size:13px;color:rgba(247,242,234,0.4);letter-spacing:0.06em;margin-bottom:28px;}
+.bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-kakao{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#FAE300;color:#3A1D1D;
+  padding:14px 32px;font-size:13px;letter-spacing:0.1em;
+  text-decoration:none;transition:all .3s;
+}
+.btn-kakao:hover{background:#f0d800;}
+.btn-tel{
+  display:inline-flex;align-items:center;gap:8px;
+  border:0.5px solid rgba(247,242,234,0.2);color:rgba(247,242,234,0.7);
+  padding:14px 32px;font-size:13px;letter-spacing:0.1em;
+  text-decoration:none;transition:all .3s;
+}
+.btn-tel:hover{border-color:var(--gold);color:var(--gold);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+
+@media(max-width:600px){
+  .nav{padding:16px 20px;}
+  .hero{padding:52px 20px 44px;}
+  .wrap{padding:48px 20px 72px;}
+  .step{grid-template-columns:56px 1fr;}
+  .step-num{width:36px;height:36px;font-size:15px;}
+  .step:not(:last-child)::after{left:28px;}
+  .step-body{padding:20px 0 40px 20px;}
+  .bottom-cta{padding:40px 20px;}
+  .account-num{font-size:22px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">고유재 한옥스튜디오<em>Koyuje Hanok Studio</em></a>
+  <a href="/" class="nav-back">← 홈으로</a>
+</nav>
+
+<div class="hero">
+  <p class="hero-eyebrow">Reservation Guide</p>
+  <h1 class="hero-title">예약 안내</h1>
+  <p class="hero-desc">고유재는 충분한 상담 후 예약이 진행됩니다.<br>아래 단계를 따라 편하게 문의해 주세요.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- 안내 박스 -->
+  <div class="notice-box reveal">
+    <div class="notice-icon">💡</div>
+    <div class="notice-text">
+      고유재 한옥스튜디오는 <strong>카카오톡 상담 → 날짜 확정 → 예약금 입금 → 예약확정 작성</strong> 순서로 진행됩니다. 원하시는 날짜가 있으시다면 먼저 카카오톡으로 문의해 주세요!
+    </div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step reveal">
+      <div class="step-left">
+        <div class="step-num">1</div>
+      </div>
+      <div class="step-body">
+        <div class="step-tag">STEP 01</div>
+        <h2 class="step-title">카카오톡으로 날짜 상담</h2>
+        <p class="step-desc">
+          원하시는 촬영 날짜와 상품을 카카오톡 채널로 문의해 주세요.<br>
+          가능한 날짜를 확인한 후 안내해 드립니다.
+        </p>
+        <div class="step-detail">
+          <strong>운영시간</strong> · 평일 · 주말 AM 10:00 — PM 18:00<br>
+          <strong>문의 내용</strong> · 희망 날짜, 상품 종류, 아기 개월 수
+        </div>
+        <div class="step-btns">
+          <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" class="step-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#3A1D1D"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.887 1.67 5.424 4.236 6.977L5.5 21l3.838-2.026A11.3 11.3 0 0012 19c5.523 0 10-3.477 10-8S17.523 3 12 3z"/></svg>
+            카카오톡 채널 상담하기
+          </a>
+          <a href="tel:010-7635-9689" class="step-cta-ghost">📞 010-7635-9689</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step reveal reveal-delay-1">
+      <div class="step-left">
+        <div class="step-num">2</div>
+      </div>
+      <div class="step-body">
+        <div class="step-tag">STEP 02</div>
+        <h2 class="step-title">예약금 입금</h2>
+        <p class="step-desc">
+          날짜가 확정되면 예약금 20만원을 입금해 주세요.<br>
+          입금이 확인되면 해당 날짜가 최종 확보됩니다.
+        </p>
+        <div class="account-box">
+          <div class="account-label">ACCOUNT</div>
+          <div class="account-num">302-1742-5215-41</div>
+          <div class="account-name">농협은행 · 조현호 (고유재)</div>
+        </div>
+        <div class="step-detail" style="margin-top:12px;">
+          <strong>예약금</strong> · 20만원 (잔금은 촬영 당일 결제)<br>
+          <strong>입금자명</strong> · 반드시 예약확정 양식에 기재하신 입금자명과 동일하게 입금해 주세요
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step reveal reveal-delay-2">
+      <div class="step-left">
+        <div class="step-num">3</div>
+      </div>
+      <div class="step-body">
+        <div class="step-tag">STEP 03</div>
+        <h2 class="step-title">예약확정 양식 작성</h2>
+        <p class="step-desc">
+          예약금 입금 후 아래 예약확정 양식을 작성해 주세요.<br>
+          한복 사이즈, 가족 정보, 촬영 날짜 등을 입력하시면 예약이 완료됩니다.
+        </p>
+        <div class="step-detail">
+          <strong>준비 내용</strong> · 아기 생년월일, 부모님 키·사이즈·신발 사이즈, 배송 주소<br>
+          <strong>확정 안내</strong> · 작성 후 48시간 이내에 예약 확정 안내 연락을 드립니다
+        </div>
+        <div class="step-btns">
+          <a href="/reservation.html" class="step-cta-ghost">
+            예약확정 양식 작성하기 →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step reveal">
+      <div class="step-left">
+        <div class="step-num">4</div>
+      </div>
+      <div class="step-body">
+        <div class="step-tag">STEP 04</div>
+        <h2 class="step-title">촬영 당일</h2>
+        <p class="step-desc">
+          예약하신 날짜에 방문해 주세요.<br>
+          한복 셀렉 후 촬영이 진행되며 잔금은 당일 결제하시면 됩니다.
+        </p>
+        <div class="step-detail">
+          <strong>주소</strong> · 충청남도 공주시 봉황로 88<br>
+          <strong>결제</strong> · 카드 및 현금 모두 가능<br>
+          <strong>소요시간</strong> · 아기 앨범형 약 30분 · 가족 실내 앨범형 약 90분
+        </div>
+        <a href="https://kko.to/wbVqE4BGHD" target="_blank" class="step-cta-ghost">카카오맵으로 길찾기 →</a>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step reveal reveal-delay-1">
+      <div class="step-left">
+        <div class="step-num">5</div>
+      </div>
+      <div class="step-body">
+        <div class="step-tag">STEP 05</div>
+        <h2 class="step-title">사진 수령</h2>
+        <p class="step-desc">
+          촬영 후 원본 수령일로부터 3주 이내에 사진을 셀렉해 주세요.<br>
+          셀렉 후 약 6주 이내에 앨범과 액자가 완성되어 배송됩니다.
+        </p>
+        <div class="step-detail">
+          <strong>원본 발송</strong> · 이메일로 발송 · 수령 후 반드시 개별 백업<br>
+          <strong>데이터 보관</strong> · 발송일 기준 6개월 후 삭제<br>
+          <strong>셀렉 기간</strong> · 원본 수령 후 3주 이내 부탁드립니다
+        </div>
+        <a href="/status.html" class="step-cta-ghost">예약 현황 확인하기 →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq reveal">
+    <h2 class="faq-title">자주 묻는 질문</h2>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>주말 촬영도 가능한가요?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">네, 주말 및 공휴일도 촬영 가능합니다. 다만 주말·공휴일(대체공휴일 포함)은 10만원이 추가됩니다. 주말은 예약이 빠르게 차는 편이니 일찍 문의해 주세요.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>쌍둥이나 형제 추가 촬영이 가능한가요?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">네, 가능합니다. 쌍둥이 추가는 50만원, 형제 추가는 실내 1인 10만원 / 야외 1인 20만원입니다. 남매 기념컷 추가는 1인 10만원이며 형제의 한복·신발·액세서리는 직접 준비해 오셔야 합니다.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>예약 취소 및 날짜 변경이 가능한가요?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">날짜 변경은 촬영일 기준 7일 이전에 문의해 주시면 가능합니다. 자세한 취소·환불 규정은 카카오톡 채널로 문의해 주세요.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>헤어메이크업은 포함되나요?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">가족 실내 앨범형의 경우 엄마·아빠 헤어메이크업이 포함됩니다. 아기 앨범형은 포함되지 않습니다. 조부모님 헤어·메이크업은 별도 비용이 발생하며 카카오톡으로 문의해 주세요.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>야외 촬영은 항상 가능한가요?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">야외 한옥 및 문화재 스냅은 아기 컨디션 및 날씨에 따라 촬영이 불가할 수 있습니다. 날씨 등의 사유로 야외 촬영이 어려울 경우 별도로 안내해 드립니다.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <h2 class="bottom-cta-title">궁금한 점이 있으신가요?</h2>
+  <p class="bottom-cta-desc">카카오톡 채널로 편하게 문의해 주세요</p>
+  <div class="bottom-cta-btns">
+    <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" class="btn-kakao">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#3A1D1D"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.887 1.67 5.424 4.236 6.977L5.5 21l3.838-2.026A11.3 11.3 0 0012 19c5.523 0 10-3.477 10-8S17.523 3 12 3z"/></svg>
+      카카오톡 채널 상담
+    </a>
+    <a href="tel:010-7635-9689" class="btn-tel">📞 010-7635-9689</a>
+  </div>
+</div>
+
+<script>
+// FAQ 토글
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+// 스크롤 reveal
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
+reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
