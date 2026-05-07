@@ -54,10 +54,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .nav-links{display:flex;gap:36px;list-style:none;}
 .nav-links a{
   font-size:12px;letter-spacing:0.2em;
-  color:rgba(247,242,234,0.85);text-decoration:none;
+  color:rgba(247,242,234,0.9);text-decoration:none;
   transition:color 0.3s;
+  text-shadow:0 1px 4px rgba(0,0,0,0.4);
 }
-.nav.scrolled .nav-links a{color:var(--muted);}
+.nav.scrolled .nav-links a{color:var(--muted);text-shadow:none;}
 .nav-links a:hover{color:var(--gold2)!important;}
 .nav-cta{
   font-size:11px;letter-spacing:0.2em;
@@ -1024,9 +1025,14 @@ function loadHomeNotice() {
 }
 
 loadHomeNotice();
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('scrolled',window.scrollY>60);
-});
+const nav=document.getElementById('navbar');
+function updateNav(){
+  const hero=document.querySelector('.hero');
+  const threshold = hero ? hero.offsetHeight - 80 : 500;
+  nav.classList.toggle('scrolled', window.scrollY > threshold);
+}
+window.addEventListener('scroll', updateNav, {passive:true});
+updateNav();
 
 // Video fallback
 const video=document.getElementById('heroVideo');
