@@ -1079,33 +1079,63 @@ fetch(BOARD_URL + '?action=gallery')
   })
   .catch(() => renderGallery(galleryFallback));
 (function(){
-  const today = new Date().toDateString();
-  const seen = sessionStorage.getItem('koyuje_intro');
   const intro = document.getElementById('siteIntro');
   if(!intro) return;
-  if(seen === today){ intro.style.display='none'; return; }
-  document.body.style.overflow='hidden';
-  function anim(el,animStr,delay){ setTimeout(()=>{ el.style.animation=animStr; },delay); }
-  const il1=document.getElementById('il1');
-  const il2=document.getElementById('il2');
-  const idiv=document.getElementById('idiv');
-  const ilogo=document.getElementById('ilogo');
-  const ilogoen=document.getElementById('ilogoen');
-  anim(il1,'introFadeIn 1s ease forwards',400);
-  anim(il2,'introFadeIn 1s ease forwards',1000);
-  anim(il1,'introFadeOut 0.7s ease forwards',2800);
-  anim(il2,'introFadeOut 0.7s ease forwards',3100);
-  anim(idiv,'introLineGrow 0.8s ease forwards',4000);
-  anim(ilogo,'introFadeIn 1s ease forwards',4600);
-  anim(ilogoen,'introFadeIn 0.8s ease forwards',5200);
-  setTimeout(()=>{
-    intro.style.animation='introOverlayFade 0.9s ease forwards';
-    setTimeout(()=>{
-      intro.style.display='none';
-      document.body.style.overflow='';
-      sessionStorage.setItem('koyuje_intro',today);
-    },900);
-  },6800);
+
+  const today = new Date().toDateString();
+  const seen = sessionStorage.getItem('koyuje_intro');
+
+  // 인트로 강제 종료 함수
+  function endIntro() {
+    intro.style.opacity = '0';
+    intro.style.transition = 'opacity 0.8s ease';
+    setTimeout(() => {
+      intro.style.display = 'none';
+      document.body.style.overflow = '';
+      sessionStorage.setItem('koyuje_intro', today);
+    }, 800);
+  }
+
+  // 이미 봤으면 즉시 숨김
+  if(seen === today) {
+    intro.style.display = 'none';
+    return;
+  }
+
+  // 안전장치: 10초 후 무조건 종료
+  const safetyTimer = setTimeout(endIntro, 10000);
+
+  document.body.style.overflow = 'hidden';
+
+  function anim(el, animStr, delay) {
+    setTimeout(() => { if(el) el.style.animation = animStr; }, delay);
+  }
+
+  const il1 = document.getElementById('il1');
+  const il2 = document.getElementById('il2');
+  const idiv = document.getElementById('idiv');
+  const ilogo = document.getElementById('ilogo');
+  const ilogoen = document.getElementById('ilogoen');
+
+  anim(il1, 'introFadeIn 1s ease forwards', 400);
+  anim(il2, 'introFadeIn 1s ease forwards', 1000);
+  anim(il1, 'introFadeOut 0.7s ease forwards', 2800);
+  anim(il2, 'introFadeOut 0.7s ease forwards', 3100);
+  anim(idiv, 'introLineGrow 0.8s ease forwards', 4000);
+  anim(ilogo, 'introFadeIn 1s ease forwards', 4600);
+  anim(ilogoen, 'introFadeIn 0.8s ease forwards', 5200);
+
+  // 7초 후 페이드아웃
+  setTimeout(() => {
+    clearTimeout(safetyTimer);
+    endIntro();
+  }, 7000);
+
+  // 클릭하면 스킵
+  intro.addEventListener('click', () => {
+    clearTimeout(safetyTimer);
+    endIntro();
+  });
 })();
 
 // 홈페이지 공지사항 — 게시판 API 연동
