@@ -493,7 +493,8 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   background:#0a0806;
   display:flex;align-items:center;justify-content:center;
   flex-direction:column;
-  pointer-events:none;
+  pointer-events:all;
+  cursor:pointer;
 }
 .intro-scene{
   display:flex;flex-direction:column;
@@ -1102,8 +1103,8 @@ fetch(BOARD_URL + '?action=gallery')
     return;
   }
 
-  // 안전장치: 10초 후 무조건 종료
-  const safetyTimer = setTimeout(endIntro, 10000);
+  // 안전장치: 8초 후 무조건 종료
+  const safetyTimer = setTimeout(endIntro, 8000);
 
   document.body.style.overflow = 'hidden';
 
