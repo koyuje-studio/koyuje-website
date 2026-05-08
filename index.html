@@ -10,7 +10,8 @@
 <meta property="og:description" content="충청남도 공주시 전통 한옥에서 만나는 프리미엄 돌촬영 스튜디오">
 <meta property="og:image" content="/_0049.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
-<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3a3bea54fcc2f18a85036be7b91e3b4e&autoload=false"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -419,6 +420,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   position:relative;overflow:hidden;
   z-index:1;
 }
+#kakaoMap .leaflet-pane,
+#kakaoMap .leaflet-top,
+#kakaoMap .leaflet-bottom{z-index:1!important;}
+#kakaoMap .leaflet-control{z-index:2!important;}
 .location-map iframe{width:100%;height:100%;border:none;filter:grayscale(20%);}
 .location-info{
   padding:72px;
@@ -493,8 +498,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   background:#0a0806;
   display:flex;align-items:center;justify-content:center;
   flex-direction:column;
-  pointer-events:all;
-  cursor:pointer;
+  pointer-events:none;
 }
 .intro-scene{
   display:flex;flex-direction:column;
@@ -894,14 +898,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
     <h2 class="sec-title reveal reveal-delay-1">오시는 길</h2>
     <div class="location-item reveal reveal-delay-2">
       <div class="location-key">주소</div>
-      <div class="location-val">충청남도 공주시 봉황로 88</div>
-    </div>
-    <div class="location-item reveal reveal-delay-2">
-      <div class="location-key">주차</div>
-      <div class="location-val">
-        스튜디오 바로 앞 공주세무서 주차장을 이용하시면 됩니다.<br>
-        <span style="font-size:12px;color:var(--muted);">일요일에는 차단기가 있어도 자동으로 올라가니 편하게 이용하시면 됩니다.</span>
-      </div>
+      <div class="location-val">충청남도 공주시 봉황로 88<br><span style="font-size:12px;color:var(--muted);">주차: 스튜디오 인근 주차 가능</span></div>
     </div>
     <div class="location-item reveal reveal-delay-2">
       <div class="location-key">전화</div>
@@ -915,14 +912,9 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
       <div class="location-key">운영시간</div>
       <div class="location-val">평일 · 주말 10:00 — 18:00<br><span style="font-size:12px;color:var(--muted);">촬영 문의는 카카오톡을 이용해 주세요</span></div>
     </div>
-    <!-- 길찾기 버튼 -->
     <a href="https://kko.to/wbVqE4BGHD" target="_blank" class="kakao-btn reveal reveal-delay-3">
       <svg class="kakao-icon" viewBox="0 0 24 24" fill="#3A1D1D"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.887 1.67 5.424 4.236 6.977L5.5 21l3.838-2.026A11.3 11.3 0 0012 19c5.523 0 10-3.477 10-8S17.523 3 12 3z"/></svg>
-      카카오맵 길찾기
-    </a>
-    <a href="https://map.naver.com/p/search/충청남도 공주시 봉황로 88" target="_blank" class="kakao-btn reveal reveal-delay-3" style="margin-top:10px;background:#03c75a;color:#fff;">
-      <svg class="kakao-icon" viewBox="0 0 24 24" fill="white"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
-      네이버지도 길찾기
+      카카오맵으로 길찾기
     </a>
     <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" class="kakao-btn reveal reveal-delay-3" style="margin-top:10px;background:rgba(250,227,0,0.15);border:1px solid #FAE300;">
       <svg class="kakao-icon" viewBox="0 0 24 24" fill="#3A1D1D"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.887 1.67 5.424 4.236 6.977L5.5 21l3.838-2.026A11.3 11.3 0 0012 19c5.523 0 10-3.477 10-8S17.523 3 12 3z"/></svg>
@@ -996,43 +988,46 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 // ─────────────────────────────────────────
 const BOARD_URL = 'https://script.google.com/macros/s/AKfycbx4-im4AYWkgsWXWqPiKkYI_l7A87ORtUPS7I4Ww6K3DlD2QBAQy06s6S1LgwNg06OT/exec';
 
-// 지도 초기화 (카카오맵)
-kakao.maps.load(function() {
+// 지도 초기화 (OpenStreetMap + Leaflet)
+window.addEventListener('DOMContentLoaded', function() {
   const container = document.getElementById('kakaoMap');
   if (!container) return;
 
+  // 고유재 한옥스튜디오 좌표
   const lat = 36.463541;
   const lng = 127.115631;
 
-  const map = new kakao.maps.Map(container, {
-    center: new kakao.maps.LatLng(lat, lng),
-    level: 4
+  const map = L.map('kakaoMap', {
+    center: [lat, lng],
+    zoom: 16,
+    zoomControl: true,
+    scrollWheelZoom: false
   });
 
-  // 마커
-  const marker = new kakao.maps.Marker({
-    position: new kakao.maps.LatLng(lat, lng),
-    map: map
+  // 타일 레이어 (OpenStreetMap)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  // 커스텀 마커
+  const icon = L.divIcon({
+    html: '<div style="background:#a07840;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    className: ''
   });
 
-  // 인포윈도우
-  const infowindow = new kakao.maps.InfoWindow({
-    content: [
-      '<div style="padding:12px 16px;font-family:\'Noto Sans KR\',sans-serif;min-width:200px;">',
-      '<div style="font-size:14px;font-weight:400;color:#1c1814;margin-bottom:4px;">📍 고유재 한옥스튜디오</div>',
-      '<div style="font-size:12px;color:#7a6e62;margin-bottom:8px;">충청남도 공주시 봉황로 88</div>',
-      '<a href="https://kko.to/wbVqE4BGHD" target="_blank" ',
-      'style="font-size:11px;color:#a07840;text-decoration:none;display:inline-block;">',
-      '카카오맵 길찾기 →</a>',
-      '</div>'
-    ].join('')
-  });
-  infowindow.open(map, marker);
+  const marker = L.marker([lat, lng], {icon: icon}).addTo(map);
 
-  // 마커 클릭 시 카카오맵 이동
-  kakao.maps.event.addListener(marker, 'click', function() {
-    window.open('https://kko.to/wbVqE4BGHD', '_blank');
-  });
+  // 팝업
+  marker.bindPopup([
+    '<div style="font-family:\'Noto Sans KR\',sans-serif;padding:4px 2px;">',
+    '<strong style="font-size:13px;color:#1c1814;font-weight:400;">고유재 한옥스튜디오</strong><br>',
+    '<span style="font-size:11px;color:#7a6e62;">충청남도 공주시 봉황로 88</span><br>',
+    '<a href="https://kko.to/wbVqE4BGHD" target="_blank" style="font-size:11px;color:#a07840;text-decoration:none;">카카오맵으로 길찾기 →</a>',
+    '</div>'
+  ].join(''), {maxWidth: 200}).openPopup();
 });
 
 // ─────────────────────────────────────────
@@ -1080,63 +1075,33 @@ fetch(BOARD_URL + '?action=gallery')
   })
   .catch(() => renderGallery(galleryFallback));
 (function(){
-  const intro = document.getElementById('siteIntro');
-  if(!intro) return;
-
   const today = new Date().toDateString();
   const seen = sessionStorage.getItem('koyuje_intro');
-
-  // 인트로 강제 종료 함수
-  function endIntro() {
-    intro.style.opacity = '0';
-    intro.style.transition = 'opacity 0.8s ease';
-    setTimeout(() => {
-      intro.style.display = 'none';
-      document.body.style.overflow = '';
-      sessionStorage.setItem('koyuje_intro', today);
-    }, 800);
-  }
-
-  // 이미 봤으면 즉시 숨김
-  if(seen === today) {
-    intro.style.display = 'none';
-    return;
-  }
-
-  // 안전장치: 8초 후 무조건 종료
-  const safetyTimer = setTimeout(endIntro, 8000);
-
-  document.body.style.overflow = 'hidden';
-
-  function anim(el, animStr, delay) {
-    setTimeout(() => { if(el) el.style.animation = animStr; }, delay);
-  }
-
-  const il1 = document.getElementById('il1');
-  const il2 = document.getElementById('il2');
-  const idiv = document.getElementById('idiv');
-  const ilogo = document.getElementById('ilogo');
-  const ilogoen = document.getElementById('ilogoen');
-
-  anim(il1, 'introFadeIn 1s ease forwards', 400);
-  anim(il2, 'introFadeIn 1s ease forwards', 1000);
-  anim(il1, 'introFadeOut 0.7s ease forwards', 2800);
-  anim(il2, 'introFadeOut 0.7s ease forwards', 3100);
-  anim(idiv, 'introLineGrow 0.8s ease forwards', 4000);
-  anim(ilogo, 'introFadeIn 1s ease forwards', 4600);
-  anim(ilogoen, 'introFadeIn 0.8s ease forwards', 5200);
-
-  // 7초 후 페이드아웃
-  setTimeout(() => {
-    clearTimeout(safetyTimer);
-    endIntro();
-  }, 7000);
-
-  // 클릭하면 스킵
-  intro.addEventListener('click', () => {
-    clearTimeout(safetyTimer);
-    endIntro();
-  });
+  const intro = document.getElementById('siteIntro');
+  if(!intro) return;
+  if(seen === today){ intro.style.display='none'; return; }
+  document.body.style.overflow='hidden';
+  function anim(el,animStr,delay){ setTimeout(()=>{ el.style.animation=animStr; },delay); }
+  const il1=document.getElementById('il1');
+  const il2=document.getElementById('il2');
+  const idiv=document.getElementById('idiv');
+  const ilogo=document.getElementById('ilogo');
+  const ilogoen=document.getElementById('ilogoen');
+  anim(il1,'introFadeIn 1s ease forwards',400);
+  anim(il2,'introFadeIn 1s ease forwards',1000);
+  anim(il1,'introFadeOut 0.7s ease forwards',2800);
+  anim(il2,'introFadeOut 0.7s ease forwards',3100);
+  anim(idiv,'introLineGrow 0.8s ease forwards',4000);
+  anim(ilogo,'introFadeIn 1s ease forwards',4600);
+  anim(ilogoen,'introFadeIn 0.8s ease forwards',5200);
+  setTimeout(()=>{
+    intro.style.animation='introOverlayFade 0.9s ease forwards';
+    setTimeout(()=>{
+      intro.style.display='none';
+      document.body.style.overflow='';
+      sessionStorage.setItem('koyuje_intro',today);
+    },900);
+  },6800);
 })();
 
 // 홈페이지 공지사항 — 게시판 API 연동
