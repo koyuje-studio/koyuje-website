@@ -10,7 +10,7 @@
 <meta property="og:description" content="충청남도 공주시 전통 한옥에서 만나는 프리미엄 돌촬영 스튜디오">
 <meta property="og:image" content="/_0049.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3a3bea54fcc2f18a85036be7b91e3b4e&autoload=false"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3a3bea54fcc2f18a85036be7b91e3b4e"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -994,76 +994,43 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 const BOARD_URL = 'https://script.google.com/macros/s/AKfycbx4-im4AYWkgsWXWqPiKkYI_l7A87ORtUPS7I4Ww6K3DlD2QBAQy06s6S1LgwNg06OT/exec';
 
 // 지도 초기화 (카카오맵)
-// 중요: 카카오 개발자센터 > 내 애플리케이션 > 플랫폼 > Web 사이트 도메인에
-// 실제 접속 주소를 등록해야 지도가 표시됩니다.
-// 예) https://koyuje-website.vercel.app, https://koyuje.com, http://localhost:3000
-function showMapFallback(message) {
+window.addEventListener('DOMContentLoaded', function() {
   const container = document.getElementById('kakaoMap');
-  if (!container) return;
-  container.innerHTML = `
-    <div style="height:100%;min-height:400px;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;background:#e8e0d4;color:#7a6e62;font-family:'Noto Sans KR',sans-serif;">
-      <div>
-        <div style="font-family:'Noto Serif KR',serif;font-size:18px;color:#1c1814;margin-bottom:10px;">고유재 한옥스튜디오</div>
-        <div style="font-size:13px;line-height:1.8;margin-bottom:18px;">${message || '지도를 불러오지 못했습니다.'}<br>아래 버튼으로 길찾기를 이용해 주세요.</div>
-        <a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" style="display:inline-block;background:#FAE300;color:#3A1D1D;padding:12px 22px;font-size:12px;letter-spacing:0.08em;text-decoration:none;margin:4px;">카카오맵 길찾기</a>
-        <a href="https://map.naver.com/p/search/%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84%20%EA%B3%B5%EC%A3%BC%EC%8B%9C%20%EB%B4%89%ED%99%A9%EB%A1%9C%2088" target="_blank" rel="noopener" style="display:inline-block;background:#03c75a;color:#fff;padding:12px 22px;font-size:12px;letter-spacing:0.08em;text-decoration:none;margin:4px;">네이버지도 길찾기</a>
-      </div>
-    </div>
-  `;
-}
+  if (!container || typeof kakao === 'undefined') return;
 
-function initKakaoMap() {
-  const container = document.getElementById('kakaoMap');
-  if (!container) return;
+  try {
+    const lat = 36.463541;
+    const lng = 127.115631;
 
-  if (!window.kakao || !window.kakao.maps) {
-    showMapFallback('카카오맵 스크립트가 로드되지 않았습니다.');
-    console.warn('[KakaoMap] SDK load failed. 도메인 등록, JavaScript Key, 네트워크 차단 여부를 확인하세요.');
-    return;
+    const map = new kakao.maps.Map(container, {
+      center: new kakao.maps.LatLng(lat, lng),
+      level: 4
+    });
+
+    const marker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(lat, lng),
+      map: map
+    });
+
+    const infowindow = new kakao.maps.InfoWindow({
+      content: [
+        '<div style="padding:10px 14px;font-family:\'Noto Sans KR\',sans-serif;min-width:180px;">',
+        '<div style="font-size:13px;font-weight:400;color:#1c1814;margin-bottom:4px;">📍 고유재 한옥스튜디오</div>',
+        '<div style="font-size:11px;color:#7a6e62;margin-bottom:6px;">충청남도 공주시 봉황로 88</div>',
+        '<a href="https://kko.to/wbVqE4BGHD" target="_blank" style="font-size:11px;color:#a07840;text-decoration:none;">카카오맵 길찾기 →</a>',
+        '</div>'
+      ].join('')
+    });
+    infowindow.open(map, marker);
+
+    kakao.maps.event.addListener(marker, 'click', function() {
+      window.open('https://kko.to/wbVqE4BGHD', '_blank');
+    });
+  } catch(e) {
+    // 카카오맵 로드 실패 시 조용히 처리
+    console.log('카카오맵 로드 실패:', e);
   }
-
-  kakao.maps.load(function () {
-    try {
-      const lat = 36.463541;
-      const lng = 127.115631;
-      const position = new kakao.maps.LatLng(lat, lng);
-
-      const map = new kakao.maps.Map(container, {
-        center: position,
-        level: 4
-      });
-
-      const marker = new kakao.maps.Marker({
-        position: position,
-        map: map
-      });
-
-      const infowindow = new kakao.maps.InfoWindow({
-        content: [
-          '<div style="padding:10px 14px;font-family:\'Noto Sans KR\',sans-serif;min-width:190px;line-height:1.55;">',
-          '<div style="font-size:13px;font-weight:500;color:#1c1814;margin-bottom:4px;">📍 고유재 한옥스튜디오</div>',
-          '<div style="font-size:11px;color:#7a6e62;margin-bottom:6px;">충청남도 공주시 봉황로 88</div>',
-          '<a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" style="font-size:11px;color:#a07840;text-decoration:none;">카카오맵 길찾기 →</a>',
-          '</div>'
-        ].join('')
-      });
-      infowindow.open(map, marker);
-
-      kakao.maps.event.addListener(marker, 'click', function() {
-        window.open('https://kko.to/wbVqE4BGHD', '_blank');
-      });
-
-      // 반응형/스크롤 진입 후 지도 영역 크기 재계산
-      setTimeout(function(){ map.relayout(); map.setCenter(position); }, 300);
-      window.addEventListener('resize', function(){ map.relayout(); map.setCenter(position); });
-    } catch (e) {
-      console.error('[KakaoMap] init error:', e);
-      showMapFallback('카카오맵 초기화 중 오류가 발생했습니다.');
-    }
-  });
-}
-
-window.addEventListener('DOMContentLoaded', initKakaoMap);
+});
 
 // ─────────────────────────────────────────
 // 📸 갤러리 관리
