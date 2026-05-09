@@ -78,46 +78,48 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .hero{
   position:relative;height:100vh;min-height:600px;
   overflow:hidden;background:#1c1814;
+  isolation:isolate;
 }
 .hero-video{
   position:absolute;inset:0;
-  width:100%;height:100%;object-fit:cover;
+  width:100%;height:100%;object-fit:cover;object-position:center;
 }
 .hero-img{
   position:absolute;inset:0;
-  width:100%;height:100%;object-fit:cover;
+  width:100%;height:100%;object-fit:cover;object-position:center;
   display:none;
 }
 .hero-overlay{
   position:absolute;inset:0;
-  background:linear-gradient(to bottom, rgba(28,24,20,0.35) 0%, rgba(28,24,20,0.2) 50%, rgba(28,24,20,0.6) 100%);
+  background:
+    linear-gradient(to bottom, rgba(14,12,10,0.26) 0%, rgba(14,12,10,0.18) 38%, rgba(14,12,10,0.72) 100%),
+    linear-gradient(to right, rgba(14,12,10,0.46) 0%, rgba(14,12,10,0.14) 48%, rgba(14,12,10,0.28) 100%);
 }
 .hero-content{
-  position:absolute;bottom:80px;left:60px;right:60px;
+  position:absolute;bottom:78px;left:60px;right:60px;
   color:var(--paper);
+  max-width:760px;
 }
 .hero-eyebrow{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:13px;color:var(--gold2);letter-spacing:0.3em;
-  margin-bottom:20px;
+  font-size:11px;color:var(--gold2);letter-spacing:0.24em;
+  margin-bottom:18px;text-transform:uppercase;
   opacity:0;animation:fadeUp 1s 0.5s ease forwards;
 }
 .hero-title{
   font-family:'Noto Serif KR',serif;
-  font-size:clamp(40px,6vw,72px);font-weight:300;
-  line-height:1.15;letter-spacing:-0.01em;
-  margin-bottom:8px;
+  font-size:clamp(42px,6vw,76px);font-weight:300;
+  line-height:1.14;letter-spacing:-0.01em;
+  margin-bottom:20px;
   opacity:0;animation:fadeUp 1s 0.7s ease forwards;
 }
-.hero-title-en{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:clamp(13px,1.5vw,17px);font-weight:300;
-  color:rgba(247,242,234,0.6);letter-spacing:0.25em;
-  margin-bottom:40px;
+.hero-lead{
+  max-width:520px;
+  font-size:15px;line-height:1.95;color:rgba(247,242,234,0.74);
+  letter-spacing:0.04em;margin-bottom:30px;
   opacity:0;animation:fadeUp 1s 0.9s ease forwards;
 }
 .hero-actions{
-  display:flex;gap:20px;align-items:center;flex-wrap:wrap;
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
   opacity:0;animation:fadeUp 1s 1.1s ease forwards;
 }
 .btn-primary{
@@ -134,6 +136,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   padding-bottom:3px;transition:all 0.3s;
 }
 .btn-ghost-light:hover{color:var(--paper);border-color:var(--paper);}
+.hero-proof{
+  display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;
+  opacity:0;animation:fadeUp 1s 1.25s ease forwards;
+}
+.hero-proof-item{
+  border:0.5px solid rgba(247,242,234,0.28);
+  background:rgba(247,242,234,0.06);
+  backdrop-filter:blur(10px);
+  color:rgba(247,242,234,0.78);
+  padding:8px 13px;
+  font-size:11px;letter-spacing:0.12em;
+  line-height:1;
+}
 .hero-scroll{
   position:absolute;bottom:32px;right:60px;
   display:flex;flex-direction:column;align-items:center;gap:8px;
@@ -553,7 +568,22 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   .nav.scrolled{padding:12px 24px;}
   .nav-links,.nav-cta{display:none;}
   .nav-toggle{display:flex;}
-  .hero-content{left:24px;right:24px;bottom:60px;}
+  .hero{min-height:680px;height:100svh;}
+  .hero-video,.hero-img{object-position:center top;}
+  .hero-overlay{
+    background:
+      linear-gradient(to bottom, rgba(14,12,10,0.18) 0%, rgba(14,12,10,0.22) 34%, rgba(14,12,10,0.82) 100%),
+      linear-gradient(to right, rgba(14,12,10,0.22), rgba(14,12,10,0.12));
+  }
+  .hero-content{left:24px;right:24px;bottom:72px;max-width:none;}
+  .hero-eyebrow{font-size:10px;letter-spacing:0.18em;margin-bottom:14px;}
+  .hero-title{font-size:clamp(38px,11.2vw,52px);line-height:1.2;margin-bottom:18px;}
+  .hero-lead{font-size:13px;line-height:1.85;margin-bottom:24px;max-width:330px;}
+  .hero-actions{gap:10px;}
+  .btn-primary{padding:13px 24px;font-size:11px;letter-spacing:0.16em;}
+  .btn-ghost-light{font-size:11px;letter-spacing:0.1em;}
+  .hero-proof{gap:8px;margin-top:22px;max-width:340px;}
+  .hero-proof-item{font-size:10px;padding:8px 10px;letter-spacing:0.08em;}
   .hero-scroll{right:24px;}
   .about{grid-template-columns:1fr;}
   .about-img{min-height:280px;}
@@ -577,6 +607,11 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   .gallery-header,.notice-header,.instagram-header{padding:0;}
 }
 @media(max-width:600px){
+  .intro{display:none!important;}
+  .hero-content{bottom:64px;}
+  .hero-actions{flex-direction:column;align-items:flex-start;}
+  .btn-primary{width:100%;max-width:260px;text-align:center;}
+  .hero-scroll{display:none;}
   .gallery-grid{grid-template-columns:1fr 1fr;padding:0 16px;}
   .insta-grid{grid-template-columns:repeat(2,1fr);}
   .process-steps{grid-template-columns:1fr;}
@@ -628,12 +663,20 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   <img src="/_0049.jpg" alt="고유재 한옥스튜디오" class="hero-img" id="heroImg">
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Gongju · Chungnam · Premium Dol Studio</p>
-    <h1 class="hero-title">아이의 첫 해,<br>한옥에 담다</h1>
-    <p class="hero-title-en">고유재 한옥스튜디오</p>
+    <p class="hero-eyebrow">Private Hanok Family Studio</p>
+    <h1 class="hero-title">하루 두 팀,<br>한옥에 담는<br>가족의 첫 생일</h1>
+    <p class="hero-lead">
+      공주 한옥의 고요한 빛과 호텔 돌잔치급 실크 한복으로
+      아이의 첫 해를 따듯하고 영화처럼 기록합니다.
+    </p>
     <div class="hero-actions">
-      <a href="/guide.html" class="btn-primary">촬영 예약하기</a>
+      <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="btn-primary">카카오톡 상담하기</a>
       <a href="#packages" class="btn-ghost-light">상품 구성 보기 →</a>
+    </div>
+    <div class="hero-proof" aria-label="고유재 촬영 특징">
+      <span class="hero-proof-item">하루 두 팀만</span>
+      <span class="hero-proof-item">프리미엄 실크 한복</span>
+      <span class="hero-proof-item">1:1 전담 디렉팅</span>
     </div>
   </div>
   <div class="hero-scroll">
@@ -1114,6 +1157,7 @@ fetch(BOARD_URL + '?action=gallery')
   const seen = sessionStorage.getItem('koyuje_intro');
   const intro = document.getElementById('siteIntro');
   if(!intro) return;
+  if(window.matchMedia && window.matchMedia('(max-width: 600px)').matches){ intro.style.display='none'; return; }
   if(seen === today){ intro.style.display='none'; return; }
   document.body.style.overflow='hidden';
   function anim(el,animStr,delay){ setTimeout(()=>{ el.style.animation=animStr; },delay); }
@@ -1122,21 +1166,21 @@ fetch(BOARD_URL + '?action=gallery')
   const idiv=document.getElementById('idiv');
   const ilogo=document.getElementById('ilogo');
   const ilogoen=document.getElementById('ilogoen');
-  anim(il1,'introFadeIn 1s ease forwards',400);
-  anim(il2,'introFadeIn 1s ease forwards',1000);
-  anim(il1,'introFadeOut 0.7s ease forwards',2800);
-  anim(il2,'introFadeOut 0.7s ease forwards',3100);
-  anim(idiv,'introLineGrow 0.8s ease forwards',4000);
-  anim(ilogo,'introFadeIn 1s ease forwards',4600);
-  anim(ilogoen,'introFadeIn 0.8s ease forwards',5200);
+  anim(il1,'introFadeIn 0.7s ease forwards',180);
+  anim(il2,'introFadeIn 0.7s ease forwards',560);
+  anim(il1,'introFadeOut 0.45s ease forwards',1500);
+  anim(il2,'introFadeOut 0.45s ease forwards',1650);
+  anim(idiv,'introLineGrow 0.5s ease forwards',1950);
+  anim(ilogo,'introFadeIn 0.55s ease forwards',2200);
+  anim(ilogoen,'introFadeIn 0.5s ease forwards',2450);
   setTimeout(()=>{
-    intro.style.animation='introOverlayFade 0.9s ease forwards';
+    intro.style.animation='introOverlayFade 0.65s ease forwards';
     setTimeout(()=>{
       intro.style.display='none';
       document.body.style.overflow='';
       sessionStorage.setItem('koyuje_intro',today);
-    },900);
-  },6800);
+    },650);
+  },3200);
 })();
 
 // 홈페이지 공지사항 — 게시판 API 연동
