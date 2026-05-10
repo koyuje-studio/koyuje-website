@@ -384,24 +384,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .insta-item:hover img{transform:scale(1.08);}
 .insta-overlay{
   position:absolute;inset:0;
-  background:rgba(28,24,20,0.35);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transition:opacity 0.3s;
-}
-.insta-item:hover .insta-overlay{opacity:1;}
-.insta-icon{
-  width:32px;height:32px;
-  border:1.5px solid rgba(247,242,234,0.8);border-radius:7px;
-  display:flex;align-items:center;justify-content:center;
-}
-.insta-item{
-  aspect-ratio:1;overflow:hidden;
-  background:#e8e0d4;position:relative;cursor:pointer;
-}
-.insta-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;}
-.insta-item:hover img{transform:scale(1.08);}
-.insta-overlay{
-  position:absolute;inset:0;
   background:rgba(28,24,20,0.4);
   display:flex;align-items:center;justify-content:center;
   opacity:0;transition:opacity 0.3s;
@@ -502,53 +484,6 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 }
 .float-reserve:hover{background:var(--gold2);transform:translateY(-2px);}
 
-/* ─── INTRO ─── */
-.intro{
-  position:fixed;inset:0;z-index:9999;
-  background:#0a0806;
-  display:flex;align-items:center;justify-content:center;
-  flex-direction:column;
-  pointer-events:none;
-}
-.intro-scene{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:0;text-align:center;
-  padding:0 24px;
-}
-.intro-line1,.intro-line2{
-  font-family:'Noto Serif KR',serif;
-  font-weight:300;letter-spacing:0.08em;
-  color:#f7f2ea;line-height:1.6;
-  opacity:0;
-}
-.intro-line1{font-size:clamp(20px,5vw,32px);}
-.intro-line2{font-size:clamp(18px,4.5vw,28px);color:rgba(247,242,234,0.65);}
-.intro-divider{
-  width:0;height:0.5px;background:#a07840;
-  margin:20px auto;opacity:0;
-}
-.intro-logo{
-  font-family:'Noto Serif KR',serif;
-  font-size:clamp(18px,4vw,24px);font-weight:300;
-  color:#f7f2ea;letter-spacing:0.28em;opacity:0;
-}
-.intro-logo-en{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:clamp(10px,2vw,13px);color:#a07840;
-  letter-spacing:0.35em;opacity:0;margin-top:8px;
-}
-.intro-glow{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-60%);
-  width:min(400px,80vw);height:200px;
-  background:radial-gradient(ellipse,rgba(160,120,64,0.07) 0%,transparent 70%);
-  pointer-events:none;
-}
-@keyframes introFadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes introFadeOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-10px)}}
-@keyframes introLineGrow{from{width:0;opacity:0}to{width:min(48px,12vw);opacity:1}}
-@keyframes introOverlayFade{from{opacity:1}to{opacity:0}}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.8s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
 .reveal-delay-1{transition-delay:0.1s;}
@@ -607,7 +542,6 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   .gallery-header,.notice-header,.instagram-header{padding:0;}
 }
 @media(max-width:600px){
-  .intro{display:none!important;}
   .hero-content{bottom:64px;}
   .hero-actions{flex-direction:column;align-items:flex-start;}
   .btn-primary{width:100%;max-width:260px;text-align:center;}
@@ -623,18 +557,6 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 </style>
 </head>
 <body>
-
-<!-- INTRO -->
-<div class="intro" id="siteIntro">
-  <div class="intro-glow"></div>
-  <div class="intro-scene">
-    <div class="intro-line1" id="il1">아이의 첫 해는</div>
-    <div class="intro-line2" id="il2">단 한 번뿐입니다</div>
-    <div class="intro-divider" id="idiv"></div>
-    <div class="intro-logo" id="ilogo">고유재</div>
-    <div class="intro-logo-en" id="ilogoen">Koyuje Hanok Studio</div>
-  </div>
-</div>
 
 <!-- NAV -->
 <nav class="nav" id="navbar">
@@ -839,7 +761,6 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
     </div>
   </div>
 
-  <!-- 이벤트 -->
   <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:2px;">
     <div class="pkg-note reveal" style="margin-top:0;">
       <strong style="font-size:12px;color:var(--ink);letter-spacing:0.08em;">🔸 친구 소개 이벤트</strong><br>
@@ -905,7 +826,6 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
     <a href="/board.html" class="btn-more reveal">전체보기 →</a>
   </div>
   <div class="notice-list" id="homeNoticeList">
-    <!-- 게시판 API에서 동적 로드 -->
     <div style="padding:32px 0;text-align:center;color:var(--muted);font-size:13px;letter-spacing:0.1em;">불러오는 중...</div>
   </div>
 </section>
@@ -1031,15 +951,9 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
 </div>
 
 <script>
-// ─────────────────────────────────────────
-// 🔗 API URL (한 번만 선언)
-// ─────────────────────────────────────────
 const BOARD_URL = 'https://script.google.com/macros/s/AKfycbx4-im4AYWkgsWXWqPiKkYI_l7A87ORtUPS7I4Ww6K3DlD2QBAQy06s6S1LgwNg06OT/exec';
 
-// 지도 초기화 (카카오맵)
-// 중요: 카카오 개발자센터 > 내 애플리케이션 > 플랫폼 > Web 사이트 도메인에
-// 실제 접속 주소를 등록해야 지도가 표시됩니다.
-// 예) https://koyuje-website.vercel.app, https://koyuje.com, http://localhost:3000
+// 카카오맵 초기화
 function showMapFallback(message) {
   const container = document.getElementById('kakaoMap');
   if (!container) return;
@@ -1058,29 +972,17 @@ function showMapFallback(message) {
 function initKakaoMap() {
   const container = document.getElementById('kakaoMap');
   if (!container) return;
-
   if (!window.kakao || !window.kakao.maps) {
     showMapFallback('카카오맵 스크립트가 로드되지 않았습니다.');
-    console.warn('[KakaoMap] SDK load failed. 도메인 등록, JavaScript Key, 네트워크 차단 여부를 확인하세요.');
     return;
   }
-
   kakao.maps.load(function () {
     try {
       const lat = 36.463541;
       const lng = 127.115631;
       const position = new kakao.maps.LatLng(lat, lng);
-
-      const map = new kakao.maps.Map(container, {
-        center: position,
-        level: 4
-      });
-
-      const marker = new kakao.maps.Marker({
-        position: position,
-        map: map
-      });
-
+      const map = new kakao.maps.Map(container, { center: position, level: 4 });
+      const marker = new kakao.maps.Marker({ position: position, map: map });
       const infowindow = new kakao.maps.InfoWindow({
         content: [
           '<div style="padding:10px 14px;font-family:\'Noto Sans KR\',sans-serif;min-width:190px;line-height:1.55;">',
@@ -1091,30 +993,19 @@ function initKakaoMap() {
         ].join('')
       });
       infowindow.open(map, marker);
-
       kakao.maps.event.addListener(marker, 'click', function() {
         window.open('https://kko.to/wbVqE4BGHD', '_blank');
       });
-
-      // 반응형/스크롤 진입 후 지도 영역 크기 재계산
       setTimeout(function(){ map.relayout(); map.setCenter(position); }, 300);
       window.addEventListener('resize', function(){ map.relayout(); map.setCenter(position); });
     } catch (e) {
-      console.error('[KakaoMap] init error:', e);
       showMapFallback('카카오맵 초기화 중 오류가 발생했습니다.');
     }
   });
 }
-
 window.addEventListener('DOMContentLoaded', initKakaoMap);
 
-// ─────────────────────────────────────────
-// 📸 갤러리 관리
-// 사진 추가/교체/순서변경은 구글 시트 '갤러리' 탭에서 하세요.
-// 아래 코드는 수정 불필요.
-// ─────────────────────────────────────────
-
-// fallback 기본 이미지 (API 실패 시 표시)
+// 갤러리
 const galleryFallback = [
   { src:'/_0049.jpg', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
   { src:'/0057.jpg',  link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
@@ -1134,14 +1025,12 @@ function renderGallery(images) {
       <div class="insta-overlay"><div class="insta-icon">${svgIcon}</div></div>
     </a>
   `).join('');
-  // reveal 재관찰
   const io2 = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
   }, {threshold:0.08});
   grid.querySelectorAll('.reveal').forEach(el => io2.observe(el));
 }
 
-// 구글 시트에서 갤러리 불러오기
 fetch(BOARD_URL + '?action=gallery')
   .then(r => r.json())
   .then(data => {
@@ -1152,77 +1041,35 @@ fetch(BOARD_URL + '?action=gallery')
     }
   })
   .catch(() => renderGallery(galleryFallback));
-(function(){
-  const today = new Date().toDateString();
-  const seen = sessionStorage.getItem('koyuje_intro');
-  const intro = document.getElementById('siteIntro');
-  if(!intro) return;
-  if(window.matchMedia && window.matchMedia('(max-width: 600px)').matches){ intro.style.display='none'; return; }
-  if(seen === today){ intro.style.display='none'; return; }
-  document.body.style.overflow='hidden';
-  function anim(el,animStr,delay){ setTimeout(()=>{ el.style.animation=animStr; },delay); }
-  const il1=document.getElementById('il1');
-  const il2=document.getElementById('il2');
-  const idiv=document.getElementById('idiv');
-  const ilogo=document.getElementById('ilogo');
-  const ilogoen=document.getElementById('ilogoen');
-  anim(il1,'introFadeIn 0.7s ease forwards',180);
-  anim(il2,'introFadeIn 0.7s ease forwards',560);
-  anim(il1,'introFadeOut 0.45s ease forwards',1500);
-  anim(il2,'introFadeOut 0.45s ease forwards',1650);
-  anim(idiv,'introLineGrow 0.5s ease forwards',1950);
-  anim(ilogo,'introFadeIn 0.55s ease forwards',2200);
-  anim(ilogoen,'introFadeIn 0.5s ease forwards',2450);
-  setTimeout(()=>{
-    intro.style.animation='introOverlayFade 0.65s ease forwards';
-    setTimeout(()=>{
-      intro.style.display='none';
-      document.body.style.overflow='';
-      sessionStorage.setItem('koyuje_intro',today);
-    },650);
-  },3200);
-})();
 
-// 홈페이지 공지사항 — 게시판 API 연동
-
+// 공지사항
 function loadHomeNotice() {
   fetch(BOARD_URL + '?action=board&page=1')
     .then(r => r.json())
     .then(data => {
       if (data.result !== 'success' || !data.data) return;
-
       const all = data.data || [];
-      // 공지 먼저, 그다음 예약확정 최신 3개
       const notices = all.filter(i => i.category === '공지').slice(0, 3);
       const reservations = all.filter(i => i.category === '예약확정').slice(0, 3);
       const items = [...notices, ...reservations].slice(0, 5);
-
       if (items.length === 0) return;
-
       const list = document.getElementById('homeNoticeList');
       list.innerHTML = items.map((item, idx) => {
         const isNotice = item.category === '공지';
         const isPrivate = item.isPublic === '비공개' || item.hasPassword;
         const isDone = item.title && item.title.includes('✅');
         const isWait = item.title && item.title.includes('⏳');
-
-        // NEW 뱃지
         let isNew = false;
         if (item.date) {
           const diff = (new Date() - new Date(item.date)) / (1000*60*60*24);
           isNew = diff <= 10;
         }
-
-        // 제목
         let displayTitle = item.title || '';
         if (isPrivate) {
           const nameMatch = item.title && item.title.match(/^(.+?)님/);
           displayTitle = nameMatch ? nameMatch[1] + '님 🔒' : '🔒 비밀글';
         }
-
-        // 날짜 포맷
         const d = item.date ? item.date.replace(/-/g, '.') : '';
-
         return `
         <a href="/board.html" class="notice-item" style="animation-delay:${idx*0.1}s">
           <div class="notice-num" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);">${isNotice ? '📌 공지' : '예약확정'}</div>
@@ -1237,12 +1084,12 @@ function loadHomeNotice() {
       }).join('');
     })
     .catch(() => {
-      // 실패 시 조용히 처리
       document.getElementById('homeNoticeList').innerHTML = '';
     });
 }
-
 loadHomeNotice();
+
+// NAV 스크롤
 const nav=document.getElementById('navbar');
 function updateNav(){
   const hero=document.querySelector('.hero');
@@ -1269,11 +1116,9 @@ const io=new IntersectionObserver(entries=>{
 },{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
 reveals.forEach(el=>io.observe(el));
 
-// Mobile nav toggle
+// Mobile nav
 const navToggle = document.getElementById('navToggle');
 let mobileMenuOpen = false;
-
-// 모바일 메뉴 DOM 생성
 const mobileMenu = document.createElement('div');
 mobileMenu.id = 'mobileMenu';
 mobileMenu.style.cssText = `
@@ -1297,17 +1142,8 @@ mobileMenu.innerHTML = `
 `;
 document.body.appendChild(mobileMenu);
 
-function openMenu() {
-  mobileMenuOpen = true;
-  mobileMenu.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-function closeMenu() {
-  mobileMenuOpen = false;
-  mobileMenu.style.display = 'none';
-  document.body.style.overflow = '';
-}
-
+function openMenu() { mobileMenuOpen = true; mobileMenu.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+function closeMenu() { mobileMenuOpen = false; mobileMenu.style.display = 'none'; document.body.style.overflow = ''; }
 navToggle.addEventListener('click', openMenu);
 document.getElementById('mobileClose').addEventListener('click', closeMenu);
 mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
