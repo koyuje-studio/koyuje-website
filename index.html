@@ -502,7 +502,8 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
 <script>
 const BOARD_URL = 'https://script.google.com/macros/s/AKfycbx4-im4AYWkgsWXWqPiKkYI_l7A87ORtUPS7I4Ww6K3DlD2QBAQy06s6S1LgwNg06OT/exec';
 const KAKAO_APP_KEY = '3a3bea54fcc2f18a85036be7b91e3b4e';
-const KAKAO_MAP_URL = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_APP_KEY}&autoload=false`;
+const KAKAO_MAP_URL = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_APP_KEY}&autoload=false&libraries=services`;
+const STUDIO_ADDRESS = '충청남도 공주시 봉황로 88';
 
 function runIdle(fn, timeout = 900) {
   if ('requestIdleCallback' in window) {
@@ -544,16 +545,24 @@ function initKakaoMap() {
   }
   kakao.maps.load(function () {
     try {
-      const position = new kakao.maps.LatLng(36.463541, 127.115631);
-      const map = new kakao.maps.Map(container, { center: position, level: 4 });
-      const marker = new kakao.maps.Marker({ position, map });
-      const infowindow = new kakao.maps.InfoWindow({
-        content: '<div style="padding:10px 14px;font-family:Noto Sans KR,sans-serif;min-width:190px;line-height:1.55;"><div style="font-size:13px;font-weight:500;color:#1c1814;margin-bottom:4px;">고유재 한옥스튜디오</div><div style="font-size:11px;color:#7a6e62;margin-bottom:6px;">충청남도 공주시 봉황로 88</div><a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" style="font-size:11px;color:#a07840;text-decoration:none;">카카오맵 길찾기 →</a></div>'
+      const geocoder = new kakao.maps.services.Geocoder();
+      geocoder.addressSearch(STUDIO_ADDRESS, function(result, status) {
+        if (status !== kakao.maps.services.Status.OK || !result[0]) {
+          showMapFallback('주소 위치를 확인하지 못했습니다.');
+          return;
+        }
+
+        const position = new kakao.maps.LatLng(Number(result[0].y), Number(result[0].x));
+        const map = new kakao.maps.Map(container, { center: position, level: 3 });
+        const marker = new kakao.maps.Marker({ position, map });
+        const infowindow = new kakao.maps.InfoWindow({
+          content: '<div style="padding:10px 14px;font-family:Noto Sans KR,sans-serif;min-width:190px;line-height:1.55;"><div style="font-size:13px;font-weight:500;color:#1c1814;margin-bottom:4px;">고유재 한옥스튜디오</div><div style="font-size:11px;color:#7a6e62;margin-bottom:6px;">충청남도 공주시 봉황로 88</div><a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" style="font-size:11px;color:#a07840;text-decoration:none;">카카오맵 길찾기 →</a></div>'
+        });
+        infowindow.open(map, marker);
+        kakao.maps.event.addListener(marker, 'click', function(){ window.open('https://kko.to/wbVqE4BGHD', '_blank'); });
+        setTimeout(function(){ map.relayout(); map.setCenter(position); }, 300);
+        window.addEventListener('resize', function(){ map.relayout(); map.setCenter(position); }, { passive:true });
       });
-      infowindow.open(map, marker);
-      kakao.maps.event.addListener(marker, 'click', function(){ window.open('https://kko.to/wbVqE4BGHD', '_blank'); });
-      setTimeout(function(){ map.relayout(); map.setCenter(position); }, 300);
-      window.addEventListener('resize', function(){ map.relayout(); map.setCenter(position); }, { passive:true });
     } catch (e) {
       showMapFallback('카카오맵 초기화 중 오류가 발생했습니다.');
     }
