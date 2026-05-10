@@ -2,565 +2,294 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>고유재 한옥스튜디오 | 공주 전통 돌사진 전문</title>
-<meta name="description" content="충청남도 공주시 전통 한옥에서 만나는 프리미엄 돌촬영 스튜디오. 실크 한복과 한옥의 고즈넉한 분위기 속에서 아이의 첫 생일을 영원히 기록합니다.">
-<meta name="keywords" content="공주 돌사진, 공주 한옥스튜디오, 공주 돌촬영, 고유재, 충남 돌사진, 공주 가족사진">
+<meta name="description" content="충청남도 공주시 전통 한옥에서 만나는 프리미엄 돌촬영 스튜디오. 실크 한복과 한옥의 고즈넉한 분위기 속에서 아이의 첫 생일을 영화처럼 기록합니다.">
+<meta name="keywords" content="공주 돌사진, 공주 한옥스튜디오, 공주 돌촬영, 고유재, 충남 돌사진, 공주 가족사진, 한옥 돌사진">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://koyuje.com/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="고유재 한옥스튜디오">
 <meta property="og:title" content="고유재 한옥스튜디오 | 공주 전통 돌사진 전문">
-<meta property="og:description" content="충청남도 공주시 전통 한옥에서 만나는 프리미엄 돌촬영 스튜디오">
-<meta property="og:image" content="/_0049.jpg">
+<meta property="og:description" content="하루 두 팀만, 공주 전통 한옥에서 만나는 프리미엄 돌촬영 스튜디오">
+<meta property="og:image" content="https://koyuje.com/_0049.jpg">
+<meta name="theme-color" content="#f7f2ea">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="/_0049.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3a3bea54fcc2f18a85036be7b91e3b4e&autoload=false"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "고유재 한옥스튜디오",
+  "image": "https://koyuje.com/_0049.jpg",
+  "description": "충청남도 공주시 전통 한옥에서 만나는 프리미엄 돌촬영 및 가족사진 스튜디오",
+  "telephone": "+82-10-7635-9689",
+  "email": "koyuje@daum.net",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "봉황로 88",
+    "addressLocality": "공주시",
+    "addressRegion": "충청남도",
+    "addressCountry": "KR"
+  },
+  "openingHours": "Mo-Su 10:00-18:00",
+  "url": "https://koyuje.com/",
+  "sameAs": [
+    "https://www.instagram.com/koyuje_studio/",
+    "https://pf.kakao.com/_xiRxjhxj"
+  ]
+}
+</script>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
   --ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;
   --gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;
-  --line:rgba(28,24,20,0.1);--white:#ffffff;
-  --red:#8b2e2e;
+  --line:rgba(28,24,20,.1);--white:#fff;
 }
-html{scroll-behavior:smooth;}
-body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;overflow-x:hidden;}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;overflow-x:hidden}
+body.menu-open{overflow:hidden}
+a{-webkit-tap-highlight-color:transparent}
+img,video{max-width:100%}
 
-/* ─── NAV ─── */
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:1000;
-  padding:20px 60px;
-  display:flex;align-items:center;justify-content:space-between;
-  transition:all 0.5s ease;
-}
-.nav.scrolled{
-  background:rgba(247,242,234,0.96);
-  backdrop-filter:blur(12px);
-  padding:14px 60px;
-  border-bottom:0.5px solid var(--line);
-}
-.nav-logo{text-decoration:none;display:flex;align-items:baseline;gap:8px;}
-.nav-logo-text{
-  font-family:'Noto Serif KR',serif;
-  font-size:20px;font-weight:400;
-  letter-spacing:0.1em;color:var(--paper);
-  transition:color 0.5s;
-}
-.nav-logo-sub{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:12px;font-weight:300;
-  letter-spacing:0.2em;color:rgba(247,242,234,0.6);
-  transition:color 0.5s;
-}
-.nav.scrolled .nav-logo-text{color:var(--ink);}
-.nav.scrolled .nav-logo-sub{color:var(--muted);}
-.nav-links{display:flex;gap:36px;list-style:none;}
-.nav-links a{
-  font-size:12px;letter-spacing:0.2em;
-  color:rgba(247,242,234,0.9);text-decoration:none;
-  transition:color 0.3s;
-  text-shadow:0 1px 4px rgba(0,0,0,0.4);
-}
-.nav.scrolled .nav-links a{color:var(--muted);text-shadow:none;}
-.nav-links a:hover{color:var(--gold2)!important;}
-.nav-cta{
-  font-size:11px;letter-spacing:0.2em;
-  border:0.5px solid rgba(247,242,234,0.6);
-  color:rgba(247,242,234,0.9);
-  padding:9px 22px;text-decoration:none;
-  transition:all 0.3s;
-}
-.nav.scrolled .nav-cta{border-color:var(--gold);color:var(--gold);}
-.nav-cta:hover{background:var(--gold)!important;border-color:var(--gold)!important;color:var(--paper)!important;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;transition:all .5s ease}
+.nav.scrolled{background:rgba(247,242,234,.96);backdrop-filter:blur(12px);padding:14px 60px;border-bottom:.5px solid var(--line)}
+.nav-logo{text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.nav-logo-text{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;letter-spacing:.1em;color:var(--paper);transition:color .5s}
+.nav-logo-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;font-weight:300;letter-spacing:.2em;color:rgba(247,242,234,.6);transition:color .5s}
+.nav.scrolled .nav-logo-text{color:var(--ink)}
+.nav.scrolled .nav-logo-sub{color:var(--muted)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{font-size:12px;letter-spacing:.2em;color:rgba(247,242,234,.9);text-decoration:none;transition:color .3s;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.nav.scrolled .nav-links a{color:var(--muted);text-shadow:none}
+.nav-links a:hover{color:var(--gold2)!important}
+.nav-cta{font-size:11px;letter-spacing:.2em;border:.5px solid rgba(247,242,234,.6);color:rgba(247,242,234,.9);padding:9px 22px;text-decoration:none;transition:all .3s}
+.nav.scrolled .nav-cta{border-color:var(--gold);color:var(--gold)}
+.nav-cta:hover{background:var(--gold)!important;border-color:var(--gold)!important;color:var(--paper)!important}
+.nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:0}
+.nav-toggle span{display:block;width:22px;height:1px;background:rgba(247,242,234,.9);transition:all .3s}
+.nav.scrolled .nav-toggle span{background:var(--ink)}
 
-/* 모바일 햄버거 */
-.nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
-.nav-toggle span{display:block;width:22px;height:1px;background:rgba(247,242,234,0.9);transition:all 0.3s;}
-.nav.scrolled .nav-toggle span{background:var(--ink);}
+.hero{position:relative;height:100vh;min-height:600px;overflow:hidden;background:#1c1814;isolation:isolate}
+.hero-video,.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.hero-img{display:none}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(14,12,10,.26) 0%,rgba(14,12,10,.18) 38%,rgba(14,12,10,.72) 100%),linear-gradient(to right,rgba(14,12,10,.46) 0%,rgba(14,12,10,.14) 48%,rgba(14,12,10,.28) 100%)}
+.hero-content{position:absolute;bottom:78px;left:60px;right:60px;color:var(--paper);max-width:760px}
+.hero-eyebrow{font-size:11px;color:var(--gold2);letter-spacing:.24em;margin-bottom:18px;text-transform:uppercase;opacity:0;animation:fadeUp 1s .5s ease forwards}
+.hero-title{font-family:'Noto Serif KR',serif;font-size:clamp(42px,6vw,76px);font-weight:300;line-height:1.14;letter-spacing:-.01em;margin-bottom:20px;opacity:0;animation:fadeUp 1s .7s ease forwards}
+.hero-lead{max-width:520px;font-size:15px;line-height:1.95;color:rgba(247,242,234,.74);letter-spacing:.04em;margin-bottom:30px;opacity:0;animation:fadeUp 1s .9s ease forwards}
+.hero-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;opacity:0;animation:fadeUp 1s 1.1s ease forwards}
+.btn-primary{background:var(--gold);color:var(--paper);padding:14px 36px;font-size:12px;letter-spacing:.22em;text-decoration:none;transition:all .35s;display:inline-block}
+.btn-primary:hover{background:var(--gold2)}
+.btn-ghost-light{font-size:12px;color:rgba(247,242,234,.8);letter-spacing:.15em;text-decoration:none;border-bottom:.5px solid rgba(247,242,234,.4);padding-bottom:3px;transition:all .3s}
+.btn-ghost-light:hover{color:var(--paper);border-color:var(--paper)}
+.hero-proof{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;opacity:0;animation:fadeUp 1s 1.25s ease forwards}
+.hero-proof-item{border:.5px solid rgba(247,242,234,.28);background:rgba(247,242,234,.06);backdrop-filter:blur(10px);color:rgba(247,242,234,.78);padding:8px 13px;font-size:11px;letter-spacing:.12em;line-height:1}
+.hero-scroll{position:absolute;bottom:32px;right:60px;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeIn 1s 1.5s ease forwards}
+.hero-scroll-line{width:.5px;height:40px;background:rgba(247,242,234,.4);animation:scrollPulse 2s ease infinite}
+.hero-scroll-text{font-size:9px;letter-spacing:.3em;color:rgba(247,242,234,.5);writing-mode:vertical-rl}
 
-/* ─── HERO ─── */
-.hero{
-  position:relative;height:100vh;min-height:600px;
-  overflow:hidden;background:#1c1814;
-  isolation:isolate;
-}
-.hero-video{
-  position:absolute;inset:0;
-  width:100%;height:100%;object-fit:cover;object-position:center;
-}
-.hero-img{
-  position:absolute;inset:0;
-  width:100%;height:100%;object-fit:cover;object-position:center;
-  display:none;
-}
-.hero-overlay{
-  position:absolute;inset:0;
-  background:
-    linear-gradient(to bottom, rgba(14,12,10,0.26) 0%, rgba(14,12,10,0.18) 38%, rgba(14,12,10,0.72) 100%),
-    linear-gradient(to right, rgba(14,12,10,0.46) 0%, rgba(14,12,10,0.14) 48%, rgba(14,12,10,0.28) 100%);
-}
-.hero-content{
-  position:absolute;bottom:78px;left:60px;right:60px;
-  color:var(--paper);
-  max-width:760px;
-}
-.hero-eyebrow{
-  font-size:11px;color:var(--gold2);letter-spacing:0.24em;
-  margin-bottom:18px;text-transform:uppercase;
-  opacity:0;animation:fadeUp 1s 0.5s ease forwards;
-}
-.hero-title{
-  font-family:'Noto Serif KR',serif;
-  font-size:clamp(42px,6vw,76px);font-weight:300;
-  line-height:1.14;letter-spacing:-0.01em;
-  margin-bottom:20px;
-  opacity:0;animation:fadeUp 1s 0.7s ease forwards;
-}
-.hero-lead{
-  max-width:520px;
-  font-size:15px;line-height:1.95;color:rgba(247,242,234,0.74);
-  letter-spacing:0.04em;margin-bottom:30px;
-  opacity:0;animation:fadeUp 1s 0.9s ease forwards;
-}
-.hero-actions{
-  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
-  opacity:0;animation:fadeUp 1s 1.1s ease forwards;
-}
-.btn-primary{
-  background:var(--gold);color:var(--paper);
-  padding:14px 36px;font-size:12px;letter-spacing:0.22em;
-  text-decoration:none;transition:all 0.35s;
-  display:inline-block;
-}
-.btn-primary:hover{background:var(--gold2);}
-.btn-ghost-light{
-  font-size:12px;color:rgba(247,242,234,0.8);
-  letter-spacing:0.15em;text-decoration:none;
-  border-bottom:0.5px solid rgba(247,242,234,0.4);
-  padding-bottom:3px;transition:all 0.3s;
-}
-.btn-ghost-light:hover{color:var(--paper);border-color:var(--paper);}
-.hero-proof{
-  display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;
-  opacity:0;animation:fadeUp 1s 1.25s ease forwards;
-}
-.hero-proof-item{
-  border:0.5px solid rgba(247,242,234,0.28);
-  background:rgba(247,242,234,0.06);
-  backdrop-filter:blur(10px);
-  color:rgba(247,242,234,0.78);
-  padding:8px 13px;
-  font-size:11px;letter-spacing:0.12em;
-  line-height:1;
-}
-.hero-scroll{
-  position:absolute;bottom:32px;right:60px;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  opacity:0;animation:fadeIn 1s 1.5s ease forwards;
-}
-.hero-scroll-line{width:0.5px;height:40px;background:rgba(247,242,234,0.4);animation:scrollPulse 2s ease infinite;}
-.hero-scroll-text{font-size:9px;letter-spacing:0.3em;color:rgba(247,242,234,0.5);writing-mode:vertical-rl;}
+.marquee-wrap{padding:16px 0;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);overflow:hidden;background:var(--paper2)}
+.marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 25s linear infinite}
+.marquee-item{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--muted);letter-spacing:.1em;white-space:nowrap;display:flex;align-items:center;gap:48px}
+.marquee-item::after{content:'◆';font-size:7px;color:var(--gold);font-style:normal}
 
-/* ─── MARQUEE ─── */
-.marquee-wrap{
-  padding:16px 0;
-  border-top:0.5px solid var(--line);
-  border-bottom:0.5px solid var(--line);
-  overflow:hidden;background:var(--paper2);
-}
-.marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 25s linear infinite;}
-.marquee-item{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:14px;color:var(--muted);letter-spacing:0.1em;
-  white-space:nowrap;display:flex;align-items:center;gap:48px;
-}
-.marquee-item::after{content:'◆';font-size:7px;color:var(--gold);font-style:normal;}
+.about{display:grid;grid-template-columns:1fr 1fr;min-height:70vh;border-bottom:.5px solid var(--line)}
+.about-img{position:relative;overflow:hidden;background:#2a2520;min-height:400px}
+.about-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+.about-img:hover img{transform:scale(1.04)}
+.about-content{padding:80px 72px;display:flex;flex-direction:column;justify-content:center;border-left:.5px solid var(--line)}
+.sec-eyebrow{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:.28em;margin-bottom:24px;display:flex;align-items:center;gap:14px}
+.sec-eyebrow::before{content:'';width:32px;height:.5px;background:var(--gold)}
+.sec-title{font-family:'Noto Serif KR',serif;font-size:clamp(28px,3vw,40px);font-weight:300;line-height:1.4;margin-bottom:28px;letter-spacing:-.01em}
+.sec-body{font-size:14px;line-height:2.1;color:var(--muted);letter-spacing:.04em;margin-bottom:40px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:.5px solid var(--line)}
+.stat{padding:24px 0;border-right:.5px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat:not(:first-child){padding-left:20px}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--ink);line-height:1;margin-bottom:5px}
+.stat-l{font-size:11px;letter-spacing:.18em;color:var(--muted)}
 
-/* ─── ABOUT ─── */
-.about{
-  display:grid;grid-template-columns:1fr 1fr;
-  min-height:70vh;border-bottom:0.5px solid var(--line);
-}
-.about-img{
-  position:relative;overflow:hidden;
-  background:#2a2520;min-height:400px;
-}
-.about-img img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform 0.8s ease;
-}
-.about-img:hover img{transform:scale(1.04);}
-.about-content{
-  padding:80px 72px;
-  display:flex;flex-direction:column;justify-content:center;
-  border-left:0.5px solid var(--line);
-}
-.sec-eyebrow{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:12px;color:var(--gold);letter-spacing:0.28em;
-  margin-bottom:24px;display:flex;align-items:center;gap:14px;
-}
-.sec-eyebrow::before{content:'';width:32px;height:0.5px;background:var(--gold);}
-.sec-title{
-  font-family:'Noto Serif KR',serif;
-  font-size:clamp(28px,3vw,40px);font-weight:300;
-  line-height:1.4;margin-bottom:28px;letter-spacing:-0.01em;
-}
-.sec-body{
-  font-size:14px;line-height:2.1;color:var(--muted);
-  letter-spacing:0.04em;margin-bottom:40px;
-}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:0.5px solid var(--line);}
-.stat{padding:24px 0;border-right:0.5px solid var(--line);}
-.stat:last-child{border-right:none;}
-.stat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--ink);line-height:1;margin-bottom:5px;}
-.stat-l{font-size:11px;letter-spacing:0.18em;color:var(--muted);}
-.stat:not(:first-child){padding-left:20px;}
+.gallery,.packages,.notice,.instagram{border-bottom:.5px solid var(--line)}
+.gallery{padding:80px 0}
+.gallery-header,.notice-header,.instagram-header{padding:0 60px;margin-bottom:48px;display:flex;justify-content:space-between;align-items:flex-end}
+.gallery-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:0 60px}
+.gallery-item{position:relative;overflow:hidden;background:#2a2520;aspect-ratio:3/4;cursor:pointer}
+.gallery-item:first-child{grid-column:span 2;aspect-ratio:auto}
+.gallery-item img,.insta-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}
+.gallery-item:hover img{transform:scale(1.06)}
+.gallery-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,24,20,.5) 0%,transparent 50%);opacity:0;transition:opacity .3s}
+.gallery-item:hover .gallery-overlay{opacity:1}
+.btn-more{font-size:11px;color:var(--muted);letter-spacing:.15em;text-decoration:none;border-bottom:.5px solid var(--line);padding-bottom:3px;transition:all .3s}
+.btn-more:hover{color:var(--ink);border-color:var(--ink)}
 
-/* ─── GALLERY ─── */
-.gallery{padding:80px 0;border-bottom:0.5px solid var(--line);}
-.gallery-header{padding:0 60px;margin-bottom:48px;display:flex;justify-content:space-between;align-items:flex-end;}
-.gallery-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:3px;
-  padding:0 60px;
-}
-.gallery-item{
-  position:relative;overflow:hidden;
-  background:#2a2520;
-  aspect-ratio:3/4;
-  cursor:pointer;
-}
-.gallery-item:first-child{grid-column:span 2;aspect-ratio:auto;}
-.gallery-item img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform 0.7s ease;
-}
-.gallery-item:hover img{transform:scale(1.06);}
-.gallery-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(28,24,20,0.5) 0%,transparent 50%);
-  opacity:0;transition:opacity 0.3s;
-}
-.gallery-item:hover .gallery-overlay{opacity:1;}
+.packages{padding:80px 60px}
+.packages-header{margin-bottom:56px}
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.pkg-card{border:.5px solid var(--line);padding:36px 32px;position:relative;transition:all .3s;display:flex;flex-direction:column}
+.pkg-card:hover{border-color:var(--gold);background:rgba(160,120,64,.03)}
+.pkg-card.featured{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pkg-badge{display:inline-block;align-self:flex-start;font-size:9px;letter-spacing:.2em;background:var(--gold);color:var(--ink);padding:3px 10px;margin-bottom:20px}
+.pkg-name{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:6px;letter-spacing:.03em}
+.pkg-name-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.15em;margin-bottom:20px}
+.pkg-card.featured .pkg-name-en{color:rgba(247,242,234,.4)}
+.pkg-price{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--ink);margin-bottom:4px;line-height:1}
+.pkg-card.featured .pkg-price{color:var(--gold2)}
+.pkg-price-note{font-size:11px;color:var(--muted);letter-spacing:.1em;margin-bottom:24px}
+.pkg-divider{height:.5px;background:var(--line);margin-bottom:20px}
+.pkg-card.featured .pkg-divider{background:rgba(247,242,234,.1)}
+.pkg-features{list-style:none;margin-bottom:28px}
+.pkg-features li{font-size:13px;color:var(--muted);padding:6px 0;letter-spacing:.03em;display:flex;align-items:center;gap:8px}
+.pkg-features li::before{content:'·';color:var(--gold);font-size:18px;line-height:0}
+.pkg-card.featured .pkg-features li{color:rgba(247,242,234,.7)}
+.pkg-desc{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:.03em}
+.btn-pkg{display:inline-block;width:100%;text-align:center;border:.5px solid var(--gold);color:var(--gold);padding:12px;font-size:11px;letter-spacing:.2em;text-decoration:none;transition:all .3s;margin-top:auto}
+.btn-pkg:hover{background:var(--gold);color:var(--paper)}
+.pkg-card.featured .btn-pkg{background:var(--gold);color:var(--ink)}
+.pkg-card.featured .btn-pkg:hover{background:var(--gold2)}
+.pkg-notes{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.pkg-note{padding:20px 24px;background:var(--paper2);border:.5px solid var(--line);font-size:12px;color:var(--muted);line-height:1.9;letter-spacing:.04em}
+.pkg-note strong,.pkg-desc strong{font-size:12px;color:var(--ink);letter-spacing:.08em}
+.pkg-wide-note{margin-top:2px}
 
-/* ─── PACKAGES ─── */
-.packages{
-  padding:80px 60px;
-  border-bottom:0.5px solid var(--line);
-}
-.packages-header{margin-bottom:56px;}
-.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
-.pkg-card{
-  border:0.5px solid var(--line);
-  padding:36px 32px;
-  position:relative;
-  transition:all 0.3s;
-}
-.pkg-card:hover{border-color:var(--gold);background:rgba(160,120,64,0.03);}
-.pkg-card.featured{
-  background:var(--ink);color:var(--paper);
-  border-color:var(--ink);
-}
-.pkg-card.featured .pkg-price{color:var(--gold2);}
-.pkg-card.featured .pkg-desc{color:rgba(247,242,234,0.5);}
-.pkg-card.featured .pkg-features li{color:rgba(247,242,234,0.7);}
-.pkg-card.featured .pkg-features li::before{color:var(--gold);}
-.pkg-badge{
-  display:inline-block;font-size:9px;letter-spacing:0.2em;
-  background:var(--gold);color:var(--ink);
-  padding:3px 10px;margin-bottom:20px;
-}
-.pkg-name{
-  font-family:'Noto Serif KR',serif;
-  font-size:20px;font-weight:300;margin-bottom:6px;letter-spacing:0.03em;
-}
-.pkg-name-en{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:12px;color:var(--muted);letter-spacing:0.15em;margin-bottom:20px;
-}
-.pkg-card.featured .pkg-name-en{color:rgba(247,242,234,0.4);}
-.pkg-price{
-  font-family:'Cormorant Garamond',serif;
-  font-size:32px;font-weight:300;color:var(--ink);
-  margin-bottom:4px;line-height:1;
-}
-.pkg-price-note{font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:24px;}
-.pkg-divider{height:0.5px;background:var(--line);margin-bottom:20px;}
-.pkg-card.featured .pkg-divider{background:rgba(247,242,234,0.1);}
-.pkg-features{list-style:none;margin-bottom:28px;}
-.pkg-features li{
-  font-size:13px;color:var(--muted);
-  padding:6px 0;letter-spacing:0.03em;
-  display:flex;align-items:center;gap:8px;
-}
-.pkg-features li::before{content:'·';color:var(--gold);font-size:18px;line-height:0;}
-.pkg-desc{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:0.03em;}
-.btn-pkg{
-  display:inline-block;width:100%;text-align:center;
-  border:0.5px solid var(--gold);color:var(--gold);
-  padding:12px;font-size:11px;letter-spacing:0.2em;
-  text-decoration:none;transition:all 0.3s;margin-top:auto;
-}
-.btn-pkg:hover{background:var(--gold);color:var(--paper);}
-.pkg-card.featured .btn-pkg{background:var(--gold);color:var(--ink);}
-.pkg-card.featured .btn-pkg:hover{background:var(--gold2);}
-.pkg-note{
-  margin-top:32px;padding:20px 24px;
-  background:var(--paper2);border:0.5px solid var(--line);
-  font-size:12px;color:var(--muted);line-height:1.9;letter-spacing:0.04em;
-}
+.process{padding:80px 60px;background:var(--ink);color:var(--paper);border-bottom:.5px solid rgba(247,242,234,.08)}
+.process-header{margin-bottom:56px}
+.process-header .sec-eyebrow{color:var(--gold2)}
+.process-header .sec-title{color:var(--paper)}
+.process-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.process-step{padding:28px 24px;border:.5px solid rgba(247,242,234,.07);position:relative}
+.step-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:36px;font-weight:300;color:var(--gold);opacity:.3;line-height:1;margin-bottom:16px}
+.step-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;margin-bottom:10px;letter-spacing:.05em}
+.step-desc{font-size:12px;color:rgba(247,242,234,.4);line-height:1.8;letter-spacing:.03em}
+.step-arrow{position:absolute;top:28px;right:-1px;width:20px;height:20px;border-top:.5px solid rgba(247,242,234,.15);border-right:.5px solid rgba(247,242,234,.15);transform:rotate(45deg);background:var(--ink);z-index:1}
+.process-step:last-child .step-arrow{display:none}
 
-/* ─── PROCESS ─── */
-.process{
-  padding:80px 60px;
-  background:var(--ink);color:var(--paper);
-  border-bottom:0.5px solid rgba(247,242,234,0.08);
-}
-.process-header{margin-bottom:56px;}
-.process-header .sec-eyebrow{color:var(--gold2);}
-.process-header .sec-title{color:var(--paper);}
-.process-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;}
-.process-step{padding:28px 24px;border:0.5px solid rgba(247,242,234,0.07);position:relative;}
-.step-num{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:36px;font-weight:300;color:var(--gold);opacity:0.3;
-  line-height:1;margin-bottom:16px;
-}
-.step-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;margin-bottom:10px;letter-spacing:0.05em;}
-.step-desc{font-size:12px;color:rgba(247,242,234,0.4);line-height:1.8;letter-spacing:0.03em;}
-.step-arrow{
-  position:absolute;top:28px;right:-1px;
-  width:20px;height:20px;
-  border-top:0.5px solid rgba(247,242,234,0.15);
-  border-right:0.5px solid rgba(247,242,234,0.15);
-  transform:rotate(45deg);
-  background:var(--ink);
-  z-index:1;
-}
-.process-step:last-child .step-arrow{display:none;}
+.notice{padding:80px 0}
+.notice-list{display:flex;flex-direction:column;padding:0 60px}
+.notice-item{display:grid;grid-template-columns:80px 1fr 120px;align-items:center;gap:24px;padding:20px 0;border-bottom:.5px solid var(--line);text-decoration:none;color:var(--ink);transition:all .2s}
+.notice-item:first-child{border-top:.5px solid var(--line)}
+.notice-item:hover{padding-left:8px}
+.notice-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.1em}
+.notice-title{font-size:14px;letter-spacing:.03em}
+.notice-badge{display:inline-block;font-size:9px;letter-spacing:.15em;border:.5px solid var(--gold);color:var(--gold);padding:2px 8px;margin-left:8px}
+.notice-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:.05em}
+.empty-state{padding:32px 0;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.1em}
 
-/* ─── NOTICE ─── */
-.notice{padding:80px 60px;border-bottom:0.5px solid var(--line);}
-.notice-header{margin-bottom:40px;display:flex;justify-content:space-between;align-items:flex-end;}
-.notice-list{display:flex;flex-direction:column;}
-.notice-item{
-  display:grid;grid-template-columns:80px 1fr 120px;
-  align-items:center;gap:24px;
-  padding:20px 0;border-bottom:0.5px solid var(--line);
-  text-decoration:none;color:var(--ink);
-  transition:all 0.2s;
-}
-.notice-item:first-child{border-top:0.5px solid var(--line);}
-.notice-item:hover{padding-left:8px;}
-.notice-num{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:12px;color:var(--muted);letter-spacing:0.1em;
-}
-.notice-title{font-size:14px;letter-spacing:0.03em;}
-.notice-badge{
-  display:inline-block;font-size:9px;letter-spacing:0.15em;
-  border:0.5px solid var(--gold);color:var(--gold);
-  padding:2px 8px;margin-left:8px;
-}
-.notice-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:0.05em;}
-.btn-more{
-  font-size:11px;color:var(--muted);letter-spacing:0.15em;
-  text-decoration:none;border-bottom:0.5px solid var(--line);
-  padding-bottom:3px;transition:all 0.3s;
-}
-.btn-more:hover{color:var(--ink);border-color:var(--ink);}
+.instagram{padding:80px 0}
+.insta-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:0 60px}
+.insta-item{aspect-ratio:1;overflow:hidden;background:#e8e0d4;position:relative;cursor:pointer}
+.insta-item:hover img{transform:scale(1.08)}
+.insta-overlay{position:absolute;inset:0;background:rgba(28,24,20,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.insta-item:hover .insta-overlay{opacity:1}
+.insta-icon{width:28px;height:28px;border:1.5px solid var(--paper);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.insta-cta{margin-top:24px;text-align:center}
+.btn-insta{display:inline-flex;align-items:center;gap:10px;border:.5px solid var(--line);color:var(--muted);padding:12px 32px;font-size:12px;letter-spacing:.15em;text-decoration:none;transition:all .3s}
+.btn-insta:hover{border-color:var(--gold);color:var(--gold)}
 
-/* ─── INSTAGRAM ─── */
-.instagram{padding:80px 60px;border-bottom:0.5px solid var(--line);}
-.instagram-header{margin-bottom:40px;display:flex;justify-content:space-between;align-items:flex-end;}
-.insta-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:3px;
-}
-.insta-item{
-  aspect-ratio:1;overflow:hidden;
-  background:#e8e0d4;position:relative;cursor:pointer;
-}
-.insta-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;}
-.insta-item:hover img{transform:scale(1.08);}
-.insta-overlay{
-  position:absolute;inset:0;
-  background:rgba(28,24,20,0.4);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transition:opacity 0.3s;
-}
-.insta-item:hover .insta-overlay{opacity:1;}
-.insta-icon{
-  width:28px;height:28px;
-  border:1.5px solid var(--paper);border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-}
-.insta-cta{
-  margin-top:24px;text-align:center;
-}
-.btn-insta{
-  display:inline-flex;align-items:center;gap:10px;
-  border:0.5px solid var(--line);color:var(--muted);
-  padding:12px 32px;font-size:12px;letter-spacing:0.15em;
-  text-decoration:none;transition:all 0.3s;
-}
-.btn-insta:hover{border-color:var(--gold);color:var(--gold);}
+.location{display:grid;grid-template-columns:1fr 1fr;border-bottom:.5px solid var(--line);position:relative;z-index:1}
+.location-map{background:#e8e0d4;min-height:400px;position:relative;overflow:hidden;z-index:1}
+.map-fallback{height:100%;min-height:400px;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;background:#e8e0d4;color:var(--muted)}
+.map-title{font-family:'Noto Serif KR',serif;font-size:18px;color:var(--ink);margin-bottom:10px}
+.map-copy{font-size:13px;line-height:1.8;margin-bottom:18px}
+.map-link{display:inline-block;padding:12px 22px;font-size:12px;letter-spacing:.08em;text-decoration:none;margin:4px}
+.map-link.kakao{background:#FAE300;color:#3A1D1D}
+.map-link.naver{background:#03c75a;color:#fff}
+.location-info{padding:72px;border-left:.5px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.location-item{padding:20px 0;border-bottom:.5px solid var(--line)}
+.location-item:first-of-type{border-top:.5px solid var(--line)}
+.location-key{font-size:10px;letter-spacing:.22em;color:var(--muted);margin-bottom:8px}
+.location-val{font-size:14px;letter-spacing:.04em;line-height:1.7}
+.location-val a{color:var(--gold);text-decoration:none}
+.location-sub{font-size:12px;color:var(--muted)}
+.kakao-btn{display:inline-flex;align-items:center;gap:10px;background:#FAE300;color:#3A1D1D;padding:14px 28px;font-size:12px;letter-spacing:.1em;text-decoration:none;margin-top:28px;transition:all .3s;font-family:'Noto Sans KR',sans-serif;font-weight:400}
+.kakao-btn:hover{background:#f0d800}
+.kakao-btn.naver{margin-top:10px;background:#03c75a;color:#fff}
+.kakao-btn.channel{margin-top:10px;background:rgba(250,227,0,.15);border:1px solid #FAE300}
+.kakao-icon{width:20px;height:20px}
 
-/* ─── MAP ─── */
-.location{
-  display:grid;grid-template-columns:1fr 1fr;
-  border-bottom:0.5px solid var(--line);
-  position:relative;z-index:1;
-}
-.location-map{
-  background:#e8e0d4;min-height:400px;
-  position:relative;overflow:hidden;
-  z-index:1;
-}
-.location-map iframe{width:100%;height:100%;border:none;filter:grayscale(20%);}
-.location-info{
-  padding:72px;
-  border-left:0.5px solid var(--line);
-  display:flex;flex-direction:column;justify-content:center;
-}
-.location-item{padding:20px 0;border-bottom:0.5px solid var(--line);}
-.location-item:first-of-type{border-top:0.5px solid var(--line);}
-.location-key{font-size:10px;letter-spacing:0.22em;color:var(--muted);margin-bottom:8px;}
-.location-val{font-size:14px;letter-spacing:0.04em;line-height:1.7;}
-.location-val a{color:var(--gold);text-decoration:none;}
-.kakao-btn{
-  display:inline-flex;align-items:center;gap:10px;
-  background:#FAE300;color:#3A1D1D;
-  padding:14px 28px;font-size:12px;letter-spacing:0.1em;
-  text-decoration:none;margin-top:28px;transition:all 0.3s;
-  font-family:'Noto Sans KR',sans-serif;font-weight:400;
-}
-.kakao-btn:hover{background:#f0d800;}
-.kakao-icon{width:20px;height:20px;}
+footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:.5px solid rgba(247,242,234,.07);margin-bottom:32px}
+.footer-logo{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;color:var(--paper);letter-spacing:.1em;margin-bottom:4px}
+.footer-brand-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:.22em;margin-bottom:14px}
+.footer-tagline{font-size:13px;line-height:1.9;max-width:240px}
+.footer-col-title{font-size:10px;letter-spacing:.25em;color:var(--paper);margin-bottom:16px}
+.footer-links{list-style:none}
+.footer-links li{margin-bottom:10px}
+.footer-links a{font-size:13px;color:rgba(247,242,234,.4);text-decoration:none;transition:color .3s;letter-spacing:.04em}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:12px;letter-spacing:.05em}
+.footer-sns{display:flex;gap:20px}
+.sns-a{font-size:11px;letter-spacing:.18em;color:rgba(247,242,234,.3);text-decoration:none;transition:color .3s}
+.sns-a:hover{color:var(--gold)}
 
-/* ─── FOOTER ─── */
-footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
-.footer-top{
-  display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;
-  gap:48px;padding-bottom:48px;
-  border-bottom:0.5px solid rgba(247,242,234,0.07);
-  margin-bottom:32px;
-}
-.footer-brand img{height:28px;filter:brightness(0) invert(0.7);margin-bottom:12px;}
-.footer-brand-en{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:12px;color:var(--gold);letter-spacing:0.22em;margin-bottom:14px;
-}
-.footer-tagline{font-size:13px;line-height:1.9;max-width:240px;}
-.footer-col-title{font-size:10px;letter-spacing:0.25em;color:var(--paper);margin-bottom:16px;}
-.footer-links{list-style:none;}
-.footer-links li{margin-bottom:10px;}
-.footer-links a{font-size:13px;color:rgba(247,242,234,0.4);text-decoration:none;transition:color 0.3s;letter-spacing:0.04em;}
-.footer-links a:hover{color:var(--gold);}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.footer-copy{font-size:12px;letter-spacing:0.05em;}
-.footer-sns{display:flex;gap:20px;}
-.sns-a{font-size:11px;letter-spacing:0.18em;color:rgba(247,242,234,0.3);text-decoration:none;transition:color 0.3s;}
-.sns-a:hover{color:var(--gold);}
+.float-cta{position:fixed;bottom:28px;right:28px;z-index:90;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.float-kakao,.float-reserve{display:flex;align-items:center;gap:8px;padding:10px 18px;font-size:12px;letter-spacing:.08em;text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,.15);transition:all .3s}
+.float-kakao{background:#FAE300;color:#3A1D1D}
+.float-reserve{background:var(--gold);color:var(--paper);box-shadow:0 4px 20px rgba(160,120,64,.3)}
+.float-kakao:hover,.float-reserve:hover{transform:translateY(-2px)}
+.float-kakao:hover{background:#f0d800}
+.float-reserve:hover{background:var(--gold2)}
 
-/* ─── FLOATING CTA ─── */
-.float-cta{
-  position:fixed;bottom:28px;right:28px;z-index:90;
-  display:flex;flex-direction:column;gap:10px;align-items:flex-end;
-}
-.float-kakao{
-  display:flex;align-items:center;gap:8px;
-  background:#FAE300;color:#3A1D1D;
-  padding:10px 18px;font-size:12px;letter-spacing:0.08em;
-  text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,0.15);
-  transition:all 0.3s;
-}
-.float-kakao:hover{background:#f0d800;transform:translateY(-2px);}
-.float-reserve{
-  display:flex;align-items:center;gap:8px;
-  background:var(--gold);color:var(--paper);
-  padding:10px 18px;font-size:12px;letter-spacing:0.08em;
-  text-decoration:none;box-shadow:0 4px 20px rgba(160,120,64,0.3);
-  transition:all 0.3s;
-}
-.float-reserve:hover{background:var(--gold2);transform:translateY(-2px);}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(247,242,234,.98);z-index:1200;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.mobile-menu.open{display:flex}
+.mobile-menu-head{position:absolute;top:0;left:0;right:0;padding:20px 24px;display:flex;align-items:center;border-bottom:.5px solid rgba(28,24,20,.08)}
+.mobile-menu-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:.1em;color:var(--ink)}
+.mobile-menu-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--muted);letter-spacing:.2em;margin-left:8px}
+.mobile-close{margin-left:auto;background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:.15em;display:flex;align-items:center;gap:6px;padding:8px;font-family:'Noto Sans KR',sans-serif;font-weight:300}
+.mobile-menu a{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:.1em;padding:12px 0}
+.mobile-menu .mobile-reserve{margin-top:16px;background:var(--gold);color:var(--paper);padding:14px 40px;font-size:13px;letter-spacing:.2em}
 
-.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.8s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-.reveal-delay-1{transition-delay:0.1s;}
-.reveal-delay-2{transition-delay:0.2s;}
-.reveal-delay-3{transition-delay:0.3s;}
-.reveal-delay-4{transition-delay:0.4s;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}.reveal-delay-4{transition-delay:.4s}
 
-/* ─── KEYFRAMES ─── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(1)}50%{opacity:0.7;transform:scaleY(1.15)}}
+@keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:.7;transform:scaleY(1.15)}}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ─── MOBILE ─── */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
 @media(max-width:900px){
-  .nav{padding:16px 24px;}
-  .nav.scrolled{padding:12px 24px;}
-  .nav-links,.nav-cta{display:none;}
-  .nav-toggle{display:flex;}
-  .hero{min-height:680px;height:100svh;}
-  .hero-video,.hero-img{object-position:center top;}
-  .hero-overlay{
-    background:
-      linear-gradient(to bottom, rgba(14,12,10,0.18) 0%, rgba(14,12,10,0.22) 34%, rgba(14,12,10,0.82) 100%),
-      linear-gradient(to right, rgba(14,12,10,0.22), rgba(14,12,10,0.12));
-  }
-  .hero-content{left:24px;right:24px;bottom:72px;max-width:none;}
-  .hero-eyebrow{font-size:10px;letter-spacing:0.18em;margin-bottom:14px;}
-  .hero-title{font-size:clamp(38px,11.2vw,52px);line-height:1.2;margin-bottom:18px;}
-  .hero-lead{font-size:13px;line-height:1.85;margin-bottom:24px;max-width:330px;}
-  .hero-actions{gap:10px;}
-  .btn-primary{padding:13px 24px;font-size:11px;letter-spacing:0.16em;}
-  .btn-ghost-light{font-size:11px;letter-spacing:0.1em;}
-  .hero-proof{gap:8px;margin-top:22px;max-width:340px;}
-  .hero-proof-item{font-size:10px;padding:8px 10px;letter-spacing:0.08em;}
-  .hero-scroll{right:24px;}
-  .about{grid-template-columns:1fr;}
-  .about-img{min-height:280px;}
-  .about-content{padding:48px 28px;}
-  .gallery-grid{grid-template-columns:repeat(2,1fr);padding:0 24px;}
-  .gallery-item:first-child{grid-column:span 2;}
-  .packages{padding:60px 24px;}
-  .pkg-grid{grid-template-columns:1fr;}
-  .process{padding:60px 24px;}
-  .process-steps{grid-template-columns:1fr 1fr;}
-  .process-step:nth-child(2) .step-arrow,.process-step:nth-child(4) .step-arrow{display:none;}
-  .notice{padding:60px 24px;}
-  .instagram{padding:60px 24px;}
-  .insta-grid{grid-template-columns:repeat(3,1fr);}
-  .location{grid-template-columns:1fr;}
-  .location-map{min-height:280px;}
-  .location-info{padding:40px 24px;}
-  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
-  footer{padding:48px 24px 32px;}
-  .float-cta{bottom:16px;right:16px;}
-  .gallery-header,.notice-header,.instagram-header{padding:0;}
+  .nav{padding:16px 24px}.nav.scrolled{padding:12px 24px}
+  .nav-links,.nav-cta{display:none}.nav-toggle{display:flex}
+  .hero{min-height:680px;height:100svh}.hero-video,.hero-img{object-position:center top}
+  .hero-overlay{background:linear-gradient(to bottom,rgba(14,12,10,.18) 0%,rgba(14,12,10,.22) 34%,rgba(14,12,10,.82) 100%),linear-gradient(to right,rgba(14,12,10,.22),rgba(14,12,10,.12))}
+  .hero-content{left:24px;right:24px;bottom:72px;max-width:none}
+  .hero-eyebrow{font-size:10px;letter-spacing:.18em;margin-bottom:14px}
+  .hero-title{font-size:clamp(38px,11.2vw,52px);line-height:1.2;margin-bottom:18px}
+  .hero-lead{font-size:13px;line-height:1.85;margin-bottom:24px;max-width:330px}
+  .hero-actions{gap:10px}.btn-primary{padding:13px 24px;font-size:11px;letter-spacing:.16em}.btn-ghost-light{font-size:11px;letter-spacing:.1em}
+  .hero-proof{gap:8px;margin-top:22px;max-width:340px}.hero-proof-item{font-size:10px;padding:8px 10px;letter-spacing:.08em}.hero-scroll{right:24px}
+  .about{grid-template-columns:1fr}.about-img{min-height:280px}.about-content{padding:48px 28px}
+  .gallery-header,.notice-header,.instagram-header{padding:0 24px}.gallery-grid{grid-template-columns:repeat(2,1fr);padding:0 24px}.gallery-item:first-child{grid-column:span 2}
+  .packages{padding:60px 24px}.pkg-grid{grid-template-columns:1fr}.pkg-notes{grid-template-columns:1fr}
+  .process{padding:60px 24px}.process-steps{grid-template-columns:1fr 1fr}.process-step:nth-child(2) .step-arrow,.process-step:nth-child(4) .step-arrow{display:none}
+  .notice{padding:60px 0}.notice-list{padding:0 24px}.instagram{padding:60px 0}.insta-grid{grid-template-columns:repeat(3,1fr);padding:0 24px}
+  .location{grid-template-columns:1fr}.location-map{min-height:280px}.location-info{padding:40px 24px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}footer{padding:48px 24px 96px}
+  .float-cta{left:0;right:0;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;padding:8px max(12px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-bottom));background:rgba(247,242,234,.94);backdrop-filter:blur(14px);border-top:.5px solid var(--line)}
+  .float-kakao,.float-reserve{justify-content:center;min-height:46px;padding:12px 10px;box-shadow:none}
 }
 @media(max-width:600px){
-  .hero-content{bottom:64px;}
-  .hero-actions{flex-direction:column;align-items:flex-start;}
-  .btn-primary{width:100%;max-width:260px;text-align:center;}
-  .hero-scroll{display:none;}
-  .gallery-grid{grid-template-columns:1fr 1fr;padding:0 16px;}
-  .insta-grid{grid-template-columns:repeat(2,1fr);}
-  .process-steps{grid-template-columns:1fr;}
-  .process-step .step-arrow{display:none;}
-  .footer-top{grid-template-columns:1fr;}
-  .stats{grid-template-columns:1fr 1fr;}
-  .stat:nth-child(3){border-top:0.5px solid var(--line);}
+  .hero-content{bottom:64px}.hero-actions{flex-direction:column;align-items:flex-start}.btn-primary{width:100%;max-width:260px;text-align:center}.hero-scroll{display:none}
+  .gallery-grid{grid-template-columns:1fr 1fr;padding:0 16px}.insta-grid{grid-template-columns:repeat(2,1fr);padding:0 16px}
+  .process-steps{grid-template-columns:1fr}.process-step .step-arrow{display:none}.footer-top{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-top:.5px solid var(--line)}
+  .notice-item{grid-template-columns:1fr;gap:6px}.notice-date{text-align:left}
 }
 </style>
 </head>
 <body>
-
-<!-- NAV -->
 <nav class="nav" id="navbar">
-  <a href="/" class="nav-logo">
+  <a href="/" class="nav-logo" aria-label="고유재 한옥스튜디오 홈">
     <span class="nav-logo-text">고유재</span>
     <span class="nav-logo-sub">한옥스튜디오</span>
   </a>
@@ -572,25 +301,21 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
     <li><a href="#location">오시는 길</a></li>
   </ul>
   <a href="/guide.html" class="nav-cta">예약 문의</a>
-  <div class="nav-toggle" id="navToggle">
+  <button class="nav-toggle" id="navToggle" type="button" aria-label="메뉴 열기" aria-controls="mobileMenu" aria-expanded="false">
     <span></span><span></span><span></span>
-  </div>
+  </button>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline id="heroVideo">
+  <video class="hero-video" autoplay muted loop playsinline id="heroVideo" poster="/_0049.jpg" preload="metadata">
     <source src="/_0049_animation.mp4" type="video/mp4">
   </video>
-  <img src="/_0049.jpg" alt="고유재 한옥스튜디오" class="hero-img" id="heroImg">
+  <img src="/_0049.jpg" alt="고유재 한옥스튜디오 돌촬영 공간" class="hero-img" id="heroImg" fetchpriority="high">
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Private Hanok Family Studio</p>
     <h1 class="hero-title">하루 두 팀,<br>한옥에 담는<br>가족의 첫 생일</h1>
-    <p class="hero-lead">
-      공주 한옥의 고요한 빛과 호텔 돌잔치급 실크 한복으로
-      아이의 첫 해를 따듯하고 영화처럼 기록합니다.
-    </p>
+    <p class="hero-lead">공주 한옥의 고요한 빛과 호텔 돌잔치급 실크 한복으로 아이의 첫 해를 따듯하고 영화처럼 기록합니다.</p>
     <div class="hero-actions">
       <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="btn-primary">카카오톡 상담하기</a>
       <a href="#packages" class="btn-ghost-light">상품 구성 보기 →</a>
@@ -607,366 +332,207 @@ footer{background:#0e0c0a;color:rgba(247,242,234,0.5);padding:64px 60px 40px;}
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee-wrap">
+<div class="marquee-wrap" aria-hidden="true">
   <div class="marquee-track">
-    <span class="marquee-item">돌촬영</span>
-    <span class="marquee-item">한복 대여 포함</span>
-    <span class="marquee-item">전통 한옥</span>
-    <span class="marquee-item">공주 스튜디오</span>
-    <span class="marquee-item">Dol Ceremony</span>
-    <span class="marquee-item">가족사진</span>
-    <span class="marquee-item">실크 한복</span>
-    <span class="marquee-item">프리미엄 촬영</span>
-    <span class="marquee-item">돌촬영</span>
-    <span class="marquee-item">한복 대여 포함</span>
-    <span class="marquee-item">전통 한옥</span>
-    <span class="marquee-item">공주 스튜디오</span>
-    <span class="marquee-item">Dol Ceremony</span>
-    <span class="marquee-item">가족사진</span>
-    <span class="marquee-item">실크 한복</span>
-    <span class="marquee-item">프리미엄 촬영</span>
+    <span class="marquee-item">돌촬영</span><span class="marquee-item">한복 대여 포함</span><span class="marquee-item">전통 한옥</span><span class="marquee-item">공주 스튜디오</span><span class="marquee-item">Dol Ceremony</span><span class="marquee-item">가족사진</span><span class="marquee-item">실크 한복</span><span class="marquee-item">프리미엄 촬영</span>
+    <span class="marquee-item">돌촬영</span><span class="marquee-item">한복 대여 포함</span><span class="marquee-item">전통 한옥</span><span class="marquee-item">공주 스튜디오</span><span class="marquee-item">Dol Ceremony</span><span class="marquee-item">가족사진</span><span class="marquee-item">실크 한복</span><span class="marquee-item">프리미엄 촬영</span>
   </div>
 </div>
 
-<!-- ABOUT -->
 <section class="about" id="about">
-  <div class="about-img">
-    <img src="/0057.jpg" alt="고유재 한옥스튜디오 촬영">
-  </div>
+  <div class="about-img"><img src="/0057.jpg" alt="고유재 한옥스튜디오 촬영 장면" loading="lazy" decoding="async"></div>
   <div class="about-content">
     <div class="sec-eyebrow reveal">About Koyuje</div>
     <h2 class="sec-title reveal reveal-delay-1">변하지 않는<br>'고유함'을<br>기록합니다</h2>
-    <p class="sec-body reveal reveal-delay-2">
-      '고유재' 한옥 스튜디오는 우리나라 전통 가옥의<br>
-      고유한 멋을 담습니다.<br><br>
-      한복 고유의 빛깔과 부드러운 선,<br>
-      그리고 소중한 가족의 고유한 가치를<br>
-      전통 돌사진으로 기록합니다.<br><br>
-      본래의 변하지 않는 고유함을 잃지 않도록<br>
-      늘 정성스럽게 준비하겠습니다.
-    </p>
+    <p class="sec-body reveal reveal-delay-2">'고유재' 한옥 스튜디오는 우리나라 전통 가옥의 고유한 멋을 담습니다.<br><br>한복 고유의 빛깔과 부드러운 선, 그리고 소중한 가족의 고유한 가치를 전통 돌사진으로 기록합니다.<br><br>본래의 변하지 않는 고유함을 잃지 않도록 늘 정성스럽게 준비하겠습니다.</p>
     <div class="stats reveal reveal-delay-3">
-      <div class="stat">
-        <div class="stat-n">100<span style="font-size:18px">%</span></div>
-        <div class="stat-l">한복 대여 포함</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n">1:1</div>
-        <div class="stat-l">전담 디렉팅</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n">98<span style="font-size:18px">%</span></div>
-        <div class="stat-l">재방문·추천율</div>
-      </div>
+      <div class="stat"><div class="stat-n">100<span style="font-size:18px">%</span></div><div class="stat-l">한복 대여 포함</div></div>
+      <div class="stat"><div class="stat-n">1:1</div><div class="stat-l">전담 디렉팅</div></div>
+      <div class="stat"><div class="stat-n">2</div><div class="stat-l">하루 두 팀 운영</div></div>
     </div>
   </div>
 </section>
 
-<!-- GALLERY -->
 <section class="gallery" id="gallery">
   <div class="gallery-header">
     <div>
-      <div class="sec-eyebrow reveal" style="padding-left:0;">Gallery</div>
-      <h2 class="sec-title reveal reveal-delay-1" style="margin-bottom:0;">한옥이 담은<br>소중한 순간들</h2>
+      <div class="sec-eyebrow reveal">Gallery</div>
+      <h2 class="sec-title reveal reveal-delay-1">한옥이 담은<br>소중한 순간들</h2>
     </div>
-    <a href="https://www.instagram.com/koyuje_studio/" target="_blank" class="btn-more reveal">인스타그램에서 더 보기 →</a>
+    <a href="https://www.instagram.com/koyuje_studio/" target="_blank" rel="noopener" class="btn-more reveal">인스타그램에서 더 보기 →</a>
   </div>
   <div class="gallery-grid">
-    <div class="gallery-item reveal">
-      <img src="/_0049.jpg" alt="고유재 돌촬영">
-      <div class="gallery-overlay"></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-1">
-      <img src="/0057.jpg" alt="고유재 돌촬영">
-      <div class="gallery-overlay"></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-2">
-      <img src="/0073.jpg" alt="고유재 돌촬영">
-      <div class="gallery-overlay"></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-3">
-      <img src="/0075.jpg" alt="고유재 돌촬영">
-      <div class="gallery-overlay"></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-4">
-      <img src="/0138_.jpg" alt="고유재 돌촬영">
-      <div class="gallery-overlay"></div>
-    </div>
+    <div class="gallery-item reveal"><img src="/_0049.jpg" alt="고유재 한옥 돌촬영 대표 이미지" loading="lazy" decoding="async"><div class="gallery-overlay"></div></div>
+    <div class="gallery-item reveal reveal-delay-1"><img src="/0057.jpg" alt="고유재 한옥스튜디오 가족 돌사진" loading="lazy" decoding="async"><div class="gallery-overlay"></div></div>
+    <div class="gallery-item reveal reveal-delay-2"><img src="/0073.jpg" alt="고유재 전통 돌상 촬영" loading="lazy" decoding="async"><div class="gallery-overlay"></div></div>
+    <div class="gallery-item reveal reveal-delay-3"><img src="/0075.jpg" alt="고유재 실크 한복 촬영" loading="lazy" decoding="async"><div class="gallery-overlay"></div></div>
+    <div class="gallery-item reveal reveal-delay-4"><img src="/0138_.jpg" alt="공주 한옥스튜디오 돌사진" loading="lazy" decoding="async"><div class="gallery-overlay"></div></div>
   </div>
 </section>
 
-<!-- PACKAGES -->
 <section class="packages" id="packages">
   <div class="packages-header">
     <div class="sec-eyebrow reveal">2026 Package</div>
     <h2 class="sec-title reveal reveal-delay-1">돌촬영 상품 구성</h2>
   </div>
   <div class="pkg-grid">
-    <div class="pkg-card reveal">
-      <div class="pkg-name">아기 앨범형</div>
-      <div class="pkg-name-en">Baby Album</div>
-      <div class="pkg-price">750,000</div>
-      <div class="pkg-price-note">원 / 평일 기준 · 주말·공휴일 +10만원</div>
-      <div class="pkg-divider"></div>
+    <article class="pkg-card reveal">
+      <div class="pkg-name">아기 앨범형</div><div class="pkg-name-en">Baby Album</div>
+      <div class="pkg-price">750,000</div><div class="pkg-price-note">원 / 평일 기준 · 주말·공휴일 +10만원</div><div class="pkg-divider"></div>
       <ul class="pkg-features">
-        <li>프리미엄 실크 아기한복 1벌</li>
-        <li>촬영시간 30분 내외</li>
-        <li>돌상 아기사진 + 전통 돌잡이 연출</li>
-        <li>선택 2가지 (서당·까꿍·벚꽃 아기씬)</li>
-        <li>14x11inch 12p 화보앨범 1개</li>
-        <li>14x11inch 액자 1개</li>
-        <li>수정본 12장 + 촬영원본 전체 제공</li>
+        <li>프리미엄 실크 아기한복 1벌</li><li>촬영시간 30분 내외</li><li>돌상 아기사진 + 전통 돌잡이 연출</li><li>선택 2가지 아기씬</li><li>14x11inch 12p 화보앨범 1개</li><li>14x11inch 액자 1개</li><li>수정본 12장 + 촬영원본 전체 제공</li>
       </ul>
       <a href="/guide.html" class="btn-pkg">예약하기</a>
-    </div>
-    <div class="pkg-card featured reveal reveal-delay-1">
-      <div class="pkg-badge">POPULAR</div>
-      <div class="pkg-name">가족 실내 앨범형</div>
-      <div class="pkg-name-en">Family Indoor Album</div>
-      <div class="pkg-price">1,100,000</div>
-      <div class="pkg-price-note">원 / 평일 기준 · 주말·공휴일 +10만원</div>
-      <div class="pkg-divider"></div>
+    </article>
+    <article class="pkg-card featured reveal reveal-delay-1">
+      <div class="pkg-badge">POPULAR</div><div class="pkg-name">가족 실내 앨범형</div><div class="pkg-name-en">Family Indoor Album</div>
+      <div class="pkg-price">1,100,000</div><div class="pkg-price-note">원 / 평일 기준 · 주말·공휴일 +10만원</div><div class="pkg-divider"></div>
       <ul class="pkg-features">
-        <li>프리미엄 실크 3인 가족 한복 1벌</li>
-        <li>엄마·아빠 헤어메이크업 포함</li>
-        <li>촬영시간 90분 내외</li>
-        <li>돌상 아기 독사진 + 가족사진</li>
-        <li>전통 돌잡이 · 서당 · 가야금 연출</li>
-        <li>선택 2가지 (서당·까꿍·벚꽃 아기씬)</li>
-        <li>14x11inch 16p 화보앨범 1개</li>
-        <li>14x11inch 액자 1개</li>
-        <li>수정본 16장 + 촬영원본 전체 제공</li>
+        <li>프리미엄 실크 3인 가족 한복 1벌</li><li>엄마·아빠 헤어메이크업 포함</li><li>촬영시간 90분 내외</li><li>돌상 아기 독사진 + 가족사진</li><li>전통 돌잡이 · 서당 · 가야금 연출</li><li>선택 2가지 아기씬</li><li>14x11inch 16p 화보앨범 1개</li><li>14x11inch 액자 1개</li><li>수정본 16장 + 촬영원본 전체 제공</li>
       </ul>
       <a href="/guide.html" class="btn-pkg">예약하기</a>
-    </div>
-    <div class="pkg-card reveal reveal-delay-2">
-      <div class="pkg-name">야외 스냅 추가</div>
-      <div class="pkg-name-en">Outdoor Snap Add-on</div>
-      <div class="pkg-price">300,000</div>
-      <div class="pkg-price-note">원 · 가족 실내 앨범형에 추가</div>
-      <div class="pkg-divider"></div>
+    </article>
+    <article class="pkg-card reveal reveal-delay-2">
+      <div class="pkg-name">야외 스냅 추가</div><div class="pkg-name-en">Outdoor Snap Add-on</div>
+      <div class="pkg-price">300,000</div><div class="pkg-price-note">원 · 가족 실내 앨범형에 추가</div><div class="pkg-divider"></div>
       <ul class="pkg-features">
-        <li>야외 한옥 가족스냅 또는 문화재스냅</li>
-        <li>앨범 페이지 4p 추가 (총 20p)</li>
-        <li>수정본 9장 추가 (총 25장 제공)</li>
-        <li>아기 컨디션·날씨에 따라 변동 가능</li>
+        <li>야외 한옥 가족스냅 또는 문화재스냅</li><li>앨범 페이지 4p 추가</li><li>수정본 9장 추가</li><li>아기 컨디션·날씨에 따라 변동 가능</li>
       </ul>
-      <div class="pkg-desc" style="margin-top:16px;padding-top:16px;border-top:0.5px solid var(--line);">
-        <strong style="font-size:12px;color:var(--ink);letter-spacing:0.05em;">추가 옵션</strong><br>
-        쌍둥이 +50만원 · 형제 실내 +10만원<br>
-        형제 야외 +20만원 · 조부모 +20만원
-      </div>
-      <a href="/guide.html" class="btn-pkg" style="margin-top:20px;">예약 문의하기</a>
-    </div>
+      <div class="pkg-desc"><strong>추가 옵션</strong><br>쌍둥이 +50만원 · 형제 실내 +10만원<br>형제 야외 +20만원 · 조부모 +20만원</div>
+      <a href="/guide.html" class="btn-pkg">예약 문의하기</a>
+    </article>
   </div>
-
-  <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:2px;">
-    <div class="pkg-note reveal" style="margin-top:0;">
-      <strong style="font-size:12px;color:var(--ink);letter-spacing:0.08em;">🔸 친구 소개 이벤트</strong><br>
-      친구 소개 시 서로 3만원 할인 · 예약 시 친구 이름과 촬영일 기재 필수
-    </div>
-    <div class="pkg-note reveal reveal-delay-1" style="margin-top:0;">
-      <strong style="font-size:12px;color:var(--ink);letter-spacing:0.08em;">🔸 후기 이벤트</strong><br>
-      육아카페 1곳 + SNS 1곳 후기 작성 시 3만원 상품권 또는 11R 액자 제공
-    </div>
+  <div class="pkg-notes">
+    <div class="pkg-note reveal"><strong>친구 소개 이벤트</strong><br>친구 소개 시 서로 3만원 할인 · 예약 시 친구 이름과 촬영일 기재 필수</div>
+    <div class="pkg-note reveal reveal-delay-1"><strong>후기 이벤트</strong><br>육아카페 1곳 + SNS 1곳 후기 작성 시 3만원 상품권 또는 11R 액자 제공</div>
   </div>
-
-  <div class="pkg-note reveal" style="margin-top:2px;">
-    · 예약금 20만원 · 입금계좌: 농협 302-1742-5215-41 조현호(고유재) &nbsp;·&nbsp; 상품 구성 및 금액은 사전고지 없이 변경될 수 있으며 예약 당시 기준으로 적용됩니다
-  </div>
+  <div class="pkg-note pkg-wide-note reveal">· 예약금 20만원 · 입금계좌: 농협 302-1742-5215-41 조현호(고유재) · 상품 구성 및 금액은 사전고지 없이 변경될 수 있으며 예약 당시 기준으로 적용됩니다</div>
 </section>
 
-<!-- PROCESS -->
 <section class="process">
   <div class="process-header">
     <div class="sec-eyebrow reveal">How It Works</div>
     <h2 class="sec-title reveal reveal-delay-1">예약부터 수령까지<br>함께합니다</h2>
   </div>
   <div class="process-steps">
-    <div class="process-step reveal">
-      <div class="step-arrow"></div>
-      <div class="step-num">01</div>
-      <div class="step-title">날짜 확인</div>
-      <div class="step-desc">카카오톡 또는 전화로 원하시는 촬영 일정과 상품을 상담 후 날짜를 확정합니다.</div>
-    </div>
-    <div class="process-step reveal reveal-delay-1">
-      <div class="step-arrow"></div>
-      <div class="step-num">02</div>
-      <div class="step-title">예약금 입금</div>
-      <div class="step-desc">예약금 20만원을 입금하시면 일정이 확보됩니다. 농협 302-1742-5215-41 (조현호)</div>
-    </div>
-    <div class="process-step reveal reveal-delay-2">
-      <div class="step-arrow"></div>
-      <div class="step-num">03</div>
-      <div class="step-title">예약확정 작성</div>
-      <div class="step-desc">예약확정 페이지에서 한복 사이즈, 촬영 정보 등을 작성하시면 최종 예약이 완료됩니다.</div>
-    </div>
-    <div class="process-step reveal reveal-delay-3">
-      <div class="step-arrow"></div>
-      <div class="step-num">04</div>
-      <div class="step-title">촬영 당일</div>
-      <div class="step-desc">한복 셀렉 후 촬영을 진행합니다. 잔금은 당일 카드 또는 현금으로 결제 가능합니다.</div>
-    </div>
-    <div class="process-step reveal reveal-delay-4">
-      <div class="step-num">05</div>
-      <div class="step-title">결과물 수령</div>
-      <div class="step-desc">촬영 후 약 6주 이내 보정 원본 및 상품이 완성되어 발송됩니다.</div>
-    </div>
+    <div class="process-step reveal"><div class="step-arrow"></div><div class="step-num">01</div><div class="step-title">날짜 확인</div><div class="step-desc">카카오톡 또는 전화로 원하시는 촬영 일정과 상품을 상담 후 날짜를 확정합니다.</div></div>
+    <div class="process-step reveal reveal-delay-1"><div class="step-arrow"></div><div class="step-num">02</div><div class="step-title">예약금 입금</div><div class="step-desc">예약금 20만원을 입금하시면 일정이 확보됩니다.</div></div>
+    <div class="process-step reveal reveal-delay-2"><div class="step-arrow"></div><div class="step-num">03</div><div class="step-title">예약확정 작성</div><div class="step-desc">한복 사이즈, 촬영 정보 등을 작성하시면 최종 예약이 완료됩니다.</div></div>
+    <div class="process-step reveal reveal-delay-3"><div class="step-arrow"></div><div class="step-num">04</div><div class="step-title">촬영 당일</div><div class="step-desc">한복 셀렉 후 촬영을 진행합니다. 잔금은 당일 결제 가능합니다.</div></div>
+    <div class="process-step reveal reveal-delay-4"><div class="step-num">05</div><div class="step-title">결과물 수령</div><div class="step-desc">촬영 후 약 6주 이내 보정 원본 및 상품이 완성되어 발송됩니다.</div></div>
   </div>
 </section>
 
-<!-- NOTICE + BOARD -->
 <section class="notice" id="notice">
   <div class="notice-header">
     <div>
-      <div class="sec-eyebrow reveal" style="padding-left:0;">Notice & Board</div>
-      <h2 class="sec-title reveal reveal-delay-1" style="margin-bottom:0;">공지사항 &amp; 예약확정</h2>
+      <div class="sec-eyebrow reveal">Notice & Board</div>
+      <h2 class="sec-title reveal reveal-delay-1">공지사항 &amp; 예약확정</h2>
     </div>
     <a href="/board.html" class="btn-more reveal">전체보기 →</a>
   </div>
   <div class="notice-list" id="homeNoticeList">
-    <div style="padding:32px 0;text-align:center;color:var(--muted);font-size:13px;letter-spacing:0.1em;">불러오는 중...</div>
+    <div class="empty-state">불러오는 중...</div>
   </div>
 </section>
 
-<!-- INSTAGRAM -->
 <section class="instagram" id="instagram">
   <div class="instagram-header">
     <div>
-      <div class="sec-eyebrow reveal" style="padding-left:0;">Instagram</div>
-      <h2 class="sec-title reveal reveal-delay-1" style="margin-bottom:0;">@koyuje_studio</h2>
+      <div class="sec-eyebrow reveal">Instagram</div>
+      <h2 class="sec-title reveal reveal-delay-1">@koyuje_studio</h2>
     </div>
-    <a href="https://www.instagram.com/koyuje_studio/" target="_blank" class="btn-more reveal">팔로우하기 →</a>
+    <a href="https://www.instagram.com/koyuje_studio/" target="_blank" rel="noopener" class="btn-more reveal">팔로우하기 →</a>
   </div>
   <div class="insta-grid" id="instaGrid"></div>
   <div class="insta-cta reveal">
-    <a href="https://www.instagram.com/koyuje_studio/" target="_blank" class="btn-insta">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    <a href="https://www.instagram.com/koyuje_studio/" target="_blank" rel="noopener" class="btn-insta">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
       인스타그램에서 더 많은 사진 보기
     </a>
   </div>
 </section>
 
-<!-- LOCATION -->
 <section class="location" id="location">
   <div class="location-map" id="kakaoMap"></div>
   <div class="location-info">
-    <div class="sec-eyebrow reveal" style="padding-left:0;">Location</div>
+    <div class="sec-eyebrow reveal">Location</div>
     <h2 class="sec-title reveal reveal-delay-1">오시는 길</h2>
-    <div class="location-item reveal reveal-delay-2">
-      <div class="location-key">주소</div>
-      <div class="location-val">충청남도 공주시 봉황로 88</div>
-    </div>
-    <div class="location-item reveal reveal-delay-2">
-      <div class="location-key">주차</div>
-      <div class="location-val">스튜디오 바로 앞 공주세무서 주차장을 이용하시면 됩니다.<br>
-        <span style="font-size:12px;color:var(--muted);">일요일에는 차단기가 있어도 자동으로 올라가니 편하게 이용하시면 됩니다.</span>
-      </div>
-    </div>
-    <div class="location-item reveal reveal-delay-2">
-      <div class="location-key">전화</div>
-      <div class="location-val"><a href="tel:010-7635-9689">010-7635-9689</a></div>
-    </div>
-    <div class="location-item reveal reveal-delay-2">
-      <div class="location-key">이메일</div>
-      <div class="location-val"><a href="mailto:koyuje@daum.net">koyuje@daum.net</a></div>
-    </div>
-    <div class="location-item reveal reveal-delay-2">
-      <div class="location-key">운영시간</div>
-      <div class="location-val">평일 · 주말 10:00 — 18:00<br><span style="font-size:12px;color:var(--muted);">촬영 문의는 카카오톡을 이용해 주세요</span></div>
-    </div>
-    <a href="https://kko.to/wbVqE4BGHD" target="_blank" class="kakao-btn reveal reveal-delay-3">
-      <svg class="kakao-icon" viewBox="0 0 24 24" fill="#3A1D1D"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.887 1.67 5.424 4.236 6.977L5.5 21l3.838-2.026A11.3 11.3 0 0012 19c5.523 0 10-3.477 10-8S17.523 3 12 3z"/></svg>
-      카카오맵 길찾기
-    </a>
-    <a href="https://map.naver.com/p/search/충청남도 공주시 봉황로 88" target="_blank" class="kakao-btn reveal reveal-delay-3" style="margin-top:10px;background:#03c75a;color:#fff;">
-      <svg class="kakao-icon" viewBox="0 0 24 24" fill="white"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
-      네이버지도 길찾기
-    </a>
-    <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" class="kakao-btn reveal reveal-delay-3" style="margin-top:10px;background:rgba(250,227,0,0.15);border:1px solid #FAE300;">
-      <svg class="kakao-icon" viewBox="0 0 24 24" fill="#3A1D1D"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.887 1.67 5.424 4.236 6.977L5.5 21l3.838-2.026A11.3 11.3 0 0012 19c5.523 0 10-3.477 10-8S17.523 3 12 3z"/></svg>
-      카카오톡 채널 상담하기
-    </a>
+    <div class="location-item reveal reveal-delay-2"><div class="location-key">주소</div><div class="location-val">충청남도 공주시 봉황로 88</div></div>
+    <div class="location-item reveal reveal-delay-2"><div class="location-key">주차</div><div class="location-val">스튜디오 바로 앞 공주세무서 주차장을 이용하시면 됩니다.<br><span class="location-sub">일요일에는 차단기가 있어도 자동으로 올라가니 편하게 이용하시면 됩니다.</span></div></div>
+    <div class="location-item reveal reveal-delay-2"><div class="location-key">전화</div><div class="location-val"><a href="tel:010-7635-9689">010-7635-9689</a></div></div>
+    <div class="location-item reveal reveal-delay-2"><div class="location-key">이메일</div><div class="location-val"><a href="mailto:koyuje@daum.net">koyuje@daum.net</a></div></div>
+    <div class="location-item reveal reveal-delay-2"><div class="location-key">운영시간</div><div class="location-val">평일 · 주말 10:00 — 18:00<br><span class="location-sub">촬영 문의는 카카오톡을 이용해 주세요</span></div></div>
+    <a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" class="kakao-btn reveal reveal-delay-3">카카오맵 길찾기</a>
+    <a href="https://map.naver.com/p/search/충청남도 공주시 봉황로 88" target="_blank" rel="noopener" class="kakao-btn naver reveal reveal-delay-3">네이버지도 길찾기</a>
+    <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="kakao-btn channel reveal reveal-delay-3">카카오톡 채널 상담하기</a>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-top">
     <div>
-      <div class="footer-brand">
-        <div style="font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;color:var(--paper);letter-spacing:0.1em;margin-bottom:4px;">고유재</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:0.22em;margin-bottom:16px;">Koyuje Hanok Studio</div>
-      </div>
+      <div class="footer-logo">고유재</div>
       <div class="footer-brand-en">Koyuje Hanok Studio</div>
       <p class="footer-tagline">변하지 않는 고유함으로 아이의 가장 빛나는 순간을 담아드립니다.</p>
     </div>
-    <div>
-      <p class="footer-col-title">MENU</p>
-      <ul class="footer-links">
-        <li><a href="#about">스튜디오 소개</a></li>
-        <li><a href="#gallery">갤러리</a></li>
-        <li><a href="#packages">상품 구성</a></li>
-        <li><a href="#notice">공지사항</a></li>
-        <li><a href="#location">오시는 길</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-title">SERVICE</p>
-      <ul class="footer-links">
-        <li><a href="/reservation.html">예약 확정 작성</a></li>
-        <li><a href="/status.html">예약 현황 확인</a></li>
-        <li><a href="https://pf.kakao.com/_xiRxjhxj">카카오톡 상담</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-title">CONTACT</p>
-      <ul class="footer-links">
-        <li><a href="#">충청남도 공주시 봉황로 88</a></li>
-        <li><a href="tel:010-7635-9689">010-7635-9689</a></li>
-        <li><a href="mailto:koyuje@daum.net">koyuje@daum.net</a></li>
-        <li><a href="#">평일·주말 10:00 — 18:00</a></li>
-      </ul>
-    </div>
+    <div><p class="footer-col-title">MENU</p><ul class="footer-links"><li><a href="#about">스튜디오 소개</a></li><li><a href="#gallery">갤러리</a></li><li><a href="#packages">상품 구성</a></li><li><a href="#notice">공지사항</a></li><li><a href="#location">오시는 길</a></li></ul></div>
+    <div><p class="footer-col-title">SERVICE</p><ul class="footer-links"><li><a href="/reservation.html">예약 확정 작성</a></li><li><a href="/status.html">예약 현황 확인</a></li><li><a href="https://pf.kakao.com/_xiRxjhxj">카카오톡 상담</a></li></ul></div>
+    <div><p class="footer-col-title">CONTACT</p><ul class="footer-links"><li><a href="#location">충청남도 공주시 봉황로 88</a></li><li><a href="tel:010-7635-9689">010-7635-9689</a></li><li><a href="mailto:koyuje@daum.net">koyuje@daum.net</a></li><li><a href="#location">평일·주말 10:00 — 18:00</a></li></ul></div>
   </div>
   <div class="footer-bottom">
     <p class="footer-copy">© 2026 고유재 한옥스튜디오. All Rights Reserved.</p>
-    <div class="footer-sns">
-      <a href="https://www.instagram.com/koyuje_studio/" target="_blank" class="sns-a">INSTAGRAM</a>
-      <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" class="sns-a">KAKAO</a>
-    </div>
+    <div class="footer-sns"><a href="https://www.instagram.com/koyuje_studio/" target="_blank" rel="noopener" class="sns-a">INSTAGRAM</a><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="sns-a">KAKAO</a></div>
   </div>
 </footer>
 
-<!-- FLOATING CTA -->
-<div class="float-cta">
-  <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" class="float-kakao">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="#3A1D1D"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.887 1.67 5.424 4.236 6.977L5.5 21l3.838-2.026A11.3 11.3 0 0012 19c5.523 0 10-3.477 10-8S17.523 3 12 3z"/></svg>
-    카카오톡 상담
-  </a>
-  <a href="/guide.html" class="float-reserve">
-    ✦ 예약하기
-  </a>
+<div class="float-cta" aria-label="빠른 상담 및 예약">
+  <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="float-kakao">카카오톡 상담</a>
+  <a href="/guide.html" class="float-reserve">예약하기</a>
+</div>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-head">
+    <span class="mobile-menu-logo">고유재</span><span class="mobile-menu-sub">한옥스튜디오</span>
+    <button id="mobileClose" class="mobile-close" type="button">✕ 닫기</button>
+  </div>
+  <a href="#about">스튜디오 소개</a><a href="#gallery">갤러리</a><a href="#packages">상품구성</a><a href="/board.html">게시판</a><a href="#location">오시는 길</a><a href="/guide.html" class="mobile-reserve">예약 문의</a>
 </div>
 
 <script>
 const BOARD_URL = 'https://script.google.com/macros/s/AKfycbx4-im4AYWkgsWXWqPiKkYI_l7A87ORtUPS7I4Ww6K3DlD2QBAQy06s6S1LgwNg06OT/exec';
+const KAKAO_APP_KEY = '3a3bea54fcc2f18a85036be7b91e3b4e';
+const KAKAO_MAP_URL = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_APP_KEY}&autoload=false`;
 
-// 카카오맵 초기화
+function runIdle(fn, timeout = 900) {
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(fn, { timeout });
+    return;
+  }
+  setTimeout(fn, timeout);
+}
+
 function showMapFallback(message) {
   const container = document.getElementById('kakaoMap');
   if (!container) return;
   container.innerHTML = `
-    <div style="height:100%;min-height:400px;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;background:#e8e0d4;color:#7a6e62;font-family:'Noto Sans KR',sans-serif;">
+    <div class="map-fallback">
       <div>
-        <div style="font-family:'Noto Serif KR',serif;font-size:18px;color:#1c1814;margin-bottom:10px;">고유재 한옥스튜디오</div>
-        <div style="font-size:13px;line-height:1.8;margin-bottom:18px;">${message || '지도를 불러오지 못했습니다.'}<br>아래 버튼으로 길찾기를 이용해 주세요.</div>
-        <a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" style="display:inline-block;background:#FAE300;color:#3A1D1D;padding:12px 22px;font-size:12px;letter-spacing:0.08em;text-decoration:none;margin:4px;">카카오맵 길찾기</a>
-        <a href="https://map.naver.com/p/search/%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84%20%EA%B3%B5%EC%A3%BC%EC%8B%9C%20%EB%B4%89%ED%99%A9%EB%A1%9C%2088" target="_blank" rel="noopener" style="display:inline-block;background:#03c75a;color:#fff;padding:12px 22px;font-size:12px;letter-spacing:0.08em;text-decoration:none;margin:4px;">네이버지도 길찾기</a>
+        <div class="map-title">고유재 한옥스튜디오</div>
+        <div class="map-copy">${message || '지도를 불러오지 못했습니다.'}<br>아래 버튼으로 길찾기를 이용해 주세요.</div>
+        <a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" class="map-link kakao">카카오맵 길찾기</a>
+        <a href="https://map.naver.com/p/search/%EC%B6%A9%EC%B2%AD%EB%82%A8%EB%8F%84%20%EA%B3%B5%EC%A3%BC%EC%8B%9C%20%EB%B4%89%ED%99%A9%EB%A1%9C%2088" target="_blank" rel="noopener" class="map-link naver">네이버지도 길찾기</a>
       </div>
-    </div>
-  `;
+    </div>`;
+}
+
+function loadScript(src, onload, onerror) {
+  const script = document.createElement('script');
+  script.src = src;
+  script.async = true;
+  script.onload = onload;
+  script.onerror = onerror;
+  document.head.appendChild(script);
 }
 
 function initKakaoMap() {
@@ -978,175 +544,146 @@ function initKakaoMap() {
   }
   kakao.maps.load(function () {
     try {
-      const lat = 36.463541;
-      const lng = 127.115631;
-      const position = new kakao.maps.LatLng(lat, lng);
+      const position = new kakao.maps.LatLng(36.463541, 127.115631);
       const map = new kakao.maps.Map(container, { center: position, level: 4 });
-      const marker = new kakao.maps.Marker({ position: position, map: map });
+      const marker = new kakao.maps.Marker({ position, map });
       const infowindow = new kakao.maps.InfoWindow({
-        content: [
-          '<div style="padding:10px 14px;font-family:\'Noto Sans KR\',sans-serif;min-width:190px;line-height:1.55;">',
-          '<div style="font-size:13px;font-weight:500;color:#1c1814;margin-bottom:4px;">📍 고유재 한옥스튜디오</div>',
-          '<div style="font-size:11px;color:#7a6e62;margin-bottom:6px;">충청남도 공주시 봉황로 88</div>',
-          '<a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" style="font-size:11px;color:#a07840;text-decoration:none;">카카오맵 길찾기 →</a>',
-          '</div>'
-        ].join('')
+        content: '<div style="padding:10px 14px;font-family:Noto Sans KR,sans-serif;min-width:190px;line-height:1.55;"><div style="font-size:13px;font-weight:500;color:#1c1814;margin-bottom:4px;">고유재 한옥스튜디오</div><div style="font-size:11px;color:#7a6e62;margin-bottom:6px;">충청남도 공주시 봉황로 88</div><a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" style="font-size:11px;color:#a07840;text-decoration:none;">카카오맵 길찾기 →</a></div>'
       });
       infowindow.open(map, marker);
-      kakao.maps.event.addListener(marker, 'click', function() {
-        window.open('https://kko.to/wbVqE4BGHD', '_blank');
-      });
+      kakao.maps.event.addListener(marker, 'click', function(){ window.open('https://kko.to/wbVqE4BGHD', '_blank'); });
       setTimeout(function(){ map.relayout(); map.setCenter(position); }, 300);
-      window.addEventListener('resize', function(){ map.relayout(); map.setCenter(position); });
+      window.addEventListener('resize', function(){ map.relayout(); map.setCenter(position); }, { passive:true });
     } catch (e) {
       showMapFallback('카카오맵 초기화 중 오류가 발생했습니다.');
     }
   });
 }
-window.addEventListener('DOMContentLoaded', initKakaoMap);
 
-// 갤러리
+function lazyLoadMap() {
+  const target = document.getElementById('kakaoMap');
+  if (!target) return;
+  const observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    observer.disconnect();
+    loadScript(KAKAO_MAP_URL, initKakaoMap, () => showMapFallback('카카오맵 스크립트가 로드되지 않았습니다.'));
+  }, { rootMargin: '320px 0px' });
+  observer.observe(target);
+}
+
 const galleryFallback = [
   { src:'/_0049.jpg', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
-  { src:'/0057.jpg',  link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
-  { src:'/0073.jpg',  link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
-  { src:'/0075.jpg',  link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
-  { src:'/0138_.jpg', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
+  { src:'/0057.jpg', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
+  { src:'/0073.jpg', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
+  { src:'/0075.jpg', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' },
+  { src:'/0138_.jpg', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 돌사진' }
 ];
+
+function observeReveals(root = document) {
+  const reveals = root.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold:.08, rootMargin:'0px 0px -40px 0px' });
+  reveals.forEach(el => io.observe(el));
+}
 
 function renderGallery(images) {
   const grid = document.getElementById('instaGrid');
   if (!grid) return;
-  const svgIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>`;
+  const svgIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>';
   grid.innerHTML = images.map((img, i) => `
-    <a href="${img.link}" target="_blank" rel="noopener"
-       class="insta-item reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}">
-      <img src="${img.src}" alt="${img.alt}" loading="lazy">
+    <a href="${img.link}" target="_blank" rel="noopener" class="insta-item reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}">
+      <img src="${img.src}" alt="${img.alt}" loading="lazy" decoding="async">
       <div class="insta-overlay"><div class="insta-icon">${svgIcon}</div></div>
-    </a>
-  `).join('');
-  const io2 = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-  }, {threshold:0.08});
-  grid.querySelectorAll('.reveal').forEach(el => io2.observe(el));
+    </a>`).join('');
+  observeReveals(grid);
 }
 
-fetch(BOARD_URL + '?action=gallery')
-  .then(r => r.json())
-  .then(data => {
-    if (data.result === 'success' && data.data && data.data.length > 0) {
-      renderGallery(data.data);
-    } else {
-      renderGallery(galleryFallback);
-    }
-  })
-  .catch(() => renderGallery(galleryFallback));
+function loadInstagramGallery() {
+  fetch(BOARD_URL + '?action=gallery')
+    .then(r => r.json())
+    .then(data => renderGallery(data.result === 'success' && data.data && data.data.length > 0 ? data.data : galleryFallback))
+    .catch(() => renderGallery(galleryFallback));
+}
 
-// 공지사항
 function loadHomeNotice() {
   fetch(BOARD_URL + '?action=board&page=1')
     .then(r => r.json())
     .then(data => {
-      if (data.result !== 'success' || !data.data) return;
-      const all = data.data || [];
-      const notices = all.filter(i => i.category === '공지').slice(0, 3);
-      const reservations = all.filter(i => i.category === '예약확정').slice(0, 3);
-      const items = [...notices, ...reservations].slice(0, 5);
-      if (items.length === 0) return;
       const list = document.getElementById('homeNoticeList');
-      list.innerHTML = items.map((item, idx) => {
+      if (!list || data.result !== 'success' || !data.data) return;
+      const all = data.data || [];
+      const items = [...all.filter(i => i.category === '공지').slice(0, 3), ...all.filter(i => i.category === '예약확정').slice(0, 3)].slice(0, 5);
+      if (items.length === 0) {
+        list.innerHTML = '<div class="empty-state">등록된 공지가 없습니다.</div>';
+        return;
+      }
+      list.innerHTML = items.map(item => {
         const isNotice = item.category === '공지';
         const isPrivate = item.isPublic === '비공개' || item.hasPassword;
-        const isDone = item.title && item.title.includes('✅');
-        const isWait = item.title && item.title.includes('⏳');
         let isNew = false;
-        if (item.date) {
-          const diff = (new Date() - new Date(item.date)) / (1000*60*60*24);
-          isNew = diff <= 10;
-        }
+        if (item.date) isNew = (new Date() - new Date(item.date)) / (1000 * 60 * 60 * 24) <= 10;
         let displayTitle = item.title || '';
         if (isPrivate) {
           const nameMatch = item.title && item.title.match(/^(.+?)님/);
-          displayTitle = nameMatch ? nameMatch[1] + '님 🔒' : '🔒 비밀글';
+          displayTitle = nameMatch ? nameMatch[1] + '님 비밀글' : '비밀글';
         }
-        const d = item.date ? item.date.replace(/-/g, '.') : '';
         return `
-        <a href="/board.html" class="notice-item" style="animation-delay:${idx*0.1}s">
-          <div class="notice-num" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);">${isNotice ? '📌 공지' : '예약확정'}</div>
-          <div class="notice-title">
-            ${displayTitle}
-            ${isNew ? '<span class="notice-badge">NEW</span>' : ''}
-            ${isDone ? '<span style="font-size:11px;color:#3a6b3a;margin-left:6px;">✅ 완료</span>' : ''}
-            ${isWait ? '<span style="font-size:11px;color:#8b6914;margin-left:6px;">⏳ 접수</span>' : ''}
-          </div>
-          <div class="notice-date">${d}</div>
-        </a>`;
+          <a href="/board.html" class="notice-item">
+            <div class="notice-num">${isNotice ? '공지' : '예약확정'}</div>
+            <div class="notice-title">${displayTitle}${isNew ? '<span class="notice-badge">NEW</span>' : ''}</div>
+            <div class="notice-date">${item.date ? item.date.replace(/-/g, '.') : ''}</div>
+          </a>`;
       }).join('');
     })
     .catch(() => {
-      document.getElementById('homeNoticeList').innerHTML = '';
+      const list = document.getElementById('homeNoticeList');
+      if (list) list.innerHTML = '<div class="empty-state">공지사항을 불러오지 못했습니다.</div>';
     });
 }
-loadHomeNotice();
 
-// NAV 스크롤
-const nav=document.getElementById('navbar');
-function updateNav(){
-  const hero=document.querySelector('.hero');
+const nav = document.getElementById('navbar');
+function updateNav() {
+  const hero = document.querySelector('.hero');
   const threshold = hero ? hero.offsetHeight - 80 : 500;
   nav.classList.toggle('scrolled', window.scrollY > threshold);
 }
-window.addEventListener('scroll', updateNav, {passive:true});
+window.addEventListener('scroll', updateNav, { passive:true });
 updateNav();
 
-// Video fallback
-const video=document.getElementById('heroVideo');
-const img=document.getElementById('heroImg');
-if(video){
-  video.addEventListener('error',()=>{
-    video.style.display='none';
-    img.style.display='block';
-  });
+const video = document.getElementById('heroVideo');
+const img = document.getElementById('heroImg');
+function showHeroImage() {
+  if (!video || !img) return;
+  video.style.display = 'none';
+  img.style.display = 'block';
+}
+if (video) {
+  video.addEventListener('error', showHeroImage);
+  video.addEventListener('stalled', showHeroImage, { once:true });
+  setTimeout(() => {
+    if (video.readyState < 2) showHeroImage();
+  }, 3500);
 }
 
-// Scroll reveal
-const reveals=document.querySelectorAll('.reveal');
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-reveals.forEach(el=>io.observe(el));
+observeReveals();
+lazyLoadMap();
+runIdle(loadHomeNotice, 700);
+runIdle(loadInstagramGallery, 1100);
 
-// Mobile nav
 const navToggle = document.getElementById('navToggle');
-let mobileMenuOpen = false;
-const mobileMenu = document.createElement('div');
-mobileMenu.id = 'mobileMenu';
-mobileMenu.style.cssText = `
-  display:none;position:fixed;top:0;left:0;right:0;bottom:0;
-  background:rgba(247,242,234,0.98);z-index:200;
-  flex-direction:column;align-items:center;justify-content:center;
-  gap:8px;
-`;
-mobileMenu.innerHTML = `
-  <div style="position:absolute;top:0;left:0;right:0;padding:20px 24px;display:flex;align-items:center;border-bottom:0.5px solid rgba(28,24,20,0.08);">
-    <span style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.1em;color:var(--ink);">고유재</span>
-    <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--muted);letter-spacing:0.2em;margin-left:8px;">한옥스튜디오</span>
-    <button id="mobileClose" style="margin-left:auto;background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:0.15em;display:flex;align-items:center;gap:6px;padding:8px;font-family:'Noto Sans KR',sans-serif;font-weight:300;">✕ 닫기</button>
-  </div>
-  <a href="#about" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">스튜디오 소개</a>
-  <a href="#gallery" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">갤러리</a>
-  <a href="#packages" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">상품구성</a>
-  <a href="/board.html" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">게시판</a>
-  <a href="#location" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">오시는 길</a>
-  <a href="/guide.html" style="margin-top:16px;background:var(--gold);color:var(--paper);padding:14px 40px;font-size:13px;letter-spacing:0.2em;text-decoration:none;">예약 문의</a>
-`;
-document.body.appendChild(mobileMenu);
-
-function openMenu() { mobileMenuOpen = true; mobileMenu.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-function closeMenu() { mobileMenuOpen = false; mobileMenu.style.display = 'none'; document.body.style.overflow = ''; }
-navToggle.addEventListener('click', openMenu);
-document.getElementById('mobileClose').addEventListener('click', closeMenu);
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileClose = document.getElementById('mobileClose');
+function setMenu(open) {
+  mobileMenu.classList.toggle('open', open);
+  mobileMenu.setAttribute('aria-hidden', String(!open));
+  navToggle.setAttribute('aria-expanded', String(open));
+  document.body.classList.toggle('menu-open', open);
+}
+navToggle.addEventListener('click', () => setMenu(true));
+mobileClose.addEventListener('click', () => setMenu(false));
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 </script>
 </body>
 </html>
