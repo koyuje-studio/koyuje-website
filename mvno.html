@@ -15,13 +15,30 @@
     .mvno-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
     .mvno-flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .mvno-input,.mvno-select{flex:1 1 150px;border:1px solid var(--border);border-radius:10px;padding:10px;font-size:14px;background:#fff;min-width:0}
+    .mvno-input:focus,.mvno-select:focus{outline:2px solid rgba(43,124,255,.16);border-color:var(--brand)}
     .mvno-btn{border:1px solid var(--border);background:#fff;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:6px}
     .mvno-btn.primary,.mvno-linkbtn{background:var(--brand);color:#fff;border-color:var(--brand)}
     .mvno-btn.danger{color:var(--danger);border-color:#fecaca}
     .mvno-btn.sm{padding:6px 10px;font-size:12px}
-    .mvno-rows{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-    .mvno-row{display:grid;grid-template-columns:1.15fr 1fr .82fr .9fr .82fr .85fr .95fr .8fr .8fr 1.1fr 1.2fr;gap:10px;align-items:center;padding:10px;border-bottom:1px dashed var(--border)}
-    .mvno-head{font-size:12px;color:var(--muted);font-weight:800;border-bottom:1px solid var(--border);padding:10px;background:#fbfdff}
+    .mvno-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+    .mvno-stat{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px}
+    .mvno-stat-label{font-size:12px;color:var(--muted);margin-bottom:6px}
+    .mvno-stat-value{font-size:22px;font-weight:850;line-height:1.1}
+    .mvno-stat-value.danger{color:var(--danger)}
+    .mvno-stat-value.warn{color:var(--warn)}
+    .mvno-stat-value.ok{color:var(--ok)}
+    .mvno-rows{display:grid;gap:12px}
+    .mvno-head{display:none}
+    .mvno-row{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 8px 22px rgba(15,23,42,.04)}
+    .mvno-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+    .mvno-line-title{font-size:18px;font-weight:850;line-height:1.25}
+    .mvno-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+    .mvno-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
+    .mvno-field{background:#f8fafc;border:1px solid #edf0f4;border-radius:12px;padding:10px;min-width:0}
+    .mvno-field-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+    .mvno-field-value{font-size:14px;font-weight:700;line-height:1.45;word-break:keep-all}
+    .mvno-desc{font-size:13px;color:#3f4652;line-height:1.55;margin-top:8px;white-space:pre-line}
+    .mvno-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
     .mvno-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 8px;font-size:12px;border:1px solid var(--border);background:#fff;white-space:nowrap}
     .mvno-badge.ok{border-color:var(--ok);color:var(--ok)}
     .mvno-badge.warn{border-color:var(--warn);color:var(--warn)}
@@ -33,15 +50,29 @@
     .mvno-status.ok{color:var(--ok)}
     .mvno-status.err{color:var(--danger)}
     .mvno-empty{padding:28px;text-align:center;color:var(--muted);font-size:13px}
+    .mvno-editing{border-color:var(--brand);box-shadow:0 0 0 3px rgba(43,124,255,.12)}
     .hide{display:none!important}
+    @media (max-width:900px){
+      .mvno-summary{grid-template-columns:1fr 1fr}
+      .mvno-grid{grid-template-columns:1fr 1fr}
+    }
     @media (max-width:760px){
       .mvno-container{padding:12px}
       .mvno-title{font-size:21px}
-      .mvno-head{display:none}
-      .mvno-row{grid-template-columns:1fr 1fr;gap:8px}
-      .mvno-row>div[data-label]:before{content:attr(data-label);display:block;color:var(--muted);font-size:11px;margin-bottom:2px}
-      .mvno-row>div:first-child,.mvno-row>div:last-child{grid-column:1/-1}
+      .mvno-summary{grid-template-columns:1fr 1fr;gap:8px}
+      .mvno-stat{padding:12px}.mvno-stat-value{font-size:19px}
+      .mvno-card-top{display:block}
+      .mvno-badge{margin-top:10px}
+      .mvno-grid{grid-template-columns:1fr 1fr;gap:8px}
+      .mvno-field{padding:9px}
+      .mvno-field-value{font-size:13px}
+      .mvno-actions{justify-content:stretch}
+      .mvno-actions .mvno-btn{flex:1 1 calc(50% - 8px)}
       .mvno-input,.mvno-select,.mvno-btn{flex:1 1 100%}
+    }
+    @media (max-width:460px){
+      .mvno-summary,.mvno-grid{grid-template-columns:1fr}
+      .mvno-actions .mvno-btn{flex:1 1 100%}
     }
   </style>
 </head>
@@ -76,6 +107,7 @@
     </section>
 
     <section class="mvno-card hide" id="formCard">
+      <input id="edit-id" type="hidden">
       <div class="mvno-flex">
         <input id="f-name" class="mvno-input" placeholder="회선 이름 (예: 업무폰)">
         <input id="f-carrier" class="mvno-input" placeholder="통신사/요금제">
@@ -88,6 +120,7 @@
         <input id="f-voice" class="mvno-input" placeholder="음성/문자">
         <input id="f-memo" class="mvno-input" placeholder="메모">
         <button class="mvno-btn primary" id="btn-add">추가</button>
+        <button class="mvno-btn hide" id="btn-cancel-edit">수정 취소</button>
       </div>
       <div class="mvno-note" style="margin-top:6px">권장 이동: 프로모션 종료 1개월 전 ~ 종료 다음 달</div>
     </section>
@@ -101,6 +134,25 @@
           <option value="name">정렬: 이름 가나다</option>
           <option value="saving">정렬: 총 절감액 내림차순</option>
         </select>
+      </div>
+    </section>
+
+    <section class="mvno-summary hide" id="summaryCard">
+      <div class="mvno-stat">
+        <div class="mvno-stat-label">전체 회선</div>
+        <div class="mvno-stat-value" id="sum-total">0</div>
+      </div>
+      <div class="mvno-stat">
+        <div class="mvno-stat-label">교체 필요</div>
+        <div class="mvno-stat-value danger" id="sum-expired">0</div>
+      </div>
+      <div class="mvno-stat">
+        <div class="mvno-stat-label">14일 이내</div>
+        <div class="mvno-stat-value warn" id="sum-soon">0</div>
+      </div>
+      <div class="mvno-stat">
+        <div class="mvno-stat-label">월 절감 합계</div>
+        <div class="mvno-stat-value ok" id="sum-saving">0원</div>
       </div>
     </section>
 
@@ -217,7 +269,7 @@
     }
 
     function showAuthed(show) {
-      ['userCard', 'formCard', 'toolCard', 'listCard'].forEach(id => $('#' + id).classList.toggle('hide', !show));
+      ['userCard', 'formCard', 'toolCard', 'summaryCard', 'listCard'].forEach(id => $('#' + id).classList.toggle('hide', !show));
       $('#authCard').classList.toggle('hide', show || !configured);
       $('#setupCard').classList.toggle('hide', configured);
     }
@@ -225,34 +277,48 @@
     function rowHTML(x) {
       const linkIcon = x.link ? ` <a href="${x.link}" target="_blank" rel="noopener" title="바로가기" style="text-decoration:none">🔗</a>` : '';
       const linkBtn = x.link ? `<a class="mvno-btn sm mvno-linkbtn" href="${x.link}" target="_blank" rel="noopener">바로가기</a>` : '';
+      const statusText = x.dday === 0 ? '오늘 종료' : (x.dday < 0 ? `교체 필요 +${Math.abs(x.dday)}일` : (x.dday <= 14 ? `임박 D-${x.dday}` : `D-${x.dday}`));
       return `
-        <div data-label="이름">
-          <div style="font-weight:800">${x.name || '-'}</div>
-          ${x.memo ? `<div class="mvno-note">${x.memo}</div>` : ''}
-          ${x.data || x.voice ? `<div class="mvno-note" style="margin-top:4px">${x.data ? `📶 ${x.data}` : ''} ${x.voice ? `· ☎ ${x.voice}` : ''}</div>` : ''}
-        </div>
-        <div data-label="통신사/요금제"><span class="mvno-chip">${x.carrier || '-'}</span>${linkIcon}</div>
-        <div data-label="개통">${x.start}</div>
-        <div data-label="프로모션">${x.promoMonths}개월 @ <span class="mvno-price">${currency(x.promoPrice)}</span></div>
-        <div data-label="종료일">${x.promoEnd}</div>
-        <div data-label="D-Day"><span class="mvno-badge ${x.badge}">${x.dday === 0 ? 'D-Day' : (x.dday > 0 ? `D-${x.dday}` : `+${Math.abs(x.dday)}일`)}</span></div>
-        <div data-label="요금">${currency(x.promoPrice)} → ${currency(x.regularPrice)}</div>
-        <div data-label="월 절감">${currency(x.savingMonthly)}</div>
-        <div data-label="총 절감"><b>${currency(x.savingTotal)}</b></div>
-        <div data-label="권장 이동">${x.winStart} ~ ${x.winEnd}</div>
-        <div data-label="액션">
-          <div class="mvno-flex">
-            ${linkBtn}
-            <button class="mvno-btn sm" data-act="edit" data-id="${x.id}">수정</button>
-            <button class="mvno-btn sm" data-act="ics" data-id="${x.id}">종료일 .ics</button>
-            <button class="mvno-btn sm danger" data-act="del" data-id="${x.id}">삭제</button>
+        <div class="mvno-card-top">
+          <div>
+            <div class="mvno-line-title">${x.name || '-'}</div>
+            <div class="mvno-meta"><span class="mvno-chip">${x.carrier || '-'}</span>${linkIcon}</div>
+            ${x.memo ? `<div class="mvno-desc">${x.memo}</div>` : ''}
           </div>
+          <span class="mvno-badge ${x.badge}">${statusText}</span>
+        </div>
+        <div class="mvno-grid">
+          <div class="mvno-field"><div class="mvno-field-label">개통일</div><div class="mvno-field-value">${x.start}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">프로모션 종료</div><div class="mvno-field-value">${x.promoEnd}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">요금</div><div class="mvno-field-value">${currency(x.promoPrice)} → ${currency(x.regularPrice)}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">월 절감</div><div class="mvno-field-value">${currency(x.savingMonthly)}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">총 절감</div><div class="mvno-field-value">${currency(x.savingTotal)}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">프로모션</div><div class="mvno-field-value">${x.promoMonths}개월 @ ${currency(x.promoPrice)}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">권장 이동</div><div class="mvno-field-value">${x.winStart}<br>${x.winEnd}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">데이터</div><div class="mvno-field-value">${x.data || '-'}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">음성/문자</div><div class="mvno-field-value">${x.voice || '-'}</div></div>
+          <div class="mvno-field"><div class="mvno-field-label">바로가기</div><div class="mvno-field-value">${x.link ? '링크 있음' : '-'}</div></div>
+        </div>
+        <div class="mvno-actions">
+          ${linkBtn}
+          <button class="mvno-btn sm" data-act="edit" data-id="${x.id}">수정</button>
+          <button class="mvno-btn sm" data-act="ics" data-id="${x.id}">종료일 .ics</button>
+          <button class="mvno-btn sm danger" data-act="del" data-id="${x.id}">삭제</button>
         </div>`;
+    }
+
+    function renderSummary() {
+      const items = state.items;
+      $('#sum-total').textContent = items.length.toLocaleString('ko-KR');
+      $('#sum-expired').textContent = items.filter(x => x.dday <= 0).length.toLocaleString('ko-KR');
+      $('#sum-soon').textContent = items.filter(x => x.dday > 0 && x.dday <= 14).length.toLocaleString('ko-KR');
+      $('#sum-saving').textContent = currency(items.reduce((sum, x) => sum + x.savingMonthly, 0));
     }
 
     function render() {
       const wrap = $('#rows');
       const rows = filtered();
+      renderSummary();
       if (!rows.length) {
         wrap.innerHTML = '<div class="mvno-empty">저장된 요금제가 없습니다. 기존 JSON을 복원하거나 새로 추가해 주세요.</div>';
         return;
@@ -300,11 +366,49 @@
       await loadItems();
     }
 
+    function readFormPayload() {
+      const V = id => $('#' + id).value.trim();
+      return {
+        name: V('f-name'),
+        carrier: V('f-carrier'),
+        link: V('f-link'),
+        start: V('f-start'),
+        promoMonths: Number(V('f-promoM') || 7),
+        promoPrice: Number(V('f-promoP') || 0),
+        regularPrice: Number(V('f-regularP') || 0),
+        data: V('f-data'),
+        voice: V('f-voice'),
+        memo: V('f-memo')
+      };
+    }
+
+    function fillForm(x) {
+      $('#edit-id').value = x.id || '';
+      $('#f-name').value = x.name || '';
+      $('#f-carrier').value = x.carrier || '';
+      $('#f-link').value = x.link || '';
+      $('#f-start').value = x.start || '';
+      $('#f-promoM').value = x.promoMonths || 7;
+      $('#f-promoP').value = x.promoPrice || 0;
+      $('#f-regularP').value = x.regularPrice || 0;
+      $('#f-data').value = x.data || '';
+      $('#f-voice').value = x.voice || '';
+      $('#f-memo').value = x.memo || '';
+      $('#btn-add').textContent = '수정 저장';
+      $('#btn-cancel-edit').classList.remove('hide');
+      $('#formCard').classList.add('mvno-editing');
+      $('#formCard').scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+
     function clearForm() {
+      $('#edit-id').value = '';
       ['f-name','f-carrier','f-link','f-start','f-data','f-voice','f-memo'].forEach(id => $('#' + id).value = '');
       $('#f-promoM').value = '7';
       $('#f-promoP').value = '15000';
       $('#f-regularP').value = '48400';
+      $('#btn-add').textContent = '추가';
+      $('#btn-cancel-edit').classList.add('hide');
+      $('#formCard').classList.remove('mvno-editing');
     }
 
     function downloadICS(title, dateStr, memo) {
@@ -360,26 +464,18 @@
     $('#btn-refresh').addEventListener('click', loadItems);
 
     $('#btn-add').addEventListener('click', async () => {
-      const V = id => $('#' + id).value.trim();
-      const payload = {
-        name: V('f-name'),
-        carrier: V('f-carrier'),
-        link: V('f-link'),
-        start: V('f-start'),
-        promoMonths: Number(V('f-promoM') || 7),
-        promoPrice: Number(V('f-promoP') || 0),
-        regularPrice: Number(V('f-regularP') || 0),
-        data: V('f-data'),
-        voice: V('f-voice'),
-        memo: V('f-memo')
-      };
+      const payload = readFormPayload();
       if (!payload.name || !payload.start) {
         alert('이름과 개통일은 필수입니다.');
         return;
       }
-      await addItem(payload);
+      const editId = $('#edit-id').value;
+      if (editId) await updateItem(editId, payload);
+      else await addItem(payload);
       clearForm();
     });
+
+    $('#btn-cancel-edit').addEventListener('click', clearForm);
 
     $('#rows').addEventListener('click', async e => {
       const b = e.target.closest('button');
@@ -392,22 +488,7 @@
         if (confirm('삭제할까요?')) await deleteItem(id);
       }
       if (act === 'edit') {
-        const nv = (msg, val) => {
-          const r = prompt(msg, val);
-          if (r === null) return null;
-          return r;
-        };
-        const name = nv('이름', x.name); if (name === null) return;
-        const carrier = nv('통신사/요금제', x.carrier); if (carrier === null) return;
-        const link = nv('링크(URL)', x.link || ''); if (link === null) return;
-        const start = nv('개통일 (YYYY-MM-DD)', x.start); if (start === null) return;
-        const promoMonths = Number(nv('프로모션 개월수', x.promoMonths) || x.promoMonths);
-        const promoPrice = Number(nv('프로모션가(원)', x.promoPrice) || x.promoPrice);
-        const regularPrice = Number(nv('정상가(원)', x.regularPrice) || x.regularPrice);
-        const data = nv('데이터/속도', x.data ?? ''); if (data === null) return;
-        const voice = nv('음성/문자', x.voice ?? ''); if (voice === null) return;
-        const memo = nv('메모', x.memo ?? ''); if (memo === null) return;
-        await updateItem(id, { name, carrier, link, start, promoMonths, promoPrice, regularPrice, data, voice, memo });
+        fillForm(x);
       }
       if (act === 'ics') {
         downloadICS(`[프로모션 종료] ${x.name} (${x.carrier})`, x.promoEnd, `프모 ${x.promoMonths}개월 @ ${x.promoPrice}원 → 정상 ${x.regularPrice}원 | 메모: ${x.memo || ''}`);
