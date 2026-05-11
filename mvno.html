@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>알뜰폰 갈아타기 플래너</title>
+  <meta name="robots" content="noindex,nofollow">
+  <style>
+    :root{--bg:#fff;--ink:#222;--muted:#666;--brand:#2b7cff;--ok:#16a34a;--warn:#f59e0b;--danger:#ef4444;--card:#f8fafc;--border:#e5e7eb}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Pretendard,Apple SD Gothic Neo,sans-serif;color:var(--ink)}
+    .mvno-container{max-width:1120px;margin:0 auto;padding:16px}
+    .mvno-title{font-weight:800;font-size:24px;margin:4px 0 8px}
+    .mvno-sub{color:var(--muted);font-size:13px;margin-bottom:12px;line-height:1.6}
+    .mvno-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+    .mvno-flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .mvno-input,.mvno-select{flex:1 1 150px;border:1px solid var(--border);border-radius:10px;padding:10px;font-size:14px;background:#fff;min-width:0}
+    .mvno-btn{border:1px solid var(--border);background:#fff;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:6px}
+    .mvno-btn.primary,.mvno-linkbtn{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .mvno-btn.danger{color:var(--danger);border-color:#fecaca}
+    .mvno-btn.sm{padding:6px 10px;font-size:12px}
+    .mvno-rows{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .mvno-row{display:grid;grid-template-columns:1.15fr 1fr .82fr .9fr .82fr .85fr .95fr .8fr .8fr 1.1fr 1.2fr;gap:10px;align-items:center;padding:10px;border-bottom:1px dashed var(--border)}
+    .mvno-head{font-size:12px;color:var(--muted);font-weight:800;border-bottom:1px solid var(--border);padding:10px;background:#fbfdff}
+    .mvno-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 8px;font-size:12px;border:1px solid var(--border);background:#fff;white-space:nowrap}
+    .mvno-badge.ok{border-color:var(--ok);color:var(--ok)}
+    .mvno-badge.warn{border-color:var(--warn);color:var(--warn)}
+    .mvno-badge.danger{border-color:var(--danger);color:var(--danger)}
+    .mvno-note{color:var(--muted);font-size:12px;line-height:1.5}
+    .mvno-chip{display:inline-flex;gap:6px;align-items:center;background:#eef2ff;border:1px solid #dbe1ff;border-radius:999px;padding:3px 8px;font-size:12px}
+    .mvno-price{font-weight:800}
+    .mvno-status{font-size:13px;color:var(--muted)}
+    .mvno-status.ok{color:var(--ok)}
+    .mvno-status.err{color:var(--danger)}
+    .mvno-empty{padding:28px;text-align:center;color:var(--muted);font-size:13px}
+    .hide{display:none!important}
+    @media (max-width:760px){
+      .mvno-container{padding:12px}
+      .mvno-title{font-size:21px}
+      .mvno-head{display:none}
+      .mvno-row{grid-template-columns:1fr 1fr;gap:8px}
+      .mvno-row>div[data-label]:before{content:attr(data-label);display:block;color:var(--muted);font-size:11px;margin-bottom:2px}
+      .mvno-row>div:first-child,.mvno-row>div:last-child{grid-column:1/-1}
+      .mvno-input,.mvno-select,.mvno-btn{flex:1 1 100%}
+    }
+  </style>
+</head>
+<body>
+  <main class="mvno-container">
+    <div class="mvno-title">알뜰폰 갈아타기 플래너</div>
+    <div class="mvno-sub">Supabase에 저장해서 PC와 모바일 어디서 열어도 같은 요금제 목록을 볼 수 있습니다. 로그인한 계정의 데이터만 표시됩니다.</div>
+
+    <section class="mvno-card" id="setupCard">
+      <b>처음 설정 필요</b>
+      <div class="mvno-sub" style="margin:6px 0 0">파일 상단의 <code>SUPABASE_URL</code>, <code>SUPABASE_PUBLISHABLE_KEY</code>를 본인 프로젝트 값으로 바꾸면 로그인 화면이 열립니다.</div>
+    </section>
+
+    <section class="mvno-card hide" id="authCard">
+      <div class="mvno-flex">
+        <input id="auth-email" class="mvno-input" type="email" placeholder="이메일">
+        <input id="auth-password" class="mvno-input" type="password" placeholder="비밀번호">
+        <button class="mvno-btn primary" id="btn-login">로그인</button>
+        <button class="mvno-btn" id="btn-signup">처음 계정 만들기</button>
+      </div>
+      <div class="mvno-sub" style="margin:8px 0 0">Supabase Auth에서 이메일 가입을 허용해야 합니다. 혼자 쓰는 도구라면 가입 후 Supabase에서 추가 가입을 꺼두면 더 깔끔합니다.</div>
+    </section>
+
+    <section class="mvno-card hide" id="userCard">
+      <div class="mvno-flex">
+        <div class="mvno-status ok" id="userStatus"></div>
+        <button class="mvno-btn" id="btn-refresh">새로고침</button>
+        <button class="mvno-btn" id="btn-export">백업(JSON)</button>
+        <label class="mvno-btn">복원(JSON) <input id="import" type="file" accept="application/json" style="display:none"></label>
+        <button class="mvno-btn danger" id="btn-logout">로그아웃</button>
+      </div>
+    </section>
+
+    <section class="mvno-card hide" id="formCard">
+      <div class="mvno-flex">
+        <input id="f-name" class="mvno-input" placeholder="회선 이름 (예: 업무폰)">
+        <input id="f-carrier" class="mvno-input" placeholder="통신사/요금제">
+        <input id="f-link" class="mvno-input" placeholder="링크(URL)">
+        <input id="f-start" class="mvno-input" type="date" title="개통일">
+        <input id="f-promoM" class="mvno-input" type="number" value="7" min="1" max="60" title="프로모션 개월수">
+        <input id="f-promoP" class="mvno-input" type="number" value="15000" step="10" title="프로모션가">
+        <input id="f-regularP" class="mvno-input" type="number" value="48400" step="10" title="정상가">
+        <input id="f-data" class="mvno-input" placeholder="데이터/속도">
+        <input id="f-voice" class="mvno-input" placeholder="음성/문자">
+        <input id="f-memo" class="mvno-input" placeholder="메모">
+        <button class="mvno-btn primary" id="btn-add">추가</button>
+      </div>
+      <div class="mvno-note" style="margin-top:6px">권장 이동: 프로모션 종료 1개월 전 ~ 종료 다음 달</div>
+    </section>
+
+    <section class="mvno-card hide" id="toolCard">
+      <div class="mvno-flex">
+        <input id="q" class="mvno-input" placeholder="검색: 이름/통신사/메모/요금">
+        <select id="sort" class="mvno-select">
+          <option value="dday">정렬: D-Day 오름차순</option>
+          <option value="start">정렬: 개통 최신</option>
+          <option value="name">정렬: 이름 가나다</option>
+          <option value="saving">정렬: 총 절감액 내림차순</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="mvno-rows hide" id="listCard">
+      <div class="mvno-head mvno-row">
+        <div>이름</div><div>통신사/요금제</div><div>개통</div><div>프로모션</div>
+        <div>종료일</div><div>D-Day</div><div>요금</div><div>월 절감</div><div>총 절감</div><div>권장 이동</div><div>액션</div>
+      </div>
+      <div id="rows"></div>
+    </section>
+
+    <div class="mvno-sub" style="margin-top:10px">각 항목의 .ics 버튼으로 종료일 알림을 캘린더에 추가할 수 있습니다.</div>
+  </main>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const SUPABASE_URL = 'https://tqrirzzurheopjigqqfe.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_SNq97IY8BPx2dgpeJcfcxg_Jc6vgdIm';
+
+    const $ = s => document.querySelector(s);
+    const DAY = 86400000;
+    const fmt = d => d.toISOString().slice(0, 10);
+    const addMonths = (date, m) => {
+      const d = new Date(date);
+      const n = d.getDate();
+      d.setMonth(d.getMonth() + m);
+      if (d.getDate() < n) d.setDate(0);
+      return d;
+    };
+    const diff = (a, b) => Math.round((a - b) / DAY);
+    const currency = n => (Number(n) || 0).toLocaleString('ko-KR') + '원';
+    const cleanUrl = u => {
+      try {
+        const url = new URL(u);
+        return url.href;
+      } catch {
+        return '';
+      }
+    };
+
+    const configured = SUPABASE_URL.startsWith('https://') && SUPABASE_PUBLISHABLE_KEY.length > 30;
+    const supabase = configured ? createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
+    const state = { session: null, items: [] };
+
+    function toDb(x) {
+      return {
+        legacy_id: x.legacy_id || x.id || null,
+        name: x.name || '',
+        carrier: x.carrier || '',
+        link: cleanUrl(x.link || ''),
+        start_date: x.start || x.start_date,
+        promo_months: Number(x.promoMonths ?? x.promo_months ?? 7),
+        promo_price: Number(x.promoPrice ?? x.promo_price ?? 0),
+        regular_price: Number(x.regularPrice ?? x.regular_price ?? 0),
+        data_info: x.data || x.data_info || '',
+        voice_info: x.voice || x.voice_info || '',
+        memo: x.memo || ''
+      };
+    }
+
+    function fromDb(x) {
+      return compute({
+        id: x.id,
+        legacy_id: x.legacy_id,
+        name: x.name,
+        carrier: x.carrier,
+        link: x.link,
+        start: x.start_date,
+        promoMonths: x.promo_months,
+        promoPrice: x.promo_price,
+        regularPrice: x.regular_price,
+        data: x.data_info,
+        voice: x.voice_info,
+        memo: x.memo
+      });
+    }
+
+    function compute(x) {
+      const start = new Date(x.start + 'T00:00:00');
+      const promoEnd = addMonths(start, Number(x.promoMonths || 7));
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      x.promoEnd = fmt(promoEnd);
+      x.dday = diff(promoEnd, today);
+      x.winStart = fmt(addMonths(promoEnd, -1));
+      x.winEnd = fmt(addMonths(promoEnd, 1));
+      const delta = Math.max(0, (Number(x.regularPrice) || 0) - (Number(x.promoPrice) || 0));
+      x.savingMonthly = delta;
+      x.savingTotal = delta * (Number(x.promoMonths) || 0);
+      x.badge = x.dday <= 0 ? 'danger' : (x.dday <= 14 ? 'warn' : 'ok');
+      x.link = cleanUrl(x.link || '');
+      return x;
+    }
+
+    function filtered() {
+      const q = $('#q').value.trim().toLowerCase();
+      let arr = state.items.filter(x => {
+        const blob = `${x.name} ${x.carrier} ${x.memo || ''} ${x.data || ''} ${x.voice || ''} ${x.promoPrice}/${x.regularPrice}`.toLowerCase();
+        return !q || blob.includes(q);
+      });
+      const s = $('#sort').value;
+      if (s === 'dday') arr.sort((a, b) => a.dday - b.dday);
+      if (s === 'start') arr.sort((a, b) => new Date(b.start) - new Date(a.start));
+      if (s === 'name') arr.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+      if (s === 'saving') arr.sort((a, b) => b.savingTotal - a.savingTotal);
+      return arr;
+    }
+
+    function setStatus(msg, type = '') {
+      const el = $('#userStatus');
+      el.className = 'mvno-status ' + type;
+      el.textContent = msg;
+    }
+
+    function showAuthed(show) {
+      ['userCard', 'formCard', 'toolCard', 'listCard'].forEach(id => $('#' + id).classList.toggle('hide', !show));
+      $('#authCard').classList.toggle('hide', show || !configured);
+      $('#setupCard').classList.toggle('hide', configured);
+    }
+
+    function rowHTML(x) {
+      const linkIcon = x.link ? ` <a href="${x.link}" target="_blank" rel="noopener" title="바로가기" style="text-decoration:none">🔗</a>` : '';
+      const linkBtn = x.link ? `<a class="mvno-btn sm mvno-linkbtn" href="${x.link}" target="_blank" rel="noopener">바로가기</a>` : '';
+      return `
+        <div data-label="이름">
+          <div style="font-weight:800">${x.name || '-'}</div>
+          ${x.memo ? `<div class="mvno-note">${x.memo}</div>` : ''}
+          ${x.data || x.voice ? `<div class="mvno-note" style="margin-top:4px">${x.data ? `📶 ${x.data}` : ''} ${x.voice ? `· ☎ ${x.voice}` : ''}</div>` : ''}
+        </div>
+        <div data-label="통신사/요금제"><span class="mvno-chip">${x.carrier || '-'}</span>${linkIcon}</div>
+        <div data-label="개통">${x.start}</div>
+        <div data-label="프로모션">${x.promoMonths}개월 @ <span class="mvno-price">${currency(x.promoPrice)}</span></div>
+        <div data-label="종료일">${x.promoEnd}</div>
+        <div data-label="D-Day"><span class="mvno-badge ${x.badge}">${x.dday === 0 ? 'D-Day' : (x.dday > 0 ? `D-${x.dday}` : `+${Math.abs(x.dday)}일`)}</span></div>
+        <div data-label="요금">${currency(x.promoPrice)} → ${currency(x.regularPrice)}</div>
+        <div data-label="월 절감">${currency(x.savingMonthly)}</div>
+        <div data-label="총 절감"><b>${currency(x.savingTotal)}</b></div>
+        <div data-label="권장 이동">${x.winStart} ~ ${x.winEnd}</div>
+        <div data-label="액션">
+          <div class="mvno-flex">
+            ${linkBtn}
+            <button class="mvno-btn sm" data-act="edit" data-id="${x.id}">수정</button>
+            <button class="mvno-btn sm" data-act="ics" data-id="${x.id}">종료일 .ics</button>
+            <button class="mvno-btn sm danger" data-act="del" data-id="${x.id}">삭제</button>
+          </div>
+        </div>`;
+    }
+
+    function render() {
+      const wrap = $('#rows');
+      const rows = filtered();
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="mvno-empty">저장된 요금제가 없습니다. 기존 JSON을 복원하거나 새로 추가해 주세요.</div>';
+        return;
+      }
+      wrap.innerHTML = rows.map(x => `<div class="mvno-row">${rowHTML(x)}</div>`).join('');
+    }
+
+    async function loadItems() {
+      setStatus('불러오는 중...');
+      const { data, error } = await supabase
+        .from('mvno_lines')
+        .select('*')
+        .order('start_date', { ascending: false });
+      if (error) {
+        setStatus('불러오기 실패: ' + error.message, 'err');
+        return;
+      }
+      state.items = (data || []).map(fromDb);
+      setStatus(`${state.session.user.email} · ${state.items.length}개 요금제 동기화됨`, 'ok');
+      render();
+    }
+
+    async function addItem(payload) {
+      const row = toDb(payload);
+      const { error } = await supabase.from('mvno_lines').insert(row);
+      if (error) {
+        alert('저장 실패: ' + error.message);
+        return;
+      }
+      await loadItems();
+    }
+
+    async function updateItem(id, payload) {
+      const { error } = await supabase.from('mvno_lines').update(toDb(payload)).eq('id', id);
+      if (error) {
+        alert('수정 실패: ' + error.message);
+        return;
+      }
+      await loadItems();
+    }
+
+    async function deleteItem(id) {
+      const { error } = await supabase.from('mvno_lines').delete().eq('id', id);
+      if (error) alert('삭제 실패: ' + error.message);
+      await loadItems();
+    }
+
+    function clearForm() {
+      ['f-name','f-carrier','f-link','f-start','f-data','f-voice','f-memo'].forEach(id => $('#' + id).value = '');
+      $('#f-promoM').value = '7';
+      $('#f-promoP').value = '15000';
+      $('#f-regularP').value = '48400';
+    }
+
+    function downloadICS(title, dateStr, memo) {
+      const start = new Date(dateStr + 'T09:00:00');
+      const dt = s => s.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      const ics = [
+        'BEGIN:VCALENDAR','VERSION:2.0','CALSCALE:GREGORIAN','PRODID:-//MVNO Planner//KO',
+        'BEGIN:VEVENT',
+        'UID:' + 'mvno-' + Math.random().toString(36).slice(2) + '@koyuje',
+        'DTSTAMP:' + dt(new Date()),
+        'DTSTART:' + dt(start),
+        'DTEND:' + dt(new Date(start.getTime() + 3600000)),
+        'SUMMARY:' + title.replace(/\n/g, ' '),
+        'DESCRIPTION:' + (memo || '').replace(/\n/g, ' '),
+        'BEGIN:VALARM','TRIGGER:-PT24H','ACTION:DISPLAY','DESCRIPTION:알뜰폰 프로모션 종료 예정','END:VALARM',
+        'END:VEVENT','END:VCALENDAR'
+      ].join('\r\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([ics], { type:'text/calendar' }));
+      a.download = title.replace(/\s+/g, '_') + '.ics';
+      a.click();
+    }
+
+    $('#btn-login').addEventListener('click', async () => {
+      const email = $('#auth-email').value.trim();
+      const password = $('#auth-password').value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        alert('로그인 실패: ' + error.message);
+        return;
+      }
+      state.session = data.session;
+      showAuthed(true);
+      await loadItems();
+    });
+
+    $('#btn-signup').addEventListener('click', async () => {
+      const email = $('#auth-email').value.trim();
+      const password = $('#auth-password').value;
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) alert('가입 실패: ' + error.message);
+      else alert('계정을 만들었습니다. Supabase 설정에 따라 이메일 확인이 필요할 수 있습니다.');
+    });
+
+    $('#btn-logout').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      state.session = null;
+      state.items = [];
+      render();
+      showAuthed(false);
+    });
+
+    $('#btn-refresh').addEventListener('click', loadItems);
+
+    $('#btn-add').addEventListener('click', async () => {
+      const V = id => $('#' + id).value.trim();
+      const payload = {
+        name: V('f-name'),
+        carrier: V('f-carrier'),
+        link: V('f-link'),
+        start: V('f-start'),
+        promoMonths: Number(V('f-promoM') || 7),
+        promoPrice: Number(V('f-promoP') || 0),
+        regularPrice: Number(V('f-regularP') || 0),
+        data: V('f-data'),
+        voice: V('f-voice'),
+        memo: V('f-memo')
+      };
+      if (!payload.name || !payload.start) {
+        alert('이름과 개통일은 필수입니다.');
+        return;
+      }
+      await addItem(payload);
+      clearForm();
+    });
+
+    $('#rows').addEventListener('click', async e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      const id = b.dataset.id;
+      const act = b.dataset.act;
+      const x = state.items.find(v => v.id === id);
+      if (!x) return;
+      if (act === 'del') {
+        if (confirm('삭제할까요?')) await deleteItem(id);
+      }
+      if (act === 'edit') {
+        const nv = (msg, val) => {
+          const r = prompt(msg, val);
+          if (r === null) return null;
+          return r;
+        };
+        const name = nv('이름', x.name); if (name === null) return;
+        const carrier = nv('통신사/요금제', x.carrier); if (carrier === null) return;
+        const link = nv('링크(URL)', x.link || ''); if (link === null) return;
+        const start = nv('개통일 (YYYY-MM-DD)', x.start); if (start === null) return;
+        const promoMonths = Number(nv('프로모션 개월수', x.promoMonths) || x.promoMonths);
+        const promoPrice = Number(nv('프로모션가(원)', x.promoPrice) || x.promoPrice);
+        const regularPrice = Number(nv('정상가(원)', x.regularPrice) || x.regularPrice);
+        const data = nv('데이터/속도', x.data ?? ''); if (data === null) return;
+        const voice = nv('음성/문자', x.voice ?? ''); if (voice === null) return;
+        const memo = nv('메모', x.memo ?? ''); if (memo === null) return;
+        await updateItem(id, { name, carrier, link, start, promoMonths, promoPrice, regularPrice, data, voice, memo });
+      }
+      if (act === 'ics') {
+        downloadICS(`[프로모션 종료] ${x.name} (${x.carrier})`, x.promoEnd, `프모 ${x.promoMonths}개월 @ ${x.promoPrice}원 → 정상 ${x.regularPrice}원 | 메모: ${x.memo || ''}`);
+      }
+    });
+
+    $('#q').addEventListener('input', render);
+    $('#sort').addEventListener('change', render);
+
+    $('#btn-export').addEventListener('click', () => {
+      const backup = state.items.map(x => ({
+        name: x.name, carrier: x.carrier, link: x.link, start: x.start,
+        promoMonths: x.promoMonths, promoPrice: x.promoPrice, regularPrice: x.regularPrice,
+        data: x.data, voice: x.voice, memo: x.memo, id: x.legacy_id || x.id
+      }));
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type:'application/json' }));
+      a.download = 'mvno_backup.json';
+      a.click();
+    });
+
+    $('#import').addEventListener('change', async e => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      try {
+        const arr = JSON.parse(await f.text());
+        if (!Array.isArray(arr)) throw new Error('배열이 아닙니다.');
+        const rows = arr.map(toDb);
+        const { error } = await supabase.from('mvno_lines').insert(rows);
+        if (error) throw error;
+        await loadItems();
+      } catch (err) {
+        alert('복원 실패: ' + (err.message || 'JSON 형식이 올바르지 않습니다.'));
+      }
+      e.target.value = '';
+    });
+
+    async function init() {
+      if (!configured) {
+        showAuthed(false);
+        return;
+      }
+      const { data } = await supabase.auth.getSession();
+      state.session = data.session;
+      if (state.session) {
+        showAuthed(true);
+        await loadItems();
+      } else {
+        showAuthed(false);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
