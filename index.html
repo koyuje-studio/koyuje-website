@@ -275,8 +275,10 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .notice{padding:60px 0}.notice-list{padding:0 24px}.instagram{padding:60px 0}.insta-grid{grid-template-columns:repeat(3,1fr);padding:0 24px}
   .location{grid-template-columns:1fr}.location-map{min-height:280px}.location-info{padding:40px 24px}
   .footer-top{grid-template-columns:1fr 1fr;gap:32px}footer{padding:48px 24px 96px}
-  .float-cta{left:0;right:0;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;padding:8px max(12px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-bottom));background:rgba(247,242,234,.94);backdrop-filter:blur(14px);border-top:.5px solid var(--line)}
-  .float-kakao,.float-reserve{justify-content:center;min-height:46px;padding:12px 10px;box-shadow:none}
+  .float-cta{left:0;right:0;bottom:0;display:grid;grid-template-columns:1.18fr .82fr;gap:8px;align-items:stretch;padding:7px max(12px,env(safe-area-inset-left)) max(7px,env(safe-area-inset-bottom));background:rgba(247,242,234,.92);backdrop-filter:blur(16px);border-top:.5px solid rgba(28,24,20,.08)}
+  .float-kakao,.float-reserve{justify-content:center;min-height:42px;padding:10px 8px;box-shadow:none}
+  .float-kakao{background:#FAE300;color:#3A1D1D;font-weight:400}
+  .float-reserve{background:rgba(247,242,234,.56);color:var(--muted);border:.5px solid rgba(160,120,64,.28)}
 }
 @media(max-width:600px){
   .hero{min-height:620px;height:100svh}
@@ -493,9 +495,9 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   </div>
 </footer>
 
-<div class="float-cta" aria-label="빠른 상담 및 예약">
+<div class="float-cta" aria-label="빠른 상담 및 예약 가능일 문의">
   <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="float-kakao">카카오톡 상담</a>
-  <a href="/guide.html" class="float-reserve">예약하기</a>
+  <a href="/guide.html" class="float-reserve">예약 가능일 문의</a>
 </div>
 
 <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
