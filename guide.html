@@ -210,6 +210,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   text-decoration:none;transition:all .3s;
 }
 .btn-tel:hover{border-color:var(--gold);color:var(--gold);}
+.floating-guide-cta{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;
+  display:grid;grid-template-columns:1.15fr .85fr;gap:8px;
+  padding:8px max(12px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-bottom));
+  background:rgba(247,242,234,0.94);backdrop-filter:blur(16px);
+  border-top:0.5px solid rgba(28,24,20,0.08);
+}
+.floating-guide-cta a{
+  min-height:42px;display:flex;align-items:center;justify-content:center;
+  text-decoration:none;font-size:11px;letter-spacing:0.08em;
+}
+.floating-guide-cta .fg-kakao{background:#FAE300;color:#3A1D1D;}
+.floating-guide-cta .fg-form{border:0.5px solid rgba(160,120,64,0.3);color:var(--muted);background:rgba(255,255,255,0.35);}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
@@ -227,8 +240,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .step-num{width:36px;height:36px;font-size:15px;}
   .step:not(:last-child)::after{left:28px;}
   .step-body{padding:20px 0 40px 20px;}
-  .bottom-cta{padding:40px 20px;}
+  .bottom-cta{padding:40px 20px 84px;}
   .account-num{font-size:22px;}
+}
+@media(min-width:901px){
+  .floating-guide-cta{display:none;}
 }
 </style>
 </head>
@@ -435,6 +451,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     </a>
     <a href="tel:010-7635-9689" class="btn-tel">📞 010-7635-9689</a>
   </div>
+</div>
+
+<div class="floating-guide-cta" aria-label="빠른 예약 상담">
+  <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="fg-kakao">카카오톡 상담</a>
+  <a href="/reservation.html" class="fg-form">예약확정 작성</a>
 </div>
 
 <script>
