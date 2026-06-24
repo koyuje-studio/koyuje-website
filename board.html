@@ -29,6 +29,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
 .board-wrap{max-width:800px;margin:0 auto;padding:48px 40px 80px;}
 
+.board-guide{
+  border-top:0.5px solid var(--line);
+  border-bottom:0.5px solid var(--line);
+  padding:24px 0;margin-bottom:28px;
+}
+.board-guide-k{font-size:10px;letter-spacing:0.22em;color:var(--gold);margin-bottom:8px;}
+.board-guide-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;letter-spacing:0.04em;margin-bottom:8px;}
+.board-guide-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:18px;}
+.board-guide-list{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
+.board-guide-item{background:var(--paper);padding:14px 16px;min-height:92px;}
+.board-guide-label{font-size:11px;letter-spacing:0.16em;color:var(--gold);margin-bottom:8px;}
+.board-guide-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;}
+
 /* 필터 */
 .board-filter{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
 .filter-btn{font-size:11px;letter-spacing:0.15em;padding:7px 16px;background:none;border:0.5px solid var(--line);color:var(--muted);cursor:pointer;transition:all .3s;}
@@ -133,9 +146,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .nav{padding:16px 20px;}
   .nav-links-full,.nav-cta-btn{display:none;}
   .nav-toggle-btn{display:flex;}
-}
   .hero{padding:40px 20px 36px;}
   .board-wrap{padding:32px 16px 60px;}
+  .board-guide-list{grid-template-columns:1fr;}
+  .board-guide-item{min-height:auto;padding:14px;}
   .board-item{grid-template-columns:36px 1fr;}
   .board-date{display:none;}
   .modal{padding:28px 20px;}
@@ -166,6 +180,26 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 </div>
 
 <div class="board-wrap">
+  <section class="board-guide" aria-label="게시판 이용 안내">
+    <div class="board-guide-k">BOARD GUIDE</div>
+    <h2 class="board-guide-title">공지와 예약확정 내역을 확인하는 공간입니다</h2>
+    <p class="board-guide-copy">운영 안내와 예약확정 게시글을 함께 확인하실 수 있습니다. 비밀글은 예약 시 입력하신 전화번호 끝 4자리로 열람됩니다.</p>
+    <div class="board-guide-list">
+      <div class="board-guide-item">
+        <div class="board-guide-label">공지</div>
+        <p class="board-guide-desc">촬영 운영, 상품 안내, 일정 관련 소식을 확인합니다.</p>
+      </div>
+      <div class="board-guide-item">
+        <div class="board-guide-label">예약확정</div>
+        <p class="board-guide-desc">예약 접수와 확정 상태를 게시글로 확인합니다.</p>
+      </div>
+      <div class="board-guide-item">
+        <div class="board-guide-label">비밀글</div>
+        <p class="board-guide-desc">전화번호 끝 4자리 입력 후 상세 내용을 확인합니다.</p>
+      </div>
+    </div>
+  </section>
+
   <div class="board-filter">
     <button class="filter-btn active" data-cat="all" onclick="setFilter('all',this)">전체</button>
     <button class="filter-btn" data-cat="예약확정" onclick="setFilter('예약확정',this)">예약확정</button>
