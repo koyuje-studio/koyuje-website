@@ -43,6 +43,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .spinner{display:inline-block;width:28px;height:28px;border:1px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .search-hint{font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:0.04em;line-height:1.9;}
+.status-guide{max-width:480px;margin:0 auto;padding:0 40px 48px;}
+.status-guide-inner{border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line);padding:24px 0;}
+.status-guide-k{font-size:10px;letter-spacing:0.22em;color:var(--gold);margin-bottom:8px;text-align:center;}
+.status-guide-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;text-align:center;margin-bottom:20px;letter-spacing:0.04em;}
+.status-guide-list{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);}
+.status-guide-item{background:var(--paper);padding:16px 18px;display:grid;grid-template-columns:74px 1fr;gap:14px;align-items:start;}
+.status-guide-label{font-size:11px;letter-spacing:0.16em;color:var(--gold);}
+.status-guide-copy{font-size:12px;color:var(--muted);line-height:1.75;letter-spacing:0.04em;}
 .results-wrap{max-width:600px;margin:0 auto;padding:0 40px 80px;display:none;}
 .result-header{text-align:center;margin-bottom:32px;padding-top:48px;}
 .result-header-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:0.25em;margin-bottom:12px;}
@@ -69,7 +77,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .btn-reset:hover{background:var(--gold);color:var(--paper);}
 .bottom-link{text-align:center;padding:32px 0 0;font-size:12px;color:var(--muted);}
 .bottom-link a{color:var(--gold);text-decoration:none;}
-@media(max-width:600px){.nav{padding:16px 20px;}.hero{padding:48px 20px 40px;}.hero-title{font-size:26px;}.search-wrap{padding:32px 16px;}.search-card{padding:28px 20px;}.results-wrap{padding:0 16px 60px;}.pin-input{width:34px;height:50px;font-size:18px;}.phone-fixed{height:50px;font-size:17px;padding:0 10px;}}
+@media(max-width:600px){.nav{padding:16px 20px;}.hero{padding:48px 20px 40px;}.hero-title{font-size:26px;}.search-wrap{padding:32px 16px 24px;}.search-card{padding:28px 20px;}.status-guide{padding:0 16px 40px;}.status-guide-item{grid-template-columns:1fr;gap:6px;padding:16px 14px;}.results-wrap{padding:0 16px 60px;}.pin-input{width:34px;height:50px;font-size:18px;}.phone-fixed{height:50px;font-size:17px;padding:0 10px;}}
 </style>
 </head>
 <body>
@@ -118,6 +126,27 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <p class="search-hint">· 조회가 안 되실 경우 카카오톡으로 문의해 주세요</p>
   </div>
 </div>
+
+<section class="status-guide" aria-label="예약 현황 안내">
+  <div class="status-guide-inner">
+    <div class="status-guide-k">STATUS GUIDE</div>
+    <h2 class="status-guide-title">조회 전 확인해 주세요</h2>
+    <div class="status-guide-list">
+      <div class="status-guide-item">
+        <div class="status-guide-label">확인중</div>
+        <p class="status-guide-copy">예약확정 신청과 입금 확인이 진행 중인 상태입니다. 보통 48시간 이내 업데이트됩니다.</p>
+      </div>
+      <div class="status-guide-item">
+        <div class="status-guide-label">완료</div>
+        <p class="status-guide-copy">일정과 예약 정보가 확인되어 촬영일이 확보된 상태입니다.</p>
+      </div>
+      <div class="status-guide-item">
+        <div class="status-guide-label">미조회</div>
+        <p class="status-guide-copy">전화번호를 다시 확인해 주세요. 계속 조회되지 않으면 카카오톡으로 문의해 주세요.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <div class="results-wrap" id="resultsSection">
   <div id="resultsContent"></div>
