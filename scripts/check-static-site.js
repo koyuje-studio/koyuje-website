@@ -9,6 +9,8 @@ const requiredFiles = [
   "robots.txt",
   "sitemap.xml",
   "_0049.jpg",
+  "_0049_poster.webp",
+  "_0049_mobile.mp4",
   "_0049_animation.mp4",
 ];
 
