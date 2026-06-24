@@ -99,6 +99,13 @@ img,video{max-width:100%}
 .marquee-item{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--muted);letter-spacing:.1em;white-space:nowrap;display:flex;align-items:center;gap:48px}
 .marquee-item::after{content:'◆';font-size:7px;color:var(--gold);font-style:normal}
 
+.quick-info{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:.5px solid var(--line);background:rgba(247,242,234,.96)}
+.quick-info-item{padding:24px 60px;border-right:.5px solid var(--line)}
+.quick-info-item:last-child{border-right:none}
+.quick-info-k{font-size:10px;letter-spacing:.22em;color:var(--gold);margin-bottom:8px}
+.quick-info-v{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;letter-spacing:.02em;color:var(--ink);margin-bottom:6px}
+.quick-info-d{font-size:12px;line-height:1.75;color:var(--muted);letter-spacing:.04em}
+
 .about{display:grid;grid-template-columns:1fr 1fr;min-height:70vh;border-bottom:.5px solid var(--line)}
 .about-img{position:relative;overflow:hidden;background:#2a2520;min-height:400px}
 .about-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
@@ -286,6 +293,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .hero-lead{font-size:13px;line-height:1.85;margin-bottom:22px;max-width:350px;opacity:1;animation:none}
   .hero-actions{gap:10px;opacity:1;animation:none}.btn-primary{padding:13px 24px;font-size:11px;letter-spacing:.16em}.btn-ghost-light{font-size:11px;letter-spacing:.1em}
   .hero-proof{gap:8px;margin-top:20px;max-width:340px;opacity:1;animation:none}.hero-proof-item{font-size:10px;padding:8px 10px;letter-spacing:.08em}.hero-scroll{right:24px}
+  .quick-info{grid-template-columns:1fr}.quick-info-item{padding:20px 24px;border-right:none;border-bottom:.5px solid var(--line)}.quick-info-item:last-child{border-bottom:none}.quick-info-v{font-size:17px}
   .about{grid-template-columns:1fr}.about-img{min-height:280px}.about-content{padding:48px 28px}
   .gallery-header,.notice-header,.instagram-header{padding:0 24px}.gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-rows:auto;padding:0 24px}.gallery-item,.gallery-item.portrait{grid-column:auto;grid-row:auto;aspect-ratio:1}.gallery-item.feature{grid-column:span 2;grid-row:auto;aspect-ratio:4/5}.gallery-item.landscape{grid-column:span 2;grid-row:auto;aspect-ratio:16/11}.gallery-item:nth-child(3),.gallery-item:nth-child(5){grid-column:auto;grid-row:auto}
   .packages{padding:60px 24px}.pkg-grid{grid-template-columns:1fr}.pkg-notes{grid-template-columns:1fr}
@@ -359,6 +367,24 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   <div class="hero-scroll">
     <p class="hero-scroll-text">SCROLL</p>
     <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<section class="quick-info" aria-label="고유재 예약 핵심 안내">
+  <div class="quick-info-item">
+    <div class="quick-info-k">PRIVATE</div>
+    <div class="quick-info-v">하루 두 팀만 촬영</div>
+    <p class="quick-info-d">가족마다 충분한 시간을 두고 한옥 공간을 차분히 준비합니다.</p>
+  </div>
+  <div class="quick-info-item">
+    <div class="quick-info-k">PACKAGE</div>
+    <div class="quick-info-v">75만원부터 시작</div>
+    <p class="quick-info-d">아기 앨범형, 가족 실내 앨범형, 야외 스냅 추가 구성이 있습니다.</p>
+  </div>
+  <div class="quick-info-item">
+    <div class="quick-info-k">RESERVATION</div>
+    <div class="quick-info-v">카카오톡 상담 후 확정</div>
+    <p class="quick-info-d">날짜 확인, 예약금 입금, 예약확정 작성 순서로 진행됩니다.</p>
   </div>
 </section>
 
