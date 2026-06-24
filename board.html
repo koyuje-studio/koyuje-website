@@ -139,6 +139,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 }
 .btn-pw:hover{background:var(--gold);}
 .pw-error{font-size:12px;color:var(--red);margin-top:8px;display:none;}
+.modal-help{margin-top:18px;border-top:0.5px solid var(--line);padding-top:16px;font-size:12px;color:var(--muted);line-height:1.75;letter-spacing:0.03em;}
+.modal-help-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+.modal-help-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
+.modal-help-actions .help-kakao{background:#FAE300;color:#3A1D1D;}
+.modal-help-actions .help-kakao:hover{background:#f0d800;}
+.modal-help-actions .help-call{border:0.5px solid var(--gold);color:var(--gold);}
+.modal-help-actions .help-call:hover{background:var(--gold);color:var(--paper);}
 
 /* 로딩 */
 .loading-wrap{text-align:center;padding:60px 0;color:var(--muted);font-size:13px;letter-spacing:0.1em;}
@@ -162,6 +169,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .board-item{grid-template-columns:36px 1fr;}
   .board-date{display:none;}
   .modal{padding:28px 20px;}
+  .modal-help-actions{display:grid;grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -426,6 +434,13 @@ function showPwForm(num){
       <p class="pw-hint">예) 010-1234-<strong>5678</strong> → 5678 입력</p>
       <div class="pw-error" id="pwError">비밀번호가 올바르지 않습니다.</div>
       <button class="btn-pw" onclick="submitPw('${num}')">확인</button>
+      <div class="modal-help">
+        전화번호 끝 4자리로 열람되지 않는 경우, 예약 시 입력한 번호가 다를 수 있습니다.
+        <div class="modal-help-actions">
+          <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a>
+          <a href="tel:010-7635-9689" class="help-call">전화 문의</a>
+        </div>
+      </div>
     </div>`;
   setTimeout(()=>document.getElementById('pwInput').focus(),100);
   document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitPw(num);});
@@ -453,7 +468,7 @@ function fetchPost(num,pw){
         return;
       }
       if(data.result!=='success'){
-        document.getElementById('modalContent').innerHTML='<p style="text-align:center;color:var(--muted);padding:40px 0;">글을 불러올 수 없습니다.</p>';
+        document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">글을 불러올 수 없습니다.</p><div class="modal-help-actions"><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a><a href="tel:010-7635-9689" class="help-call">전화 문의</a></div></div>';
         return;
       }
       const d=data.data;
@@ -470,7 +485,7 @@ function fetchPost(num,pw){
         }</div>`;
     })
     .catch(()=>{
-      document.getElementById('modalContent').innerHTML='<p style="text-align:center;color:var(--muted);padding:40px 0;">오류가 발생했습니다.</p>';
+      document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">오류가 발생했습니다.</p><div class="modal-help-actions"><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a><a href="tel:010-7635-9689" class="help-call">전화 문의</a></div></div>';
     });
 }
 
