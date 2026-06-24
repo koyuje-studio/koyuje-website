@@ -180,6 +180,21 @@ img,video{max-width:100%}
 .pkg-note{padding:20px 24px;background:var(--paper2);border:.5px solid var(--line);font-size:12px;color:var(--muted);line-height:1.9;letter-spacing:.04em}
 .pkg-note strong,.pkg-desc strong{font-size:12px;color:var(--ink);letter-spacing:.08em}
 .pkg-wide-note{margin-top:2px}
+.booking-bridge{margin-top:34px;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);padding:28px 0;display:grid;grid-template-columns:1fr 1.35fr;gap:36px;align-items:center}
+.booking-bridge-k{font-size:10px;letter-spacing:.24em;color:var(--gold);margin-bottom:10px}
+.booking-bridge-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:300;line-height:1.45;letter-spacing:.02em;margin-bottom:12px}
+.booking-bridge-copy{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:.04em;max-width:340px}
+.booking-bridge-list{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.booking-bridge-item{background:var(--paper);padding:18px 16px;min-height:126px}
+.booking-bridge-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--gold);margin-bottom:12px}
+.booking-bridge-label{font-size:13px;letter-spacing:.04em;margin-bottom:6px}
+.booking-bridge-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:.03em}
+.booking-bridge-actions{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+.booking-bridge-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:11px 24px;font-size:11px;letter-spacing:.14em;text-decoration:none;transition:all .3s}
+.booking-bridge-actions .bridge-primary{background:#FAE300;color:#3A1D1D}
+.booking-bridge-actions .bridge-primary:hover{background:#f0d800}
+.booking-bridge-actions .bridge-secondary{border:.5px solid var(--gold);color:var(--gold)}
+.booking-bridge-actions .bridge-secondary:hover{background:var(--gold);color:var(--paper)}
 
 .process{padding:80px 60px;background:var(--ink);color:var(--paper);border-bottom:.5px solid rgba(247,242,234,.08)}
 .process-header{margin-bottom:56px}
@@ -302,6 +317,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .gallery-header,.notice-header,.instagram-header{padding:0 24px}.gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-rows:auto;padding:0 24px}.gallery-item,.gallery-item.portrait{grid-column:auto;grid-row:auto;aspect-ratio:1}.gallery-item.feature{grid-column:span 2;grid-row:auto;aspect-ratio:4/5}.gallery-item.landscape{grid-column:span 2;grid-row:auto;aspect-ratio:16/11}.gallery-item:nth-child(3),.gallery-item:nth-child(5){grid-column:auto;grid-row:auto}
   .packages{padding:60px 24px}.pkg-grid{grid-template-columns:1fr}.pkg-notes{grid-template-columns:1fr}
   .pkg-card{padding:30px 26px}.pkg-features{margin-bottom:20px}.pkg-recommend{margin-bottom:18px}.pkg-details{margin-bottom:22px}.btn-pkg{letter-spacing:.12em}
+  .booking-bridge{grid-template-columns:1fr;gap:22px;margin-top:28px;padding:24px 0}.booking-bridge-copy{max-width:none}.booking-bridge-list{grid-template-columns:1fr 1fr}.booking-bridge-actions a{flex:1 1 180px}
   .process{padding:60px 24px}.process-steps{grid-template-columns:1fr 1fr}.process-step:nth-child(2) .step-arrow,.process-step:nth-child(4) .step-arrow{display:none}
   .notice{padding:60px 0}.notice-list{padding:0 24px}.instagram{padding:60px 0}.insta-grid{grid-template-columns:repeat(3,1fr);padding:0 24px}
   .location{grid-template-columns:1fr}.location-map{min-height:280px}.location-info{padding:40px 24px}
@@ -322,6 +338,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .hero-proof{margin-top:16px;gap:6px;opacity:1;animation:none}.hero-proof-item{font-size:9px;padding:7px 8px}.hero-scroll{display:none}
   .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:none;gap:3px;padding:0 16px}.gallery-item{grid-column:auto;grid-row:auto}.gallery-item.feature{grid-column:span 2;aspect-ratio:4/5}.gallery-item.landscape{grid-column:span 2;grid-row:auto;aspect-ratio:16/11}.gallery-item:nth-child(3),.gallery-item:nth-child(5){grid-column:auto;grid-row:auto}.insta-grid{grid-template-columns:repeat(2,1fr);padding:0 16px}
   .packages{padding:56px 18px}.packages-header{margin-bottom:34px}.pkg-card{padding:28px 22px}.pkg-name{font-size:21px}.pkg-price{font-size:34px}.pkg-price-note{margin-bottom:18px}.pkg-divider{margin-bottom:16px}.pkg-features li{font-size:13px;padding:5px 0}.pkg-recommend{font-size:12px;padding-top:14px}.pkg-details summary{font-size:10px}.btn-pkg{padding:13px 10px;font-size:10px;letter-spacing:.08em}
+  .booking-bridge{margin-top:24px;padding:22px 0}.booking-bridge-title{font-size:21px}.booking-bridge-list{grid-template-columns:1fr}.booking-bridge-item{min-height:auto;padding:16px 14px}.booking-bridge-actions{gap:8px}.booking-bridge-actions a{width:100%;min-height:44px}
   .process-steps{grid-template-columns:1fr}.process-step .step-arrow{display:none}.footer-top{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-top:.5px solid var(--line)}
   .notice-item{grid-template-columns:1fr;gap:6px}.notice-date{text-align:left}
@@ -482,6 +499,34 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
     <div class="pkg-note reveal reveal-delay-1"><strong>후기 이벤트</strong><br>육아카페 1곳 + SNS 1곳 후기 작성 시 3만원 상품권 또는 11R 액자 제공</div>
   </div>
   <div class="pkg-note pkg-wide-note reveal">· 예약금 20만원 · 입금계좌: 농협 302-1742-5215-41 조현호(고유재) · 상품 구성 및 금액은 사전고지 없이 변경될 수 있으며 예약 당시 기준으로 적용됩니다</div>
+  <div class="booking-bridge reveal" aria-label="예약 상담 전 준비 안내">
+    <div>
+      <div class="booking-bridge-k">BOOKING CHECK</div>
+      <h2 class="booking-bridge-title">상담 전, 이 세 가지만 알려주시면<br>더 빠르게 안내드릴 수 있어요</h2>
+      <p class="booking-bridge-copy">상품을 고르기 어렵더라도 괜찮습니다. 희망 날짜와 아기 정보, 함께 촬영할 가족만 알려주시면 가장 자연스러운 구성을 제안해 드립니다.</p>
+    </div>
+    <div class="booking-bridge-list">
+      <div class="booking-bridge-item">
+        <div class="booking-bridge-num">01</div>
+        <div class="booking-bridge-label">희망 촬영일</div>
+        <p class="booking-bridge-desc">1순위와 예비 날짜를 함께 알려주세요.</p>
+      </div>
+      <div class="booking-bridge-item">
+        <div class="booking-bridge-num">02</div>
+        <div class="booking-bridge-label">아기 개월 수</div>
+        <p class="booking-bridge-desc">생년월일 또는 촬영일 기준 개월 수를 알려주세요.</p>
+      </div>
+      <div class="booking-bridge-item">
+        <div class="booking-bridge-num">03</div>
+        <div class="booking-bridge-label">참여 가족</div>
+        <p class="booking-bridge-desc">부모님, 형제, 조부모님 참여 여부를 알려주세요.</p>
+      </div>
+    </div>
+    <div class="booking-bridge-actions">
+      <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="bridge-primary">카카오톡으로 상담하기</a>
+      <a href="/guide.html" class="bridge-secondary">예약 절차 먼저 보기</a>
+    </div>
+  </div>
 </section>
 
 <section class="process">
