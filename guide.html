@@ -69,6 +69,21 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .notice-text{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:0.04em;}
 .notice-text strong{color:var(--ink);font-weight:400;}
 
+.prep-panel{
+  border-top:0.5px solid var(--line);
+  border-bottom:0.5px solid var(--line);
+  padding:28px 0;margin-bottom:56px;
+}
+.prep-head{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;margin-bottom:24px;}
+.prep-k{font-size:10px;letter-spacing:0.22em;color:var(--gold);margin-bottom:8px;}
+.prep-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;letter-spacing:0.03em;}
+.prep-copy{max-width:320px;font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;}
+.prep-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);}
+.prep-item{background:var(--paper);padding:18px 16px;min-height:118px;}
+.prep-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--gold);margin-bottom:12px;}
+.prep-label{font-size:13px;letter-spacing:0.04em;margin-bottom:6px;}
+.prep-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;}
+
 /* STEPS */
 .steps{display:flex;flex-direction:column;gap:0;}
 .step{
@@ -240,6 +255,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .step-num{width:36px;height:36px;font-size:15px;}
   .step:not(:last-child)::after{left:28px;}
   .step-body{padding:20px 0 40px 20px;}
+  .prep-head{display:block;}
+  .prep-copy{margin-top:12px;max-width:none;}
+  .prep-grid{grid-template-columns:1fr 1fr;}
+  .prep-item{min-height:112px;padding:16px 14px;}
   .bottom-cta{padding:40px 20px 84px;}
   .account-num{font-size:22px;}
 }
@@ -270,6 +289,38 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       고유재 한옥스튜디오는 <strong>카카오톡 상담 → 날짜 확정 → 예약금 입금 → 예약확정 작성</strong> 순서로 진행됩니다. 원하시는 날짜가 있으시다면 먼저 카카오톡으로 문의해 주세요!
     </div>
   </div>
+
+  <section class="prep-panel reveal" aria-label="상담 전 준비 정보">
+    <div class="prep-head">
+      <div>
+        <div class="prep-k">BEFORE CONTACT</div>
+        <h2 class="prep-title">상담 전, 이 네 가지만 준비해 주세요</h2>
+      </div>
+      <p class="prep-copy">아래 정보가 있으면 가능한 날짜와 상품 구성을 더 빠르고 정확하게 안내해 드릴 수 있습니다.</p>
+    </div>
+    <div class="prep-grid">
+      <div class="prep-item">
+        <div class="prep-num">01</div>
+        <div class="prep-label">희망 촬영일</div>
+        <p class="prep-desc">1순위와 예비 날짜를 함께 알려주세요.</p>
+      </div>
+      <div class="prep-item">
+        <div class="prep-num">02</div>
+        <div class="prep-label">아기 개월 수</div>
+        <p class="prep-desc">생년월일 또는 촬영일 기준 개월 수를 알려주세요.</p>
+      </div>
+      <div class="prep-item">
+        <div class="prep-num">03</div>
+        <div class="prep-label">원하는 상품</div>
+        <p class="prep-desc">아기 앨범형, 가족 실내, 야외 추가 여부를 말씀해 주세요.</p>
+      </div>
+      <div class="prep-item">
+        <div class="prep-num">04</div>
+        <div class="prep-label">참여 가족</div>
+        <p class="prep-desc">부모님, 형제, 조부모님 참여 여부를 알려주세요.</p>
+      </div>
+    </div>
+  </section>
 
   <!-- STEPS -->
   <div class="steps">
