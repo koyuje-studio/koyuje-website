@@ -6,22 +6,22 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://koyuje-website.vercel.app/guide.html</loc>
+    <loc>https://koyuje-website.vercel.app/guide</loc>
     <lastmod>2026-06-25</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://koyuje-website.vercel.app/reservation.html</loc>
+    <loc>https://koyuje-website.vercel.app/reservation</loc>
     <lastmod>2026-06-25</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://koyuje-website.vercel.app/board.html</loc>
+    <loc>https://koyuje-website.vercel.app/board</loc>
     <lastmod>2026-06-25</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://koyuje-website.vercel.app/status.html</loc>
+    <loc>https://koyuje-website.vercel.app/status</loc>
     <lastmod>2026-06-25</lastmod>
     <priority>0.4</priority>
   </url>

@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>예약확정 게시판 | 고유재 한옥스튜디오</title>
 <meta name="description" content="고유재 한옥스튜디오 공지사항과 예약확정 게시판. 운영 안내, 예약 가능일 문의, 접수 및 확정 내역을 확인하세요.">
-<link rel="canonical" href="https://koyuje-website.vercel.app/board.html">
+<link rel="canonical" href="https://koyuje-website.vercel.app/board">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="고유재 한옥스튜디오">
 <meta property="og:title" content="예약확정 게시판 | 고유재 한옥스튜디오">
 <meta property="og:description" content="고유재 공지사항과 예약확정 내역, 예약 가능일 문의 동선을 함께 확인할 수 있는 게시판입니다.">
-<meta property="og:url" content="https://koyuje-website.vercel.app/board.html">
+<meta property="og:url" content="https://koyuje-website.vercel.app/board">
 <meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -192,10 +192,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <li><a href="/#about">스튜디오 소개</a></li>
     <li><a href="/#gallery">갤러리</a></li>
     <li><a href="/#packages">상품구성</a></li>
-    <li><a href="/board.html" class="active">게시판</a></li>
+    <li><a href="/board" class="active">게시판</a></li>
     <li><a href="/#location">오시는 길</a></li>
   </ul>
-  <a href="/guide.html" class="nav-cta-btn">예약 가능일 문의</a>
+  <a href="/guide" class="nav-cta-btn">예약 가능일 문의</a>
   <div class="nav-toggle-btn" id="boardNavToggle">
     <span></span><span></span><span></span>
   </div>
@@ -214,8 +214,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <p class="board-guide-copy">운영 안내와 예약확정 게시글을 함께 확인하실 수 있습니다. 예약 전 고객은 가능일 문의를 먼저, 예약확정 양식을 작성한 고객은 현황 확인을 이용해 주세요.</p>
     <div class="board-guide-actions" aria-label="예약 관련 빠른 이동">
       <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="guide-kakao">예약 가능일 문의</a>
-      <a href="/status.html" class="guide-status">예약 현황 확인</a>
-      <a href="/reservation.html" class="guide-form">예약확정 작성</a>
+      <a href="/status" class="guide-status">예약 현황 확인</a>
+      <a href="/reservation" class="guide-form">예약확정 작성</a>
     </div>
     <div class="board-guide-list">
       <div class="board-guide-item">
@@ -526,9 +526,9 @@ if(boardToggle){
     <a href="/#about" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">스튜디오 소개</a>
     <a href="/#gallery" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">갤러리</a>
     <a href="/#packages" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">상품구성</a>
-    <a href="/board.html" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--gold);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">게시판</a>
+    <a href="/board" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--gold);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">게시판</a>
     <a href="/#location" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">오시는 길</a>
-    <a href="/guide.html" style="margin-top:16px;background:var(--gold);color:var(--paper);padding:14px 40px;font-size:13px;letter-spacing:0.2em;text-decoration:none;">예약 가능일 문의</a>
+    <a href="/guide" style="margin-top:16px;background:var(--gold);color:var(--paper);padding:14px 40px;font-size:13px;letter-spacing:0.2em;text-decoration:none;">예약 가능일 문의</a>
   `;
   document.body.appendChild(mobileMenu);
   boardToggle.addEventListener('click',()=>{mobileMenu.style.display='flex';document.body.style.overflow='hidden';});
