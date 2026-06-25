@@ -2,7 +2,9 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin.html
+Disallow: /mvno
 Disallow: /mvno.html
+Disallow: /imweb-reservation-widget-full
 Disallow: /imweb-reservation-widget-full.html
 Disallow: /assets/raw/
 
