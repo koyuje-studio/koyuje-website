@@ -36,7 +36,7 @@
       ]
     },
     {
-      "source": "/:internal(admin|admin\\.html|mvno\\.html|imweb-reservation-widget-full\\.html)",
+      "source": "/:internal(admin|admin\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
       "headers": [
         {
           "key": "X-Robots-Tag",
