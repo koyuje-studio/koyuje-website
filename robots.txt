@@ -6,6 +6,7 @@ Disallow: /mvno
 Disallow: /mvno.html
 Disallow: /imweb-reservation-widget-full
 Disallow: /imweb-reservation-widget-full.html
+Disallow: /assets/raw
 Disallow: /assets/raw/
 
 Sitemap: https://koyuje-website.vercel.app/sitemap.xml
