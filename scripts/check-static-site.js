@@ -13,6 +13,11 @@ const requiredFiles = [
   "assets/video/hero/_0049_mobile.mp4",
   "assets/video/hero/_0049_animation.mp4",
   "assets/images/gallery/gallery_01.jpg",
+  "assets/images/gallery/webp/gallery_01.webp",
+  "assets/images/gallery/webp/0057.webp",
+  "assets/images/gallery/webp/0073.webp",
+  "assets/images/gallery/webp/0075.webp",
+  "assets/images/gallery/webp/0138_.webp",
   "assets/images/social/og-image.jpg",
 ];
 
