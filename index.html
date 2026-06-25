@@ -213,6 +213,16 @@ img,video{max-width:100%}
 .process-step:last-child .step-arrow{display:none}
 
 .notice{padding:80px 0}
+.notice-bridge{margin:0 60px 30px;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);padding:22px 0;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+.notice-bridge-k{font-size:10px;letter-spacing:.22em;color:var(--gold);margin-bottom:8px}
+.notice-bridge-copy{font-size:13px;color:var(--muted);line-height:1.85;letter-spacing:.04em}
+.notice-bridge-copy strong{font-weight:400;color:var(--ink)}
+.notice-bridge-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.notice-bridge-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:10px 16px;font-size:11px;letter-spacing:.12em;text-decoration:none;transition:all .3s;white-space:nowrap}
+.notice-bridge-actions .notice-kakao{background:#FAE300;color:#3A1D1D}
+.notice-bridge-actions .notice-kakao:hover{background:#f0d800}
+.notice-bridge-actions .notice-status{border:.5px solid var(--gold);color:var(--gold)}
+.notice-bridge-actions .notice-status:hover{background:var(--gold);color:var(--paper)}
 .notice-list{display:flex;flex-direction:column;padding:0 60px}
 .notice-item{display:grid;grid-template-columns:80px 1fr 120px;align-items:center;gap:24px;padding:20px 0;border-bottom:.5px solid var(--line);text-decoration:none;color:var(--ink);transition:all .2s}
 .notice-item:first-child{border-top:.5px solid var(--line)}
@@ -323,7 +333,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .pkg-card{padding:30px 26px}.pkg-features{margin-bottom:20px}.pkg-recommend{margin-bottom:18px}.pkg-details{margin-bottom:22px}.btn-pkg{letter-spacing:.12em}
   .booking-bridge{grid-template-columns:1fr;gap:22px;margin-top:28px;padding:24px 0}.booking-bridge-copy{max-width:none}.booking-bridge-list{grid-template-columns:1fr 1fr}.booking-bridge-actions a{flex:1 1 180px}
   .process{padding:60px 24px}.process-steps{grid-template-columns:1fr 1fr}.process-step:nth-child(2) .step-arrow,.process-step:nth-child(4) .step-arrow{display:none}
-  .notice{padding:60px 0}.notice-list{padding:0 24px}.instagram{padding:60px 0}.insta-grid{grid-template-columns:repeat(3,1fr);padding:0 24px}
+  .notice{padding:60px 0}.notice-bridge{margin:0 24px 26px;grid-template-columns:1fr}.notice-bridge-actions{justify-content:flex-start}.notice-list{padding:0 24px}.instagram{padding:60px 0}.insta-grid{grid-template-columns:repeat(3,1fr);padding:0 24px}
   .location{grid-template-columns:1fr}.location-map{min-height:280px}.location-info{padding:40px 24px}
   .footer-top{grid-template-columns:1fr 1fr;gap:32px}footer{padding:48px 24px 96px}
   .float-cta{left:0;right:0;bottom:0;display:grid;grid-template-columns:1.18fr .82fr;gap:8px;align-items:stretch;padding:7px max(12px,env(safe-area-inset-left)) max(7px,env(safe-area-inset-bottom));background:rgba(247,242,234,.92);backdrop-filter:blur(16px);border-top:.5px solid rgba(28,24,20,.08)}
@@ -345,7 +355,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .booking-bridge{margin-top:24px;padding:22px 0}.booking-bridge-title{font-size:21px}.booking-bridge-list{grid-template-columns:1fr}.booking-bridge-item{min-height:auto;padding:16px 14px}.booking-bridge-actions{gap:8px}.booking-bridge-actions a{width:100%;min-height:44px}
   .process-steps{grid-template-columns:1fr}.process-step .step-arrow{display:none}.footer-top{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-top:.5px solid var(--line)}
-  .notice-item{grid-template-columns:1fr;gap:6px}.notice-date{text-align:left}
+  .notice-bridge-actions{display:grid;grid-template-columns:1fr}.notice-item{grid-template-columns:1fr;gap:6px}.notice-date{text-align:left}
 }
 </style>
 </head>
@@ -555,6 +565,16 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
       <h2 class="sec-title reveal reveal-delay-1">공지사항 &amp; 예약확정</h2>
     </div>
     <a href="/board.html" class="btn-more reveal">전체보기 →</a>
+  </div>
+  <div class="notice-bridge reveal" aria-label="예약 공지 빠른 안내">
+    <div>
+      <div class="notice-bridge-k">RESERVATION NOTE</div>
+      <p class="notice-bridge-copy"><strong>하루 두 팀만 촬영합니다.</strong><br>예약 전에는 가능일을 먼저 문의해 주시고, 예약확정 작성 후에는 현황 페이지에서 접수 상태를 확인해 주세요.</p>
+    </div>
+    <div class="notice-bridge-actions">
+      <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="notice-kakao">예약 가능일 문의</a>
+      <a href="/status.html" class="notice-status">예약 현황 확인</a>
+    </div>
   </div>
   <div class="notice-list" id="homeNoticeList">
     <div class="empty-state">불러오는 중...</div>
