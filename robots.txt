@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /mvno.html
+Disallow: /imweb-reservation-widget-full.html
+Disallow: /assets/raw/
 
 Sitemap: https://koyuje-website.vercel.app/sitemap.xml
