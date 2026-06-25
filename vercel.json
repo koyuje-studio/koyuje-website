@@ -52,6 +52,15 @@
           "value": "noindex, nofollow"
         }
       ]
+    },
+    {
+      "source": "/assets/raw",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ],
   "redirects": [
