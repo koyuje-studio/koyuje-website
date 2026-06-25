@@ -66,6 +66,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   max-width:480px;margin:0 auto;
   opacity:0;animation:fadeUp .8s .6s ease forwards;
 }
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px;opacity:0;animation:fadeUp .8s .8s ease forwards;}
+.hero-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:12px 24px;font-size:12px;letter-spacing:0.12em;text-decoration:none;transition:all .3s;}
+.hero-primary{background:#FAE300;color:#3A1D1D;}
+.hero-primary:hover{background:#f0d800;transform:translateY(-1px);}
+.hero-secondary{border:0.5px solid rgba(247,242,234,0.28);color:rgba(247,242,234,0.72);}
+.hero-secondary:hover{border-color:var(--gold);color:var(--gold2);}
 
 /* WRAP */
 .wrap{max-width:760px;margin:0 auto;padding:72px 40px 100px;}
@@ -293,6 +299,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 @media(max-width:600px){
   .nav{padding:16px 20px;}
   .hero{padding:52px 20px 44px;}
+  .hero-actions{margin-top:24px;}
+  .hero-actions a{flex:1 1 180px;max-width:260px;}
   .wrap{padding:48px 20px 72px;}
   .step{grid-template-columns:56px 1fr;}
   .step-num{width:36px;height:36px;font-size:15px;}
@@ -322,8 +330,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
 <div class="hero">
   <p class="hero-eyebrow">Reservation Guide</p>
-  <h1 class="hero-title">예약 안내</h1>
-  <p class="hero-desc">고유재는 충분한 상담 후 예약이 진행됩니다.<br>아래 단계를 따라 편하게 문의해 주세요.</p>
+  <h1 class="hero-title">예약 가능일 문의 안내</h1>
+  <p class="hero-desc">하루 두 팀만 촬영하기 때문에 희망 날짜를 먼저 확인해 주세요.<br>아래 정보를 함께 보내주시면 더 빠르게 안내드릴 수 있습니다.</p>
+  <div class="hero-actions" aria-label="예약 가능일 빠른 문의">
+    <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="hero-primary">예약 가능일 문의</a>
+    <a href="/status.html" class="hero-secondary">예약 현황 확인</a>
+  </div>
 </div>
 
 <div class="wrap">
@@ -570,7 +582,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 </div>
 
 <div class="floating-guide-cta" aria-label="빠른 예약 상담">
-  <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="fg-kakao">카카오톡 상담</a>
+  <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="fg-kakao">예약 가능일 문의</a>
   <a href="/reservation.html" class="fg-form">예약확정 작성</a>
 </div>
 
