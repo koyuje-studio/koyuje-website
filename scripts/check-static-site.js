@@ -8,10 +8,12 @@ const requiredFiles = [
   "status.html",
   "robots.txt",
   "sitemap.xml",
-  "_0049.jpg",
-  "_0049_poster.webp",
-  "_0049_mobile.mp4",
-  "_0049_animation.mp4",
+  "assets/images/hero/_0049.jpg",
+  "assets/images/hero/_0049_poster.webp",
+  "assets/video/hero/_0049_mobile.mp4",
+  "assets/video/hero/_0049_animation.mp4",
+  "assets/images/gallery/gallery_01.jpg",
+  "assets/images/social/og-image.jpg",
 ];
 
 const htmlFiles = [

@@ -5,6 +5,16 @@
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/reservation", "destination": "/reservation.html" },
     { "source": "/status", "destination": "/status.html" },
-    { "source": "/guide", "destination": "/guide.html" }
+    { "source": "/guide", "destination": "/guide.html" },
+    { "source": "/og-image.jpg", "destination": "/assets/images/social/og-image.jpg" },
+    { "source": "/gallery_01.jpg", "destination": "/assets/images/gallery/gallery_01.jpg" },
+    { "source": "/0057.jpg", "destination": "/assets/images/gallery/0057.jpg" },
+    { "source": "/0073.jpg", "destination": "/assets/images/gallery/0073.jpg" },
+    { "source": "/0075.jpg", "destination": "/assets/images/gallery/0075.jpg" },
+    { "source": "/0138_.jpg", "destination": "/assets/images/gallery/0138_.jpg" },
+    { "source": "/_0049.jpg", "destination": "/assets/images/hero/_0049.jpg" },
+    { "source": "/_0049_poster.webp", "destination": "/assets/images/hero/_0049_poster.webp" },
+    { "source": "/_0049_mobile.mp4", "destination": "/assets/video/hero/_0049_mobile.mp4" },
+    { "source": "/_0049_animation.mp4", "destination": "/assets/video/hero/_0049_animation.mp4" }
   ]
 }
