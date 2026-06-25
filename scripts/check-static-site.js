@@ -32,7 +32,42 @@ const htmlFiles = [
   "mvno.html",
 ];
 
+const publicPages = {
+  "index.html": "https://koyuje-website.vercel.app/",
+  "guide.html": "https://koyuje-website.vercel.app/guide",
+  "reservation.html": "https://koyuje-website.vercel.app/reservation",
+  "board.html": "https://koyuje-website.vercel.app/board",
+  "status.html": "https://koyuje-website.vercel.app/status",
+};
+
+const internalPages = ["admin.html", "mvno.html"];
+
+const requiredPublicMeta = [
+  '<meta name="description"',
+  '<meta name="robots" content="index,follow">',
+  '<meta property="og:type" content="website">',
+  '<meta property="og:locale" content="ko_KR">',
+  '<meta property="og:site_name"',
+  '<meta property="og:title"',
+  '<meta property="og:description"',
+  '<meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">',
+  '<meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">',
+  '<meta property="og:image:alt"',
+  '<meta property="og:image:type" content="image/jpeg">',
+  '<meta property="og:image:width" content="1200">',
+  '<meta property="og:image:height" content="630">',
+  '<meta name="theme-color" content="#f7f2ea">',
+  '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
+];
+
 let hasError = false;
+
+function requireIncludes(file, html, snippet, label) {
+  if (!html.includes(snippet)) {
+    console.error(`Missing ${label}: ${file}`);
+    hasError = true;
+  }
+}
 
 for (const file of requiredFiles) {
   if (!fs.existsSync(file)) {
@@ -56,6 +91,19 @@ for (const file of htmlFiles) {
   if (htmlOpen !== 1 || htmlClose !== 1) {
     console.error(`Invalid html wrapper: ${file}`);
     hasError = true;
+  }
+
+  if (publicPages[file]) {
+    requireIncludes(file, html, `<link rel="canonical" href="${publicPages[file]}">`, "canonical");
+    requireIncludes(file, html, `<meta property="og:url" content="${publicPages[file]}">`, "og:url");
+
+    for (const snippet of requiredPublicMeta) {
+      requireIncludes(file, html, snippet, snippet);
+    }
+  }
+
+  if (internalPages.includes(file)) {
+    requireIncludes(file, html, '<meta name="robots" content="noindex,nofollow">', "noindex robots meta");
   }
 }
 
