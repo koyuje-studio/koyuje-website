@@ -60,6 +60,9 @@ const requiredPublicMeta = [
   '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
 ];
 
+const expectedSitemapUrls = Object.values(publicPages);
+const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
+
 let hasError = false;
 
 function requireIncludes(file, html, snippet, label) {
@@ -104,6 +107,30 @@ for (const file of htmlFiles) {
 
   if (internalPages.includes(file)) {
     requireIncludes(file, html, '<meta name="robots" content="noindex,nofollow">', "noindex robots meta");
+  }
+}
+
+if (fs.existsSync("sitemap.xml")) {
+  const sitemap = fs.readFileSync("sitemap.xml", "utf8");
+  const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+
+  for (const url of expectedSitemapUrls) {
+    if (!sitemapUrls.includes(url)) {
+      console.error(`Missing sitemap URL: ${url}`);
+      hasError = true;
+    }
+  }
+
+  for (const url of sitemapUrls) {
+    if (!expectedSitemapUrls.includes(url)) {
+      console.error(`Unexpected sitemap URL: ${url}`);
+      hasError = true;
+    }
+
+    if (blockedSitemapParts.some((part) => url.includes(part))) {
+      console.error(`Blocked sitemap URL pattern: ${url}`);
+      hasError = true;
+    }
   }
 }
 
