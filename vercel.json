@@ -56,6 +56,10 @@
   ],
   "redirects": [
     { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/guide/", "destination": "/guide", "permanent": true },
+    { "source": "/reservation/", "destination": "/reservation", "permanent": true },
+    { "source": "/board/", "destination": "/board", "permanent": true },
+    { "source": "/status/", "destination": "/status", "permanent": true },
     { "source": "/guide.html", "destination": "/guide", "permanent": true },
     { "source": "/reservation.html", "destination": "/reservation", "permanent": true },
     { "source": "/board.html", "destination": "/board", "permanent": true },
