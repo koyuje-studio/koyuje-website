@@ -50,6 +50,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .board-guide-k{font-size:10px;letter-spacing:0.22em;color:var(--gold);margin-bottom:8px;}
 .board-guide-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;letter-spacing:0.04em;margin-bottom:8px;}
 .board-guide-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:18px;}
+.board-guide-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.board-guide-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:10px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
+.board-guide-actions .guide-kakao{background:#FAE300;color:#3A1D1D;}
+.board-guide-actions .guide-kakao:hover{background:#f0d800;}
+.board-guide-actions .guide-status,.board-guide-actions .guide-form{border:0.5px solid rgba(160,120,64,0.35);color:var(--gold);}
+.board-guide-actions .guide-status:hover,.board-guide-actions .guide-form:hover{background:var(--gold);color:var(--paper);}
 .board-guide-list{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
 .board-guide-item{background:var(--paper);padding:14px 16px;min-height:92px;}
 .board-guide-label{font-size:11px;letter-spacing:0.16em;color:var(--gold);margin-bottom:8px;}
@@ -168,6 +174,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .nav-toggle-btn{display:flex;}
   .hero{padding:40px 20px 36px;}
   .board-wrap{padding:32px 16px 60px;}
+  .board-guide-actions{display:grid;grid-template-columns:1fr;}
   .board-guide-list{grid-template-columns:1fr;}
   .board-guide-item{min-height:auto;padding:14px;}
   .board-item{grid-template-columns:36px 1fr;}
@@ -197,14 +204,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <div class="hero">
   <div class="hero-label">예약확정 게시판</div>
   <h1 class="hero-title">고유재와 함께한<br>소중한 순간들</h1>
-  <p class="hero-desc">실제 예약 확정 내역을 확인하실 수 있습니다.<br>비밀글은 예약 시 입력하신 전화번호 끝 4자리로 열람 가능합니다.</p>
+  <p class="hero-desc">공지사항과 예약확정 내역을 한곳에서 확인하실 수 있습니다.<br>아직 날짜 확인 전이라면 먼저 예약 가능일을 문의해 주세요.</p>
 </div>
 
 <div class="board-wrap">
   <section class="board-guide" aria-label="게시판 이용 안내">
     <div class="board-guide-k">BOARD GUIDE</div>
     <h2 class="board-guide-title">공지와 예약확정 내역을 확인하는 공간입니다</h2>
-    <p class="board-guide-copy">운영 안내와 예약확정 게시글을 함께 확인하실 수 있습니다. 비밀글은 예약 시 입력하신 전화번호 끝 4자리로 열람됩니다.</p>
+    <p class="board-guide-copy">운영 안내와 예약확정 게시글을 함께 확인하실 수 있습니다. 예약 전 고객은 가능일 문의를 먼저, 예약확정 양식을 작성한 고객은 현황 확인을 이용해 주세요.</p>
+    <div class="board-guide-actions" aria-label="예약 관련 빠른 이동">
+      <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="guide-kakao">예약 가능일 문의</a>
+      <a href="/status.html" class="guide-status">예약 현황 확인</a>
+      <a href="/reservation.html" class="guide-form">예약확정 작성</a>
+    </div>
     <div class="board-guide-list">
       <div class="board-guide-item">
         <div class="board-guide-label">공지</div>
