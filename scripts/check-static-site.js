@@ -62,6 +62,19 @@ const requiredPublicMeta = [
 
 const expectedSitemapUrls = Object.values(publicPages);
 const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
+const requiredRobotsLines = [
+  "User-agent: *",
+  "Allow: /",
+  "Disallow: /admin",
+  "Disallow: /admin.html",
+  "Disallow: /mvno",
+  "Disallow: /mvno.html",
+  "Disallow: /imweb-reservation-widget-full",
+  "Disallow: /imweb-reservation-widget-full.html",
+  "Disallow: /assets/raw",
+  "Disallow: /assets/raw/",
+  "Sitemap: https://koyuje-website.vercel.app/sitemap.xml",
+];
 
 let hasError = false;
 
@@ -131,6 +144,14 @@ if (fs.existsSync("sitemap.xml")) {
       console.error(`Blocked sitemap URL pattern: ${url}`);
       hasError = true;
     }
+  }
+}
+
+if (fs.existsSync("robots.txt")) {
+  const robots = fs.readFileSync("robots.txt", "utf8");
+
+  for (const line of requiredRobotsLines) {
+    requireIncludes("robots.txt", robots, line, line);
   }
 }
 
