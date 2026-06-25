@@ -36,6 +36,12 @@
       ]
     }
   ],
+  "redirects": [
+    { "source": "/guide.html", "destination": "/guide", "permanent": true },
+    { "source": "/reservation.html", "destination": "/reservation", "permanent": true },
+    { "source": "/board.html", "destination": "/board", "permanent": true },
+    { "source": "/status.html", "destination": "/status", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/board", "destination": "/board.html" },
