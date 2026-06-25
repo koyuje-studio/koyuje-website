@@ -11,6 +11,7 @@ const requiredFiles = [
   "assets/images/hero/_0049.jpg",
   "assets/images/hero/_0049_poster.webp",
   "assets/video/hero/_0049_mobile.mp4",
+  "assets/video/hero/_0049_desktop.webm",
   "assets/video/hero/_0049_animation.mp4",
   "assets/images/gallery/gallery_01.jpg",
   "assets/images/gallery/webp/gallery_01.webp",
