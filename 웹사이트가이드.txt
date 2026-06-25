@@ -1,0 +1,8 @@
+assets/
+  images/
+    hero/      메인 첫 화면 이미지, 포스터
+    gallery/   갤러리/인스타용 사진
+    social/    공유 썸네일 이미지
+  video/
+    hero/      메인 히어로 영상
+  raw/         원본 영상/작업 소스, 배포 제외
