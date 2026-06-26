@@ -76,6 +76,38 @@ const requiredRobotsLines = [
   "Sitemap: https://koyuje-website.vercel.app/sitemap.xml",
 ];
 
+const requiredVercelRedirects = [
+  ["/index.html", "/"],
+  ["/guide/", "/guide"],
+  ["/reservation/", "/reservation"],
+  ["/board/", "/board"],
+  ["/status/", "/status"],
+  ["/guide.html", "/guide"],
+  ["/reservation.html", "/reservation"],
+  ["/board.html", "/board"],
+  ["/status.html", "/status"],
+];
+
+const requiredVercelRewrites = [
+  ["/", "/index.html"],
+  ["/guide", "/guide.html"],
+  ["/reservation", "/reservation.html"],
+  ["/board", "/board.html"],
+  ["/status", "/status.html"],
+  ["/admin", "/admin.html"],
+  ["/og-image.jpg", "/assets/images/social/og-image.jpg"],
+  ["/gallery_01.jpg", "/assets/images/gallery/gallery_01.jpg"],
+  ["/_0049_mobile.mp4", "/assets/video/hero/_0049_mobile.mp4"],
+];
+
+const requiredVercelHeaderSources = [
+  "/(.*)",
+  "/assets/(.*)",
+  "/:internal(admin|admin\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+  "/assets/raw/(.*)",
+  "/assets/raw",
+];
+
 let hasError = false;
 
 function requireIncludes(file, html, snippet, label) {
@@ -152,6 +184,45 @@ if (fs.existsSync("robots.txt")) {
 
   for (const line of requiredRobotsLines) {
     requireIncludes("robots.txt", robots, line, line);
+  }
+}
+
+if (fs.existsSync("vercel.json")) {
+  const vercelConfig = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
+  const redirects = vercelConfig.redirects || [];
+  const rewrites = vercelConfig.rewrites || [];
+  const headers = vercelConfig.headers || [];
+
+  for (const [source, destination] of requiredVercelRedirects) {
+    const exists = redirects.some((entry) => (
+      entry.source === source &&
+      entry.destination === destination &&
+      entry.permanent === true
+    ));
+
+    if (!exists) {
+      console.error(`Missing Vercel redirect: ${source} -> ${destination}`);
+      hasError = true;
+    }
+  }
+
+  for (const [source, destination] of requiredVercelRewrites) {
+    const exists = rewrites.some((entry) => (
+      entry.source === source &&
+      entry.destination === destination
+    ));
+
+    if (!exists) {
+      console.error(`Missing Vercel rewrite: ${source} -> ${destination}`);
+      hasError = true;
+    }
+  }
+
+  for (const source of requiredVercelHeaderSources) {
+    if (!headers.some((entry) => entry.source === source)) {
+      console.error(`Missing Vercel header source: ${source}`);
+      hasError = true;
+    }
   }
 }
 
