@@ -625,6 +625,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('input[name="product"]').forEach(input => {
     input.addEventListener('change', updateFamilySizeSections);
   });
+  document.querySelectorAll('input[name="extra"]').forEach(input => {
+    input.addEventListener('change', () => normalizeExtraSelection(input));
+  });
   updateFamilySizeSections();
 });
 
@@ -670,6 +673,21 @@ function updateFamilySizeSections() {
     finalCopy.textContent = show
       ? '가족 실내 앨범형은 부모님 키, 한복, 신발 사이즈를 함께 확인해 주세요.'
       : '아기 앨범형은 부모님 한복 사이즈 입력 없이 제출할 수 있습니다.';
+  }
+}
+
+function normalizeExtraSelection(changedInput) {
+  const noneValue = '추가구성없음';
+  const extras = Array.from(document.querySelectorAll('input[name="extra"]'));
+  if (changedInput.value === noneValue && changedInput.checked) {
+    extras.filter(input => input !== changedInput).forEach(input => {
+      input.checked = false;
+    });
+    return;
+  }
+  if (changedInput.value !== noneValue && changedInput.checked) {
+    const noneInput = extras.find(input => input.value === noneValue);
+    if (noneInput) noneInput.checked = false;
   }
 }
 
