@@ -335,14 +335,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <!-- 04 엄마 사이즈 -->
   <div class="sec">
     <div class="sec-head"><div class="sec-num">04</div><div class="sec-title">엄마 한복 사이즈</div></div>
-    <p class="hint" style="margin-bottom:16px;">엄마 헤어가 짧아 가발 사용(+2만원) 또는 큰아이 헤어 손질 시 추가 비용(+1만원)이 발생할 수 있습니다.</p>
+    <p class="hint" style="margin-bottom:16px;">가족 실내 앨범형 선택 시 필요한 항목입니다. 아기 앨범형만 진행하시는 경우 작성하지 않으셔도 됩니다.</p>
     <div class="grid3">
       <div class="field">
-        <label class="f-label">엄마 키 (cm) <span class="req">*</span></label>
-        <input type="number" class="f-input" id="momHeight" placeholder="예) 162" inputmode="numeric" required>
+        <label class="f-label">엄마 키 (cm)</label>
+        <input type="number" class="f-input" id="momHeight" placeholder="예) 162" inputmode="numeric">
       </div>
       <div class="field">
-        <label class="f-label">엄마 한복 사이즈 <span class="req">*</span></label>
+        <label class="f-label">엄마 한복 사이즈</label>
         <div class="radio-group" style="flex-wrap:wrap;gap:8px;padding-top:6px;">
           <label class="r-item"><input type="radio" name="momSize" value="55"> 55</label>
           <label class="r-item"><input type="radio" name="momSize" value="66"> 66</label>
@@ -351,8 +351,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         </div>
       </div>
       <div class="field">
-        <label class="f-label">엄마 신발 사이즈 (mm) <span class="req">*</span></label>
-        <input type="number" class="f-input" id="momShoes" placeholder="예) 240" inputmode="numeric" required>
+        <label class="f-label">엄마 신발 사이즈 (mm)</label>
+        <input type="number" class="f-input" id="momShoes" placeholder="예) 240" inputmode="numeric">
       </div>
     </div>
   </div>
@@ -360,14 +360,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <!-- 05 아빠 사이즈 -->
   <div class="sec">
     <div class="sec-head"><div class="sec-num">05</div><div class="sec-title">아빠 한복 사이즈</div></div>
-    <p class="hint" style="margin-bottom:16px;">아빠 신발은 295 이하만 대여 가능합니다.</p>
+    <p class="hint" style="margin-bottom:16px;">가족 실내 앨범형 선택 시 필요한 항목입니다. 아빠 신발은 295 이하만 대여 가능합니다.</p>
     <div class="grid3">
       <div class="field">
-        <label class="f-label">아빠 키 (cm) <span class="req">*</span></label>
-        <input type="number" class="f-input" id="dadHeight" placeholder="예) 178" inputmode="numeric" required>
+        <label class="f-label">아빠 키 (cm)</label>
+        <input type="number" class="f-input" id="dadHeight" placeholder="예) 178" inputmode="numeric">
       </div>
       <div class="field">
-        <label class="f-label">아빠 한복 사이즈 <span class="req">*</span></label>
+        <label class="f-label">아빠 한복 사이즈</label>
         <div class="radio-group" style="flex-wrap:wrap;gap:8px;padding-top:6px;">
           <label class="r-item"><input type="radio" name="dadSize" value="90"> 90</label>
           <label class="r-item"><input type="radio" name="dadSize" value="95"> 95</label>
@@ -378,8 +378,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         </div>
       </div>
       <div class="field">
-        <label class="f-label">아빠 신발 사이즈 (mm) <span class="req">*</span></label>
-        <input type="number" class="f-input" id="dadShoes" placeholder="예) 270" inputmode="numeric" required>
+        <label class="f-label">아빠 신발 사이즈 (mm)</label>
+        <input type="number" class="f-input" id="dadShoes" placeholder="예) 270" inputmode="numeric">
       </div>
     </div>
   </div>
@@ -549,8 +549,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </div>
       <div class="final-check-item">
         <div class="final-check-num">03</div>
-        <div class="final-check-label">사이즈 정보</div>
-        <p class="final-check-copy">한복 준비를 위해 키, 의상, 신발 사이즈를 다시 확인해 주세요.</p>
+        <div class="final-check-label">상품별 필수 정보</div>
+        <p class="final-check-copy">가족 실내 앨범형은 부모님 키, 한복, 신발 사이즈를 함께 확인해 주세요.</p>
       </div>
     </div>
   </div>
@@ -656,7 +656,7 @@ function submitForm() {
   }
 
   // 필수값 확인
-  const required = ['babyName','babyBirth','parentName','phone','email','momHeight','momShoes','dadHeight','dadShoes','shootDate','shootTime','depositor'];
+  const required = ['babyName','babyBirth','parentName','phone','email','shootDate','shootTime','depositor'];
   for (const id of required) {
     if (!val(id)) {
       alert('필수 항목을 모두 입력해 주세요.');
@@ -685,6 +685,33 @@ function submitForm() {
     alert('촬영 상품을 선택해 주세요.');
     focusRadioGroup('product');
     return;
+  }
+  const isFamilyProduct = getRadio('product') === '가족실내앨범형';
+  if (isFamilyProduct) {
+    const familyRequired = [
+      ['momHeight','엄마 키를 입력해 주세요.'],
+      ['momShoes','엄마 신발 사이즈를 입력해 주세요.'],
+      ['dadHeight','아빠 키를 입력해 주세요.'],
+      ['dadShoes','아빠 신발 사이즈를 입력해 주세요.'],
+    ];
+    for (const [id,message] of familyRequired) {
+      if (!val(id)) {
+        alert(message);
+        document.getElementById(id).scrollIntoView({behavior:'smooth', block:'center'});
+        document.getElementById(id).focus();
+        return;
+      }
+    }
+    if (!getRadio('momSize')) {
+      alert('엄마 한복 사이즈를 선택해 주세요.');
+      focusRadioGroup('momSize');
+      return;
+    }
+    if (!getRadio('dadSize')) {
+      alert('아빠 한복 사이즈를 선택해 주세요.');
+      focusRadioGroup('dadSize');
+      return;
+    }
   }
 
   // 사이즈 기타 처리
