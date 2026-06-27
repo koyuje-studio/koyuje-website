@@ -468,7 +468,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <label class="c-item"><input type="checkbox" name="channel" value="SNS"> SNS</label>
         <label class="c-item"><input type="checkbox" name="channel" value="맘카페"> 맘카페</label>
         <label class="c-item"><input type="checkbox" name="channel" value="포털검색"> 포털 검색</label>
-        <label class="c-item"><input type="checkbox" name="channel" value="지인소개"> 지인 소개</label>
+        <label class="c-item"><input type="checkbox" name="channel" value="지인소개"> 지인 소개&nbsp;<input type="text" class="extra-in" id="referralName" placeholder="소개자 이름"></label>
         <label class="c-item"><input type="checkbox" name="channel" value="기타"> 기타&nbsp;<input type="text" class="extra-in" id="channelEtc" placeholder="직접 입력"></label>
       </div>
     </div>
@@ -806,6 +806,11 @@ function submitForm() {
     focusField('channelEtc');
     return;
   }
+  if (channelCheckedRaw.includes('지인소개') && !val('referralName')) {
+    alert('소개해주신 지인 성함을 입력해 주세요.');
+    focusField('referralName');
+    return;
+  }
 
   // 사이즈 기타 처리
   const momSize = getRadio('momSize') === '기타' ? '기타: ' + val('momSizeEtc') : getRadio('momSize');
@@ -813,7 +818,8 @@ function submitForm() {
   const siblingShoes = getRadio('siblingShoes') === '기타' ? '기타: ' + val('siblingShoesSz') : getRadio('siblingShoes');
   // 체크박스 — 복수 선택
   const siblingChecked = getCheckboxes('sibling');
-  const channel = channelCheckedRaw.includes('기타') ? channelCheckedRaw.replace('기타', '기타: '+val('channelEtc')) : channelCheckedRaw;
+  let channel = channelCheckedRaw.includes('기타') ? channelCheckedRaw.replace('기타', '기타: '+val('channelEtc')) : channelCheckedRaw;
+  channel = channel.includes('지인소개') ? channel.replace('지인소개', '지인 소개: '+val('referralName')) : channel;
 
   const payload = {
     babyName: val('babyName'),
