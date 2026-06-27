@@ -628,6 +628,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('input[name="extra"]').forEach(input => {
     input.addEventListener('change', () => normalizeExtraSelection(input));
   });
+  document.querySelectorAll('input[name="sibling"]').forEach(input => {
+    input.addEventListener('change', () => normalizeSiblingSelection(input));
+  });
   updateFamilySizeSections();
 });
 
@@ -687,6 +690,21 @@ function normalizeExtraSelection(changedInput) {
   }
   if (changedInput.value !== noneValue && changedInput.checked) {
     const noneInput = extras.find(input => input.value === noneValue);
+    if (noneInput) noneInput.checked = false;
+  }
+}
+
+function normalizeSiblingSelection(changedInput) {
+  const noneValue = '형제없음';
+  const siblings = Array.from(document.querySelectorAll('input[name="sibling"]'));
+  if (changedInput.value === noneValue && changedInput.checked) {
+    siblings.filter(input => input !== changedInput).forEach(input => {
+      input.checked = false;
+    });
+    return;
+  }
+  if (changedInput.value !== noneValue && changedInput.checked) {
+    const noneInput = siblings.find(input => input.value === noneValue);
     if (noneInput) noneInput.checked = false;
   }
 }
