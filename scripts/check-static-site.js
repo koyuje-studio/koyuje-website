@@ -76,8 +76,8 @@ const blockedPublicMeta = [
 ];
 
 const blockedInquiryLinks = [
-  /<a\b[^>]*href="\/guide"[^>]*>\s*예약 가능일 문의/gi,
-  /<a\b[^>]*href='\/guide'[^>]*>\s*예약 가능일 문의/gi,
+  /<a\b[^>]*href="\/guide"[^>]*>[^<]*가능일 문의/gi,
+  /<a\b[^>]*href='\/guide'[^>]*>[^<]*가능일 문의/gi,
 ];
 
 const blockedReservationLabels = [
