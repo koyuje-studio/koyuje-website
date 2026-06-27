@@ -158,6 +158,7 @@ for (const file of htmlFiles) {
 if (fs.existsSync("sitemap.xml")) {
   const sitemap = fs.readFileSync("sitemap.xml", "utf8");
   const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+  const sitemapDates = [...sitemap.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].map((match) => match[1]);
 
   for (const url of expectedSitemapUrls) {
     if (!sitemapUrls.includes(url)) {
@@ -174,6 +175,18 @@ if (fs.existsSync("sitemap.xml")) {
 
     if (blockedSitemapParts.some((part) => url.includes(part))) {
       console.error(`Blocked sitemap URL pattern: ${url}`);
+      hasError = true;
+    }
+  }
+
+  if (sitemapDates.length !== sitemapUrls.length) {
+    console.error("Sitemap lastmod count does not match URL count");
+    hasError = true;
+  }
+
+  for (const date of sitemapDates) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      console.error(`Invalid sitemap lastmod date: ${date}`);
       hasError = true;
     }
   }
