@@ -661,6 +661,13 @@ function focusRadioGroup(name) {
   first.focus();
 }
 
+function focusField(id) {
+  const field = document.getElementById(id);
+  if (!field) return;
+  field.scrollIntoView({behavior:'smooth', block:'center'});
+  field.focus();
+}
+
 function isFamilyAlbumSelected() {
   return getRadio('product') === '가족실내앨범형';
 }
@@ -777,6 +784,27 @@ function submitForm() {
       focusRadioGroup('dadSize');
       return;
     }
+    if (getRadio('momSize') === '기타' && !val('momSizeEtc')) {
+      alert('엄마 한복 기타 사이즈를 입력해 주세요.');
+      focusField('momSizeEtc');
+      return;
+    }
+    if (getRadio('dadSize') === '기타' && !val('dadSizeEtc')) {
+      alert('아빠 한복 기타 사이즈를 입력해 주세요.');
+      focusField('dadSizeEtc');
+      return;
+    }
+  }
+  if (getRadio('siblingShoes') === '기타' && !val('siblingShoesSz')) {
+    alert('형제 신발 사이즈를 입력해 주세요.');
+    focusField('siblingShoesSz');
+    return;
+  }
+  const channelCheckedRaw = getCheckboxes('channel');
+  if (channelCheckedRaw.includes('기타') && !val('channelEtc')) {
+    alert('알게 된 경로의 기타 내용을 입력해 주세요.');
+    focusField('channelEtc');
+    return;
   }
 
   // 사이즈 기타 처리
@@ -785,8 +813,7 @@ function submitForm() {
   const siblingShoes = getRadio('siblingShoes') === '기타' ? '기타: ' + val('siblingShoesSz') : getRadio('siblingShoes');
   // 체크박스 — 복수 선택
   const siblingChecked = getCheckboxes('sibling');
-  const channelChecked = getCheckboxes('channel');
-  const channel = channelChecked.includes('기타') ? channelChecked.replace('기타', '기타: '+val('channelEtc')) : channelChecked;
+  const channel = channelCheckedRaw.includes('기타') ? channelCheckedRaw.replace('기타', '기타: '+val('channelEtc')) : channelCheckedRaw;
 
   const payload = {
     babyName: val('babyName'),
