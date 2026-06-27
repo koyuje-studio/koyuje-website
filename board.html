@@ -391,9 +391,14 @@ function renderPage(page){
       : isPrivate
       ? '<span style="color:var(--muted);">🔒 비밀글</span>'
       : (item.title||'');
+    const accessibleTitle = isPrivate && displayName
+      ? `${displayName}님 비밀글`
+      : isPrivate
+      ? '비밀글'
+      : (item.title||'게시글');
 
     return `
-    <div class="board-item" onclick="openPost('${item.num}','${item.hasPassword}')">
+    <div class="board-item" role="button" tabindex="0" aria-label="게시글 열기: ${escapeAttr(accessibleTitle)}" data-num="${escapeAttr(item.num)}" data-pw="${escapeAttr(item.hasPassword)}" onclick="openPost(this.dataset.num,this.dataset.pw)" onkeydown="openPostFromKey(event,this.dataset.num,this.dataset.pw)">
       <div class="board-num">${isNotice?'📌':globalNum}</div>
       <div class="board-title-wrap">
         <div class="board-title" style="gap:8px;align-items:center;">
@@ -407,6 +412,21 @@ function renderPage(page){
   }).join('');
 
   renderPagination();
+}
+
+function escapeAttr(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
+function openPostFromKey(event,num,hasPw){
+  if(event.key!=='Enter'&&event.key!==' ')return;
+  event.preventDefault();
+  openPost(num,hasPw);
 }
 
 function renderPagination(){
