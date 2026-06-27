@@ -191,7 +191,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <body>
 
 <!-- LOADING -->
-<div class="loading" id="loading">
+<div class="loading" id="loading" role="status" aria-live="polite" aria-hidden="true">
   <div class="spinner"></div>
   <div class="loading-text">예약 정보를 저장하는 중입니다...</div>
 </div>
@@ -268,7 +268,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="grid2">
       <div class="field">
         <label class="f-label">아기 이름 <span class="req">*</span></label>
-        <input type="text" class="f-input" id="babyName" placeholder="홍길동" required>
+        <input type="text" class="f-input" id="babyName" placeholder="홍길동" autocomplete="off" required>
       </div>
       <div class="field">
         <label class="f-label">아기 생년월일 <span class="req">*</span></label>
@@ -319,16 +319,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="grid2">
       <div class="field">
         <label class="f-label">부모님 성함 <span class="req">*</span></label>
-        <input type="text" class="f-input" id="parentName" placeholder="홍길동 / 김영희" required>
+        <input type="text" class="f-input" id="parentName" placeholder="홍길동 / 김영희" autocomplete="name" required>
       </div>
       <div class="field">
         <label class="f-label">연락처 <span class="req">*</span></label>
-        <input type="tel" class="f-input" id="phone" placeholder="010-0000-0000" maxlength="13" required>
+        <input type="tel" class="f-input" id="phone" placeholder="010-0000-0000" maxlength="13" inputmode="tel" autocomplete="tel" required>
       </div>
     </div>
     <div class="field">
       <label class="f-label">이메일 <span class="req">*</span></label>
-      <input type="email" class="f-input" id="email" placeholder="촬영 원본 및 수정본 발송용" required>
+      <input type="email" class="f-input" id="email" placeholder="촬영 원본 및 수정본 발송용" inputmode="email" autocomplete="email" required>
     </div>
   </div>
 
@@ -339,7 +339,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="grid3">
       <div class="field">
         <label class="f-label">엄마 키 (cm) <span class="req">*</span></label>
-        <input type="number" class="f-input" id="momHeight" placeholder="예) 162" required>
+        <input type="number" class="f-input" id="momHeight" placeholder="예) 162" inputmode="numeric" required>
       </div>
       <div class="field">
         <label class="f-label">엄마 한복 사이즈 <span class="req">*</span></label>
@@ -352,7 +352,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </div>
       <div class="field">
         <label class="f-label">엄마 신발 사이즈 (mm) <span class="req">*</span></label>
-        <input type="number" class="f-input" id="momShoes" placeholder="예) 240" required>
+        <input type="number" class="f-input" id="momShoes" placeholder="예) 240" inputmode="numeric" required>
       </div>
     </div>
   </div>
@@ -364,7 +364,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="grid3">
       <div class="field">
         <label class="f-label">아빠 키 (cm) <span class="req">*</span></label>
-        <input type="number" class="f-input" id="dadHeight" placeholder="예) 178" required>
+        <input type="number" class="f-input" id="dadHeight" placeholder="예) 178" inputmode="numeric" required>
       </div>
       <div class="field">
         <label class="f-label">아빠 한복 사이즈 <span class="req">*</span></label>
@@ -379,7 +379,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </div>
       <div class="field">
         <label class="f-label">아빠 신발 사이즈 (mm) <span class="req">*</span></label>
-        <input type="number" class="f-input" id="dadShoes" placeholder="예) 270" required>
+        <input type="number" class="f-input" id="dadShoes" placeholder="예) 270" inputmode="numeric" required>
       </div>
     </div>
   </div>
@@ -447,11 +447,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       <div class="field">
         <label class="f-label">상품 받으실 주소 <span class="req">*</span></label>
         <div style="display:flex;gap:8px;margin-bottom:8px;">
-          <input type="text" class="f-input" id="postcode" placeholder="우편번호" style="width:120px;flex-shrink:0;" readonly>
+          <input type="text" class="f-input" id="postcode" placeholder="우편번호" inputmode="numeric" style="width:120px;flex-shrink:0;" readonly>
           <button type="button" onclick="searchAddress()" style="background:var(--ink);color:var(--paper);border:none;padding:0 16px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;transition:background .3s;" onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--ink)'">주소 검색</button>
         </div>
         <input type="text" class="f-input" id="addressMain" placeholder="기본 주소" style="margin-bottom:8px;" readonly>
-        <input type="text" class="f-input" id="addressDetail" placeholder="상세 주소 입력 (동/호수 등)">
+        <input type="text" class="f-input" id="addressDetail" placeholder="상세 주소 입력 (동/호수 등)" autocomplete="address-line2">
         <input type="hidden" id="address">
       </div>
     </div>
@@ -704,8 +704,12 @@ function submitForm() {
   };
 
   // 로딩 표시
-  document.getElementById('loading').classList.add('show');
-  document.getElementById('submitBtn').disabled = true;
+  const loading = document.getElementById('loading');
+  const submitBtn = document.getElementById('submitBtn');
+  loading.classList.add('show');
+  loading.setAttribute('aria-hidden','false');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '예약 정보를 저장하는 중입니다';
 
   fetch(SCRIPT_URL, {
     method: 'POST',
@@ -713,7 +717,8 @@ function submitForm() {
   })
   .then(res => res.json())
   .then(data => {
-    document.getElementById('loading').classList.remove('show');
+    loading.classList.remove('show');
+    loading.setAttribute('aria-hidden','true');
     if (data.result === 'success') {
       // 성공 화면
       document.getElementById('formSection').style.display = 'none';
@@ -727,13 +732,16 @@ function submitForm() {
       window.scrollTo({top:0, behavior:'smooth'});
     } else {
       alert('오류가 발생했습니다. 다시 시도해 주세요.\n' + (data.message || ''));
-      document.getElementById('submitBtn').disabled = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = '예약 확정 신청하기';
     }
   })
   .catch(err => {
-    document.getElementById('loading').classList.remove('show');
+    loading.classList.remove('show');
+    loading.setAttribute('aria-hidden','true');
     alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-    document.getElementById('submitBtn').disabled = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = '예약 확정 신청하기';
   });
 }
 </script>
