@@ -256,7 +256,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
 <!-- 모달 -->
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
-  <div class="modal" id="modal">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="게시글 상세" tabindex="-1">
     <button type="button" class="modal-close" aria-label="게시글 닫기" onclick="closeModal()">✕</button>
     <div id="modalContent"></div>
   </div>
@@ -461,6 +461,7 @@ function openPost(num, hasPw){
   const modal=document.getElementById('modal');
   const bg=document.getElementById('modalBg');
   bg.classList.add('show');
+  modal.focus();
 
   if(hasPw==='true'){
     showPwForm(num);
@@ -536,11 +537,15 @@ function fetchPost(num,pw){
 function closeModal(e){
   if(e&&e.target!==document.getElementById('modalBg')&&e.type!=='click')return;
   if(e&&e.currentTarget===document.getElementById('modalBg')&&e.target!==e.currentTarget)return;
+  hideModal();
+}
+
+function hideModal(){
   document.getElementById('modalBg').classList.remove('show');
 }
-document.querySelector('.modal-close') && document.querySelector('.modal-close').addEventListener('click',()=>{
-  document.getElementById('modalBg').classList.remove('show');
-});
+
+document.querySelector('.modal-close') && document.querySelector('.modal-close').addEventListener('click',hideModal);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideModal();});
 // 모바일 메뉴
 const boardToggle = document.getElementById('boardNavToggle');
 if(boardToggle){
