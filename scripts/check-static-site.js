@@ -85,6 +85,14 @@ const blockedReservationLabels = [
   /<a\b[^>]*href='\/reservation'[^>]*>\s*예약확정 작성\s*<\/a>/gi,
 ];
 
+const requiredExternalAnchorAttributes = [
+  {
+    label: "Kakao channel",
+    href: "https://pf.kakao.com/_xiRxjhxj",
+    attributes: ["target=\"_blank\"", "rel=\"noopener\""],
+  },
+];
+
 const expectedSitemapUrls = Object.values(publicPages);
 const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
 const requiredRobotsLines = [
@@ -148,6 +156,10 @@ function getHtmlTags(html, tagName) {
 
 function hasAttribute(tag, attribute) {
   return new RegExp(`\\s${attribute}(=|\\s|>)`, "i").test(tag);
+}
+
+function getAnchorTags(html) {
+  return html.match(/<a\b[^>]*>/gi) || [];
 }
 
 for (const file of requiredFiles) {
@@ -214,6 +226,19 @@ for (const file of htmlFiles) {
       if (!hasAttribute(tag, attribute)) {
         console.error(`Missing video ${attribute}: ${file}`);
         hasError = true;
+      }
+    }
+  }
+
+  for (const tag of getAnchorTags(html)) {
+    for (const rule of requiredExternalAnchorAttributes) {
+      if (!tag.includes(`href="${rule.href}"`) && !tag.includes(`href='${rule.href}'`)) continue;
+
+      for (const attribute of rule.attributes) {
+        if (!tag.includes(attribute)) {
+          console.error(`Missing ${rule.label} anchor attribute ${attribute}: ${file}`);
+          hasError = true;
+        }
       }
     }
   }
