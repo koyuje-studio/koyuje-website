@@ -35,7 +35,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .nav-links-full a:hover,.nav-links-full a.active{color:var(--ink);}
 .nav-cta-btn{font-size:11px;letter-spacing:0.2em;border:0.5px solid var(--gold);color:var(--gold);padding:8px 20px;text-decoration:none;transition:all .3s;}
 .nav-cta-btn:hover{background:var(--gold);color:var(--paper);}
-.nav-toggle-btn{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.nav-toggle-btn{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:transparent;border:0;}
 .nav-toggle-btn span{display:block;width:22px;height:1px;background:var(--ink);transition:all .3s;}
 
 .hero{background:var(--ink);padding:56px 40px 48px;text-align:center;}
@@ -200,9 +200,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <li><a href="/#location">오시는 길</a></li>
   </ul>
   <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="nav-cta-btn">예약 가능일 문의</a>
-  <div class="nav-toggle-btn" id="boardNavToggle">
+  <button class="nav-toggle-btn" id="boardNavToggle" type="button" aria-label="메뉴 열기" aria-expanded="false">
     <span></span><span></span><span></span>
-  </div>
+  </button>
 </nav>
 
 <div class="hero">
@@ -535,9 +535,14 @@ if(boardToggle){
     <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" style="margin-top:16px;background:var(--gold);color:var(--paper);padding:14px 40px;font-size:13px;letter-spacing:0.2em;text-decoration:none;">예약 가능일 문의</a>
   `;
   document.body.appendChild(mobileMenu);
-  boardToggle.addEventListener('click',()=>{mobileMenu.style.display='flex';document.body.style.overflow='hidden';});
-  document.getElementById('boardMenuClose').addEventListener('click',()=>{mobileMenu.style.display='none';document.body.style.overflow='';});
-  mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileMenu.style.display='none';document.body.style.overflow='';}));
+  const setBoardMenu = open => {
+    mobileMenu.style.display = open ? 'flex' : 'none';
+    document.body.style.overflow = open ? 'hidden' : '';
+    boardToggle.setAttribute('aria-expanded', String(open));
+  };
+  boardToggle.addEventListener('click',()=>setBoardMenu(true));
+  document.getElementById('boardMenuClose').addEventListener('click',()=>setBoardMenu(false));
+  mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setBoardMenu(false)));
 }
 </script>
 </body>
