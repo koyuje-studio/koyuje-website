@@ -132,6 +132,14 @@ function requireIncludes(file, html, snippet, label) {
   }
 }
 
+function getHtmlTags(html, tagName) {
+  return html.match(new RegExp(`<${tagName}\\b[^>]*>`, "gi")) || [];
+}
+
+function hasAttribute(tag, attribute) {
+  return new RegExp(`\\s${attribute}(=|\\s|>)`, "i").test(tag);
+}
+
 for (const file of requiredFiles) {
   if (!fs.existsSync(file)) {
     console.error(`Missing required file: ${file}`);
@@ -164,6 +172,40 @@ for (const file of htmlFiles) {
   if (htmlOpen !== 1 || htmlClose !== 1) {
     console.error(`Invalid html wrapper: ${file}`);
     hasError = true;
+  }
+
+  for (const tag of getHtmlTags(html, "img")) {
+    const isTemplateImage = tag.includes("${");
+
+    for (const attribute of ["src", "alt", "decoding"]) {
+      if (!hasAttribute(tag, attribute)) {
+        console.error(`Missing image ${attribute}: ${file}`);
+        hasError = true;
+      }
+    }
+
+    if (!isTemplateImage) {
+      for (const attribute of ["width", "height"]) {
+        if (!hasAttribute(tag, attribute)) {
+          console.error(`Missing image ${attribute}: ${file}`);
+          hasError = true;
+        }
+      }
+
+      if (!hasAttribute(tag, "loading") && !hasAttribute(tag, "fetchpriority")) {
+        console.error(`Missing image loading strategy: ${file}`);
+        hasError = true;
+      }
+    }
+  }
+
+  for (const tag of getHtmlTags(html, "video")) {
+    for (const attribute of ["poster", "preload", "width", "height"]) {
+      if (!hasAttribute(tag, attribute)) {
+        console.error(`Missing video ${attribute}: ${file}`);
+        hasError = true;
+      }
+    }
   }
 
   if (publicPages[file]) {
