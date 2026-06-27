@@ -226,6 +226,12 @@ img,video{max-width:100%}
 .step-desc{font-size:12px;color:rgba(247,242,234,.4);line-height:1.8;letter-spacing:.03em}
 .step-arrow{position:absolute;top:28px;right:-1px;width:20px;height:20px;border-top:.5px solid rgba(247,242,234,.15);border-right:.5px solid rgba(247,242,234,.15);transform:rotate(45deg);background:var(--ink);z-index:1}
 .process-step:last-child .step-arrow{display:none}
+.process-actions{margin-top:28px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.process-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:11px 20px;font-size:12px;letter-spacing:.12em;text-decoration:none;transition:all .3s}
+.process-kakao{background:var(--gold);color:var(--ink)}
+.process-form{border:.5px solid rgba(247,242,234,.22);color:var(--paper)}
+.process-kakao:hover{background:var(--gold2)}
+.process-form:hover{border-color:var(--gold);color:var(--gold)}
 
 .notice{padding:80px 0}
 .notice-bridge{margin:0 60px 30px;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);padding:22px 0;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
@@ -347,7 +353,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .packages{padding:60px 24px}.pkg-grid{grid-template-columns:1fr}.pkg-notes{grid-template-columns:1fr}
   .pkg-card{padding:30px 26px}.pkg-features{margin-bottom:20px}.pkg-recommend{margin-bottom:18px}.pkg-details{margin-bottom:22px}.btn-pkg{letter-spacing:.12em}
   .booking-bridge{grid-template-columns:1fr;gap:22px;margin-top:28px;padding:24px 0}.booking-bridge-copy{max-width:none}.booking-bridge-list{grid-template-columns:1fr 1fr}.booking-bridge-actions a{flex:1 1 180px}
-  .process{padding:60px 24px}.process-steps{grid-template-columns:1fr 1fr}.process-step:nth-child(2) .step-arrow,.process-step:nth-child(4) .step-arrow{display:none}
+  .process{padding:60px 24px}.process-steps{grid-template-columns:1fr 1fr}.process-step:nth-child(2) .step-arrow,.process-step:nth-child(4) .step-arrow{display:none}.process-actions{justify-content:flex-start}
   .notice{padding:60px 0}.notice-bridge{margin:0 24px 26px;grid-template-columns:1fr}.notice-bridge-actions{justify-content:flex-start}.notice-list{padding:0 24px}.instagram{padding:60px 0}.insta-grid{grid-template-columns:repeat(3,1fr);padding:0 24px}
   .location{grid-template-columns:1fr}.location-map{min-height:280px}.location-info{padding:40px 24px}
   .footer-top{grid-template-columns:1fr 1fr;gap:32px}footer{padding:48px 24px 96px}
@@ -368,7 +374,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:none;gap:3px;padding:0 16px}.gallery-item{grid-column:auto;grid-row:auto}.gallery-item.feature{grid-column:span 2;aspect-ratio:4/5}.gallery-item.landscape{grid-column:span 2;grid-row:auto;aspect-ratio:16/11}.gallery-item:nth-child(3),.gallery-item:nth-child(5){grid-column:auto;grid-row:auto}.insta-grid{grid-template-columns:repeat(2,1fr);padding:0 16px}
   .packages{padding:56px 18px}.packages-header{margin-bottom:34px}.pkg-card{padding:28px 22px}.pkg-name{font-size:21px}.pkg-price{font-size:34px}.pkg-price-note{margin-bottom:18px}.pkg-divider{margin-bottom:16px}.pkg-features li{font-size:13px;padding:5px 0}.pkg-recommend{font-size:12px;padding-top:14px}.pkg-details summary{font-size:10px}.btn-pkg{padding:13px 10px;font-size:10px;letter-spacing:.08em}
   .booking-bridge{margin-top:24px;padding:22px 0}.booking-bridge-title{font-size:21px}.booking-bridge-list{grid-template-columns:1fr}.booking-bridge-item{min-height:auto;padding:16px 14px}.booking-bridge-actions{gap:8px}.booking-bridge-actions a{width:100%;min-height:44px}
-  .process-steps{grid-template-columns:1fr}.process-step .step-arrow{display:none}.footer-top{grid-template-columns:1fr}
+  .process-steps{grid-template-columns:1fr}.process-step .step-arrow{display:none}.process-actions{display:grid;grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-top:.5px solid var(--line)}
   .notice-bridge-actions{display:grid;grid-template-columns:1fr}.notice-item{grid-template-columns:1fr;gap:6px}.notice-date{text-align:left}
 }
@@ -570,6 +576,10 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
     <div class="process-step reveal reveal-delay-2"><div class="step-arrow"></div><div class="step-num">03</div><div class="step-title">예약확정 작성</div><div class="step-desc">한복 사이즈, 촬영 정보 등을 작성하시면 최종 예약이 완료됩니다.</div></div>
     <div class="process-step reveal reveal-delay-3"><div class="step-arrow"></div><div class="step-num">04</div><div class="step-title">촬영 당일</div><div class="step-desc">한복 셀렉 후 촬영을 진행합니다. 잔금은 당일 결제 가능합니다.</div></div>
     <div class="process-step reveal reveal-delay-4"><div class="step-num">05</div><div class="step-title">결과물 수령</div><div class="step-desc">촬영 후 약 6주 이내 보정 원본 및 상품이 완성되어 발송됩니다.</div></div>
+  </div>
+  <div class="process-actions reveal" aria-label="예약 진행 빠른 이동">
+    <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="process-kakao">예약 가능일 문의</a>
+    <a href="/reservation" class="process-form">입금 후 작성</a>
   </div>
 </section>
 
