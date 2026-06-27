@@ -22,6 +22,14 @@ const requiredFiles = [
   "assets/images/social/og-image.jpg",
 ];
 
+const assetSizeLimits = {
+  "assets/images/social/og-image.jpg": 500 * 1024,
+  "assets/images/hero/_0049_poster.webp": 350 * 1024,
+  "assets/images/gallery/webp/gallery_01.webp": 350 * 1024,
+  "assets/video/hero/_0049_mobile.mp4": 1.5 * 1024 * 1024,
+  "assets/video/hero/_0049_desktop.webm": 3 * 1024 * 1024,
+};
+
 const htmlFiles = [
   "index.html",
   "guide.html",
@@ -58,6 +66,13 @@ const requiredPublicMeta = [
   '<meta property="og:image:height" content="630">',
   '<meta name="theme-color" content="#f7f2ea">',
   '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
+];
+
+const blockedPublicMeta = [
+  'name="twitter:',
+  'property="twitter:',
+  "twitter.com",
+  "x.com/",
 ];
 
 const expectedSitemapUrls = Object.values(publicPages);
@@ -124,6 +139,16 @@ for (const file of requiredFiles) {
   }
 }
 
+for (const [file, maxBytes] of Object.entries(assetSizeLimits)) {
+  if (!fs.existsSync(file)) continue;
+
+  const size = fs.statSync(file).size;
+  if (size > maxBytes) {
+    console.error(`Asset too large: ${file} (${Math.round(size / 1024)}KB > ${Math.round(maxBytes / 1024)}KB)`);
+    hasError = true;
+  }
+}
+
 for (const file of htmlFiles) {
   if (!fs.existsSync(file)) continue;
   const html = fs.readFileSync(file, "utf8");
@@ -147,6 +172,13 @@ for (const file of htmlFiles) {
 
     for (const snippet of requiredPublicMeta) {
       requireIncludes(file, html, snippet, snippet);
+    }
+
+    for (const snippet of blockedPublicMeta) {
+      if (html.includes(snippet)) {
+        console.error(`Blocked public meta found in ${file}: ${snippet}`);
+        hasError = true;
+      }
     }
   }
 
