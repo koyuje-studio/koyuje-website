@@ -636,6 +636,14 @@ function val(id) {
   return el ? el.value.trim() : '';
 }
 
+function focusRadioGroup(name) {
+  const first = document.querySelector('input[name="'+name+'"]');
+  if (!first) return;
+  const group = first.closest('.radio-group') || first;
+  group.scrollIntoView({behavior:'smooth', block:'center'});
+  first.focus();
+}
+
 function submitForm() {
   // 주소 합치기
   updateAddress();
@@ -663,9 +671,21 @@ function submitForm() {
     document.getElementById('postcode').scrollIntoView({behavior:'smooth', block:'center'});
     return;
   }
-  if (!getRadio('babyGender')) { alert('아기 성별을 선택해 주세요.'); return; }
-  if (!getRadio('weekday')) { alert('촬영 요일 구분을 선택해 주세요.'); return; }
-  if (!getRadio('product')) { alert('촬영 상품을 선택해 주세요.'); return; }
+  if (!getRadio('babyGender')) {
+    alert('아기 성별을 선택해 주세요.');
+    focusRadioGroup('babyGender');
+    return;
+  }
+  if (!getRadio('weekday')) {
+    alert('촬영 요일 구분을 선택해 주세요.');
+    focusRadioGroup('weekday');
+    return;
+  }
+  if (!getRadio('product')) {
+    alert('촬영 상품을 선택해 주세요.');
+    focusRadioGroup('product');
+    return;
+  }
 
   // 사이즈 기타 처리
   const momSize = getRadio('momSize') === '기타' ? '기타: ' + val('momSizeEtc') : getRadio('momSize');
