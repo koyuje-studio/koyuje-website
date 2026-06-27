@@ -75,6 +75,11 @@ const blockedPublicMeta = [
   "x.com/",
 ];
 
+const blockedInquiryLinks = [
+  /<a\b[^>]*href="\/guide"[^>]*>\s*예약 가능일 문의/gi,
+  /<a\b[^>]*href='\/guide'[^>]*>\s*예약 가능일 문의/gi,
+];
+
 const expectedSitemapUrls = Object.values(publicPages);
 const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
 const requiredRobotsLines = [
@@ -219,6 +224,13 @@ for (const file of htmlFiles) {
     for (const snippet of blockedPublicMeta) {
       if (html.includes(snippet)) {
         console.error(`Blocked public meta found in ${file}: ${snippet}`);
+        hasError = true;
+      }
+    }
+
+    for (const pattern of blockedInquiryLinks) {
+      if (pattern.test(html)) {
+        console.error(`Reservation inquiry CTA should point to Kakao: ${file}`);
         hasError = true;
       }
     }
