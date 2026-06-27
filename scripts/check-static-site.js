@@ -80,6 +80,11 @@ const blockedInquiryLinks = [
   /<a\b[^>]*href='\/guide'[^>]*>\s*예약 가능일 문의/gi,
 ];
 
+const blockedReservationLabels = [
+  /<a\b[^>]*href="\/reservation"[^>]*>\s*예약확정 작성\s*<\/a>/gi,
+  /<a\b[^>]*href='\/reservation'[^>]*>\s*예약확정 작성\s*<\/a>/gi,
+];
+
 const expectedSitemapUrls = Object.values(publicPages);
 const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
 const requiredRobotsLines = [
@@ -231,6 +236,13 @@ for (const file of htmlFiles) {
     for (const pattern of blockedInquiryLinks) {
       if (pattern.test(html)) {
         console.error(`Reservation inquiry CTA should point to Kakao: ${file}`);
+        hasError = true;
+      }
+    }
+
+    for (const pattern of blockedReservationLabels) {
+      if (pattern.test(html)) {
+        console.error(`Reservation form CTA should mention deposit timing: ${file}`);
         hasError = true;
       }
     }
