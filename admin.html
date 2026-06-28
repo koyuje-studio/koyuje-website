@@ -493,7 +493,10 @@ function showToast(message){
   const t=document.getElementById('saveToast');
   if(message)t.textContent=message;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+  setTimeout(()=>{
+    t.classList.remove('show');
+    t.textContent='✓ 상태가 저장되었습니다';
+  },2500);
 }
 
 // 글쓰기 모달
@@ -530,15 +533,13 @@ function submitPost(){
     btn.disabled=false;btn.textContent='게시글 등록하기';
     if(data.result==='success'){
       closeWriteModal();
-      const t=document.getElementById('saveToast');
-      t.textContent='✓ 게시글이 등록되었습니다';
-      t.classList.add('show');
-      setTimeout(()=>{t.classList.remove('show');t.textContent='✓ 상태가 저장되었습니다';},2500);
+      showToast('✓ 게시글이 등록되었습니다');
+      loadData();
     } else {
-      alert('등록 실패: '+(data.message||''));
+      alert('등록 실패: '+(data.message||'다시 시도해 주세요.'));
     }
   })
-  .catch(()=>{btn.disabled=false;btn.textContent='게시글 등록하기';alert('오류가 발생했습니다.');});
+  .catch(()=>{btn.disabled=false;btn.textContent='게시글 등록하기';alert('오류가 발생했습니다. 다시 시도해 주세요.');});
 }
 
 document.getElementById('pwInput').addEventListener('keydown',function(e){
