@@ -194,6 +194,12 @@ const requiredVercelHeaderSources = [
   "/assets/raw",
 ];
 
+const requiredNoindexHeaderSources = [
+  "/:internal(admin|admin\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+  "/assets/raw/(.*)",
+  "/assets/raw",
+];
+
 let hasError = false;
 
 function requireIncludes(file, html, snippet, label) {
@@ -444,6 +450,19 @@ if (fs.existsSync("vercel.json")) {
   for (const source of requiredVercelHeaderSources) {
     if (!headers.some((entry) => entry.source === source)) {
       console.error(`Missing Vercel header source: ${source}`);
+      hasError = true;
+    }
+  }
+
+  for (const source of requiredNoindexHeaderSources) {
+    const entry = headers.find((headerEntry) => headerEntry.source === source);
+    const hasNoindex = entry && (entry.headers || []).some((header) => (
+      header.key === "X-Robots-Tag" &&
+      header.value === "noindex, nofollow"
+    ));
+
+    if (!hasNoindex) {
+      console.error(`Missing noindex header for Vercel source: ${source}`);
       hasError = true;
     }
   }
