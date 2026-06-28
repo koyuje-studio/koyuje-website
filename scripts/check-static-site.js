@@ -288,6 +288,16 @@ function getAnchorTags(html) {
   return html.match(/<a\b[^>]*>/gi) || [];
 }
 
+function getTitle(html) {
+  return html.match(/<title>(.*?)<\/title>/i)?.[1]?.trim() || "";
+}
+
+function getMetaContent(html, selector) {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(`<meta\\s+${escaped}\\s+content="([^"]+)"\\s*\\/?>`, "i");
+  return html.match(pattern)?.[1]?.trim() || "";
+}
+
 function getScriptBlocks(html) {
   return [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
     .filter((match) => !/type=(["'])application\/ld\+json\1/i.test(match[1]))
@@ -460,6 +470,31 @@ for (const file of htmlFiles) {
 
     for (const snippet of requiredPublicMeta) {
       requireIncludes(file, html, snippet, snippet);
+    }
+
+    const publicTitle = getTitle(html);
+    const publicDescription = getMetaContent(html, 'name="description"');
+    const ogTitle = getMetaContent(html, 'property="og:title"');
+    const ogDescription = getMetaContent(html, 'property="og:description"');
+
+    if (!publicTitle.includes("고유재 한옥스튜디오")) {
+      console.error(`Public title should include brand name: ${file}`);
+      hasError = true;
+    }
+
+    if (publicDescription.length < 45) {
+      console.error(`Public meta description is too short: ${file}`);
+      hasError = true;
+    }
+
+    if (ogTitle !== publicTitle) {
+      console.error(`OG title should match title: ${file}`);
+      hasError = true;
+    }
+
+    if (ogDescription.length < 35) {
+      console.error(`OG description is too short: ${file}`);
+      hasError = true;
     }
 
     for (const snippet of blockedPublicMeta) {
