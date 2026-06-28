@@ -109,6 +109,10 @@ const requiredPageSnippets = {
     'class="mobile-booking-links"',
     '<a href="/status">현황 확인</a>',
     '<a href="/board">게시판으로 이동</a>',
+    "function escapeHTML(value)",
+    "const safeTitle = escapeHTML(displayTitle)",
+    "const safeDate = escapeHTML(item.date",
+    'src="${escapeHTML(img.src)}"',
   ],
   "guide.html": [
     '<a href="/reservation" class="btn-tel">입금 후 작성</a>',
