@@ -75,6 +75,11 @@ const blockedPublicMeta = [
   "x.com/",
 ];
 
+const blockedPublicContactPatterns = [
+  /href=(["'])tel:/i,
+  /010-7635-9689/,
+];
+
 const blockedInquiryLinks = [
   /<a\b[^>]*href="\/guide"[^>]*>[^<]*가능일 문의/gi,
   /<a\b[^>]*href='\/guide'[^>]*>[^<]*가능일 문의/gi,
@@ -254,6 +259,13 @@ for (const file of htmlFiles) {
     for (const snippet of blockedPublicMeta) {
       if (html.includes(snippet)) {
         console.error(`Blocked public meta found in ${file}: ${snippet}`);
+        hasError = true;
+      }
+    }
+
+    for (const pattern of blockedPublicContactPatterns) {
+      if (pattern.test(html)) {
+        console.error(`Public inquiry should prefer Kakao over phone in ${file}: ${pattern}`);
         hasError = true;
       }
     }
