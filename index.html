@@ -253,6 +253,7 @@ img,video{max-width:100%}
 .notice-badge{display:inline-block;font-size:9px;letter-spacing:.15em;border:.5px solid var(--gold);color:var(--gold);padding:2px 8px;margin-left:8px}
 .notice-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:.05em}
 .empty-state{padding:32px 0;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.1em}
+.empty-state a{display:inline-flex;margin-top:12px;color:var(--gold);text-decoration:none;border-bottom:.5px solid rgba(160,120,64,.35);padding-bottom:2px}
 
 .instagram{padding:80px 0}
 .insta-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:0 60px}
@@ -830,7 +831,7 @@ function loadHomeNotice() {
     })
     .catch(() => {
       const list = document.getElementById('homeNoticeList');
-      if (list) list.innerHTML = '<div class="empty-state">공지사항을 불러오지 못했습니다.</div>';
+      if (list) list.innerHTML = '<div class="empty-state">공지사항을 불러오지 못했습니다.<br><a href="/board">게시판으로 이동</a></div>';
     });
 }
 
