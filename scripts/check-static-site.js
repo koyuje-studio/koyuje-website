@@ -166,6 +166,7 @@ const requiredPageSnippets = {
     'class="mobile-booking-links"',
     '<a href="/status">현황 확인</a>',
     '<a href="/board">게시판으로 이동</a>',
+    "촬영 정보와 상품별 필요 정보",
     "function escapeHTML(value)",
     "const safeTitle = escapeHTML(displayTitle)",
     "const safeDate = escapeHTML(item.date",
