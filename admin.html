@@ -375,6 +375,19 @@ function fTime(t){
   return s;
 }
 
+function escapeHTML(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function escapeAttr(value){
+  return escapeHTML(value);
+}
+
 function renderCards(){
   const keyword=(document.getElementById('searchInput').value||'').toLowerCase();
   let filtered=allData.filter(d=>{
@@ -394,17 +407,19 @@ function renderCards(){
 
   const html=filtered.map((item,idx)=>{
     const sc=getStatusClass(item.status||'');
-    const statusLabel=item.status||'⏳ 확인중';
+    const shootDate=escapeHTML(fDate(item.shootDate));
+    const shootTime=escapeHTML(fTime(item.shootTime));
+    const rowId=String(item.rowId ?? '');
     return `
     <div class="res-card" id="card_${idx}">
       <div class="res-card-head" onclick="toggleDetail('detail_${idx}')">
-        <div class="res-date">${fDate(item.shootDate)} ${fTime(item.shootTime)}</div>
+        <div class="res-date">${shootDate} ${shootTime}</div>
         <div class="res-name-wrap">
-          <div class="res-name">${item.babyName||'-'} <span style="font-size:11px;color:rgba(247,242,234,0.35);font-family:'Cormorant Garamond',serif;font-style:italic;">아기</span></div>
-          <div class="res-sub">${item.parentName||''} · ${item.phone||''}</div>
+          <div class="res-name">${escapeHTML(item.babyName||'-')} <span style="font-size:11px;color:rgba(247,242,234,0.35);font-family:'Cormorant Garamond',serif;font-style:italic;">아기</span></div>
+          <div class="res-sub">${escapeHTML(item.parentName||'')} · ${escapeHTML(item.phone||'')}</div>
         </div>
-        <div class="res-product">${item.product||''}</div>
-        <select class="status-select ${sc}" onchange="updateStatus(this,'${item.rowId}')" onclick="event.stopPropagation()">
+        <div class="res-product">${escapeHTML(item.product||'')}</div>
+        <select class="status-select ${sc}" data-row-id="${escapeAttr(rowId)}" onchange="updateStatus(this)" onclick="event.stopPropagation()">
           <option value="⏳ 확인중" ${!item.status||item.status.includes('확인중')?'selected':''}>⏳ 확인중</option>
           <option value="✅ 예약완료" ${item.status&&item.status.includes('✅')?'selected':''}>✅ 예약완료</option>
           <option value="❌ 취소" ${item.status&&item.status.includes('❌')?'selected':''}>❌ 취소</option>
@@ -412,15 +427,15 @@ function renderCards(){
       </div>
       <div class="res-detail" id="detail_${idx}">
         <div class="detail-grid">
-          <div class="detail-item"><div class="detail-key">아기 성별</div><div class="detail-val">${item.babyGender||'-'}</div></div>
-          <div class="detail-item"><div class="detail-key">연락처</div><div class="detail-val">${item.phone||'-'}</div></div>
-          <div class="detail-item"><div class="detail-key">이메일</div><div class="detail-val" style="font-size:12px;">${item.email||'-'}</div></div>
-          <div class="detail-item"><div class="detail-key">촬영 날짜</div><div class="detail-val">${fDate(item.shootDate)}</div></div>
-          <div class="detail-item"><div class="detail-key">촬영 시간</div><div class="detail-val">${fTime(item.shootTime)}</div></div>
-          <div class="detail-item"><div class="detail-key">선택 상품</div><div class="detail-val">${item.product||'-'}</div></div>
-          <div class="detail-item"><div class="detail-key">추가 구성</div><div class="detail-val" style="font-size:12px;">${item.extra||'없음'}</div></div>
-          <div class="detail-item"><div class="detail-key">입금자명</div><div class="detail-val">${item.depositor||'-'}</div></div>
-          <div class="detail-item"><div class="detail-key">제출 일시</div><div class="detail-val" style="font-size:12px;">${item.rowId||'-'}</div></div>
+          <div class="detail-item"><div class="detail-key">아기 성별</div><div class="detail-val">${escapeHTML(item.babyGender||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">연락처</div><div class="detail-val">${escapeHTML(item.phone||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">이메일</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.email||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">촬영 날짜</div><div class="detail-val">${shootDate}</div></div>
+          <div class="detail-item"><div class="detail-key">촬영 시간</div><div class="detail-val">${shootTime}</div></div>
+          <div class="detail-item"><div class="detail-key">선택 상품</div><div class="detail-val">${escapeHTML(item.product||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">추가 구성</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.extra||'없음')}</div></div>
+          <div class="detail-item"><div class="detail-key">입금자명</div><div class="detail-val">${escapeHTML(item.depositor||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">제출 일시</div><div class="detail-val" style="font-size:12px;">${escapeHTML(rowId||'-')}</div></div>
         </div>
       </div>
     </div>`;
@@ -434,7 +449,8 @@ function toggleDetail(id){
   if(el)el.classList.toggle('open');
 }
 
-function updateStatus(select,rowId){
+function updateStatus(select){
+  const rowId=select.dataset.rowId;
   const newStatus=select.value;
   const sc=getStatusClass(newStatus);
   select.className='status-select '+sc;
