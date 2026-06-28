@@ -217,6 +217,31 @@ function requireIncludes(file, html, snippet, label) {
   }
 }
 
+function getJpegSize(file) {
+  const buffer = fs.readFileSync(file);
+  let offset = 2;
+
+  if (buffer[0] !== 0xff || buffer[1] !== 0xd8) return null;
+
+  while (offset < buffer.length) {
+    if (buffer[offset] !== 0xff) return null;
+
+    const marker = buffer[offset + 1];
+    const length = buffer.readUInt16BE(offset + 2);
+
+    if (marker >= 0xc0 && marker <= 0xc3) {
+      return {
+        height: buffer.readUInt16BE(offset + 5),
+        width: buffer.readUInt16BE(offset + 7),
+      };
+    }
+
+    offset += 2 + length;
+  }
+
+  return null;
+}
+
 function getHtmlTags(html, tagName) {
   return html.match(new RegExp(`<${tagName}\\b[^>]*>`, "gi")) || [];
 }
@@ -242,6 +267,15 @@ for (const [file, maxBytes] of Object.entries(assetSizeLimits)) {
   const size = fs.statSync(file).size;
   if (size > maxBytes) {
     console.error(`Asset too large: ${file} (${Math.round(size / 1024)}KB > ${Math.round(maxBytes / 1024)}KB)`);
+    hasError = true;
+  }
+}
+
+if (fs.existsSync("assets/images/social/og-image.jpg")) {
+  const ogImageSize = getJpegSize("assets/images/social/og-image.jpg");
+
+  if (!ogImageSize || ogImageSize.width !== 1200 || ogImageSize.height !== 630) {
+    console.error("OG image must be a 1200x630 JPEG: assets/images/social/og-image.jpg");
     hasError = true;
   }
 }
