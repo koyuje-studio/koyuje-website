@@ -191,6 +191,8 @@ const requiredPageSnippets = {
   ],
   "reservation.html": [
     "촬영 정보와 상품별 필요 정보를 작성해 주세요",
+    "부모님 키·한복·신발 사이즈는 가족 실내 앨범형 선택 시에만 작성합니다.",
+    "가족 실내 앨범형을 선택하시면 부모님 키·한복·신발 사이즈 입력란이 이어서 열립니다.",
     "photoUsageConsent",
     "고객님께서 동의해주신 사진에 한해",
     'data-family-size-section',
