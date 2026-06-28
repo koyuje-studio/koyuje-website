@@ -215,6 +215,7 @@ const requiredVercelRewrites = [
   ["/_0049.jpg", "/assets/images/hero/_0049.jpg"],
   ["/_0049_poster.webp", "/assets/images/hero/_0049_poster.webp"],
   ["/_0049_mobile.mp4", "/assets/video/hero/_0049_mobile.mp4"],
+  ["/_0049_desktop.webm", "/assets/video/hero/_0049_desktop.webm"],
   ["/_0049_animation.mp4", "/assets/video/hero/_0049_animation.mp4"],
 ];
 

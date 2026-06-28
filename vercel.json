@@ -27,7 +27,7 @@
       ]
     },
     {
-      "source": "/:asset(og-image\\.jpg|gallery_01\\.jpg|0057\\.jpg|0073\\.jpg|0075\\.jpg|0138_\\.jpg|_0049\\.jpg|_0049_poster\\.webp|_0049_mobile\\.mp4|_0049_animation\\.mp4)",
+      "source": "/:asset(og-image\\.jpg|gallery_01\\.jpg|0057\\.jpg|0073\\.jpg|0075\\.jpg|0138_\\.jpg|_0049\\.jpg|_0049_poster\\.webp|_0049_mobile\\.mp4|_0049_desktop\\.webm|_0049_animation\\.mp4)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -90,6 +90,7 @@
     { "source": "/_0049.jpg", "destination": "/assets/images/hero/_0049.jpg" },
     { "source": "/_0049_poster.webp", "destination": "/assets/images/hero/_0049_poster.webp" },
     { "source": "/_0049_mobile.mp4", "destination": "/assets/video/hero/_0049_mobile.mp4" },
+    { "source": "/_0049_desktop.webm", "destination": "/assets/video/hero/_0049_desktop.webm" },
     { "source": "/_0049_animation.mp4", "destination": "/assets/video/hero/_0049_animation.mp4" }
   ]
 }
