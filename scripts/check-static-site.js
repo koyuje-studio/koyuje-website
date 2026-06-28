@@ -78,6 +78,7 @@ const blockedPublicMeta = [
 const blockedPublicContactPatterns = [
   /href=(["'])tel:/i,
   /010-7635-9689/,
+  /\+82-10-7635-9689/,
 ];
 
 const blockedSensitiveSnippets = [
