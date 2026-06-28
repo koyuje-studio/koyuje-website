@@ -106,6 +106,11 @@ const requiredExternalAnchorAttributes = [
     href: "https://pf.kakao.com/_xiRxjhxj",
     attributes: ["target=\"_blank\"", "rel=\"noopener\""],
   },
+  {
+    label: "Naver map",
+    href: "https://map.naver.com/p/search/고유재%20한옥스튜디오",
+    attributes: ["target=\"_blank\"", "rel=\"noopener\""],
+  },
 ];
 
 const requiredPageSnippets = {
@@ -119,6 +124,9 @@ const requiredPageSnippets = {
     "const safeTitle = escapeHTML(displayTitle)",
     "const safeDate = escapeHTML(item.date",
     'src="${escapeHTML(img.src)}"',
+    "const NAVER_SEARCH_URL = 'https://map.naver.com/p/search/고유재%20한옥스튜디오'",
+    'class="kakao-btn naver',
+    'class="map-link naver"',
   ],
   "guide.html": [
     '<a href="/reservation" class="btn-tel">입금 후 작성</a>',
