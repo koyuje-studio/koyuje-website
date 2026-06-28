@@ -584,7 +584,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       <div class="final-check-item">
         <div class="final-check-num">03</div>
         <div class="final-check-label">상품별 필수 정보</div>
-        <p class="final-check-copy" id="finalProductCheck">아기 앨범형은 부모님 한복 사이즈 입력 없이 제출할 수 있습니다.</p>
+        <p class="final-check-copy" id="finalProductCheck">아기 앨범형은 부모님 키·한복·신발 사이즈 입력 없이 제출할 수 있습니다.</p>
       </div>
     </div>
   </div>
@@ -740,8 +740,8 @@ function updateFamilySizeSections() {
   const finalCopy = document.getElementById('finalProductCheck');
   if (finalCopy) {
     finalCopy.textContent = show
-      ? '가족 실내 앨범형은 부모님 키, 한복, 신발 사이즈를 함께 확인해 주세요.'
-      : '아기 앨범형은 부모님 한복 사이즈 입력 없이 제출할 수 있습니다.';
+      ? '가족 실내 앨범형은 부모님 키·한복·신발 사이즈를 함께 확인해 주세요.'
+      : '아기 앨범형은 부모님 키·한복·신발 사이즈 입력 없이 제출할 수 있습니다.';
   }
 }
 
