@@ -195,7 +195,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       <p class="support-copy">예약확정 양식을 작성했는데 조회되지 않는다면, 작성 직후이거나 전화번호가 다르게 입력된 경우일 수 있습니다. 아기 이름과 촬영 예정일을 함께 알려주시면 빠르게 확인해 드립니다.</p>
       <div class="support-actions">
         <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="support-kakao">예약 상태 문의하기</a>
-        <a href="tel:010-7635-9689" class="support-call">전화 문의</a>
       </div>
     </div>
   </div>
@@ -207,7 +206,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <button class="btn-reset" onclick="resetSearch()">다시 조회하기</button>
   </div>
   <div class="bottom-link">
-    예약 상태 문의 · <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener">카카오톡 채널</a> · <a href="tel:010-7635-9689">010-7635-9689</a>
+    예약 상태 문의 · <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener">카카오톡 채널</a>
   </div>
 </div>
 
@@ -256,7 +255,7 @@ function doSearch(){
   fetch(SCRIPT_URL+'?phone8='+p)
     .then(r=>r.json())
     .then(data=>{document.getElementById('loading').classList.remove('show');document.getElementById('searchBtn').disabled=false;showResults(data,p);})
-    .catch(()=>{document.getElementById('loading').classList.remove('show');document.getElementById('searchBtn').disabled=false;alert('조회 중 오류가 발생했습니다.');});
+    .catch(()=>{document.getElementById('loading').classList.remove('show');document.getElementById('searchBtn').disabled=false;alert('조회 중 오류가 발생했습니다. 잠시 후 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.');});
 }
 function badge(s){
   if(!s||s.includes('확인중'))return'<span class="status-badge waiting">⏳ 확인중</span>';
@@ -304,13 +303,13 @@ function showResults(data,p){
   const c=document.getElementById('resultsContent');
   const pd='010-'+p.slice(0,4)+'-'+p.slice(4);
   if(!data.data||data.data.length===0){
-    c.innerHTML=`<div class="no-result"><div class="no-result-icon">🔍</div><div class="no-result-title">조회된 예약이 없습니다</div><p class="no-result-desc"><strong style="color:var(--ink);font-weight:400;">${pd}</strong> 로 등록된 예약 정보를 찾을 수 없어요.<br><br>예약확정 폼을 작성하셨다면<br>48시간 후 다시 확인해 주세요.</p><div class="support-actions"><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="support-kakao">예약 상태 문의하기</a><a href="tel:010-7635-9689" class="support-call">전화 문의</a></div></div>`;
+    c.innerHTML=`<div class="no-result"><div class="no-result-icon">🔍</div><div class="no-result-title">조회된 예약이 없습니다</div><p class="no-result-desc"><strong style="color:var(--ink);font-weight:400;">${pd}</strong> 로 등록된 예약 정보를 찾을 수 없어요.<br><br>예약확정 폼을 작성하셨다면<br>48시간 후 다시 확인해 주세요.</p><div class="support-actions"><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="support-kakao">예약 상태 문의하기</a></div></div>`;
     return;
   }
   let html=`<div class="result-header"><div class="result-header-label">${pd} 조회 결과</div><div class="result-header-title">총 ${data.data.length}건의 예약이 확인됩니다</div></div>`;
   data.data.forEach(item=>{
     const w=!item.status||item.status.includes('확인중');
-    html+=`<div class="result-card"><div class="result-card-top"><div class="result-baby">${item.babyName||'-'}<em>아기</em></div>${badge(item.status)}</div><div class="result-card-body"><div class="result-row"><div class="result-key">촬영 날짜</div><div class="result-val">${fDate(item.shootDate)}</div></div><div class="result-row"><div class="result-key">촬영 시간</div><div class="result-val">${fTime(item.shootTime)}</div></div><div class="result-row"><div class="result-key">선택 상품</div><div class="result-val">${item.product||'-'}</div></div><div class="result-row"><div class="result-key">예약 상태</div><div class="result-val">${item.status||'⏳ 확인중'}</div></div>${w?'<div class="result-notice">📋 예약 신청이 접수되었습니다.<br>입금 확인 후 <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 상태가 업데이트됩니다.<br>문의: 카카오톡 @고유재 · 010-7635-9689</div>':''}</div></div>`;
+    html+=`<div class="result-card"><div class="result-card-top"><div class="result-baby">${item.babyName||'-'}<em>아기</em></div>${badge(item.status)}</div><div class="result-card-body"><div class="result-row"><div class="result-key">촬영 날짜</div><div class="result-val">${fDate(item.shootDate)}</div></div><div class="result-row"><div class="result-key">촬영 시간</div><div class="result-val">${fTime(item.shootTime)}</div></div><div class="result-row"><div class="result-key">선택 상품</div><div class="result-val">${item.product||'-'}</div></div><div class="result-row"><div class="result-key">예약 상태</div><div class="result-val">${item.status||'⏳ 확인중'}</div></div>${w?'<div class="result-notice">📋 예약 신청이 접수되었습니다.<br>입금 확인 후 <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 상태가 업데이트됩니다.<br>문의: 카카오톡 채널 @고유재</div>':''}</div></div>`;
   });
   c.innerHTML=html;
   window.scrollTo({top:0,behavior:'smooth'});
