@@ -866,16 +866,18 @@ runIdle(loadInstagramGallery, 1100);
 const navToggle = document.getElementById('navToggle');
 const mobileMenu = document.getElementById('mobileMenu');
 const mobileClose = document.getElementById('mobileClose');
-function setMenu(open) {
-  mobileMenu.classList.toggle('open', open);
-  mobileMenu.setAttribute('aria-hidden', String(!open));
-  navToggle.setAttribute('aria-expanded', String(open));
-  document.body.classList.toggle('menu-open', open);
+if (navToggle && mobileMenu && mobileClose) {
+  function setMenu(open) {
+    mobileMenu.classList.toggle('open', open);
+    mobileMenu.setAttribute('aria-hidden', String(!open));
+    navToggle.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('menu-open', open);
+  }
+  navToggle.addEventListener('click', () => setMenu(true));
+  mobileClose.addEventListener('click', () => setMenu(false));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 }
-navToggle.addEventListener('click', () => setMenu(true));
-mobileClose.addEventListener('click', () => setMenu(false));
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
-document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 </script>
 </body>
 </html>
