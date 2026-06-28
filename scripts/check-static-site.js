@@ -95,6 +95,11 @@ const blockedReservationLabels = [
   /<a\b[^>]*href='\/reservation'[^>]*>\s*예약확정 작성\s*<\/a>/gi,
 ];
 
+const blockedReservationTerms = [
+  /SNS에 올라갈 수 있습니다/,
+  /원치 않으시는 분은 예약 시 미리 말씀해주세요/,
+];
+
 const requiredExternalAnchorAttributes = [
   {
     label: "Kakao channel",
@@ -121,6 +126,7 @@ const requiredPageSnippets = {
   ],
   "reservation.html": [
     "photoUsageConsent",
+    "고객님께서 동의해주신 사진에 한해",
     "사진 활용 &nbsp;<span>",
     "입금자명 &nbsp;<span>",
   ],
@@ -335,6 +341,15 @@ for (const file of htmlFiles) {
       if (pattern.test(html)) {
         console.error(`Reservation form CTA should mention deposit timing: ${file}`);
         hasError = true;
+      }
+    }
+
+    if (file === "reservation.html") {
+      for (const pattern of blockedReservationTerms) {
+        if (pattern.test(html)) {
+          console.error(`Reservation terms should match optional photo usage consent: ${file}`);
+          hasError = true;
+        }
       }
     }
   }
