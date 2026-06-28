@@ -322,6 +322,8 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
 .mobile-close{margin-left:auto;background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:.15em;display:flex;align-items:center;gap:6px;padding:8px;font-family:'Noto Sans KR',sans-serif;font-weight:300}
 .mobile-menu a{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:.1em;padding:12px 0}
 .mobile-menu .mobile-reserve{margin-top:16px;background:var(--gold);color:var(--paper);padding:14px 40px;font-size:13px;letter-spacing:.2em}
+.mobile-booking-links{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+.mobile-booking-links a{font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:.12em;border:.5px solid rgba(160,120,64,.35);color:var(--gold);padding:9px 12px;min-width:108px;text-align:center}
 
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -672,6 +674,10 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
     <button id="mobileClose" class="mobile-close" type="button">✕ 닫기</button>
   </div>
   <a href="#about">스튜디오 소개</a><a href="#gallery">갤러리</a><a href="#packages">상품구성</a><a href="/board">게시판</a><a href="#location">오시는 길</a><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="mobile-reserve">예약 가능일 문의</a>
+  <div class="mobile-booking-links" aria-label="예약 단계 바로가기">
+    <a href="/reservation">입금 후 작성</a>
+    <a href="/status">현황 확인</a>
+  </div>
 </div>
 
 <script>
