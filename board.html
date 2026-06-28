@@ -155,11 +155,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .pw-error{font-size:12px;color:var(--red);margin-top:8px;display:none;}
 .modal-help{margin-top:18px;border-top:0.5px solid var(--line);padding-top:16px;font-size:12px;color:var(--muted);line-height:1.75;letter-spacing:0.03em;}
 .modal-help-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
-.modal-help-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
+.modal-help-actions a,.modal-help-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;border:0;background:none;font-family:'Noto Sans KR',sans-serif;cursor:pointer;}
 .modal-help-actions .help-kakao{background:#FAE300;color:#3A1D1D;}
 .modal-help-actions .help-kakao:hover{background:#f0d800;}
-.modal-help-actions .help-call{border:0.5px solid var(--gold);color:var(--gold);}
-.modal-help-actions .help-call:hover{background:var(--gold);color:var(--paper);}
+.modal-help-actions .help-close,.modal-help-actions .help-call{border:0.5px solid var(--gold);color:var(--gold);}
+.modal-help-actions .help-close:hover,.modal-help-actions .help-call:hover{background:var(--gold);color:var(--paper);}
 
 /* 로딩 */
 .loading-wrap{text-align:center;padding:60px 0;color:var(--muted);font-size:13px;letter-spacing:0.1em;}
@@ -525,7 +525,7 @@ function fetchPost(num,pw){
         return;
       }
       if(data.result!=='success'){
-        document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">글을 불러올 수 없습니다.</p><div class="modal-help-actions"><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
+        document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">글을 불러올 수 없습니다.</p><div class="modal-help-actions"><button type="button" class="help-close" onclick="hideModal()">목록으로 돌아가기</button><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
         return;
       }
       const d=data.data;
@@ -543,7 +543,7 @@ function fetchPost(num,pw){
         <div class="modal-body">${formatBoardContent(d.content||fallbackContent)}</div>`;
     })
     .catch(()=>{
-      document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">오류가 발생했습니다.</p><div class="modal-help-actions"><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
+      document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">오류가 발생했습니다.</p><div class="modal-help-actions"><button type="button" class="help-close" onclick="hideModal()">목록으로 돌아가기</button><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
     });
 }
 
