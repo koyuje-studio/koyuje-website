@@ -102,6 +102,28 @@ const requiredExternalAnchorAttributes = [
   },
 ];
 
+const requiredPageSnippets = {
+  "index.html": [
+    'class="float-reserve">입금 후 작성</a>',
+    'class="notice-form">입금 후 작성</a>',
+    'class="mobile-booking-links"',
+    '<a href="/status">현황 확인</a>',
+  ],
+  "reservation.html": [
+    "photoUsageConsent",
+    "사진 활용 &nbsp;<span>",
+    "입금자명 &nbsp;<span>",
+  ],
+  "status.html": [
+    "번호 다시 입력",
+    "resetSearch()",
+  ],
+  "board.html": [
+    "목록으로 돌아가기",
+    "help-close",
+  ],
+};
+
 const expectedSitemapUrls = Object.values(publicPages);
 const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
 const requiredRobotsLines = [
@@ -210,6 +232,10 @@ for (const file of htmlFiles) {
       console.error(`Sensitive admin credential pattern found: ${file}`);
       hasError = true;
     }
+  }
+
+  for (const snippet of requiredPageSnippets[file] || []) {
+    requireIncludes(file, html, snippet, snippet);
   }
 
   for (const tag of getHtmlTags(html, "img")) {
