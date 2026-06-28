@@ -222,7 +222,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbx4-im4AYWkgsWXWqPiKkYI_l7A87ORtUPS7I4Ww6K3DlD2QBAQy06s6S1LgwNg06OT/exec';
-const ADMIN_PW='koyuje2024!';
 
 let allData=[];
 let currentFilter='all';
@@ -233,17 +232,46 @@ const now=new Date();
 document.getElementById('todayLabel').textContent=now.getFullYear()+'년 '+(now.getMonth()+1)+'월 '+now.getDate()+'일';
 
 function doLogin(){
-  const pw=document.getElementById('pwInput').value;
-  if(pw===ADMIN_PW){
-    adminPw=pw;
-    document.getElementById('loginWrap').style.display='none';
-    document.getElementById('adminWrap').style.display='block';
-    loadData();
-  } else {
-    document.getElementById('loginErr').style.display='block';
-    document.getElementById('pwInput').value='';
-    document.getElementById('pwInput').focus();
+  const input=document.getElementById('pwInput');
+  const pw=input.value.trim();
+  if(!pw){
+    showLoginError('비밀번호를 입력해 주세요.');
+    input.focus();
+    return;
   }
+
+  setLoginPending(true);
+  adminPw=pw;
+
+  fetchAdminData()
+    .then(data=>{
+      allData=data.data||[];
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('adminWrap').style.display='block';
+      document.getElementById('loginErr').style.display='none';
+      updateStats();
+      renderCards();
+    })
+    .catch(()=>{
+      adminPw='';
+      allData=[];
+      showLoginError('비밀번호가 올바르지 않거나 관리자 데이터를 불러올 수 없습니다.');
+      input.value='';
+      input.focus();
+    })
+    .finally(()=>setLoginPending(false));
+}
+
+function setLoginPending(isPending){
+  const btn=document.querySelector('.btn-login');
+  btn.disabled=isPending;
+  btn.textContent=isPending?'확인 중...':'로그인';
+}
+
+function showLoginError(message){
+  const err=document.getElementById('loginErr');
+  err.textContent=message;
+  err.style.display='block';
 }
 
 function doLogout(){
@@ -255,17 +283,26 @@ function doLogout(){
   document.getElementById('loginErr').style.display='none';
 }
 
-function loadData(){
-  document.getElementById('cardsWrap').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>예약 데이터를 불러오는 중...</div>';
-  fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(adminPw))
+function fetchAdminData(){
+  return fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(adminPw))
     .then(r=>r.json())
     .then(data=>{
-      if(data.result==='error'){alert('데이터 로드 실패: '+data.message);return;}
+      if(data.result==='error')throw new Error(data.message||'admin auth failed');
+      return data;
+    });
+}
+
+function loadData(){
+  document.getElementById('cardsWrap').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>예약 데이터를 불러오는 중...</div>';
+  fetchAdminData()
+    .then(data=>{
       allData=data.data||[];
       updateStats();
       renderCards();
     })
-    .catch(()=>{ document.getElementById('cardsWrap').innerHTML='<div class="loading-wrap"><div class="empty-icon">⚠️</div><br><div class="empty-text">데이터 로드 실패. 새로고침 해주세요.</div></div>'; });
+    .catch(()=>{
+      document.getElementById('cardsWrap').innerHTML='<div class="loading-wrap"><div class="empty-icon">⚠️</div><br><div class="empty-text">데이터 로드 실패. 다시 로그인해 주세요.</div></div>';
+    });
 }
 
 function updateStats(){

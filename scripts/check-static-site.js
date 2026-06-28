@@ -80,6 +80,10 @@ const blockedPublicContactPatterns = [
   /010-7635-9689/,
 ];
 
+const blockedSensitiveSnippets = [
+  /const\s+ADMIN_PW\s*=/,
+];
+
 const blockedInquiryLinks = [
   /<a\b[^>]*href="\/guide"[^>]*>[^<]*가능일 문의/gi,
   /<a\b[^>]*href='\/guide'[^>]*>[^<]*가능일 문의/gi,
@@ -199,6 +203,13 @@ for (const file of htmlFiles) {
   if (htmlOpen !== 1 || htmlClose !== 1) {
     console.error(`Invalid html wrapper: ${file}`);
     hasError = true;
+  }
+
+  for (const pattern of blockedSensitiveSnippets) {
+    if (pattern.test(html)) {
+      console.error(`Sensitive admin credential pattern found: ${file}`);
+      hasError = true;
+    }
   }
 
   for (const tag of getHtmlTags(html, "img")) {
