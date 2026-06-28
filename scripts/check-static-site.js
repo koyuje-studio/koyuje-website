@@ -236,6 +236,13 @@ for (const file of htmlFiles) {
   }
 
   for (const tag of getAnchorTags(html)) {
+    if (tag.includes('target="_blank"') || tag.includes("target='_blank'")) {
+      if (!tag.includes('rel="noopener"') && !tag.includes("rel='noopener'")) {
+        console.error(`Missing noopener on blank target anchor: ${file}`);
+        hasError = true;
+      }
+    }
+
     for (const rule of requiredExternalAnchorAttributes) {
       if (!tag.includes(`href="${rule.href}"`) && !tag.includes(`href='${rule.href}'`)) continue;
 
