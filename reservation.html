@@ -685,6 +685,14 @@ function val(id) {
   return el ? el.value.trim() : '';
 }
 
+function digitsOnly(value) {
+  return String(value || '').replace(/[^0-9]/g, '');
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, char => ({
     '&': '&amp;',
@@ -772,14 +780,32 @@ function submitForm() {
   updateAddress();
 
   // 필수값 확인
-  const required = ['babyName','babyBirth','parentName','phone','email','shootDate','shootTime','depositor'];
-  for (const id of required) {
+  const required = [
+    ['babyName','아기 이름을 입력해 주세요.'],
+    ['babyBirth','아기 생년월일을 선택해 주세요.'],
+    ['parentName','부모님 성함을 입력해 주세요.'],
+    ['phone','연락처를 입력해 주세요.'],
+    ['email','이메일을 입력해 주세요.'],
+    ['shootDate','촬영 날짜를 선택해 주세요.'],
+    ['shootTime','촬영 시간을 선택해 주세요.'],
+    ['depositor','입금자명을 입력해 주세요.'],
+  ];
+  for (const [id,message] of required) {
     if (!val(id)) {
-      alert('필수 항목을 모두 입력해 주세요.');
-      document.getElementById(id).scrollIntoView({behavior:'smooth', block:'center'});
-      document.getElementById(id).focus();
+      alert(message);
+      focusField(id);
       return;
     }
+  }
+  if (digitsOnly(val('phone')).length < 10) {
+    alert('연락처를 정확히 입력해 주세요.');
+    focusField('phone');
+    return;
+  }
+  if (!isValidEmail(val('email'))) {
+    alert('이메일 형식을 확인해 주세요.');
+    focusField('email');
+    return;
   }
   // 주소 확인
   if (!val('addressMain')) {
