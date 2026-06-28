@@ -120,6 +120,45 @@ const requiredExternalAnchorAttributes = [
   },
 ];
 
+const requiredClassHrefRules = {
+  "index.html": [
+    ["nav-cta", "https://pf.kakao.com/_xiRxjhxj"],
+    ["btn-primary", "https://pf.kakao.com/_xiRxjhxj"],
+    ["bridge-primary", "https://pf.kakao.com/_xiRxjhxj"],
+    ["process-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["process-form", "/reservation"],
+    ["notice-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["notice-form", "/reservation"],
+    ["notice-status", "/status"],
+    ["float-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["float-reserve", "/reservation"],
+    ["mobile-reserve", "https://pf.kakao.com/_xiRxjhxj"],
+  ],
+  "guide.html": [
+    ["hero-primary", "https://pf.kakao.com/_xiRxjhxj"],
+    ["message-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["btn-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["fg-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["fg-form", "/reservation"],
+    ["btn-tel", "/reservation"],
+  ],
+  "reservation.html": [
+    ["helper-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["btn-check", "/status"],
+  ],
+  "board.html": [
+    ["nav-cta-btn", "https://pf.kakao.com/_xiRxjhxj"],
+    ["guide-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["guide-form", "/reservation"],
+    ["guide-status", "/status"],
+  ],
+  "status.html": [
+    ["inquiry-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["inquiry-form", "/reservation"],
+    ["support-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+  ],
+};
+
 const requiredPageSnippets = {
   "index.html": [
     'class="float-reserve">입금 후 작성</a>',
@@ -294,6 +333,17 @@ function getAnchorTags(html) {
   return html.match(/<a\b[^>]*>/gi) || [];
 }
 
+function getAttribute(tag, name) {
+  return tag.match(new RegExp(`\\s${name}=(["'])(.*?)\\1`, "i"))?.[2] || "";
+}
+
+function hasAnchorWithClassAndHref(html, className, href) {
+  return getAnchorTags(html).some((tag) => {
+    const classes = getAttribute(tag, "class").split(/\s+/);
+    return classes.includes(className) && getAttribute(tag, "href") === href;
+  });
+}
+
 function getTitle(html) {
   return html.match(/<title>(.*?)<\/title>/i)?.[1]?.trim() || "";
 }
@@ -424,6 +474,13 @@ for (const file of htmlFiles) {
           hasError = true;
         }
       }
+    }
+  }
+
+  for (const [className, href] of requiredClassHrefRules[file] || []) {
+    if (!hasAnchorWithClassAndHref(html, className, href)) {
+      console.error(`Missing required CTA link target in ${file}: .${className} -> ${href}`);
+      hasError = true;
     }
   }
 
