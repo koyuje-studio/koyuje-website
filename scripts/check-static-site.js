@@ -127,6 +127,12 @@ const requiredPageSnippets = {
   "reservation.html": [
     "photoUsageConsent",
     "고객님께서 동의해주신 사진에 한해",
+    'data-family-size-section',
+    "function isFamilyAlbumSelected()",
+    "return getRadio('product') === '가족실내앨범형'",
+    "if (isFamilyProduct) {",
+    "momHeight: isFamilyProduct ? val('momHeight') : ''",
+    "dadShoes: isFamilyProduct ? val('dadShoes') : ''",
     "사진 활용 &nbsp;<span>",
     "입금자명 &nbsp;<span>",
   ],
