@@ -242,8 +242,8 @@ img,video{max-width:100%}
 .notice-bridge-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:10px 16px;font-size:11px;letter-spacing:.12em;text-decoration:none;transition:all .3s;white-space:nowrap}
 .notice-bridge-actions .notice-kakao{background:#FAE300;color:#3A1D1D}
 .notice-bridge-actions .notice-kakao:hover{background:#f0d800}
-.notice-bridge-actions .notice-status{border:.5px solid var(--gold);color:var(--gold)}
-.notice-bridge-actions .notice-status:hover{background:var(--gold);color:var(--paper)}
+.notice-bridge-actions .notice-status,.notice-bridge-actions .notice-form{border:.5px solid var(--gold);color:var(--gold)}
+.notice-bridge-actions .notice-status:hover,.notice-bridge-actions .notice-form:hover{background:var(--gold);color:var(--paper)}
 .notice-list{display:flex;flex-direction:column;padding:0 60px}
 .notice-item{display:grid;grid-template-columns:80px 1fr 120px;align-items:center;gap:24px;padding:20px 0;border-bottom:.5px solid var(--line);text-decoration:none;color:var(--ink);transition:all .2s}
 .notice-item:first-child{border-top:.5px solid var(--line)}
@@ -598,6 +598,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
     </div>
     <div class="notice-bridge-actions">
       <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="notice-kakao">예약 가능일 문의</a>
+      <a href="/reservation" class="notice-form">입금 후 작성</a>
       <a href="/status" class="notice-status">예약 현황 확인</a>
     </div>
   </div>
