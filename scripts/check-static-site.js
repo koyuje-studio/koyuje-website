@@ -208,7 +208,14 @@ const requiredVercelRewrites = [
   ["/admin", "/admin.html"],
   ["/og-image.jpg", "/assets/images/social/og-image.jpg"],
   ["/gallery_01.jpg", "/assets/images/gallery/gallery_01.jpg"],
+  ["/0057.jpg", "/assets/images/gallery/0057.jpg"],
+  ["/0073.jpg", "/assets/images/gallery/0073.jpg"],
+  ["/0075.jpg", "/assets/images/gallery/0075.jpg"],
+  ["/0138_.jpg", "/assets/images/gallery/0138_.jpg"],
+  ["/_0049.jpg", "/assets/images/hero/_0049.jpg"],
+  ["/_0049_poster.webp", "/assets/images/hero/_0049_poster.webp"],
   ["/_0049_mobile.mp4", "/assets/video/hero/_0049_mobile.mp4"],
+  ["/_0049_animation.mp4", "/assets/video/hero/_0049_animation.mp4"],
 ];
 
 const requiredVercelHeaderSources = [
