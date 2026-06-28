@@ -170,6 +170,23 @@ const requiredRobotsLines = [
   "Sitemap: https://koyuje-website.vercel.app/sitemap.xml",
 ];
 
+const requiredVercelIgnoreLines = [
+  "assets/raw/",
+  "0918.mov",
+  "scripts/",
+  "backup-before-sync/",
+  "folder-color-tool/",
+  "imweb-reservation-widget-full.html",
+  "mvno.html",
+];
+
+const requiredGitIgnoreLines = [
+  "assets/raw/",
+  "backup-before-sync/",
+  "folder-color-tool/",
+  "imweb-reservation-widget-full.html",
+];
+
 const requiredVercelRedirects = [
   ["/index.html", "/"],
   ["/guide/", "/guide"],
@@ -455,6 +472,22 @@ if (fs.existsSync("robots.txt")) {
 
   for (const line of requiredRobotsLines) {
     requireIncludes("robots.txt", robots, line, line);
+  }
+}
+
+if (fs.existsSync(".vercelignore")) {
+  const vercelIgnore = fs.readFileSync(".vercelignore", "utf8");
+
+  for (const line of requiredVercelIgnoreLines) {
+    requireIncludes(".vercelignore", vercelIgnore, line, line);
+  }
+}
+
+if (fs.existsSync(".gitignore")) {
+  const gitIgnore = fs.readFileSync(".gitignore", "utf8");
+
+  for (const line of requiredGitIgnoreLines) {
+    requireIncludes(".gitignore", gitIgnore, line, line);
   }
 }
 
