@@ -757,13 +757,6 @@ function submitForm() {
   // 주소 합치기
   updateAddress();
 
-  // 약관 확인
-  if (!document.getElementById('agree').checked) {
-    alert('예약 약관에 동의해 주세요.');
-    focusField('agree');
-    return;
-  }
-
   // 필수값 확인
   const required = ['babyName','babyBirth','parentName','phone','email','shootDate','shootTime','depositor'];
   for (const id of required) {
@@ -846,6 +839,12 @@ function submitForm() {
   if (channelCheckedRaw.includes('지인소개') && !val('referralName')) {
     alert('소개해주신 지인 성함을 입력해 주세요.');
     focusField('referralName');
+    return;
+  }
+  // 약관 확인
+  if (!document.getElementById('agree').checked) {
+    alert('예약 약관에 동의해 주세요.');
+    focusField('agree');
     return;
   }
 
