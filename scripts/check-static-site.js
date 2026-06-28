@@ -82,6 +82,12 @@ const blockedPublicContactPatterns = [
   /\+82-10-7635-9689/,
 ];
 
+const blockedPublicHrefPatterns = [
+  /href=(["'])\/[^"']+\.html\1/i,
+  /href=(["'])\/admin(?:\.html)?\1/i,
+  /href=(["'])\/mvno(?:\.html)?\1/i,
+];
+
 const blockedSensitiveSnippets = [
   /const\s+ADMIN_PW\s*=/,
 ];
@@ -507,6 +513,13 @@ for (const file of htmlFiles) {
     for (const pattern of blockedPublicContactPatterns) {
       if (pattern.test(html)) {
         console.error(`Public inquiry should prefer Kakao over phone in ${file}: ${pattern}`);
+        hasError = true;
+      }
+    }
+
+    for (const pattern of blockedPublicHrefPatterns) {
+      if (pattern.test(html)) {
+        console.error(`Public page should not link to html/internal route directly in ${file}: ${pattern}`);
         hasError = true;
       }
     }
