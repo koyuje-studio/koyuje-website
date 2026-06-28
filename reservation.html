@@ -22,7 +22,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -464,7 +464,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <label class="f-label">상품 받으실 주소 <span class="req">*</span></label>
         <div style="display:flex;gap:8px;margin-bottom:8px;">
           <input type="text" class="f-input" id="postcode" placeholder="우편번호" inputmode="numeric" style="width:120px;flex-shrink:0;" readonly>
-          <button type="button" onclick="searchAddress()" style="background:var(--ink);color:var(--paper);border:none;padding:0 16px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;transition:background .3s;" onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--ink)'">주소 검색</button>
+          <button type="button" id="addressSearchBtn" onclick="searchAddress()" style="background:var(--ink);color:var(--paper);border:none;padding:0 16px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;transition:background .3s;" onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--ink)'">주소 검색</button>
         </div>
         <input type="text" class="f-input" id="addressMain" placeholder="기본 주소" style="margin-bottom:8px;" readonly>
         <input type="text" class="f-input" id="addressDetail" placeholder="상세 주소 입력 (동/호수 등)" autocomplete="address-line2">
@@ -635,6 +635,11 @@ document.getElementById('phone').addEventListener('input', function(e) {
 
 // 카카오 주소 검색
 function searchAddress() {
+  if (!window.daum || !window.daum.Postcode) {
+    alert('주소 검색을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
+    focusField('addressSearchBtn');
+    return;
+  }
   new daum.Postcode({
     oncomplete: function(data) {
       document.getElementById('postcode').value = data.zonecode;
@@ -770,7 +775,7 @@ function submitForm() {
   // 주소 확인
   if (!val('addressMain')) {
     alert('주소 검색 버튼을 눌러 주소를 입력해 주세요.');
-    document.getElementById('postcode').scrollIntoView({behavior:'smooth', block:'center'});
+    focusField('addressSearchBtn');
     return;
   }
   if (!getRadio('babyGender')) {
