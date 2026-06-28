@@ -242,6 +242,15 @@ ids.forEach((id,i)=>{
 function getPhone8(){
   return ids.map(id=>document.getElementById(id).value.trim()).join('');
 }
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,char=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[char]));
+}
 function doSearch(){
   const p=getPhone8();
   if(p.length!==8){
@@ -261,7 +270,7 @@ function badge(s){
   if(!s||s.includes('확인중'))return'<span class="status-badge waiting">⏳ 확인중</span>';
   if(s.includes('완료')||s.includes('✅'))return'<span class="status-badge done">✅ 예약완료</span>';
   if(s.includes('취소')||s.includes('❌'))return'<span class="status-badge cancel">❌ 취소</span>';
-  return'<span class="status-badge waiting">'+s+'</span>';
+  return'<span class="status-badge waiting">'+escapeHTML(s)+'</span>';
 }
 function fDate(d){
   if(!d)return'-';
@@ -309,7 +318,7 @@ function showResults(data,p){
   let html=`<div class="result-header"><div class="result-header-label">${pd} 조회 결과</div><div class="result-header-title">총 ${data.data.length}건의 예약이 확인됩니다</div></div>`;
   data.data.forEach(item=>{
     const w=!item.status||item.status.includes('확인중');
-    html+=`<div class="result-card"><div class="result-card-top"><div class="result-baby">${item.babyName||'-'}<em>아기</em></div>${badge(item.status)}</div><div class="result-card-body"><div class="result-row"><div class="result-key">촬영 날짜</div><div class="result-val">${fDate(item.shootDate)}</div></div><div class="result-row"><div class="result-key">촬영 시간</div><div class="result-val">${fTime(item.shootTime)}</div></div><div class="result-row"><div class="result-key">선택 상품</div><div class="result-val">${item.product||'-'}</div></div><div class="result-row"><div class="result-key">예약 상태</div><div class="result-val">${item.status||'⏳ 확인중'}</div></div>${w?'<div class="result-notice">📋 예약 신청이 접수되었습니다.<br>입금 확인 후 <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 상태가 업데이트됩니다.<br>문의: 카카오톡 채널 @고유재</div>':''}</div></div>`;
+    html+=`<div class="result-card"><div class="result-card-top"><div class="result-baby">${escapeHTML(item.babyName||'-')}<em>아기</em></div>${badge(item.status)}</div><div class="result-card-body"><div class="result-row"><div class="result-key">촬영 날짜</div><div class="result-val">${escapeHTML(fDate(item.shootDate))}</div></div><div class="result-row"><div class="result-key">촬영 시간</div><div class="result-val">${escapeHTML(fTime(item.shootTime))}</div></div><div class="result-row"><div class="result-key">선택 상품</div><div class="result-val">${escapeHTML(item.product||'-')}</div></div><div class="result-row"><div class="result-key">예약 상태</div><div class="result-val">${escapeHTML(item.status||'⏳ 확인중')}</div></div>${w?'<div class="result-notice">📋 예약 신청이 접수되었습니다.<br>입금 확인 후 <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 상태가 업데이트됩니다.<br>문의: 카카오톡 채널 @고유재</div>':''}</div></div>`;
   });
   c.innerHTML=html;
   window.scrollTo({top:0,behavior:'smooth'});
