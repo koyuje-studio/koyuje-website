@@ -366,6 +366,10 @@ function getMetaContent(html, selector) {
   return html.match(pattern)?.[1]?.trim() || "";
 }
 
+function arraysMatch(a, b) {
+  return a.length === b.length && a.every((value, index) => value === b[index]);
+}
+
 function getScriptBlocks(html) {
   return [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
     .filter((match) => !/type=(["'])application\/ld\+json\1/i.test(match[1]))
@@ -626,6 +630,17 @@ if (fs.existsSync("sitemap.xml")) {
   const sitemap = fs.readFileSync("sitemap.xml", "utf8");
   const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
   const sitemapDates = [...sitemap.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].map((match) => match[1]);
+  const uniqueSitemapUrls = new Set(sitemapUrls);
+
+  if (!arraysMatch(sitemapUrls, expectedSitemapUrls)) {
+    console.error("Sitemap URL order should match public canonical page order");
+    hasError = true;
+  }
+
+  if (uniqueSitemapUrls.size !== sitemapUrls.length) {
+    console.error("Sitemap contains duplicate URLs");
+    hasError = true;
+  }
 
   for (const url of expectedSitemapUrls) {
     if (!sitemapUrls.includes(url)) {
@@ -637,6 +652,11 @@ if (fs.existsSync("sitemap.xml")) {
   for (const url of sitemapUrls) {
     if (!expectedSitemapUrls.includes(url)) {
       console.error(`Unexpected sitemap URL: ${url}`);
+      hasError = true;
+    }
+
+    if (!url.startsWith("https://koyuje-website.vercel.app")) {
+      console.error(`Sitemap URL should use production HTTPS domain: ${url}`);
       hasError = true;
     }
 
