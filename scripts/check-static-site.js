@@ -109,6 +109,10 @@ const requiredPageSnippets = {
     'class="mobile-booking-links"',
     '<a href="/status">현황 확인</a>',
   ],
+  "guide.html": [
+    '<a href="/reservation" class="btn-tel">입금 후 작성</a>',
+    'class="fg-form">입금 후 작성</a>',
+  ],
   "reservation.html": [
     "photoUsageConsent",
     "사진 활용 &nbsp;<span>",
