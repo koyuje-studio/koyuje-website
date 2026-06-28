@@ -108,6 +108,7 @@ const requiredPageSnippets = {
     'class="notice-form">입금 후 작성</a>',
     'class="mobile-booking-links"',
     '<a href="/status">현황 확인</a>',
+    '<a href="/board">게시판으로 이동</a>',
   ],
   "guide.html": [
     '<a href="/reservation" class="btn-tel">입금 후 작성</a>',
