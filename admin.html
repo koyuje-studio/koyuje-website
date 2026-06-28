@@ -37,6 +37,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .btn-refresh:hover{background:rgba(160,120,64,0.1);}
 .btn-write{font-size:11px;letter-spacing:0.15em;color:var(--ink);background:var(--gold);border:none;padding:6px 16px;cursor:pointer;transition:all .3s;}
 .btn-write:hover{background:var(--gold2);}
+.btn-login:disabled,.btn-write-submit:disabled,.status-select:disabled{opacity:.55;cursor:wait;}
 
 /* 글쓰기 모달 */
 .write-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px;}
@@ -114,11 +115,34 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .empty-text{font-size:13px;color:rgba(247,242,234,0.3);letter-spacing:0.1em;}
 
 @media(max-width:768px){
+  .login-card{padding:44px 28px;}
+  .admin-nav{align-items:flex-start;gap:14px;flex-direction:column;padding:16px;}
+  .admin-brand{display:block;font-size:13px;}
+  .admin-brand em{display:block;margin-left:0;margin-top:2px;}
+  .admin-nav-right{width:100%;gap:8px;flex-wrap:wrap;}
+  .admin-today{width:100%;font-size:11px;}
+  .btn-write,.btn-refresh,.btn-logout{padding:8px 11px;font-size:10px;letter-spacing:0.1em;}
   .stats-row{grid-template-columns:repeat(2,1fr);}
+  .stat-card{padding:16px;}
+  .stat-num{font-size:30px;}
+  .filter-row{gap:6px;}
+  .filter-btn{flex:1 1 calc(50% - 6px);padding:9px 10px;}
+  .search-input{margin-left:0;width:100%;padding:10px 14px;}
   .res-card-head{grid-template-columns:1fr auto;}
   .res-date,.res-product{display:none;}
   .detail-grid{grid-template-columns:1fr 1fr;}
   .admin-body{padding:20px 16px;}
+  .write-modal-bg{align-items:flex-end;padding:12px;}
+  .write-modal{padding:30px 20px 24px;max-height:92vh;}
+  .write-grid{grid-template-columns:1fr;}
+  .save-toast{left:16px;right:16px;bottom:18px;text-align:center;}
+}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .detail-grid{grid-template-columns:1fr;}
+  .status-select{min-width:104px;padding:7px 8px;font-size:10px;}
+  .res-card-head{padding:16px 14px;gap:10px;}
+  .res-name{font-size:14px;}
 }
 </style>
 </head>
