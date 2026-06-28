@@ -419,7 +419,7 @@ function renderCards(){
           <div class="res-sub">${escapeHTML(item.parentName||'')} · ${escapeHTML(item.phone||'')}</div>
         </div>
         <div class="res-product">${escapeHTML(item.product||'')}</div>
-        <select class="status-select ${sc}" data-row-id="${escapeAttr(rowId)}" onchange="updateStatus(this)" onclick="event.stopPropagation()">
+        <select class="status-select ${sc}" data-row-id="${escapeAttr(rowId)}" data-prev-status="${escapeAttr(item.status||'⏳ 확인중')}" onchange="updateStatus(this)" onclick="event.stopPropagation()">
           <option value="⏳ 확인중" ${!item.status||item.status.includes('확인중')?'selected':''}>⏳ 확인중</option>
           <option value="✅ 예약완료" ${item.status&&item.status.includes('✅')?'selected':''}>✅ 예약완료</option>
           <option value="❌ 취소" ${item.status&&item.status.includes('❌')?'selected':''}>❌ 취소</option>
@@ -452,8 +452,10 @@ function toggleDetail(id){
 function updateStatus(select){
   const rowId=select.dataset.rowId;
   const newStatus=select.value;
+  const previousStatus=select.dataset.prevStatus||'⏳ 확인중';
   const sc=getStatusClass(newStatus);
   select.className='status-select '+sc;
+  select.disabled=true;
 
   fetch(SCRIPT_URL,{
     method:'POST',
@@ -465,17 +467,31 @@ function updateStatus(select){
       // 로컬 데이터 업데이트
       const item=allData.find(d=>String(d.rowId)===String(rowId));
       if(item)item.status=newStatus;
+      select.dataset.prevStatus=newStatus;
       updateStats();
-      showToast();
+      showToast('✓ 상태가 저장되었습니다');
     } else {
-      alert('저장 실패: '+data.message);
+      restoreStatusSelect(select,previousStatus);
+      alert('저장 실패: '+(data.message||'다시 시도해 주세요.'));
     }
   })
-  .catch(()=>alert('저장 중 오류가 발생했습니다.'));
+  .catch(()=>{
+    restoreStatusSelect(select,previousStatus);
+    alert('저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
+  })
+  .finally(()=>{
+    select.disabled=false;
+  });
 }
 
-function showToast(){
+function restoreStatusSelect(select,status){
+  select.value=status;
+  select.className='status-select '+getStatusClass(status);
+}
+
+function showToast(message){
   const t=document.getElementById('saveToast');
+  if(message)t.textContent=message;
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
