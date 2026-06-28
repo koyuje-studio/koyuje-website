@@ -251,6 +251,10 @@ function escapeHTML(value){
     "'":'&#39;'
   }[char]));
 }
+function restoreSearchButton(){
+  document.getElementById('loading').classList.remove('show');
+  document.getElementById('searchBtn').disabled=false;
+}
 function doSearch(){
   const p=getPhone8();
   if(p.length!==8){
@@ -262,9 +266,20 @@ function doSearch(){
   document.getElementById('searchBtn').disabled=true;
   document.getElementById('loading').classList.add('show');
   fetch(SCRIPT_URL+'?phone8='+p)
-    .then(r=>r.json())
-    .then(data=>{document.getElementById('loading').classList.remove('show');document.getElementById('searchBtn').disabled=false;showResults(data,p);})
-    .catch(()=>{document.getElementById('loading').classList.remove('show');document.getElementById('searchBtn').disabled=false;alert('조회 중 오류가 발생했습니다. 잠시 후 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.');});
+    .then(r=>r.text())
+    .then(text=>{
+      try{return JSON.parse(text);}
+      catch(err){throw new Error('INVALID_RESPONSE');}
+    })
+    .then(data=>{restoreSearchButton();showResults(data,p);})
+    .catch(err=>{
+      restoreSearchButton();
+      if(err.message==='INVALID_RESPONSE'){
+        alert('예약 조회 응답을 확인하지 못했습니다. 잠시 후 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.');
+        return;
+      }
+      alert('조회 중 오류가 발생했습니다. 잠시 후 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.');
+    });
 }
 function badge(s){
   if(!s||s.includes('확인중'))return'<span class="status-badge waiting">⏳ 확인중</span>';
