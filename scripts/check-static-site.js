@@ -1,4 +1,5 @@
 const fs = require("fs");
+const vm = require("vm");
 
 const requiredFiles = [
   "index.html",
@@ -287,6 +288,14 @@ function getAnchorTags(html) {
   return html.match(/<a\b[^>]*>/gi) || [];
 }
 
+function getScriptBlocks(html) {
+  return [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+    .filter((match) => !/type=(["'])application\/ld\+json\1/i.test(match[1]))
+    .filter((match) => !/type=(["'])module\1/i.test(match[1]))
+    .map((match) => match[2].trim())
+    .filter(Boolean);
+}
+
 for (const file of requiredFiles) {
   if (!fs.existsSync(file)) {
     console.error(`Missing required file: ${file}`);
@@ -392,6 +401,15 @@ for (const file of htmlFiles) {
           hasError = true;
         }
       }
+    }
+  }
+
+  for (const [index, script] of getScriptBlocks(html).entries()) {
+    try {
+      new vm.Script(script);
+    } catch (error) {
+      console.error(`Invalid inline script syntax: ${file} script #${index + 1} (${error.message})`);
+      hasError = true;
     }
   }
 
