@@ -296,6 +296,13 @@ function getScriptBlocks(html) {
     .filter(Boolean);
 }
 
+function getJsonLdBlocks(html) {
+  return [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+    .filter((match) => /type=(["'])application\/ld\+json\1/i.test(match[1]))
+    .map((match) => match[2].trim())
+    .filter(Boolean);
+}
+
 for (const file of requiredFiles) {
   if (!fs.existsSync(file)) {
     console.error(`Missing required file: ${file}`);
@@ -409,6 +416,40 @@ for (const file of htmlFiles) {
       new vm.Script(script);
     } catch (error) {
       console.error(`Invalid inline script syntax: ${file} script #${index + 1} (${error.message})`);
+      hasError = true;
+    }
+  }
+
+  const jsonLdBlocks = getJsonLdBlocks(html);
+  for (const [index, block] of jsonLdBlocks.entries()) {
+    try {
+      JSON.parse(block);
+    } catch (error) {
+      console.error(`Invalid JSON-LD syntax: ${file} block #${index + 1} (${error.message})`);
+      hasError = true;
+    }
+  }
+
+  if (file === "index.html") {
+    const hasLocalBusiness = jsonLdBlocks.some((block) => {
+      try {
+        const data = JSON.parse(block);
+        return (
+          data["@context"] === "https://schema.org" &&
+          data["@type"] === "LocalBusiness" &&
+          data.name === "고유재 한옥스튜디오" &&
+          data.url === "https://koyuje-website.vercel.app/" &&
+          Array.isArray(data.sameAs) &&
+          data.sameAs.includes("https://www.instagram.com/koyuje_studio/") &&
+          data.sameAs.includes("https://pf.kakao.com/_xiRxjhxj")
+        );
+      } catch (error) {
+        return false;
+      }
+    });
+
+    if (!hasLocalBusiness) {
+      console.error("Missing required LocalBusiness JSON-LD on index.html");
       hasError = true;
     }
   }
