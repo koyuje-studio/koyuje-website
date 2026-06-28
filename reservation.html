@@ -957,7 +957,9 @@ function submitForm() {
         '아기 이름 &nbsp;<span>' + escapeHTML(payload.babyName) + '</span><br>' +
         '촬영 날짜 &nbsp;<span>' + escapeHTML(payload.shootDate + ' ' + payload.shootTime) + '</span><br>' +
         '선택 상품 &nbsp;<span>' + escapeHTML(payload.product) + '</span><br>' +
-        '연락처 &nbsp;&nbsp;&nbsp;&nbsp;<span>' + escapeHTML(payload.phone) + '</span>';
+        '연락처 &nbsp;&nbsp;&nbsp;&nbsp;<span>' + escapeHTML(payload.phone) + '</span><br>' +
+        '입금자명 &nbsp;<span>' + escapeHTML(payload.depositor) + '</span><br>' +
+        '사진 활용 &nbsp;<span>' + escapeHTML(payload.photoUsageConsent) + '</span>';
       window.scrollTo({top:0, behavior:'smooth'});
     } else {
       alert('오류가 발생했습니다. 다시 시도해 주세요.\n' + (data.message || ''));
