@@ -780,13 +780,23 @@ function observeReveals(root = document) {
   reveals.forEach(el => io.observe(el));
 }
 
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[char]));
+}
+
 function renderGallery(images) {
   const grid = document.getElementById('instaGrid');
   if (!grid) return;
   const svgIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>';
   grid.innerHTML = images.map((img, i) => `
-    <a href="${img.link}" target="_blank" rel="noopener" class="insta-item reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}">
-      <img src="${img.src}" alt="${img.alt}" loading="lazy" decoding="async">
+    <a href="${escapeHTML(img.link)}" target="_blank" rel="noopener" class="insta-item reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}">
+      <img src="${escapeHTML(img.src)}" alt="${escapeHTML(img.alt)}" loading="lazy" decoding="async">
       <div class="insta-overlay"><div class="insta-icon">${svgIcon}</div></div>
     </a>`).join('');
   observeReveals(grid);
@@ -821,11 +831,13 @@ function loadHomeNotice() {
           const nameMatch = item.title && item.title.match(/^(.+?)님/);
           displayTitle = nameMatch ? nameMatch[1] + '님 비밀글' : '비밀글';
         }
+        const safeTitle = escapeHTML(displayTitle);
+        const safeDate = escapeHTML(item.date ? item.date.replace(/-/g, '.') : '');
         return `
           <a href="/board" class="notice-item">
             <div class="notice-num">${isNotice ? '공지' : '예약확정'}</div>
-            <div class="notice-title">${displayTitle}${isNew ? '<span class="notice-badge">NEW</span>' : ''}</div>
-            <div class="notice-date">${item.date ? item.date.replace(/-/g, '.') : ''}</div>
+            <div class="notice-title">${safeTitle}${isNew ? '<span class="notice-badge">NEW</span>' : ''}</div>
+            <div class="notice-date">${safeDate}</div>
           </a>`;
       }).join('');
     })
