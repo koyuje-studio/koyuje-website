@@ -387,10 +387,10 @@ function renderPage(page){
 
     // 제목
     const displayTitle = isPrivate && displayName
-      ? `${displayName}님 <span style="color:var(--muted);font-size:12px;">🔒</span>`
+      ? `${escapeHTML(displayName)}님 <span style="color:var(--muted);font-size:12px;">🔒</span>`
       : isPrivate
       ? '<span style="color:var(--muted);">🔒 비밀글</span>'
-      : (item.title||'');
+      : escapeHTML(item.title||'');
     const accessibleTitle = isPrivate && displayName
       ? `${displayName}님 비밀글`
       : isPrivate
@@ -421,6 +421,19 @@ function escapeAttr(value){
     .replace(/'/g,'&#39;')
     .replace(/</g,'&lt;')
     .replace(/>/g,'&gt;');
+}
+
+function escapeHTML(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function formatBoardContent(value){
+  return escapeHTML(value).replace(/\r?\n/g,'<br>');
 }
 
 function openPostFromKey(event,num,hasPw){
@@ -518,15 +531,16 @@ function fetchPost(num,pw){
       const d=data.data;
       const isDone=d.title&&d.title.includes('✅');
       const isWait=d.title&&d.title.includes('⏳');
+      const fallbackContent = isDone
+        ? '예약이 완료되었습니다. 촬영 당일 뵙겠습니다! 감사합니다 😊'
+        : isWait
+        ? '예약 신청이 접수되었습니다. 입금 확인 후 48시간 이내에 확정 연락을 드리겠습니다.'
+        : '내용이 없습니다.';
       document.getElementById('modalContent').innerHTML=`
-        <div class="modal-cat">${d.category||'예약확정'}</div>
-        <div class="modal-title">${d.title||''}</div>
-        <div class="modal-meta">${d.author||'고유재'} · ${d.date||''}</div>
-        <div class="modal-body">${d.content||
-          (isDone?'예약이 완료되었습니다. 촬영 당일 뵙겠습니다! 감사합니다 😊':
-          isWait?'예약 신청이 접수되었습니다. 입금 확인 후 48시간 이내에 확정 연락을 드리겠습니다.':
-          '내용이 없습니다.')
-        }</div>`;
+        <div class="modal-cat">${escapeHTML(d.category||'예약확정')}</div>
+        <div class="modal-title">${escapeHTML(d.title||'')}</div>
+        <div class="modal-meta">${escapeHTML(d.author||'고유재')} · ${escapeHTML(d.date||'')}</div>
+        <div class="modal-body">${formatBoardContent(d.content||fallbackContent)}</div>`;
     })
     .catch(()=>{
       document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">오류가 발생했습니다.</p><div class="modal-help-actions"><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
