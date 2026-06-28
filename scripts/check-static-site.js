@@ -190,6 +190,7 @@ const requiredPageSnippets = {
     "가족 실내 앨범형</strong> · 선택 시 부모님 키·한복·신발 사이즈",
   ],
   "reservation.html": [
+    "촬영 정보와 상품별 필요 정보를 작성해 주세요",
     "photoUsageConsent",
     "고객님께서 동의해주신 사진에 한해",
     'data-family-size-section',
