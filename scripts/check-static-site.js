@@ -164,6 +164,7 @@ const requiredPageSnippets = {
     'class="float-reserve">입금 후 작성</a>',
     'class="notice-form">입금 후 작성</a>',
     'class="mobile-booking-links"',
+    "min-width:126px;text-align:center;white-space:nowrap",
     '<a href="/status">예약 현황 확인</a>',
     '<a href="/board">공지·예약 현황으로 이동</a>',
     '<a href="/board">공지·예약 현황</a>',
