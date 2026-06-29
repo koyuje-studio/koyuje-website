@@ -207,7 +207,7 @@ const requiredPageSnippets = {
   "reservation.html": [
     "<title>입금 후 작성 | 고유재 한옥스튜디오</title>",
     '<meta property="og:title" content="입금 후 작성 | 고유재 한옥스튜디오">',
-    '<meta property="og:description" content="예약 가능일 확인과 예약금 입금 후 작성하는 고유재 한옥스튜디오 예약 정보 접수 양식입니다.">',
+    '<meta property="og:description" content="예약 가능일 확인과 예약금 입금 후 아기 정보, 촬영 일정, 상품별 필요 정보를 작성하는 고유재 한옥스튜디오 예약 정보 접수 양식입니다.">',
     '<meta property="og:image:alt" content="고유재 한옥스튜디오 입금 후 작성 대표 이미지">',
     'aria-label="입금 후 작성 안내"',
     'aria-label="입금 후 작성 제출 전 확인"',
@@ -220,7 +220,7 @@ const requiredPageSnippets = {
     "<strong style=\"color:var(--ink);font-weight:400;\">48시간 이내</strong>에 예약 확인 연락을 드리겠습니다.",
     "오류가 발생했습니다. 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.",
     "예약 정보 접수가<br>완료되었습니다",
-    "촬영 정보와 상품별 필요 정보를 작성해 주세요",
+    "아기 정보, 촬영 일정, 상품별 필요 정보와 배송 주소를 작성해 주세요",
     "부모님 키·한복·신발 사이즈는 가족 실내 앨범형 선택 시에만 작성합니다.",
     "가족 실내 앨범형을 선택하시면 부모님 키·한복·신발 사이즈 입력란이 이어서 열립니다.",
     "엄마 키·한복·신발",
