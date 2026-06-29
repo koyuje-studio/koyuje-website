@@ -185,7 +185,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
     <!-- 통계 -->
     <div class="stats-row">
       <div class="stat-card"><div class="stat-label">전체 예약</div><div class="stat-num gold" id="statTotal">—</div></div>
-      <div class="stat-card"><div class="stat-label">예약완료</div><div class="stat-num green" id="statDone">—</div></div>
+      <div class="stat-card"><div class="stat-label">확인 완료</div><div class="stat-num green" id="statDone">—</div></div>
       <div class="stat-card"><div class="stat-label">확인중</div><div class="stat-num orange" id="statWaiting">—</div></div>
       <div class="stat-card"><div class="stat-label">취소</div><div class="stat-num red" id="statCancel">—</div></div>
     </div>
@@ -194,7 +194,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
     <div class="filter-row">
       <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">전체</button>
       <button class="filter-btn" data-filter="waiting" onclick="setFilter('waiting',this)">⏳ 확인중</button>
-      <button class="filter-btn" data-filter="done" onclick="setFilter('done',this)">✅ 예약완료</button>
+      <button class="filter-btn" data-filter="done" onclick="setFilter('done',this)">✅ 확인 완료</button>
       <button class="filter-btn" data-filter="cancel" onclick="setFilter('cancel',this)">❌ 취소</button>
       <input type="text" class="search-input" id="searchInput" placeholder="이름 · 연락처 검색" oninput="renderCards()">
     </div>
@@ -223,10 +223,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
     </div>
     <div class="write-field">
       <label class="write-label">제목 *</label>
-      <input type="text" class="write-input" id="wTitle" placeholder="예) 김시우님 예약완료 ✅">
+      <input type="text" class="write-input" id="wTitle" placeholder="예) 김시우님 예약 확인 완료 ✅">
       <div class="write-hint">
-        · 예약확정: 홍길동님 예약완료 ✅<br>
-        · 쌍둥이: 김시우, 김시아님 예약완료 ✅<br>
+        · 예약확정: 홍길동님 예약 확인 완료 ✅<br>
+        · 쌍둥이: 김시우, 김시아님 예약 확인 완료 ✅<br>
         · 공지: [공지] 휴무 안내
       </div>
     </div>
@@ -457,7 +457,7 @@ function renderCards(){
         <div class="res-product">${escapeHTML(item.product||'')}</div>
         <select class="status-select ${sc}" data-row-id="${escapeAttr(rowId)}" data-prev-status="${escapeAttr(item.status||'⏳ 확인중')}" onchange="updateStatus(this)" onclick="event.stopPropagation()">
           <option value="⏳ 확인중" ${!item.status||item.status.includes('확인중')?'selected':''}>⏳ 확인중</option>
-          <option value="✅ 예약완료" ${item.status&&item.status.includes('✅')?'selected':''}>✅ 예약완료</option>
+          <option value="✅ 예약 확인 완료" ${item.status&&item.status.includes('✅')?'selected':''}>✅ 예약 확인 완료</option>
           <option value="❌ 취소" ${item.status&&item.status.includes('❌')?'selected':''}>❌ 취소</option>
         </select>
       </div>

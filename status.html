@@ -283,13 +283,13 @@ function doSearch(){
 }
 function badge(s){
   if(!s||s.includes('확인중'))return'<span class="status-badge waiting">⏳ 접수 확인중</span>';
-  if(s.includes('완료')||s.includes('✅'))return'<span class="status-badge done">✅ 예약완료</span>';
+  if(s.includes('완료')||s.includes('✅'))return'<span class="status-badge done">✅ 예약 확인 완료</span>';
   if(s.includes('취소')||s.includes('❌'))return'<span class="status-badge cancel">❌ 취소</span>';
   return'<span class="status-badge waiting">'+escapeHTML(s)+'</span>';
 }
 function statusText(s){
   if(!s||s.includes('확인중'))return'접수 확인중';
-  if(s.includes('완료')||s.includes('✅'))return'예약완료';
+  if(s.includes('완료')||s.includes('✅'))return'예약 확인 완료';
   if(s.includes('취소')||s.includes('❌'))return'취소';
   return s;
 }
