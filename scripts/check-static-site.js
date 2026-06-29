@@ -233,6 +233,8 @@ const requiredPageSnippets = {
     "입금자명 &nbsp;<span>",
   ],
   "status.html": [
+    '<meta name="description" content="고유재 한옥스튜디오 예약 현황 확인. 입금 후 작성한 예약 정보의 접수 및 확인 상태를 휴대폰 번호로 확인하세요.">',
+    '<meta property="og:description" content="입금 후 작성한 예약 정보의 접수 및 확인 상태를 확인하고, 조회되지 않는 예약은 빠르게 문의할 수 있습니다.">',
     "입금 후 작성한 예약 정보는 48시간 이내에 상태가 업데이트됩니다.",
     "입금 후 작성한 예약 정보와 입금 확인이 진행 중인 상태입니다.",
     "접수 확인중",
@@ -258,6 +260,7 @@ const requiredPageSnippets = {
     "resetSearch()",
   ],
   "board.html": [
+    '<meta name="description" content="고유재 한옥스튜디오 공지사항과 예약 현황 안내. 운영 안내, 예약 가능일 문의, 접수 및 확인 내역을 확인하세요.">',
     "목록으로 돌아가기",
     "help-close",
     "공지 및 예약 현황",
