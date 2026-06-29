@@ -260,7 +260,7 @@ const requiredPageSnippets = {
     "escapeHTML(item.product||'-')",
     "escapeHTML(statusText(item.status))",
     "예약 정보가 접수되었습니다.",
-    "48시간 이내</strong>에 예약 확인 연락을 드립니다.",
+    "추가 확인이 필요하시면 카카오톡 채널로 문의해 주세요.",
     "class=\"support-actions\"",
     "예약 상태 문의하기",
     "번호 다시 입력",
