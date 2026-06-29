@@ -178,6 +178,7 @@ const requiredPageSnippets = {
     "function escapeHTML(value)",
     "const safeTitle = escapeHTML(displayTitle)",
     "const safeDate = escapeHTML(item.date",
+    "고유재 실크 한복 가족 촬영",
     'src="${escapeHTML(img.src)}"',
     '<video class="hero-video" autoplay muted loop playsinline',
     'poster="/assets/images/hero/_0049_poster.webp"',
