@@ -161,10 +161,11 @@ const requiredClassHrefRules = {
 
 const requiredPageSnippets = {
   "index.html": [
-    'class="float-reserve">입금 후 작성</a>',
+    'class="float-reserve" aria-label="입금 후 작성">입금 후 작성</a>',
     'class="notice-form">입금 후 작성</a>',
     'class="mobile-booking-links"',
     "min-width:126px;text-align:center;white-space:nowrap",
+    'class="float-kakao" aria-label="예약 가능일 문의">가능일 문의</a>',
     '<a href="/status">예약 현황 확인</a>',
     '<a href="/board">공지·예약 현황으로 이동</a>',
     '<a href="/board">공지·예약 현황</a>',
