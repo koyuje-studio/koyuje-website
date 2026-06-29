@@ -191,6 +191,7 @@ const requiredPageSnippets = {
   "guide.html": [
     '<a href="/reservation" class="btn-tel">입금 후 작성</a>',
     'class="fg-form">입금 후 작성</a>',
+    "예약 가능일 문의부터 날짜 확정, 예약금 입금, 입금 후 작성",
     "예약 가능일 문의 → 날짜 확정 → 예약금 입금 → 입금 후 작성",
     '<h2 class="step-title">입금 후 작성</h2>',
     "입금 후 작성하기",
