@@ -213,6 +213,7 @@ const requiredPageSnippets = {
     '<div class="step-t">입금 후 작성</div>',
     "입금 후 이 페이지를 작성하시면 예약 정보가 접수됩니다.",
     "입금 후 작성하는 예약 정보 접수 양식입니다",
+    "입금 후 48시간 이내 예약 확인 연락이 없으면",
     "예약 정보 제출하기",
     "작성 완료 후 <strong>48시간 이내</strong>에 예약 확인 연락을 드립니다.",
     "<strong style=\"color:var(--ink);font-weight:400;\">48시간 이내</strong>에 예약 확인 연락을 드리겠습니다.",
