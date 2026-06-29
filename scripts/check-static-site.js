@@ -234,7 +234,7 @@ const requiredPageSnippets = {
     "dadShoes: isFamilyProduct ? val('dadShoes') : ''",
     "아기 앨범형은 부모님 키·한복·신발 사이즈 입력 없이 제출할 수 있습니다.",
     "가족 실내 앨범형은 부모님 키·한복·신발 사이즈를 함께 확인해 주세요.",
-    "사진 활용 &nbsp;<span>",
+    "사진 활용 동의 &nbsp;<span>",
     "입금자명 &nbsp;<span>",
   ],
   "status.html": [

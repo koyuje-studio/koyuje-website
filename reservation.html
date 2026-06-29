@@ -606,7 +606,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <p class="success-desc">
     입력하신 정보를 확인 후<br>
     <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 예약 확인 연락을 드리겠습니다.<br>
-    문의사항은 카카오톡 채널로 남겨주세요.
+    접수 상태는 예약 현황에서 확인하실 수 있습니다.
   </p>
   <div class="success-box">
     <div class="success-box-title">예약 정보 요약</div>
@@ -959,7 +959,7 @@ function submitForm() {
         '선택 상품 &nbsp;<span>' + escapeHTML(payload.product) + '</span><br>' +
         '연락처 &nbsp;&nbsp;&nbsp;&nbsp;<span>' + escapeHTML(payload.phone) + '</span><br>' +
         '입금자명 &nbsp;<span>' + escapeHTML(payload.depositor) + '</span><br>' +
-        '사진 활용 &nbsp;<span>' + escapeHTML(payload.photoUsageConsent) + '</span>';
+        '사진 활용 동의 &nbsp;<span>' + escapeHTML(payload.photoUsageConsent) + '</span>';
       window.scrollTo({top:0, behavior:'smooth'});
     } else {
       alert('오류가 발생했습니다. 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.\n' + (data.message || ''));
