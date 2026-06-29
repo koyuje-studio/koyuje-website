@@ -165,7 +165,8 @@ const requiredPageSnippets = {
     'class="notice-form">입금 후 작성</a>',
     'class="mobile-booking-links"',
     '<a href="/status">현황 확인</a>',
-    '<a href="/board">게시판으로 이동</a>',
+    '<a href="/board">공지·예약 현황으로 이동</a>',
+    '<a href="/board">공지·예약 현황</a>',
     "공지사항 &amp; 예약 현황",
     "촬영 정보와 상품별 필요 정보",
     "function escapeHTML(value)",
@@ -229,6 +230,7 @@ const requiredPageSnippets = {
     "목록으로 돌아가기",
     "help-close",
     "공지 및 예약 현황",
+    "공지·예약 현황",
     "공지와 예약 현황을 확인하는 공간입니다",
   ],
 };

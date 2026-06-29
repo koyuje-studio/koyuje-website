@@ -392,7 +392,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
     <li><a href="#about">스튜디오 소개</a></li>
     <li><a href="#gallery">갤러리</a></li>
     <li><a href="#packages">상품구성</a></li>
-    <li><a href="/board">게시판</a></li>
+    <li><a href="/board">공지·예약 현황</a></li>
     <li><a href="#location">오시는 길</a></li>
   </ul>
   <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="nav-cta">예약 가능일 문의</a>
@@ -673,7 +673,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
     <span class="mobile-menu-logo">고유재</span><span class="mobile-menu-sub">한옥스튜디오</span>
     <button id="mobileClose" class="mobile-close" type="button">✕ 닫기</button>
   </div>
-  <a href="#about">스튜디오 소개</a><a href="#gallery">갤러리</a><a href="#packages">상품구성</a><a href="/board">게시판</a><a href="#location">오시는 길</a><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="mobile-reserve">예약 가능일 문의</a>
+  <a href="#about">스튜디오 소개</a><a href="#gallery">갤러리</a><a href="#packages">상품구성</a><a href="/board">공지·예약 현황</a><a href="#location">오시는 길</a><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="mobile-reserve">예약 가능일 문의</a>
   <div class="mobile-booking-links" aria-label="예약 단계 바로가기">
     <a href="/reservation">입금 후 작성</a>
     <a href="/status">현황 확인</a>
@@ -842,7 +842,7 @@ function loadHomeNotice() {
     })
     .catch(() => {
       const list = document.getElementById('homeNoticeList');
-      if (list) list.innerHTML = '<div class="empty-state">공지사항을 불러오지 못했습니다.<br><a href="/board">게시판으로 이동</a></div>';
+      if (list) list.innerHTML = '<div class="empty-state">공지사항을 불러오지 못했습니다.<br><a href="/board">공지·예약 현황으로 이동</a></div>';
     });
 }
 
