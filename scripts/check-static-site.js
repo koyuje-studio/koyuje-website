@@ -211,6 +211,10 @@ const requiredPageSnippets = {
     "입금자명 &nbsp;<span>",
   ],
   "status.html": [
+    "입금 후 작성한 예약 정보는 48시간 이내에 상태가 업데이트됩니다.",
+    "입금 후 작성한 예약 정보와 입금 확인이 진행 중인 상태입니다.",
+    "입금 후 작성한 예약 정보가 조회되지 않는다면",
+    "class=\"inquiry-form\">입금 후 작성</a>",
     "function getPhone8()",
     "if(p.length!==8)",
     "fetch(SCRIPT_URL+'?phone8='+p)",
