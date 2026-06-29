@@ -204,10 +204,13 @@ const requiredPageSnippets = {
   "reservation.html": [
     "<title>입금 후 작성 | 고유재 한옥스튜디오</title>",
     '<meta property="og:title" content="입금 후 작성 | 고유재 한옥스튜디오">',
+    '<meta property="og:description" content="예약 가능일 확인과 예약금 입금 후 작성하는 고유재 한옥스튜디오 예약 정보 접수 양식입니다.">',
     '<meta property="og:image:alt" content="고유재 한옥스튜디오 입금 후 작성 대표 이미지">',
     'aria-label="입금 후 작성 안내"',
     'aria-label="입금 후 작성 제출 전 확인"',
     '<div class="step-t">입금 후 작성</div>',
+    "입금 후 이 페이지를 작성하시면 예약 정보가 접수됩니다.",
+    "입금 후 작성하는 예약 정보 접수 양식입니다",
     "예약 정보 제출하기",
     "예약 정보 접수가<br>완료되었습니다",
     "촬영 정보와 상품별 필요 정보를 작성해 주세요",
