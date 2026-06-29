@@ -962,7 +962,7 @@ function submitForm() {
         '사진 활용 &nbsp;<span>' + escapeHTML(payload.photoUsageConsent) + '</span>';
       window.scrollTo({top:0, behavior:'smooth'});
     } else {
-      alert('오류가 발생했습니다. 다시 시도해 주세요.\n' + (data.message || ''));
+      alert('오류가 발생했습니다. 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.\n' + (data.message || ''));
       restoreSubmitButton();
     }
   })
