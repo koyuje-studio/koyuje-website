@@ -236,6 +236,7 @@ const requiredPageSnippets = {
     "공지 및 예약 현황",
     "공지·예약 현황",
     "공지와 예약 현황을 확인하는 공간입니다",
+    "class=\"guide-form\">입금 후 작성</a>",
     "예약 현황</button>",
     "catLabel=isNotice?'공지':'예약 현황'",
   ],
