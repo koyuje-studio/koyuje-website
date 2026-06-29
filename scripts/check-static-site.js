@@ -235,6 +235,7 @@ const requiredPageSnippets = {
   "status.html": [
     "입금 후 작성한 예약 정보는 48시간 이내에 상태가 업데이트됩니다.",
     "입금 후 작성한 예약 정보와 입금 확인이 진행 중인 상태입니다.",
+    "접수 확인중",
     "입금 후 작성한 예약 정보가 조회되지 않는다면",
     "입금 후 작성하셨다면 48시간 후 다시 확인해 주세요.",
     "class=\"inquiry-form\">입금 후 작성</a>",
@@ -246,8 +247,10 @@ const requiredPageSnippets = {
     "예약 조회 응답을 확인하지 못했습니다",
     "조회 중 오류가 발생했습니다",
     "function escapeHTML(value)",
+    "function statusText(s)",
     "escapeHTML(item.babyName||'-')",
     "escapeHTML(item.product||'-')",
+    "escapeHTML(statusText(item.status))",
     "예약 정보가 접수되었습니다.",
     "class=\"support-actions\"",
     "예약 상태 문의하기",
