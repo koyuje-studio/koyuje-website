@@ -834,7 +834,7 @@ function loadHomeNotice() {
         const safeDate = escapeHTML(item.date ? item.date.replace(/-/g, '.') : '');
         return `
           <a href="/board" class="notice-item">
-            <div class="notice-num">${isNotice ? '공지' : '예약확정'}</div>
+            <div class="notice-num">${isNotice ? '공지' : '예약 현황'}</div>
             <div class="notice-title">${safeTitle}${isNew ? '<span class="notice-badge">NEW</span>' : ''}</div>
             <div class="notice-date">${safeDate}</div>
           </a>`;

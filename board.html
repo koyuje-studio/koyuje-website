@@ -227,7 +227,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <p class="board-guide-desc">촬영 운영, 상품 안내, 일정 관련 소식을 확인합니다.</p>
       </div>
       <div class="board-guide-item">
-        <div class="board-guide-label">예약확정</div>
+        <div class="board-guide-label">예약 현황</div>
         <p class="board-guide-desc">예약 접수와 확정 상태를 게시글로 확인합니다.</p>
       </div>
       <div class="board-guide-item">
@@ -239,7 +239,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
   <div class="board-filter">
     <button type="button" class="filter-btn active" data-cat="all" aria-pressed="true" onclick="setFilter('all',this)">전체</button>
-    <button type="button" class="filter-btn" data-cat="예약확정" aria-pressed="false" onclick="setFilter('예약확정',this)">예약확정</button>
+    <button type="button" class="filter-btn" data-cat="예약확정" aria-pressed="false" onclick="setFilter('예약확정',this)">예약 현황</button>
     <button type="button" class="filter-btn" data-cat="공지" aria-pressed="false" onclick="setFilter('공지',this)">공지</button>
   </div>
 
@@ -359,7 +359,7 @@ function renderPage(page){
     const globalNum=filteredItems.length-(start+idx);
     const isNotice=item.category==='공지';
     const catClass=isNotice?'notice':'reservation';
-    const catLabel=isNotice?'공지':'예약확정';
+    const catLabel=isNotice?'공지':'예약 현황';
     const isPrivate=item.isPublic==='비공개'||item.hasPassword;
 
     // 이름 추출 (제목에서 "님" 앞까지 전체)
@@ -537,7 +537,7 @@ function fetchPost(num,pw){
         ? '예약 신청이 접수되었습니다. 입금 확인 후 48시간 이내에 확정 연락을 드리겠습니다.'
         : '내용이 없습니다.';
       document.getElementById('modalContent').innerHTML=`
-        <div class="modal-cat">${escapeHTML(d.category||'예약확정')}</div>
+        <div class="modal-cat">${escapeHTML(d.category==='공지'?'공지':'예약 현황')}</div>
         <div class="modal-title">${escapeHTML(d.title||'')}</div>
         <div class="modal-meta">${escapeHTML(d.author||'고유재')} · ${escapeHTML(d.date||'')}</div>
         <div class="modal-body">${formatBoardContent(d.content||fallbackContent)}</div>`;
