@@ -227,6 +227,8 @@ const requiredPageSnippets = {
   "board.html": [
     "목록으로 돌아가기",
     "help-close",
+    "공지 및 예약 현황",
+    "공지와 예약 현황을 확인하는 공간입니다",
   ],
 };
 
