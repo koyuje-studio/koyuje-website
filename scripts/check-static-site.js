@@ -241,6 +241,7 @@ const requiredPageSnippets = {
     "function escapeHTML(value)",
     "escapeHTML(item.babyName||'-')",
     "escapeHTML(item.product||'-')",
+    "예약 정보가 접수되었습니다.",
     "class=\"support-actions\"",
     "예약 상태 문의하기",
     "번호 다시 입력",
@@ -256,6 +257,7 @@ const requiredPageSnippets = {
     "class=\"guide-form\">입금 후 작성</a>",
     "예약 현황</button>",
     "catLabel=isNotice?'공지':'예약 현황'",
+    "예약 정보가 접수되었습니다. 입금 확인 후 48시간 이내에 확정 연락을 드리겠습니다.",
   ],
 };
 
