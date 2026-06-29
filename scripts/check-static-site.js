@@ -240,8 +240,8 @@ const requiredPageSnippets = {
   "status.html": [
     '<meta name="description" content="고유재 한옥스튜디오 예약 현황 확인. 입금 후 작성한 예약 정보의 접수 및 확인 상태를 휴대폰 번호로 확인하세요.">',
     '<meta property="og:description" content="입금 후 작성한 예약 정보의 접수 및 확인 상태를 확인하고, 조회되지 않는 예약은 빠르게 문의할 수 있습니다.">',
-    "입금 후 작성한 예약 정보는 48시간 이내에 상태가 업데이트됩니다.",
-    "입금 후 작성한 예약 정보와 입금 확인이 진행 중인 상태입니다.",
+    "입금 후 작성한 예약 정보는 48시간 이내에 확인 후 연락드립니다.",
+    "입금 후 작성한 예약 정보와 입금 확인이 진행 중인 상태입니다. 보통 48시간 이내 예약 확인 연락을 드립니다.",
     "접수 확인중",
     "조회되지 않으면 카카오톡으로 문의해 주세요",
     "입금 후 작성한 예약 정보가 조회되지 않는다면",
@@ -260,6 +260,7 @@ const requiredPageSnippets = {
     "escapeHTML(item.product||'-')",
     "escapeHTML(statusText(item.status))",
     "예약 정보가 접수되었습니다.",
+    "48시간 이내</strong>에 예약 확인 연락을 드립니다.",
     "class=\"support-actions\"",
     "예약 상태 문의하기",
     "번호 다시 입력",

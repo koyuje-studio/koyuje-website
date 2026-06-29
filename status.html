@@ -126,7 +126,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <div class="hero">
   <div class="hero-label">예약 현황 확인</div>
   <h1 class="hero-title">예약이 잘 접수되었는지<br>확인해보세요</h1>
-  <p class="hero-desc">입금 후 작성한 예약 정보는 48시간 이내에 상태가 업데이트됩니다.<br>아직 날짜 확인 전이라면 먼저 예약 가능일을 문의해 주세요.</p>
+  <p class="hero-desc">입금 후 작성한 예약 정보는 48시간 이내에 확인 후 연락드립니다.<br>아직 날짜 확인 전이라면 먼저 예약 가능일을 문의해 주세요.</p>
 </div>
 
 <div class="search-wrap" id="searchSection">
@@ -179,7 +179,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="status-guide-list">
       <div class="status-guide-item">
         <div class="status-guide-label">접수 확인중</div>
-        <p class="status-guide-copy">입금 후 작성한 예약 정보와 입금 확인이 진행 중인 상태입니다. 보통 48시간 이내 업데이트됩니다.</p>
+        <p class="status-guide-copy">입금 후 작성한 예약 정보와 입금 확인이 진행 중인 상태입니다. 보통 48시간 이내 예약 확인 연락을 드립니다.</p>
       </div>
       <div class="status-guide-item">
         <div class="status-guide-label">완료</div>
@@ -339,7 +339,7 @@ function showResults(data,p){
   let html=`<div class="result-header"><div class="result-header-label">${pd} 조회 결과</div><div class="result-header-title">총 ${data.data.length}건의 예약이 확인됩니다</div></div>`;
   data.data.forEach(item=>{
     const w=!item.status||item.status.includes('확인중');
-    html+=`<div class="result-card"><div class="result-card-top"><div class="result-baby">${escapeHTML(item.babyName||'-')}<em>아기</em></div>${badge(item.status)}</div><div class="result-card-body"><div class="result-row"><div class="result-key">촬영 날짜</div><div class="result-val">${escapeHTML(fDate(item.shootDate))}</div></div><div class="result-row"><div class="result-key">촬영 시간</div><div class="result-val">${escapeHTML(fTime(item.shootTime))}</div></div><div class="result-row"><div class="result-key">선택 상품</div><div class="result-val">${escapeHTML(item.product||'-')}</div></div><div class="result-row"><div class="result-key">예약 상태</div><div class="result-val">${escapeHTML(statusText(item.status))}</div></div>${w?'<div class="result-notice">📋 예약 정보가 접수되었습니다.<br>입금 확인 후 <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 상태가 업데이트됩니다.<br>문의: 카카오톡 채널 @고유재</div>':''}</div></div>`;
+    html+=`<div class="result-card"><div class="result-card-top"><div class="result-baby">${escapeHTML(item.babyName||'-')}<em>아기</em></div>${badge(item.status)}</div><div class="result-card-body"><div class="result-row"><div class="result-key">촬영 날짜</div><div class="result-val">${escapeHTML(fDate(item.shootDate))}</div></div><div class="result-row"><div class="result-key">촬영 시간</div><div class="result-val">${escapeHTML(fTime(item.shootTime))}</div></div><div class="result-row"><div class="result-key">선택 상품</div><div class="result-val">${escapeHTML(item.product||'-')}</div></div><div class="result-row"><div class="result-key">예약 상태</div><div class="result-val">${escapeHTML(statusText(item.status))}</div></div>${w?'<div class="result-notice">📋 예약 정보가 접수되었습니다.<br>입금 확인 후 <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 예약 확인 연락을 드립니다.<br>문의: 카카오톡 채널 @고유재</div>':''}</div></div>`;
   });
   c.innerHTML=html;
   window.scrollTo({top:0,behavior:'smooth'});
