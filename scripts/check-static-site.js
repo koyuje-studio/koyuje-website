@@ -191,6 +191,9 @@ const requiredPageSnippets = {
   "guide.html": [
     '<a href="/reservation" class="btn-tel">입금 후 작성</a>',
     'class="fg-form">입금 후 작성</a>',
+    "예약 가능일 문의 → 날짜 확정 → 예약금 입금 → 입금 후 작성",
+    '<h2 class="step-title">입금 후 작성</h2>',
+    "입금 후 작성하기",
     "아기 생년월일, 촬영 상품, 배송 주소",
     "가족 실내 앨범형</strong> · 선택 시 부모님 키·한복·신발 사이즈",
   ],
