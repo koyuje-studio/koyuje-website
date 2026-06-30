@@ -436,7 +436,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </div>
       <div class="field">
         <label class="f-label">촬영 시간 <span class="req">*</span></label>
-        <input type="time" class="f-input" id="shootTime" required>
+        <select class="f-input" id="shootTime" required>
+          <option value="">촬영 시간을 선택해 주세요</option>
+        </select>
       </div>
     </div>
   </div>
@@ -667,6 +669,7 @@ function searchAddress() {
 
 // 상세주소 입력시 hidden address 업데이트
 document.addEventListener('DOMContentLoaded', function() {
+  populateShootTimeOptions();
   document.getElementById('addressDetail').addEventListener('input', updateAddress);
   document.querySelectorAll('input[name="product"]').forEach(input => {
     input.addEventListener('change', updateFamilySizeSections);
@@ -679,6 +682,25 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   updateFamilySizeSections();
 });
+
+function populateShootTimeOptions() {
+  const select = document.getElementById('shootTime');
+  if (!select) return;
+
+  const startMinutes = 9 * 60;
+  const endMinutes = 16 * 60;
+  const interval = 10;
+
+  for (let minutes = startMinutes; minutes <= endMinutes; minutes += interval) {
+    const hour = String(Math.floor(minutes / 60)).padStart(2, '0');
+    const minute = String(minutes % 60).padStart(2, '0');
+    const value = `${hour}:${minute}`;
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+  }
+}
 
 function updateAddress() {
   const main = document.getElementById('addressMain').value;
