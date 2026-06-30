@@ -688,8 +688,8 @@ function populateShootTimeOptions() {
   if (!select) return;
 
   const startMinutes = 9 * 60;
-  const endMinutes = 16 * 60;
-  const interval = 10;
+  const endMinutes = 15 * 60;
+  const interval = 30;
 
   for (let minutes = startMinutes; minutes <= endMinutes; minutes += interval) {
     const hour = String(Math.floor(minutes / 60)).padStart(2, '0');
