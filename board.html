@@ -64,12 +64,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .board-guide-item{background:var(--paper);padding:14px 16px;min-height:92px;}
 .board-guide-label{font-size:11px;letter-spacing:0.16em;color:var(--gold);margin-bottom:8px;}
 .board-guide-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;}
-.signal-panel{border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.045);padding:22px 24px;margin:0 0 28px;display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:end;}
+.signal-panel{border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.045);padding:24px 24px;margin:0 0 28px;}
 .signal-k{font-size:10px;letter-spacing:0.24em;color:var(--gold);margin-bottom:8px;}
 .signal-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;letter-spacing:0.04em;line-height:1.55;}
-.signal-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-top:8px;}
-.signal-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(28,24,20,0.08);}
-.signal-stat{background:var(--paper);padding:18px 16px;min-height:104px;}
+.signal-copy{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:0.04em;margin-top:12px;}
+.signal-stats{display:none;grid-template-columns:1fr;gap:1px;background:rgba(28,24,20,0.08);margin-top:18px;max-width:230px;}
+.signal-stats.is-ready{display:grid;}
+.signal-stat{background:var(--paper);padding:16px 16px;min-height:92px;}
 .signal-label{font-size:10px;letter-spacing:0.16em;color:var(--muted);margin-bottom:10px;}
 .signal-num{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--gold);line-height:1;}
 .signal-note{font-size:11px;color:var(--muted);letter-spacing:0.04em;margin-top:8px;}
@@ -207,8 +208,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .board-guide-actions{display:grid;grid-template-columns:1fr;}
   .board-guide-list{grid-template-columns:1fr;}
   .board-guide-item{min-height:auto;padding:14px;}
-  .signal-panel{grid-template-columns:1fr;padding:20px 18px;}
-  .signal-stats{grid-template-columns:1fr 1fr;}
+  .signal-panel{padding:20px 18px;}
+  .signal-stats{max-width:none;}
   .lookup-form{grid-template-columns:1fr;}
   .lookup-btn{width:100%;}
   .board-item{grid-template-columns:36px 1fr;}
@@ -270,19 +271,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <section class="signal-panel" aria-label="월별 예약 접수 현황">
     <div>
       <div class="signal-k">MONTHLY RESERVATION</div>
-      <h2 class="signal-title">이번 달의 촬영 일정이<br>천천히 채워지고 있습니다</h2>
-      <p class="signal-copy">개별 예약자 목록은 공개하지 않고, 접수 흐름만 간단히 안내합니다.</p>
+      <h2 class="signal-title">촬영 일정이 순차적으로<br>채워지고 있습니다</h2>
+      <p class="signal-copy">고유재는 하루 두 팀만 여유 있게 촬영하기 때문에<br>월별 촬영 가능 일정이 많지 않습니다.<br><br>예약 가능 일정은 문의와 접수 흐름에 따라 순차적으로 안내해 드립니다.</p>
     </div>
-    <div class="signal-stats">
+    <div class="signal-stats" id="signalStats" aria-live="polite">
       <div class="signal-stat">
         <div class="signal-label">이번 달 접수</div>
         <div class="signal-num" id="monthCount">—</div>
         <div class="signal-note" id="monthCode">집계 확인 중</div>
-      </div>
-      <div class="signal-stat">
-        <div class="signal-label">확인 완료</div>
-        <div class="signal-num" id="doneCount">—</div>
-        <div class="signal-note">예약 상태 기준</div>
       </div>
     </div>
   </section>
@@ -334,13 +330,11 @@ function loadReservationSignal(){
     .then(data=>{
       if(data.result!=='success')throw new Error('stats failed');
       document.getElementById('monthCount').textContent=(data.currentMonthCount||0)+'건';
-      document.getElementById('doneCount').textContent=(data.currentMonthDone||0)+'건';
       document.getElementById('monthCode').textContent=(data.currentMonthCode||'이번 달')+' 기준';
+      document.getElementById('signalStats').classList.add('is-ready');
     })
     .catch(()=>{
-      document.getElementById('monthCount').textContent='확인중';
-      document.getElementById('doneCount').textContent='확인중';
-      document.getElementById('monthCode').textContent='잠시 후 다시 확인';
+      document.getElementById('signalStats').classList.remove('is-ready');
     });
 }
 
