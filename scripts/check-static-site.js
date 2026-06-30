@@ -279,6 +279,7 @@ const requiredPageSnippets = {
     "class=\"support-actions\"",
     "예약 상태 문의하기",
     "번호 다시 입력",
+    "작성 직후에는 아직 예약 현황에 반영되지 않았을 수 있습니다.",
     "resetSearch()",
   ],
   "board.html": [

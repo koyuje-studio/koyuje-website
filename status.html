@@ -333,7 +333,7 @@ function showResults(data,p){
   const c=document.getElementById('resultsContent');
   const pd='010-'+p.slice(0,4)+'-'+p.slice(4);
   if(!data.data||data.data.length===0){
-    c.innerHTML=`<div class="no-result"><div class="no-result-icon">🔍</div><div class="no-result-title">조회된 예약이 없습니다</div><p class="no-result-desc"><strong style="color:var(--ink);font-weight:400;">${pd}</strong> 로 등록된 예약 정보를 찾을 수 없어요.<br><br>휴대폰 번호를 다시 확인해 주시고, 입금 후 작성하셨다면 카카오톡으로 아기 이름과 촬영 예정일을 함께 알려주세요.</p><div class="support-actions"><button type="button" class="btn-reset" onclick="resetSearch()">번호 다시 입력</button><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="support-kakao">예약 상태 문의하기</a></div></div>`;
+    c.innerHTML=`<div class="no-result"><div class="no-result-icon">🔍</div><div class="no-result-title">조회된 예약이 없습니다</div><p class="no-result-desc"><strong style="color:var(--ink);font-weight:400;">${pd}</strong> 로 등록된 예약 정보를 찾을 수 없어요.<br><br>작성 직후에는 아직 예약 현황에 반영되지 않았을 수 있습니다. 휴대폰 번호를 다시 확인해 주시고, 입금 후 작성하셨다면 카카오톡으로 아기 이름과 촬영 예정일을 함께 알려주세요.</p><div class="support-actions"><button type="button" class="btn-reset" onclick="resetSearch()">번호 다시 입력</button><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="support-kakao">예약 상태 문의하기</a></div></div>`;
     return;
   }
   let html=`<div class="result-header"><div class="result-header-label">${pd} 조회 결과</div><div class="result-header-title">총 ${data.data.length}건의 예약이 확인됩니다</div></div>`;
