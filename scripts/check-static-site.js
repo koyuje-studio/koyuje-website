@@ -165,7 +165,7 @@ const requiredPageSnippets = {
     'class="notice-form">입금 후 작성</a>',
     'class="mobile-booking-links"',
     "min-width:126px;min-height:40px;text-align:center;white-space:nowrap",
-    'class="float-kakao" aria-label="예약 가능일 문의">가능일 문의</a>',
+    'class="float-kakao" aria-label="카카오톡 예약 가능일 문의">카톡 가능일 문의</a>',
     '<a href="/status">예약 현황 확인</a>',
     '<a href="/board">공지·예약 현황으로 이동</a>',
     '<a href="/board">공지·예약 현황</a>',
