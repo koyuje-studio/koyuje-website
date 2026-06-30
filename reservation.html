@@ -464,19 +464,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <div class="sec">
     <div class="sec-head"><div class="sec-num">08</div><div class="sec-title">추가 구성 (선택)</div></div>
     <p class="hint" style="margin-bottom:16px;">아기 컨디션 및 날씨에 따라 야외 촬영이 불가할 수 있습니다.</p>
-    <label class="add-card">
+    <label class="add-card" data-extra-for="family">
       <input type="checkbox" name="extra" value="야외가족한옥스냅(+30만원)">
       <div><div class="add-name">야외 가족 한옥스냅</div><div class="add-price">+ 300,000원</div></div>
     </label>
-    <label class="add-card">
+    <label class="add-card" data-extra-for="family">
       <input type="checkbox" name="extra" value="야외가족문화재스냅(+30만원)">
       <div><div class="add-name">야외 가족 문화재스냅</div><div class="add-price">+ 300,000원</div></div>
     </label>
-    <label class="add-card">
+    <label class="add-card" data-extra-for="baby">
       <input type="checkbox" name="extra" value="야외아기컨셉(+20만원)">
       <div><div class="add-name">야외 아기 컨셉</div><div class="add-price">+ 200,000원</div></div>
     </label>
-    <label class="add-card">
+    <label class="add-card" data-extra-for="all">
       <input type="checkbox" name="extra" value="추가구성없음">
       <div><div class="add-name">추가 구성 없이 진행</div><div class="add-price" style="color:var(--muted)">실내 촬영만 진행</div></div>
     </label>
@@ -689,7 +689,7 @@ document.addEventListener('DOMContentLoaded', function() {
   populateShootTimeOptions();
   document.getElementById('addressDetail').addEventListener('input', updateAddress);
   document.querySelectorAll('input[name="product"]').forEach(input => {
-    input.addEventListener('change', updateFamilySizeSections);
+    input.addEventListener('change', updateProductDependentSections);
   });
   document.querySelectorAll('input[name="extra"]').forEach(input => {
     input.addEventListener('change', () => normalizeExtraSelection(input));
@@ -697,7 +697,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('input[name="sibling"]').forEach(input => {
     input.addEventListener('change', () => normalizeSiblingSelection(input));
   });
-  updateFamilySizeSections();
+  updateProductDependentSections();
 });
 
 function populateShootTimeOptions() {
@@ -732,9 +732,18 @@ function getRadio(name) {
 function getCheckboxes(name) {
   return getCheckboxArray(name).join(', ');
 }
+function getVisibleCheckboxes(name) {
+  return getVisibleCheckboxArray(name).join(', ');
+}
 function getCheckboxArray(name) {
   const els = document.querySelectorAll('input[name="'+name+'"]:checked');
   return Array.from(els).map(e=>e.value);
+}
+function getVisibleCheckboxArray(name) {
+  const els = document.querySelectorAll('input[name="'+name+'"]:checked');
+  return Array.from(els)
+    .filter(input => !input.closest('.is-hidden'))
+    .map(e=>e.value);
 }
 function val(id) {
   const el = document.getElementById(id);
@@ -788,7 +797,7 @@ function buildSuccessInfo(payload) {
       successRow('촬영 일정', [payload.shootDate, payload.shootTime].filter(Boolean).join(' ')),
       successRow('요일 구분', payload.weekday),
       successRow('선택 상품', payload.product),
-      successRow('추가 구성', payload.extra)
+      successRow('추가 구성', payload.extra || '추가 구성 없음')
     ]),
     successSection('가족 정보', [
       successRow('형제/자매', payload.sibling),
@@ -849,9 +858,26 @@ function updateFamilySizeSections() {
   }
 }
 
+function updateProductDependentSections() {
+  updateFamilySizeSections();
+  updateExtraOptions();
+}
+
+function updateExtraOptions() {
+  const isFamilyProduct = isFamilyAlbumSelected();
+  document.querySelectorAll('[data-extra-for]').forEach(card => {
+    const target = card.getAttribute('data-extra-for');
+    const shouldShow = target === 'all' || (isFamilyProduct ? target === 'family' : target === 'baby');
+    card.classList.toggle('is-hidden', !shouldShow);
+    card.setAttribute('aria-hidden', String(!shouldShow));
+    const input = card.querySelector('input[name="extra"]');
+    if (input && !shouldShow) input.checked = false;
+  });
+}
+
 function normalizeExtraSelection(changedInput) {
   const noneValue = '추가구성없음';
-  const extras = Array.from(document.querySelectorAll('input[name="extra"]'));
+  const extras = Array.from(document.querySelectorAll('[data-extra-for]:not(.is-hidden) input[name="extra"]'));
   if (changedInput.value === noneValue && changedInput.checked) {
     extras.filter(input => input !== changedInput).forEach(input => {
       input.checked = false;
@@ -1023,7 +1049,7 @@ function submitForm() {
     shootDate: val('shootDate'),
     shootTime: val('shootTime'),
     product: getRadio('product'),
-    extra: getCheckboxes('extra'),
+    extra: getVisibleCheckboxes('extra'),
     siblingShoes: siblingShoes,
     depositor: val('depositor'),
     address: val('address'),
