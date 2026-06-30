@@ -296,6 +296,11 @@ const requiredPageSnippets = {
     "예약 접수와 확인 상태를 게시글로 확인합니다.",
     "예약 정보가 접수되었습니다. 입금 확인 후 48시간 이내에 예약 확인 연락을 드리겠습니다.",
   ],
+  "admin.html": [
+    "item.siblingInfo",
+    "사진 활용",
+    "유입 경로",
+  ],
 };
 
 const expectedSitemapUrls = Object.values(publicPages);

@@ -442,7 +442,7 @@ function renderCards(){
     const shootTime=escapeHTML(fTime(item.shootTime));
     const rowId=String(item.rowId ?? '');
     const extra=escapeHTML(item.extra||'없음');
-    const sibling=escapeHTML(item.sibling||'형제 정보 없음');
+    const sibling=escapeHTML([item.sibling,item.siblingInfo].filter(Boolean).join(' / ')||'형제 정보 없음');
     const parentSizeHTML=(item.momHeight||item.momSize||item.momShoes||item.dadHeight||item.dadSize||item.dadShoes)?`
           <div class="detail-item"><div class="detail-key">엄마 사이즈</div><div class="detail-val">${escapeHTML([item.momHeight&&item.momHeight+'cm',item.momSize&&'한복 '+item.momSize,item.momShoes&&'신발 '+item.momShoes].filter(Boolean).join(' · ')||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">아빠 사이즈</div><div class="detail-val">${escapeHTML([item.dadHeight&&item.dadHeight+'cm',item.dadSize&&'한복 '+item.dadSize,item.dadShoes&&'신발 '+item.dadShoes].filter(Boolean).join(' · ')||'-')}</div></div>`:'';
