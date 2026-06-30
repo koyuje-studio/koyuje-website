@@ -69,6 +69,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .stat-num.green{color:#6aaa6a;}
 .stat-num.orange{color:#e0a050;}
 .stat-num.red{color:#e07070;}
+.monthly-panel{background:rgba(247,242,234,0.035);border:0.5px solid rgba(247,242,234,0.08);padding:18px 20px;margin:-18px 0 28px;}
+.monthly-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:12px;}
+.monthly-title{font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);}
+.monthly-current{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);line-height:1;}
+.monthly-list{display:flex;flex-wrap:wrap;gap:8px;}
+.monthly-chip{border:0.5px solid rgba(160,120,64,0.28);color:rgba(247,242,234,0.72);padding:6px 10px;font-size:11px;letter-spacing:0.08em;}
 
 /* 필터 */
 .filter-row{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center;}
@@ -109,6 +115,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .detail-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px;margin-top:2px;}
 .btn-detail-edit{background:transparent;border:0.5px solid rgba(160,120,64,0.5);color:var(--gold);padding:10px 16px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.12em;cursor:pointer;transition:all .3s;}
 .btn-detail-edit:hover{background:rgba(160,120,64,0.12);}
+.btn-detail-delete{background:transparent;border:0.5px solid rgba(224,112,112,0.45);color:#e07070;padding:10px 16px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.12em;cursor:pointer;transition:all .3s;}
+.btn-detail-delete:hover{background:rgba(224,112,112,0.1);}
 
 /* 저장 피드백 */
 .save-toast{position:fixed;bottom:32px;right:32px;background:var(--green);color:var(--paper);padding:12px 24px;font-size:12px;letter-spacing:0.1em;display:none;z-index:200;}
@@ -134,6 +142,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   .stats-row{grid-template-columns:repeat(2,1fr);}
   .stat-card{padding:16px;}
   .stat-num{font-size:30px;}
+  .monthly-head{align-items:flex-start;flex-direction:column;}
   .filter-row{gap:6px;}
   .filter-btn{flex:1 1 calc(50% - 6px);padding:9px 10px;}
   .search-input{margin-left:0;width:100%;padding:10px 14px;}
@@ -194,6 +203,17 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
       <div class="stat-card"><div class="stat-label">확인 완료</div><div class="stat-num green" id="statDone">—</div></div>
       <div class="stat-card"><div class="stat-label">확인중</div><div class="stat-num orange" id="statWaiting">—</div></div>
       <div class="stat-card"><div class="stat-label">취소</div><div class="stat-num red" id="statCancel">—</div></div>
+    </div>
+
+    <div class="monthly-panel">
+      <div class="monthly-head">
+        <div>
+          <div class="monthly-title">월별 접수 집계</div>
+          <div class="write-hint">삭제 처리된 예약은 집계에서 제외됩니다.</div>
+        </div>
+        <div class="monthly-current" id="monthlyCurrent">—</div>
+      </div>
+      <div class="monthly-list" id="monthlyList"></div>
     </div>
 
     <!-- 필터 -->
@@ -355,14 +375,62 @@ function loadData(){
 }
 
 function updateStats(){
-  const total=allData.length;
-  const done=allData.filter(d=>d.status&&(d.status.includes('완료')||d.status.includes('✅'))).length;
-  const waiting=allData.filter(d=>!d.status||d.status.includes('확인중')).length;
-  const cancel=allData.filter(d=>d.status&&(d.status.includes('취소')||d.status.includes('❌'))).length;
+  const activeData=getActiveReservations();
+  const total=activeData.length;
+  const done=activeData.filter(d=>d.status&&(d.status.includes('완료')||d.status.includes('✅'))).length;
+  const waiting=activeData.filter(d=>!d.status||d.status.includes('확인중')).length;
+  const cancel=activeData.filter(d=>d.status&&(d.status.includes('취소')||d.status.includes('❌'))).length;
   document.getElementById('statTotal').textContent=total;
   document.getElementById('statDone').textContent=done;
   document.getElementById('statWaiting').textContent=waiting;
   document.getElementById('statCancel').textContent=cancel;
+  updateMonthlyStats(activeData);
+}
+
+function getActiveReservations(){
+  return allData.filter(d=>!String(d.status||'').includes('삭제'));
+}
+
+function getSubmitMonthInfo(item){
+  const raw=String(item.rowId||'').trim();
+  let year=0,month=0;
+  const iso=raw.match(/^(\d{4})-(\d{1,2})-/);
+  const kr=raw.match(/^(\d{4})[.\s년-]+(\d{1,2})/);
+  if(iso){
+    year=parseInt(iso[1],10);
+    month=parseInt(iso[2],10);
+  }else if(kr){
+    year=parseInt(kr[1],10);
+    month=parseInt(kr[2],10);
+  }else{
+    const parsed=new Date(raw);
+    if(!isNaN(parsed.getTime())){
+      year=parsed.getFullYear();
+      month=parsed.getMonth()+1;
+    }
+  }
+  if(!year||!month)return null;
+  const code='V'+String(year).slice(-1)+String(month).padStart(2,'0');
+  return {year,month,code,key:year+'-'+String(month).padStart(2,'0')};
+}
+
+function updateMonthlyStats(source){
+  const map=new Map();
+  source.forEach(item=>{
+    const info=getSubmitMonthInfo(item);
+    if(!info)return;
+    const prev=map.get(info.key)||{...info,count:0};
+    prev.count+=1;
+    map.set(info.key,prev);
+  });
+  const entries=Array.from(map.values()).sort((a,b)=>b.key.localeCompare(a.key));
+  const nowInfo={year:now.getFullYear(),month:now.getMonth()+1};
+  const currentCode='V'+String(nowInfo.year).slice(-1)+String(nowInfo.month).padStart(2,'0');
+  const current=entries.find(item=>item.year===nowInfo.year&&item.month===nowInfo.month);
+  document.getElementById('monthlyCurrent').textContent=currentCode+' · '+(current?current.count:0)+'건';
+  document.getElementById('monthlyList').innerHTML=entries.length
+    ? entries.map(item=>'<span class="monthly-chip">'+escapeHTML(item.code)+' · '+item.count+'건</span>').join('')
+    : '<span class="monthly-chip">집계 없음</span>';
 }
 
 function setFilter(f,el){
@@ -465,7 +533,7 @@ function detailValueHTML(state){
 
 function renderCards(){
   const keyword=(document.getElementById('searchInput').value||'').toLowerCase();
-  let filtered=allData.filter(d=>{
+  let filtered=getActiveReservations().filter(d=>{
     const sc=getStatusClass(d.status||'');
     if(currentFilter!=='all'&&sc!==currentFilter)return false;
     if(keyword&&!((d.babyName||'').includes(keyword)&&true)&&!(d.babyName||'').toLowerCase().includes(keyword)&&!(d.parentName||'').toLowerCase().includes(keyword)&&!(d.phone||'').includes(keyword))return false;
@@ -537,7 +605,10 @@ function renderCards(){
           <div class="detail-item"><div class="detail-key">제출 일시</div><div class="detail-val" style="font-size:12px;">${escapeHTML(rowId||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">주소</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.address||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">요청 사항</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.memo||'-')}</div></div>
-          <div class="detail-actions"><button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button></div>
+          <div class="detail-actions">
+            <button type="button" class="btn-detail-delete" onclick="event.stopPropagation();deleteReservation('${escapeAttr(rowId)}')">삭제 처리</button>
+            <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button>
+          </div>
         </div>
       </div>
     </div>`;
@@ -589,6 +660,33 @@ function updateStatus(select){
 function restoreStatusSelect(select,status){
   select.value=status;
   select.className='status-select '+getStatusClass(status);
+}
+
+function deleteReservation(rowId){
+  const item=allData.find(d=>String(d.rowId)===String(rowId));
+  const label=item?[item.babyName,item.phone].filter(Boolean).join(' · '):rowId;
+  if(!confirm('이 예약을 삭제 처리할까요?\n\n'+label+'\n\n삭제 처리된 예약은 관리자 목록과 월별 집계에서 제외됩니다.')){
+    return;
+  }
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({action:'deleteReservation',adminPw:adminPw,rowId:rowId})
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.result==='success'){
+      const target=allData.find(d=>String(d.rowId)===String(rowId));
+      if(target)target.status='🗑️ 삭제';
+      updateStats();
+      renderCards();
+      showToast('✓ 삭제 처리되었습니다');
+    }else{
+      alert('삭제 실패: '+(data.message||'다시 시도해 주세요.'));
+    }
+  })
+  .catch(()=>{
+    alert('삭제 중 오류가 발생했습니다. 다시 시도해 주세요.');
+  });
 }
 
 function showToast(message){
