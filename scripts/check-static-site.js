@@ -308,6 +308,10 @@ const requiredPageSnippets = {
   ],
   "admin.html": [
     "item.siblingInfo",
+    "isFamilyProduct",
+    "엄마 키·한복·신발",
+    "아빠 키·한복·신발",
+    "저장된 값 없음",
     "사진 활용",
     "유입 경로",
     "min-height:44px",
