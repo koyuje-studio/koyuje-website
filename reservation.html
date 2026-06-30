@@ -686,8 +686,11 @@ function getRadio(name) {
   return el ? el.value : '';
 }
 function getCheckboxes(name) {
+  return getCheckboxArray(name).join(', ');
+}
+function getCheckboxArray(name) {
   const els = document.querySelectorAll('input[name="'+name+'"]:checked');
-  return Array.from(els).map(e=>e.value).join(', ');
+  return Array.from(els).map(e=>e.value);
 }
 function val(id) {
   const el = document.getElementById(id);
@@ -878,13 +881,13 @@ function submitForm() {
     focusField('siblingShoesSz');
     return;
   }
-  const channelCheckedRaw = getCheckboxes('channel');
-  if (channelCheckedRaw.includes('기타') && !val('channelEtc')) {
+  const channelCheckedList = getCheckboxArray('channel');
+  if (channelCheckedList.includes('기타') && !val('channelEtc')) {
     alert('알게 된 경로의 기타 내용을 입력해 주세요.');
     focusField('channelEtc');
     return;
   }
-  if (channelCheckedRaw.includes('지인소개') && !val('referralName')) {
+  if (channelCheckedList.includes('지인소개') && !val('referralName')) {
     alert('소개해주신 지인 성함을 입력해 주세요.');
     focusField('referralName');
     return;
@@ -902,8 +905,11 @@ function submitForm() {
   const siblingShoes = getRadio('siblingShoes') === '기타' ? '기타: ' + val('siblingShoesSz') : getRadio('siblingShoes');
   // 체크박스 — 복수 선택
   const siblingChecked = getCheckboxes('sibling');
-  let channel = channelCheckedRaw.includes('기타') ? channelCheckedRaw.replace('기타', '기타: '+val('channelEtc')) : channelCheckedRaw;
-  channel = channel.includes('지인소개') ? channel.replace('지인소개', '지인 소개: '+val('referralName')) : channel;
+  const channel = channelCheckedList.map(item => {
+    if (item === '기타') return '기타: ' + val('channelEtc');
+    if (item === '지인소개') return '지인 소개: ' + val('referralName');
+    return item;
+  }).join(', ');
 
   const payload = {
     babyName: val('babyName'),

@@ -236,6 +236,8 @@ const requiredPageSnippets = {
     'data-family-size-section',
     "function isFamilyAlbumSelected()",
     "return getRadio('product') === '가족실내앨범형'",
+    "function getCheckboxArray(name)",
+    "channelCheckedList.map",
     "if (isFamilyProduct) {",
     "momHeight: isFamilyProduct ? val('momHeight') : ''",
     "dadShoes: isFamilyProduct ? val('dadShoes') : ''",
