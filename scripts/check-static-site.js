@@ -232,7 +232,7 @@ const requiredPageSnippets = {
     "엄마 키·한복·신발",
     "아빠 키·한복·신발",
     "photoUsageConsent",
-    "고객님께서 동의해주신 사진에 한해",
+    "고객님께서 동의해 주신 사진에 한해",
     'data-family-size-section',
     "function isFamilyAlbumSelected()",
     "return getRadio('product') === '가족실내앨범형'",
