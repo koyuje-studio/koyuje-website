@@ -170,8 +170,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .success-desc{font-size:14px;color:var(--muted);line-height:2;letter-spacing:0.04em;margin-bottom:40px;}
 .success-box{background:var(--paper2);border:0.5px solid var(--line);padding:24px;margin-bottom:32px;text-align:left;}
 .success-box-title{font-size:11px;letter-spacing:0.2em;color:var(--muted);margin-bottom:12px;}
-.success-info{font-size:14px;line-height:2.1;}
-.success-info span{color:var(--gold);}
+.success-info{font-size:13px;line-height:1.8;}
+.success-confirm-section{padding:14px 0;border-top:0.5px solid rgba(28,24,20,0.08);}
+.success-confirm-section:first-child{border-top:none;padding-top:0;}
+.success-confirm-title{font-size:11px;letter-spacing:0.16em;color:var(--gold);margin-bottom:9px;}
+.success-confirm-row{display:grid;grid-template-columns:92px 1fr;gap:10px;margin:5px 0;}
+.success-confirm-label{color:var(--muted);font-size:12px;}
+.success-confirm-value{color:var(--ink);word-break:break-word;}
 .success-next{border:0.5px solid rgba(160,120,64,0.2);background:rgba(160,120,64,0.055);padding:16px 18px;margin:-18px 0 28px;text-align:left;font-size:13px;line-height:1.85;color:var(--muted);letter-spacing:0.03em;}
 .success-next strong{color:var(--ink);font-weight:400;}
 .success-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
@@ -202,6 +207,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .final-check-grid{grid-template-columns:1fr;}
   .final-check-item{min-height:auto;}
   .success-actions{display:grid;grid-template-columns:1fr;}
+  .success-confirm-row{grid-template-columns:1fr;gap:2px;margin:9px 0;}
   .guide{padding:28px 20px;}
   .nav{padding:16px 20px;}
   .btn-submit{padding:17px 40px;}
@@ -742,6 +748,54 @@ function escapeHTML(value) {
   }[char]));
 }
 
+function displayValue(value) {
+  const text = String(value || '').trim();
+  return text ? escapeHTML(text) : '-';
+}
+
+function successRow(label, value) {
+  return '<div class="success-confirm-row"><div class="success-confirm-label">' +
+    escapeHTML(label) + '</div><div class="success-confirm-value">' +
+    displayValue(value) + '</div></div>';
+}
+
+function successSection(title, rows) {
+  return '<div class="success-confirm-section"><div class="success-confirm-title">' +
+    escapeHTML(title) + '</div>' + rows.join('') + '</div>';
+}
+
+function buildSuccessInfo(payload) {
+  return [
+    successSection('기본 정보', [
+      successRow('아기 이름', payload.babyName),
+      successRow('아기 정보', [payload.babyGender, payload.babyBirth].filter(Boolean).join(' · ')),
+      successRow('보호자명', payload.parentName),
+      successRow('연락처', payload.phone),
+      successRow('이메일', payload.email)
+    ]),
+    successSection('촬영 정보', [
+      successRow('촬영 일정', [payload.shootDate, payload.shootTime].filter(Boolean).join(' ')),
+      successRow('요일 구분', payload.weekday),
+      successRow('선택 상품', payload.product),
+      successRow('추가 구성', payload.extra)
+    ]),
+    successSection('가족 정보', [
+      successRow('형제/자매', payload.sibling),
+      successRow('형제 상세', payload.siblingInfo),
+      successRow('형제 신발', payload.siblingShoes),
+      successRow('엄마 사이즈', [payload.momHeight, payload.momSize, payload.momShoes].filter(Boolean).join(' / ')),
+      successRow('아빠 사이즈', [payload.dadHeight, payload.dadSize, payload.dadShoes].filter(Boolean).join(' / '))
+    ]),
+    successSection('입금/요청 정보', [
+      successRow('입금자명', payload.depositor),
+      successRow('주소', payload.address),
+      successRow('유입 경로', payload.channel),
+      successRow('사진 활용', payload.photoUsageConsent),
+      successRow('요청 사항', payload.memo)
+    ])
+  ].join('');
+}
+
 function focusRadioGroup(name) {
   const first = document.querySelector('input[name="'+name+'"]');
   if (!first) return;
@@ -995,13 +1049,7 @@ function submitForm() {
       document.getElementById('formSection').style.display = 'none';
       const s = document.getElementById('successSection');
       s.style.display = 'block';
-      document.getElementById('successInfo').innerHTML =
-        '아기 이름 &nbsp;<span>' + escapeHTML(payload.babyName) + '</span><br>' +
-        '촬영 날짜 &nbsp;<span>' + escapeHTML(payload.shootDate + ' ' + payload.shootTime) + '</span><br>' +
-        '선택 상품 &nbsp;<span>' + escapeHTML(payload.product) + '</span><br>' +
-        '연락처 &nbsp;&nbsp;&nbsp;&nbsp;<span>' + escapeHTML(payload.phone) + '</span><br>' +
-        '입금자명 &nbsp;<span>' + escapeHTML(payload.depositor) + '</span><br>' +
-        '사진 활용 동의 &nbsp;<span>' + escapeHTML(payload.photoUsageConsent) + '</span>';
+      document.getElementById('successInfo').innerHTML = buildSuccessInfo(payload);
       window.scrollTo({top:0, behavior:'smooth'});
     } else {
       alert('오류가 발생했습니다. 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.\n' + (data.message || ''));
