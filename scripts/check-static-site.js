@@ -169,6 +169,8 @@ const requiredPageSnippets = {
     'class="float-kakao" aria-label="카카오톡 예약 가능일 문의">카톡 가능일 문의</a>',
     "grid-template-columns:1.08fr .92fr",
     "transition:all .3s;white-space:nowrap",
+    "@media(max-width:600px) and (max-height:700px)",
+    ".hero-proof{display:none}",
     "예약제 운영 · 하루 두 팀 촬영 · 카카오톡 우선 문의",
     '<a href="/status">예약 현황 확인</a>',
     '<a href="/board">공지·예약 현황으로 이동</a>',
