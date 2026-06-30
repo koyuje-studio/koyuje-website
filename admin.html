@@ -43,6 +43,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .write-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px;}
 .write-modal-bg.show{display:flex;}
 .write-modal{background:#1a1714;border:0.5px solid rgba(247,242,234,0.1);width:100%;max-width:500px;padding:36px;position:relative;max-height:90vh;overflow-y:auto;}
+.write-modal.edit-modal{max-width:760px;}
 .write-modal-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;color:var(--paper);margin-bottom:28px;letter-spacing:0.05em;}
 .write-field{margin-bottom:20px;}
 .write-label{display:block;font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);margin-bottom:8px;}
@@ -105,6 +106,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .detail-val{font-size:13px;color:rgba(247,242,234,0.8);letter-spacing:0.03em;}
 .detail-val.missing{color:#e0a45c;}
 .detail-val.blank{color:rgba(247,242,234,0.35);}
+.detail-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px;margin-top:2px;}
+.btn-detail-edit{background:transparent;border:0.5px solid rgba(160,120,64,0.5);color:var(--gold);padding:10px 16px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.12em;cursor:pointer;transition:all .3s;}
+.btn-detail-edit:hover{background:rgba(160,120,64,0.12);}
 
 /* 저장 피드백 */
 .save-toast{position:fixed;bottom:32px;right:32px;background:var(--green);color:var(--paper);padding:12px 24px;font-size:12px;letter-spacing:0.1em;display:none;z-index:200;}
@@ -253,12 +257,24 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   </div>
 </div>
 
+<!-- 예약 수정 모달 -->
+<div class="write-modal-bg" id="editModalBg">
+  <div class="write-modal edit-modal">
+    <button class="write-close" onclick="closeEditModal()">✕</button>
+    <div class="write-modal-title">예약 정보 수정</div>
+    <div class="write-grid" id="editFields"></div>
+    <button class="btn-write-submit" id="editSubmitBtn" onclick="submitReservationEdit()">수정 내용 저장하기</button>
+    <div class="write-hint">수정 후 관리자 화면과 시트에 함께 반영됩니다. 고객이 직접 수정하는 기능은 별도 인증 흐름이 필요합니다.</div>
+  </div>
+</div>
+
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzPBBwBX07W_3ZPq0AVJWPWIrZIDU2EpTdsnwoS5bYRd3n0dmT6KLp2TMCmnbIhjV5i/exec';
 
 let allData=[];
 let currentFilter='all';
 let adminPw='';
+let editingRowId='';
 
 // 오늘 날짜
 const now=new Date();
@@ -408,6 +424,21 @@ function fTime(t){
   return s;
 }
 
+function fPlainDate(d){
+  if(!d)return'';
+  const s=String(d).trim();
+  const num=parseFloat(s);
+  if(!isNaN(num)&&num>40000&&num<60000){
+    const dt=new Date((num-25569)*86400*1000);
+    return dt.getUTCFullYear()+'년 '+(dt.getUTCMonth()+1)+'월 '+dt.getUTCDate()+'일';
+  }
+  const dt=new Date(s);
+  if(!isNaN(dt.getTime())){
+    return dt.getFullYear()+'년 '+(dt.getMonth()+1)+'월 '+dt.getDate()+'일';
+  }
+  return s;
+}
+
 function escapeHTML(value){
   return String(value ?? '')
     .replace(/&/g,'&amp;')
@@ -453,6 +484,7 @@ function renderCards(){
     const sc=getStatusClass(item.status||'');
     const shootDate=escapeHTML(fDate(item.shootDate));
     const shootTime=escapeHTML(fTime(item.shootTime));
+    const babyBirth=escapeHTML(fPlainDate(item.babyBirth));
     const rowId=String(item.rowId ?? '');
     const extra=escapeHTML(item.extra||'없음');
     const sibling=escapeHTML([item.sibling,item.siblingInfo].filter(Boolean).join(' / ')||'형제 정보 없음');
@@ -489,18 +521,23 @@ function renderCards(){
           <div class="detail-item"><div class="detail-key">촬영 날짜</div><div class="detail-val">${shootDate}</div></div>
           <div class="detail-item"><div class="detail-key">촬영 시간</div><div class="detail-val">${shootTime}</div></div>
           <div class="detail-item"><div class="detail-key">선택 상품</div><div class="detail-val">${escapeHTML(item.product||'-')}</div></div>
-          <div class="detail-item"><div class="detail-key">아기 정보</div><div class="detail-val">${escapeHTML([item.babyGender,item.babyBirth].filter(Boolean).join(' · ')||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">촬영 가능 요일</div><div class="detail-val">${escapeHTML(item.weekday||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">아기 성별</div><div class="detail-val">${escapeHTML(item.babyGender||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">아기 생년월일</div><div class="detail-val">${babyBirth||'-'}</div></div>
           <div class="detail-item"><div class="detail-key">연락처</div><div class="detail-val">${escapeHTML(item.phone||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">이메일</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.email||'-')}</div></div>
-          <div class="detail-item wide"><div class="detail-key">추가 구성</div><div class="detail-val" style="font-size:12px;">${extra}</div></div>
-          <div class="detail-item"><div class="detail-key">형제 정보</div><div class="detail-val">${sibling}</div></div>
+          <div class="detail-item"><div class="detail-key">추가 구성</div><div class="detail-val" style="font-size:12px;">${extra}</div></div>
+          <div class="detail-item"><div class="detail-key">형제 구성</div><div class="detail-val">${escapeHTML(item.sibling||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">형제 상세</div><div class="detail-val">${escapeHTML(item.siblingInfo||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">형제 신발</div><div class="detail-val">${escapeHTML(item.siblingShoes||'-')}</div></div>
           ${parentSizeHTML}
           <div class="detail-item"><div class="detail-key">입금자명</div><div class="detail-val">${escapeHTML(item.depositor||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">유입 경로</div><div class="detail-val">${escapeHTML(item.channel||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">사진 활용</div><div class="detail-val">${escapeHTML(item.photoUsageConsent||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">제출 일시</div><div class="detail-val" style="font-size:12px;">${escapeHTML(rowId||'-')}</div></div>
-          <div class="detail-item full"><div class="detail-key">주소 / 요청 사항</div><div class="detail-val" style="font-size:12px;">${escapeHTML([item.address,item.memo].filter(Boolean).join(' / ')||'-')}</div></div>
+          <div class="detail-item full"><div class="detail-key">주소</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.address||'-')}</div></div>
+          <div class="detail-item full"><div class="detail-key">요청 사항</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.memo||'-')}</div></div>
+          <div class="detail-actions"><button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button></div>
         </div>
       </div>
     </div>`;
@@ -562,6 +599,112 @@ function showToast(message){
     t.classList.remove('show');
     t.textContent='✓ 상태가 저장되었습니다';
   },2500);
+}
+
+const editableReservationFields=[
+  ['babyName','아기 이름','text'],
+  ['babyGender','아기 성별','text'],
+  ['babyBirth','아기 생년월일','date'],
+  ['sibling','형제 구성','text'],
+  ['siblingInfo','형제 상세','text'],
+  ['parentName','보호자명','text'],
+  ['phone','연락처','text'],
+  ['email','이메일','email'],
+  ['momHeight','엄마 키','number'],
+  ['momSize','엄마 한복 사이즈','text'],
+  ['momShoes','엄마 신발 사이즈','number'],
+  ['dadHeight','아빠 키','number'],
+  ['dadSize','아빠 한복 사이즈','text'],
+  ['dadShoes','아빠 신발 사이즈','number'],
+  ['weekday','촬영 가능 요일','text'],
+  ['shootDate','촬영 날짜','date'],
+  ['shootTime','촬영 시간','time'],
+  ['product','선택 상품','text'],
+  ['extra','추가 구성','text'],
+  ['siblingShoes','형제 신발','text'],
+  ['depositor','입금자명','text'],
+  ['address','주소','textarea'],
+  ['channel','유입 경로','text'],
+  ['photoUsageConsent','사진 활용 동의','text'],
+  ['memo','요청 사항','textarea']
+];
+
+function toDateInput(value){
+  if(!value)return'';
+  const s=String(value).trim();
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;
+  const dt=new Date(s);
+  if(!isNaN(dt.getTime())){
+    return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+  }
+  return s;
+}
+
+function toTimeInput(value){
+  if(!value)return'';
+  const s=String(value).trim();
+  const match=s.match(/^(\d{1,2}):(\d{2})/);
+  if(match)return String(match[1]).padStart(2,'0')+':'+match[2];
+  return s;
+}
+
+function editValue(item,key,type){
+  if(type==='date')return toDateInput(item[key]);
+  if(type==='time')return toTimeInput(item[key]);
+  return item[key] ?? '';
+}
+
+function openEditModal(rowId){
+  const item=allData.find(d=>String(d.rowId)===String(rowId));
+  if(!item){alert('수정할 예약 정보를 찾을 수 없습니다.');return;}
+  editingRowId=String(rowId);
+  const fields=document.getElementById('editFields');
+  fields.innerHTML=editableReservationFields.map(([key,label,type])=>{
+    const value=escapeAttr(editValue(item,key,type));
+    if(type==='textarea'){
+      return `<div class="write-field" style="grid-column:1/-1;"><label class="write-label">${label}</label><textarea class="write-textarea" data-edit-key="${key}">${value}</textarea></div>`;
+    }
+    return `<div class="write-field"><label class="write-label">${label}</label><input type="${type}" class="write-input" data-edit-key="${key}" value="${value}"></div>`;
+  }).join('');
+  document.getElementById('editModalBg').classList.add('show');
+}
+
+function closeEditModal(){
+  document.getElementById('editModalBg').classList.remove('show');
+  document.getElementById('editFields').innerHTML='';
+  editingRowId='';
+}
+
+function submitReservationEdit(){
+  if(!editingRowId)return;
+  const btn=document.getElementById('editSubmitBtn');
+  const updates={};
+  document.querySelectorAll('[data-edit-key]').forEach(input=>{
+    updates[input.dataset.editKey]=input.value.trim();
+  });
+  btn.disabled=true;
+  btn.textContent='저장 중...';
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({action:'updateReservation',adminPw:adminPw,rowId:editingRowId,updates:updates})
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.result!=='success')throw new Error(data.message||'저장 실패');
+    const item=allData.find(d=>String(d.rowId)===String(editingRowId));
+    if(item)Object.assign(item,updates);
+    closeEditModal();
+    updateStats();
+    renderCards();
+    showToast('✓ 예약 정보가 수정되었습니다');
+  })
+  .catch(err=>{
+    alert('수정 저장 실패: '+err.message);
+  })
+  .finally(()=>{
+    btn.disabled=false;
+    btn.textContent='수정 내용 저장하기';
+  });
 }
 
 // 글쓰기 모달
