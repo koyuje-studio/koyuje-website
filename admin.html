@@ -74,7 +74,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .monthly-title{font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);}
 .monthly-current{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);line-height:1;}
 .monthly-list{display:flex;flex-wrap:wrap;gap:8px;}
-.monthly-chip{border:0.5px solid rgba(160,120,64,0.28);color:rgba(247,242,234,0.72);padding:6px 10px;font-size:11px;letter-spacing:0.08em;}
+.monthly-chip{border:0.5px solid rgba(160,120,64,0.28);background:transparent;color:rgba(247,242,234,0.72);padding:6px 10px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.08em;cursor:pointer;transition:all .25s;}
+.monthly-chip:hover,.monthly-chip.active{background:rgba(160,120,64,0.16);border-color:rgba(160,120,64,0.45);color:var(--gold2);}
 
 /* 필터 */
 .filter-row{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center;}
@@ -293,6 +294,7 @@ const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxe69Jzk0tOCeahtmuupDY
 
 let allData=[];
 let currentFilter='all';
+let currentMonthKey='';
 let adminPw='';
 let editingRowId='';
 
@@ -436,8 +438,15 @@ function updateMonthlyStats(source){
   const current=entries.find(item=>item.year===nowInfo.year&&item.month===nowInfo.month);
   document.getElementById('monthlyCurrent').textContent=currentCode+' · '+(current?current.count:0)+'건';
   document.getElementById('monthlyList').innerHTML=entries.length
-    ? entries.map(item=>'<span class="monthly-chip">'+escapeHTML(item.code)+' · '+item.count+'건</span>').join('')
+    ? '<button type="button" class="monthly-chip '+(!currentMonthKey?'active':'')+'" onclick="setMonthFilter(\'\')">전체 월</button>'
+      +entries.map(item=>'<button type="button" class="monthly-chip '+(currentMonthKey===item.key?'active':'')+'" onclick="setMonthFilter(\''+escapeAttr(item.key)+'\')">'+escapeHTML(item.code)+' · '+item.count+'건</button>').join('')
     : '<span class="monthly-chip">집계 없음</span>';
+}
+
+function setMonthFilter(monthKey){
+  currentMonthKey=monthKey||'';
+  updateMonthlyStats(getActiveReservations());
+  renderCards();
 }
 
 function setFilter(f,el){
@@ -543,7 +552,19 @@ function renderCards(){
   let filtered=getActiveReservations().filter(d=>{
     const sc=getStatusClass(d.status||'');
     if(currentFilter!=='all'&&sc!==currentFilter)return false;
-    if(keyword&&!((d.babyName||'').includes(keyword)&&true)&&!(d.babyName||'').toLowerCase().includes(keyword)&&!(d.parentName||'').toLowerCase().includes(keyword)&&!(d.phone||'').includes(keyword))return false;
+    if(currentMonthKey){
+      const info=getSubmitMonthInfo(d);
+      if(!info||info.key!==currentMonthKey)return false;
+    }
+    const haystack=[
+      d.babyName,
+      d.parentName,
+      d.phone,
+      d.email,
+      d.depositor,
+      d.product
+    ].map(value=>String(value||'').toLowerCase()).join(' ');
+    if(keyword&&!haystack.includes(keyword))return false;
     return true;
   });
 
