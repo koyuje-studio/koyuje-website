@@ -300,6 +300,7 @@ const requiredPageSnippets = {
     "item.siblingInfo",
     "사진 활용",
     "유입 경로",
+    "min-height:44px",
   ],
 };
 
