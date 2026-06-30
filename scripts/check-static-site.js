@@ -50,6 +50,8 @@ const publicPages = {
 };
 
 const internalPages = ["admin.html", "mvno.html"];
+const appsScriptUrl = "https://script.google.com/macros/s/AKfycbz1mUUI9PHRDPUG-5VH_E4fnTYeLCzrfjHyhvZk2ap4EYC4h48ixrPgXI6cRGSQZrLP/exec";
+const appsScriptPages = ["index.html", "reservation.html", "admin.html", "board.html", "status.html"];
 
 const requiredPublicMeta = [
   '<meta name="description"',
@@ -732,6 +734,24 @@ for (const file of htmlFiles) {
 
   if (internalPages.includes(file)) {
     requireIncludes(file, html, '<meta name="robots" content="noindex,nofollow">', "noindex robots meta");
+  }
+}
+
+for (const file of appsScriptPages) {
+  if (!fs.existsSync(file)) continue;
+  const html = fs.readFileSync(file, "utf8");
+  const scriptUrls = [...html.matchAll(/https:\/\/script\.google\.com\/macros\/s\/[^'")\s]+\/exec/g)].map((match) => match[0]);
+
+  if (!scriptUrls.includes(appsScriptUrl)) {
+    console.error(`Missing current Apps Script URL: ${file}`);
+    hasError = true;
+  }
+
+  for (const url of scriptUrls) {
+    if (url !== appsScriptUrl) {
+      console.error(`Unexpected Apps Script URL in ${file}: ${url}`);
+      hasError = true;
+    }
   }
 }
 
