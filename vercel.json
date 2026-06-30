@@ -1,4 +1,6 @@
 {
+  "buildCommand": "node scripts/generate-runtime-config.js",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)",
