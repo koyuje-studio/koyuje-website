@@ -7,6 +7,8 @@ outputs/
 backup-before-sync/
 folder-color-tool/
 scripts/
+!scripts/
+!scripts/generate-runtime-config.js
 웹사이트가이드.txt
 imweb-reservation-widget-full.html
 mvno.html
