@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "npx serve .",
-    "check": "node scripts/check-static-site.js"
+    "build": "node scripts/generate-runtime-config.js",
+    "check": "node scripts/generate-runtime-config.js && node scripts/check-static-site.js"
   }
 }

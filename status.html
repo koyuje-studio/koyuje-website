@@ -8,15 +8,15 @@
 <title>예약 현황 확인 | 고유재 한옥스튜디오</title>
 <meta name="description" content="고유재 한옥스튜디오 예약 현황 확인. 예약확정서를 작성한 예약 정보의 접수 확인중, 예약 확인 완료 상태를 휴대폰 번호로 확인하세요.">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://koyuje-website.vercel.app/status">
+<link rel="canonical" href="https://koyuje.com/status">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="고유재 한옥스튜디오">
 <meta property="og:title" content="예약 현황 확인 | 고유재 한옥스튜디오">
 <meta property="og:description" content="예약확정서를 작성한 예약 정보의 접수 확인중, 예약 확인 완료 상태를 확인하고 조회되지 않는 경우 카카오톡으로 문의할 수 있습니다.">
-<meta property="og:url" content="https://koyuje-website.vercel.app/status">
-<meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
-<meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
+<meta property="og:url" content="https://koyuje.com/status">
+<meta property="og:image" content="https://koyuje.com/assets/images/social/og-image.jpg">
+<meta property="og:image:secure_url" content="https://koyuje.com/assets/images/social/og-image.jpg">
 <meta property="og:image:alt" content="고유재 한옥스튜디오 예약 현황 대표 이미지">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
@@ -115,6 +115,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .bottom-link a{color:var(--gold);text-decoration:none;}
 @media(max-width:600px){.nav{padding:16px 20px;}.hero{padding:48px 20px 40px;}.hero-title{font-size:26px;}.search-wrap{padding:32px 16px 24px;}.search-card{padding:28px 20px;}.inquiry-strip{padding:16px;margin-bottom:26px;}.inquiry-actions{display:grid;grid-template-columns:1fr;}.status-guide{padding:0 16px 40px;}.status-guide-item{grid-template-columns:1fr;gap:6px;padding:16px 14px;}.support-actions{display:grid;grid-template-columns:1fr;}.results-wrap{padding:0 16px 60px;}.pin-input{width:34px;height:50px;font-size:18px;}.phone-fixed{height:50px;font-size:17px;padding:0 10px;}}
 </style>
+<script src="/assets/js/runtime-config.js" defer></script>
+<script src="/assets/js/tracking.js" defer></script>
 </head>
 <body>
 
@@ -262,6 +264,9 @@ function doSearch(){
     // 비어있는 첫 칸으로 포커스
     for(let id of ids){if(!document.getElementById(id).value){document.getElementById(id).focus();break;}}
     return;
+  }
+  if (window.KoyujeTracking) {
+    window.KoyujeTracking.trackSearch('reservation_status');
   }
   document.getElementById('searchBtn').disabled=true;
   document.getElementById('loading').classList.add('show');

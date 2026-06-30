@@ -18,6 +18,15 @@
       ]
     },
     {
+      "source": "/assets/js/runtime-config.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/assets/(.*)",
       "headers": [
         {
@@ -36,7 +45,16 @@
       ]
     },
     {
-      "source": "/:internal(admin|admin\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+      "source": "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/admin/analytics",
       "headers": [
         {
           "key": "X-Robots-Tag",
@@ -78,6 +96,7 @@
     { "source": "/", "destination": "/index.html" },
     { "source": "/board", "destination": "/board.html" },
     { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/admin/analytics", "destination": "/admin-analytics.html" },
     { "source": "/reservation", "destination": "/reservation.html" },
     { "source": "/status", "destination": "/status.html" },
     { "source": "/guide", "destination": "/guide.html" },

@@ -8,15 +8,15 @@
 <title>예약확정서 | 고유재 한옥스튜디오</title>
 <meta name="description" content="고유재 한옥스튜디오 예약확정서. 예약 가능일 확인과 예약금 입금 후 아기 정보, 촬영 일정, 상품별 필요 정보와 배송 주소를 작성해 주세요.">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://koyuje-website.vercel.app/reservation">
+<link rel="canonical" href="https://koyuje.com/reservation">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="고유재 한옥스튜디오">
 <meta property="og:title" content="예약확정서 | 고유재 한옥스튜디오">
 <meta property="og:description" content="예약 가능일 확인과 예약금 입금 후 아기 정보, 촬영 일정, 상품별 필요 정보를 작성하는 고유재 한옥스튜디오 예약 정보 접수 양식입니다.">
-<meta property="og:url" content="https://koyuje-website.vercel.app/reservation">
-<meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
-<meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
+<meta property="og:url" content="https://koyuje.com/reservation">
+<meta property="og:image" content="https://koyuje.com/assets/images/social/og-image.jpg">
+<meta property="og:image:secure_url" content="https://koyuje.com/assets/images/social/og-image.jpg">
 <meta property="og:image:alt" content="고유재 한옥스튜디오 예약확정서 대표 이미지">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
@@ -223,6 +223,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .btn-submit{padding:17px 40px;}
 }
 </style>
+<script src="/assets/js/runtime-config.js" defer></script>
+<script src="/assets/js/tracking.js" defer></script>
 </head>
 <body>
 
@@ -1082,6 +1084,12 @@ function submitForm() {
     loading.classList.remove('show');
     loading.setAttribute('aria-hidden','true');
     if (data.result === 'success') {
+      if (window.KoyujeTracking) {
+        window.KoyujeTracking.trackCompleteRegistration({
+          content_name: '예약확정서 제출 완료',
+          content_category: payload.product || 'reservation'
+        });
+      }
       // 성공 화면
       document.getElementById('formSection').style.display = 'none';
       const s = document.getElementById('successSection');

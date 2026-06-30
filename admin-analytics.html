@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>고유재 관리자 통계</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#15120f;--panel:#201c18;--panel2:#27231e;--line:rgba(247,242,234,.12);--paper:#f7f2ea;--muted:rgba(247,242,234,.55);--gold:#b08a55;--gold2:#d7bb86;--green:#7ecf9a;--orange:#e6aa55}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--paper);font-weight:300;letter-spacing:.02em}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{width:min(420px,100%);border:1px solid var(--line);background:var(--panel);padding:36px}
+.login-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;margin-bottom:10px}
+.login-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:22px}
+.login input{width:100%;background:#111;border:1px solid var(--line);color:var(--paper);padding:14px;font-size:16px;margin-bottom:12px}
+button,.nav-btn{border:1px solid rgba(176,138,85,.55);background:transparent;color:var(--paper);padding:12px 16px;font-size:12px;letter-spacing:.08em;cursor:pointer;text-decoration:none}
+button.active,.btn-gold{background:var(--gold);color:#16120f}
+.wrap{display:none;min-height:100vh}
+.nav{position:sticky;top:0;z-index:10;background:rgba(15,13,11,.96);border-bottom:1px solid var(--line);padding:16px 28px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.brand{font-family:'Noto Serif KR',serif;font-size:15px;letter-spacing:.12em}
+.brand em{font-family:'Cormorant Garamond',serif;color:var(--gold);font-style:italic;font-size:12px;margin-left:8px}
+.nav-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.body{padding:30px}
+.periods{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.card{border:1px solid var(--line);background:var(--panel);padding:22px}
+.label{font-size:11px;color:var(--muted);letter-spacing:.14em;margin-bottom:12px}
+.num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold2)}
+.sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.7}
+.section{border:1px solid var(--line);background:var(--panel);padding:22px;margin-bottom:18px}
+.section-title{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:300;margin-bottom:16px}
+.funnel{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.funnel-item{background:var(--panel2);padding:16px;min-height:112px}
+.funnel-name{font-size:12px;color:var(--muted);line-height:1.5;min-height:36px}
+.funnel-count{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--gold2);margin-top:8px}
+.funnel-rate{font-size:11px;color:var(--muted)}
+.tables{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{border-bottom:1px solid rgba(247,242,234,.08);padding:10px 4px;text-align:left;color:var(--muted);vertical-align:top}
+td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
+.empty{color:var(--muted);font-size:13px;padding:14px 0}
+.error{color:#ff8e8e;font-size:13px;margin-top:10px;display:none}
+@media(max-width:900px){.nav{align-items:flex-start;flex-direction:column}.body{padding:20px 16px}.grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}.tables{grid-template-columns:1fr}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.funnel{grid-template-columns:1fr}.card,.section{padding:18px}.nav-right{width:100%}.nav-btn,button{flex:1;text-align:center}}
+</style>
+</head>
+<body>
+<div class="login" id="loginBox">
+  <div class="login-card">
+    <div class="login-title">관리자 통계</div>
+    <p class="login-desc">방문, 문의 클릭, 예약확정서 전환 흐름을 확인합니다.</p>
+    <input type="password" id="pwInput" placeholder="관리자 비밀번호" autocomplete="current-password">
+    <button class="btn-gold" onclick="login()">확인</button>
+    <div class="error" id="loginErr">비밀번호를 확인해 주세요.</div>
+  </div>
+</div>
+
+<div class="wrap" id="analyticsWrap">
+  <nav class="nav">
+    <div class="brand">고유재 한옥스튜디오<em>analytics</em></div>
+    <div class="nav-right">
+      <a class="nav-btn" href="/admin">예약 관리</a>
+      <button onclick="loadAnalytics()">새로고침</button>
+      <button onclick="logout()">로그아웃</button>
+    </div>
+  </nav>
+  <main class="body">
+    <div class="periods" id="periodButtons">
+      <button data-period="today">오늘</button>
+      <button data-period="yesterday">어제</button>
+      <button data-period="7d" class="active">최근 7일</button>
+      <button data-period="30d">최근 30일</button>
+      <button data-period="this_month">이번 달</button>
+      <button data-period="last_month">지난 달</button>
+    </div>
+
+    <section class="grid">
+      <div class="card"><div class="label">오늘 방문자</div><div class="num" id="todayVisitors">—</div></div>
+      <div class="card"><div class="label">최근 7일 방문자</div><div class="num" id="last7Visitors">—</div></div>
+      <div class="card"><div class="label">카카오톡 클릭</div><div class="num" id="kakaoClicks">—</div><div class="sub" id="rangeLabel">선택 기간 기준</div></div>
+      <div class="card"><div class="label">예약확정서 제출</div><div class="num" id="reservationSubmits">—</div><div class="sub">선택 기간 기준</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">전환 흐름</div>
+      <div class="funnel" id="funnel"></div>
+    </section>
+
+    <section class="tables" id="tables"></section>
+  </main>
+</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwIdsLEEWsLJYCf3iYh5ag2qRmEcTtsga1U9eELF5rtP7UmPhRt-_BgEOYe78h47j8J/exec';
+let currentPeriod='7d';
+
+function getPw(){return sessionStorage.getItem('koyujeAdminPw') || '';}
+function showApp(){
+  document.getElementById('loginBox').style.display='none';
+  document.getElementById('analyticsWrap').style.display='block';
+}
+function login(){
+  const pw=document.getElementById('pwInput').value.trim();
+  if(!pw)return;
+  sessionStorage.setItem('koyujeAdminPw',pw);
+  loadAnalytics(true);
+}
+function logout(){
+  sessionStorage.removeItem('koyujeAdminPw');
+  location.reload();
+}
+function setText(id,value){document.getElementById(id).textContent=value;}
+function escapeHTML(value){
+  return String(value||'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+}
+function renderTable(title,items){
+  if(!items||!items.length)return `<div class="section"><div class="section-title">${title}</div><div class="empty">표시할 데이터가 아직 없습니다.</div></div>`;
+  return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>건수</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)}</td><td>${item.count}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function render(data){
+  showApp();
+  const summary=data.summary||{};
+  setText('todayVisitors',summary.todayVisitors||0);
+  setText('last7Visitors',summary.last7Visitors||0);
+  setText('kakaoClicks',summary.kakaoClicks||0);
+  setText('reservationSubmits',summary.reservationSubmits||0);
+  setText('rangeLabel',(data.rangeLabel||'선택 기간')+' 기준');
+
+  document.getElementById('funnel').innerHTML=(data.funnel||[]).map(item=>`
+    <div class="funnel-item">
+      <div class="funnel-name">${escapeHTML(item.label)}</div>
+      <div class="funnel-count">${item.count}</div>
+      <div class="funnel-rate">${item.rate}%</div>
+    </div>
+  `).join('');
+
+  const rankings=data.rankings||{};
+  document.getElementById('tables').innerHTML=[
+    renderTable('유입 도메인',rankings.referrerDomains),
+    renderTable('UTM 소스',rankings.utmSources),
+    renderTable('UTM 캠페인',rankings.utmCampaigns),
+    renderTable('방문 페이지',rankings.pages),
+    renderTable('카카오톡 클릭 위치',rankings.kakaoPages),
+    renderTable('예약확정서 진입',rankings.reservationEntryPages)
+  ].join('');
+}
+function loadAnalytics(fromLogin){
+  const pw=getPw();
+  if(!pw)return;
+  fetch(SCRIPT_URL+'?action=analytics&period='+encodeURIComponent(currentPeriod)+'&pw='+encodeURIComponent(pw))
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result==='error')throw new Error(data.message||'인증 실패');
+      document.getElementById('loginErr').style.display='none';
+      render(data);
+    })
+    .catch(err=>{
+      if(fromLogin){
+        sessionStorage.removeItem('koyujeAdminPw');
+        document.getElementById('loginErr').style.display='block';
+      }else{
+        alert('통계를 불러오지 못했습니다. Apps Script 배포와 비밀번호를 확인해 주세요.\n'+err.message);
+      }
+    });
+}
+document.getElementById('periodButtons').addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-period]');
+  if(!btn)return;
+  currentPeriod=btn.dataset.period;
+  document.querySelectorAll('#periodButtons button').forEach(item=>item.classList.toggle('active',item===btn));
+  loadAnalytics();
+});
+document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+if(getPw())loadAnalytics();
+</script>
+</body>
+</html>

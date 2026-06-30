@@ -1,0 +1,5 @@
+window.KOYUJE_RUNTIME_CONFIG = {
+  "META_PIXEL_ID": "",
+  "META_CAPI_ENABLED": false,
+  "TRACKING_DEBUG": false
+};

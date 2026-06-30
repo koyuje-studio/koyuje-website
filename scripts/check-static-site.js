@@ -7,8 +7,12 @@ const requiredFiles = [
   "reservation.html",
   "board.html",
   "status.html",
+  "admin-analytics.html",
   "robots.txt",
   "sitemap.xml",
+  "assets/js/runtime-config.js",
+  "assets/js/tracking.js",
+  "scripts/generate-runtime-config.js",
   "assets/images/hero/_0049.jpg",
   "assets/images/hero/_0049_poster.webp",
   "assets/video/hero/_0049_mobile.mp4",
@@ -37,21 +41,22 @@ const htmlFiles = [
   "reservation.html",
   "board.html",
   "admin.html",
+  "admin-analytics.html",
   "status.html",
   "mvno.html",
 ];
 
 const publicPages = {
-  "index.html": "https://koyuje-website.vercel.app/",
-  "guide.html": "https://koyuje-website.vercel.app/guide",
-  "reservation.html": "https://koyuje-website.vercel.app/reservation",
-  "board.html": "https://koyuje-website.vercel.app/board",
-  "status.html": "https://koyuje-website.vercel.app/status",
+  "index.html": "https://koyuje.com/",
+  "guide.html": "https://koyuje.com/guide",
+  "reservation.html": "https://koyuje.com/reservation",
+  "board.html": "https://koyuje.com/board",
+  "status.html": "https://koyuje.com/status",
 };
 
-const internalPages = ["admin.html", "mvno.html"];
+const internalPages = ["admin.html", "admin-analytics.html", "mvno.html"];
 const appsScriptUrl = "https://script.google.com/macros/s/AKfycbwIdsLEEWsLJYCf3iYh5ag2qRmEcTtsga1U9eELF5rtP7UmPhRt-_BgEOYe78h47j8J/exec";
-const appsScriptPages = ["index.html", "reservation.html", "admin.html", "board.html", "status.html"];
+const appsScriptPages = ["index.html", "reservation.html", "admin.html", "admin-analytics.html", "board.html", "status.html"];
 
 const requiredPublicMeta = [
   '<meta name="description"',
@@ -61,8 +66,8 @@ const requiredPublicMeta = [
   '<meta property="og:site_name"',
   '<meta property="og:title"',
   '<meta property="og:description"',
-  '<meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">',
-  '<meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">',
+  '<meta property="og:image" content="https://koyuje.com/assets/images/social/og-image.jpg">',
+  '<meta property="og:image:secure_url" content="https://koyuje.com/assets/images/social/og-image.jpg">',
   '<meta property="og:image:alt"',
   '<meta property="og:image:type" content="image/jpeg">',
   '<meta property="og:image:width" content="1200">',
@@ -351,7 +356,7 @@ const requiredPageSnippets = {
     "검색/플레이스 등록용 소개 문구",
     "카카오 공유 디버거: https://developers.kakao.com/tool/debugger/sharing",
     "네이버 서치어드바이저: https://searchadvisor.naver.com/",
-    "제출 사이트맵: https://koyuje-website.vercel.app/sitemap.xml",
+    "제출 사이트맵: https://koyuje.com/sitemap.xml",
     "공주 한옥에서 하루 두 팀만 촬영하는 프리미엄 돌사진·가족사진 스튜디오입니다.",
     "핵심 키워드: 공주 돌사진, 공주 한옥스튜디오, 공주 돌촬영, 충남 돌사진, 가족사진, 한옥 돌사진, 실크 한복 촬영",
     "예약폼 테스트 제출 기준",
@@ -368,20 +373,22 @@ const requiredPageSnippets = {
 };
 
 const expectedSitemapUrls = Object.values(publicPages);
-const expectedSitemapLastmod = "2026-06-30";
+const expectedSitemapLastmod = "2026-07-01";
 const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
 const requiredRobotsLines = [
   "User-agent: *",
   "Allow: /",
   "Disallow: /admin",
   "Disallow: /admin.html",
+  "Disallow: /admin/analytics",
+  "Disallow: /admin-analytics.html",
   "Disallow: /mvno",
   "Disallow: /mvno.html",
   "Disallow: /imweb-reservation-widget-full",
   "Disallow: /imweb-reservation-widget-full.html",
   "Disallow: /assets/raw",
   "Disallow: /assets/raw/",
-  "Sitemap: https://koyuje-website.vercel.app/sitemap.xml",
+  "Sitemap: https://koyuje.com/sitemap.xml",
 ];
 
 const requiredVercelIgnoreLines = [
@@ -435,14 +442,17 @@ const requiredVercelRewrites = [
 
 const requiredVercelHeaderSources = [
   "/(.*)",
+  "/assets/js/runtime-config.js",
   "/assets/(.*)",
-  "/:internal(admin|admin\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+  "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+  "/admin/analytics",
   "/assets/raw/(.*)",
   "/assets/raw",
 ];
 
 const requiredNoindexHeaderSources = [
-  "/:internal(admin|admin\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+  "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+  "/admin/analytics",
   "/assets/raw/(.*)",
   "/assets/raw",
 ];
@@ -675,7 +685,7 @@ for (const file of htmlFiles) {
           data["@context"] === "https://schema.org" &&
           data["@type"] === "LocalBusiness" &&
           data.name === "고유재 한옥스튜디오" &&
-          data.url === "https://koyuje-website.vercel.app/" &&
+          data.url === "https://koyuje.com/" &&
           Array.isArray(data.sameAs) &&
           data.sameAs.includes("https://www.instagram.com/koyuje_studio/") &&
           data.sameAs.includes("https://pf.kakao.com/_xiRxjhxj")
@@ -821,7 +831,7 @@ if (fs.existsSync("sitemap.xml")) {
       hasError = true;
     }
 
-    if (!url.startsWith("https://koyuje-website.vercel.app")) {
+    if (!url.startsWith("https://koyuje.com")) {
       console.error(`Sitemap URL should use production HTTPS domain: ${url}`);
       hasError = true;
     }
