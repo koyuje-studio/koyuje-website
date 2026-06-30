@@ -162,7 +162,7 @@ const requiredClassHrefRules = {
 
 const requiredPageSnippets = {
   "index.html": [
-    'class="float-reserve" aria-label="입금 후 작성">입금 후 작성</a>',
+    'class="float-reserve" aria-label="입금 후 작성하기">입금 후 작성하기</a>',
     'class="notice-form">입금 후 작성</a>',
     'class="mobile-booking-links"',
     "min-width:126px;min-height:40px;text-align:center;white-space:nowrap",
