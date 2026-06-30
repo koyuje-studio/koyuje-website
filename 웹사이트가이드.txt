@@ -41,6 +41,7 @@ assets/
 - 예약 현황 페이지에서 휴대폰 번호 8자리 조회 흐름을 확인합니다.
 - 예약 현황 조회 결과가 없을 때 작성 직후 반영 전 안내와 카카오톡 문의 버튼이 보이는지 확인합니다.
 - 관리자 페이지에서 예약 상태 변경과 형제 정보 표시를 확인합니다.
+- 고객 직접 수정 기능은 만들지 않습니다. 수정 요청은 카카오톡으로 받은 뒤 관리자가 관리자 페이지에서 직접 반영합니다.
 
 Apps Script 저장/조회 필수 필드
 - 예약폼에서 보내는 추가 필드: siblingInfo, siblingShoes, momHeight, momSize, momShoes, dadHeight, dadSize, dadShoes, address, channel, photoUsageConsent, memo
