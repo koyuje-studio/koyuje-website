@@ -41,3 +41,8 @@ assets/
 - 예약 현황 페이지에서 휴대폰 번호 8자리 조회 흐름을 확인합니다.
 - 예약 현황 조회 결과가 없을 때 작성 직후 반영 전 안내와 카카오톡 문의 버튼이 보이는지 확인합니다.
 - 관리자 페이지에서 예약 상태 변경과 형제 정보 표시를 확인합니다.
+
+Apps Script 저장/조회 필수 필드
+- 예약폼에서 보내는 추가 필드: siblingInfo, siblingShoes, momHeight, momSize, momShoes, dadHeight, dadSize, dadShoes, address, channel, photoUsageConsent, memo
+- 관리자 화면에서 "Apps Script 응답 누락"으로 표시되면 고객 미입력이 아니라 doPost 저장 또는 doGet admin 응답 매핑에 해당 키가 빠진 상태입니다.
+- 작성 완료 메일 발송은 Apps Script의 MailApp.sendEmail 또는 GmailApp.sendEmail로 가능합니다. 고객 이메일과 스튜디오 이메일을 각각 수신자로 보내거나, 스튜디오를 cc/bcc로 넣는 방식으로 구현합니다.

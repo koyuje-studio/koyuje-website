@@ -103,6 +103,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .detail-item.full{grid-column:1/-1;}
 .detail-key{font-size:10px;letter-spacing:0.18em;color:rgba(247,242,234,0.35);margin-bottom:5px;}
 .detail-val{font-size:13px;color:rgba(247,242,234,0.8);letter-spacing:0.03em;}
+.detail-val.missing{color:#e0a45c;}
+.detail-val.blank{color:rgba(247,242,234,0.35);}
 
 /* 저장 피드백 */
 .save-toast{position:fixed;bottom:32px;right:32px;background:var(--green);color:var(--paper);padding:12px 24px;font-size:12px;letter-spacing:0.1em;display:none;z-index:200;}
@@ -419,6 +421,17 @@ function escapeAttr(value){
   return escapeHTML(value);
 }
 
+function fieldState(item,key){
+  if(!Object.prototype.hasOwnProperty.call(item,key))return{className:'missing',text:'Apps Script 응답 누락'};
+  if(item[key]===null||item[key]===undefined||String(item[key]).trim()==='')return{className:'blank',text:'미입력 또는 빈값'};
+  return{className:'',text:String(item[key])};
+}
+
+function detailValueHTML(state){
+  const className=state.className?'detail-val '+state.className:'detail-val';
+  return `<div class="${className}">${escapeHTML(state.text)}</div>`;
+}
+
 function renderCards(){
   const keyword=(document.getElementById('searchInput').value||'').toLowerCase();
   let filtered=allData.filter(d=>{
@@ -445,11 +458,17 @@ function renderCards(){
     const sibling=escapeHTML([item.sibling,item.siblingInfo].filter(Boolean).join(' / ')||'형제 정보 없음');
     const isFamilyProduct=String(item.product||'').includes('가족실내앨범형');
     const hasParentSize=item.momHeight||item.momSize||item.momShoes||item.dadHeight||item.dadSize||item.dadShoes;
+    const momStates=['momHeight','momSize','momShoes'].map(key=>fieldState(item,key));
+    const dadStates=['dadHeight','dadSize','dadShoes'].map(key=>fieldState(item,key));
+    const momMissing=momStates.some(state=>state.className==='missing');
+    const dadMissing=dadStates.some(state=>state.className==='missing');
     const momSizeText=[item.momHeight&&item.momHeight+'cm',item.momSize&&'한복 '+item.momSize,item.momShoes&&'신발 '+item.momShoes].filter(Boolean).join(' · ');
     const dadSizeText=[item.dadHeight&&item.dadHeight+'cm',item.dadSize&&'한복 '+item.dadSize,item.dadShoes&&'신발 '+item.dadShoes].filter(Boolean).join(' · ');
+    const momDisplay=momMissing?{className:'missing',text:'Apps Script 응답 누락'}:(momSizeText?{className:'',text:momSizeText}:{className:'blank',text:'미입력 또는 빈값'});
+    const dadDisplay=dadMissing?{className:'missing',text:'Apps Script 응답 누락'}:(dadSizeText?{className:'',text:dadSizeText}:{className:'blank',text:'미입력 또는 빈값'});
     const parentSizeHTML=(isFamilyProduct||hasParentSize)?`
-          <div class="detail-item"><div class="detail-key">엄마 키·한복·신발</div><div class="detail-val">${escapeHTML(momSizeText||'저장된 값 없음')}</div></div>
-          <div class="detail-item"><div class="detail-key">아빠 키·한복·신발</div><div class="detail-val">${escapeHTML(dadSizeText||'저장된 값 없음')}</div></div>`:'';
+          <div class="detail-item"><div class="detail-key">엄마 키·한복·신발</div>${detailValueHTML(momDisplay)}</div>
+          <div class="detail-item"><div class="detail-key">아빠 키·한복·신발</div>${detailValueHTML(dadDisplay)}</div>`:'';
     return `
     <div class="res-card" id="card_${idx}">
       <div class="res-card-head" onclick="toggleDetail('detail_${idx}')">

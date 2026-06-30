@@ -311,7 +311,8 @@ const requiredPageSnippets = {
     "isFamilyProduct",
     "엄마 키·한복·신발",
     "아빠 키·한복·신발",
-    "저장된 값 없음",
+    "Apps Script 응답 누락",
+    "미입력 또는 빈값",
     "사진 활용",
     "유입 경로",
     "min-height:44px",
@@ -331,6 +332,8 @@ const requiredPageSnippets = {
     "예약 정보 제출 완료 화면에서 48시간 안내와 카카오톡 문의 안내가 자연스럽게 보이는지 확인",
     "예약 현황 조회 결과가 없을 때 작성 직후 반영 전 안내와 카카오톡 문의 버튼이 보이는지 확인",
     "관리자 페이지에서 예약 상태 변경과 형제 정보 표시를 확인",
+    "Apps Script 저장/조회 필수 필드",
+    "MailApp.sendEmail",
   ],
 };
 
