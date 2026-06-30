@@ -271,6 +271,7 @@ const requiredPageSnippets = {
     'data-extra-for="family"',
     'data-extra-for="baby"',
     'data-extra-for="all"',
+    ".sec.is-hidden,.add-card.is-hidden{display:none;}",
     "function updateExtraOptions()",
     "extra: getVisibleCheckboxes('extra')",
   ],
