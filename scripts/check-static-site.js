@@ -312,6 +312,9 @@ const requiredPageSnippets = {
   "웹사이트가이드.txt": [
     "최종 운영 전 체크리스트",
     "검색/플레이스 등록용 소개 문구",
+    "카카오 공유 디버거: https://developers.kakao.com/tool/debugger/sharing",
+    "네이버 서치어드바이저: https://searchadvisor.naver.com/",
+    "제출 사이트맵: https://koyuje-website.vercel.app/sitemap.xml",
     "공주 한옥에서 하루 두 팀만 촬영하는 프리미엄 돌사진·가족사진 스튜디오입니다.",
     "핵심 키워드: 공주 돌사진, 공주 한옥스튜디오, 공주 돌촬영, 충남 돌사진, 가족사진, 한옥 돌사진, 실크 한복 촬영",
     "예약폼 테스트 제출 기준",

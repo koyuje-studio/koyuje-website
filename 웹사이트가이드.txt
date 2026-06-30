@@ -12,7 +12,13 @@ assets/
 - 권장 규격은 1200x630 JPG, 500KB 이하입니다.
 - 대표 이미지를 바꾼 뒤에는 배포 완료 후 카카오톡에 https://koyuje-website.vercel.app/ 링크를 직접 보내 썸네일을 확인합니다.
 - 카카오톡에서 이전 이미지가 계속 보이면 카카오 디벨로퍼스 공유 디버거에서 URL 캐시를 초기화한 뒤 다시 확인합니다.
+- 카카오 공유 디버거: https://developers.kakao.com/tool/debugger/sharing
 - 트위터/X는 운영 채널이 아니므로 twitter 메타 태그는 추가하지 않습니다.
+
+검색 등록 확인 링크
+- 네이버 서치어드바이저: https://searchadvisor.naver.com/
+- 제출 사이트맵: https://koyuje-website.vercel.app/sitemap.xml
+- 제출 후 네이버에서 site:koyuje-website.vercel.app 으로 색인 여부를 확인합니다.
 
 검색/플레이스 등록용 소개 문구
 - 짧은 소개: 공주 한옥에서 하루 두 팀만 촬영하는 프리미엄 돌사진·가족사진 스튜디오입니다.
