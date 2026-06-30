@@ -96,6 +96,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .f-input::placeholder,.f-textarea::placeholder{color:rgba(28,24,20,0.22);}
 .f-textarea{resize:vertical;min-height:72px;line-height:1.8;}
 .f-select option{background:var(--paper);}
+.address-search-row{display:flex;gap:8px;margin-bottom:8px;}
+.postcode-input{width:120px;flex-shrink:0;}
+.address-search-btn{background:var(--ink);color:var(--paper);border:none;padding:0 16px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;transition:background .3s;}
+.address-search-btn:hover{background:var(--gold);}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
 
@@ -188,6 +192,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .form-helper-inner{padding:18px 18px;}
   .form-helper-title{font-size:17px;}
   .form-helper-links a{flex:1 1 100%;text-align:center;padding:10px 8px;}
+  .address-search-row{display:grid;grid-template-columns:1fr;gap:8px;}
+  .postcode-input{width:100%;}
+  .address-search-btn{min-height:46px;}
   .optional-consent,.review-guide{padding:18px 16px;}
   .final-check-grid{grid-template-columns:1fr;}
   .final-check-item{min-height:auto;}
@@ -463,9 +470,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </div>
       <div class="field">
         <label class="f-label">상품 받으실 주소 <span class="req">*</span></label>
-        <div style="display:flex;gap:8px;margin-bottom:8px;">
-          <input type="text" class="f-input" id="postcode" placeholder="우편번호" inputmode="numeric" style="width:120px;flex-shrink:0;" readonly>
-          <button type="button" id="addressSearchBtn" onclick="searchAddress()" style="background:var(--ink);color:var(--paper);border:none;padding:0 16px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;transition:background .3s;" onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--ink)'">주소 검색</button>
+        <div class="address-search-row">
+          <input type="text" class="f-input postcode-input" id="postcode" placeholder="우편번호" inputmode="numeric" readonly>
+          <button type="button" id="addressSearchBtn" class="address-search-btn" onclick="searchAddress()">주소 검색</button>
         </div>
         <input type="text" class="f-input" id="addressMain" placeholder="기본 주소" style="margin-bottom:8px;" readonly>
         <input type="text" class="f-input" id="addressDetail" placeholder="상세 주소 입력 (동/호수 등)" autocomplete="address-line2">
