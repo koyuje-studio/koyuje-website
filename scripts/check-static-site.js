@@ -317,6 +317,7 @@ const requiredPageSnippets = {
 };
 
 const expectedSitemapUrls = Object.values(publicPages);
+const expectedSitemapLastmod = "2026-06-30";
 const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
 const requiredRobotsLines = [
   "User-agent: *",
@@ -770,6 +771,11 @@ if (fs.existsSync("sitemap.xml")) {
   for (const date of sitemapDates) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       console.error(`Invalid sitemap lastmod date: ${date}`);
+      hasError = true;
+    }
+
+    if (date !== expectedSitemapLastmod) {
+      console.error(`Sitemap lastmod should be ${expectedSitemapLastmod}: ${date}`);
       hasError = true;
     }
   }
