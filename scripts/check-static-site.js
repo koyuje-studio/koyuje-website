@@ -302,6 +302,11 @@ const requiredPageSnippets = {
     "유입 경로",
     "min-height:44px",
   ],
+  "웹사이트가이드.txt": [
+    "최종 운영 전 체크리스트",
+    "아기 앨범형 선택 시 부모님 사이즈 입력란이 숨겨지는지 확인",
+    "관리자 페이지에서 예약 상태 변경과 형제 정보 표시를 확인",
+  ],
 };
 
 const expectedSitemapUrls = Object.values(publicPages);
