@@ -244,6 +244,7 @@ const requiredPageSnippets = {
     "return getRadio('product') === '가족실내앨범형'",
     "function getCheckboxArray(name)",
     "channelCheckedList.map",
+    "action: 'reservation'",
     "if (isFamilyProduct) {",
     "momHeight: isFamilyProduct ? val('momHeight') : ''",
     "dadShoes: isFamilyProduct ? val('dadShoes') : ''",

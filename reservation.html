@@ -917,6 +917,7 @@ function submitForm() {
   }).join(', ');
 
   const payload = {
+    action: 'reservation',
     babyName: val('babyName'),
     babyGender: getRadio('babyGender'),
     babyBirth: val('babyBirth'),
