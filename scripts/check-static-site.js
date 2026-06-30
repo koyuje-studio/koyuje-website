@@ -50,7 +50,7 @@ const publicPages = {
 };
 
 const internalPages = ["admin.html", "mvno.html"];
-const appsScriptUrl = "https://script.google.com/macros/s/AKfycbz1mUUI9PHRDPUG-5VH_E4fnTYeLCzrfjHyhvZk2ap4EYC4h48ixrPgXI6cRGSQZrLP/exec";
+const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzPBBwBX07W_3ZPq0AVJWPWIrZIDU2EpTdsnwoS5bYRd3n0dmT6KLp2TMCmnbIhjV5i/exec";
 const appsScriptPages = ["index.html", "reservation.html", "admin.html", "board.html", "status.html"];
 
 const requiredPublicMeta = [
