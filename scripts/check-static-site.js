@@ -144,6 +144,7 @@ const requiredClassHrefRules = {
   ],
   "reservation.html": [
     ["helper-kakao", "https://pf.kakao.com/_xiRxjhxj"],
+    ["helper-status", "/status"],
     ["btn-check", "/status"],
   ],
   "board.html": [
