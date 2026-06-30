@@ -246,6 +246,7 @@ const requiredPageSnippets = {
     "address-search-row",
     "postcode-input",
     "address-search-btn",
+    "scroll-margin-top:96px",
   ],
   "status.html": [
     '<meta name="description" content="고유재 한옥스튜디오 예약 현황 확인. 입금 후 작성한 예약 정보의 접수 확인중, 예약 확인 완료 상태를 휴대폰 번호로 확인하세요.">',

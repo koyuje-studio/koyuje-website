@@ -96,6 +96,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .f-input::placeholder,.f-textarea::placeholder{color:rgba(28,24,20,0.22);}
 .f-textarea{resize:vertical;min-height:72px;line-height:1.8;}
 .f-select option{background:var(--paper);}
+.field,.radio-group,.check-group,.address-search-btn,.c-item,.r-item{scroll-margin-top:96px;}
 .address-search-row{display:flex;gap:8px;margin-bottom:8px;}
 .postcode-input{width:120px;flex-shrink:0;}
 .address-search-btn{background:var(--ink);color:var(--paper);border:none;padding:0 16px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;transition:background .3s;}
@@ -847,8 +848,7 @@ function submitForm() {
     for (const [id,message] of familyRequired) {
       if (!val(id)) {
         alert(message);
-        document.getElementById(id).scrollIntoView({behavior:'smooth', block:'center'});
-        document.getElementById(id).focus();
+        focusField(id);
         return;
       }
     }
