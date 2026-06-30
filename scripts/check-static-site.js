@@ -333,6 +333,8 @@ const requiredPageSnippets = {
     "삭제 처리",
     "function deleteReservation(rowId)",
     "action:'deleteReservation'",
+    "function getAdminPw()",
+    "sessionStorage.setItem('koyujeAdminPw', pw)",
     "월별 접수 집계",
     "function updateMonthlyStats(source)",
     "고객 수정 요청은 카카오톡으로 접수",

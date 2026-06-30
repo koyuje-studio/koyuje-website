@@ -311,6 +311,7 @@ function doLogin(){
 
   setLoginPending(true);
   adminPw=pw;
+  sessionStorage.setItem('koyujeAdminPw', pw);
 
   fetchAdminData()
     .then(data=>{
@@ -323,6 +324,7 @@ function doLogin(){
     })
     .catch(()=>{
       adminPw='';
+      sessionStorage.removeItem('koyujeAdminPw');
       allData=[];
       showLoginError('비밀번호가 올바르지 않거나 관리자 데이터를 불러올 수 없습니다.');
       input.value='';
@@ -345,6 +347,7 @@ function showLoginError(message){
 
 function doLogout(){
   adminPw='';
+  sessionStorage.removeItem('koyujeAdminPw');
   allData=[];
   document.getElementById('adminWrap').style.display='none';
   document.getElementById('loginWrap').style.display='flex';
@@ -353,12 +356,16 @@ function doLogout(){
 }
 
 function fetchAdminData(){
-  return fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(adminPw))
+  return fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(getAdminPw()))
     .then(r=>r.json())
     .then(data=>{
       if(data.result==='error')throw new Error(data.message||'admin auth failed');
       return data;
     });
+}
+
+function getAdminPw(){
+  return adminPw || sessionStorage.getItem('koyujeAdminPw') || '';
 }
 
 function loadData(){
@@ -632,7 +639,7 @@ function updateStatus(select){
 
   fetch(SCRIPT_URL,{
     method:'POST',
-    body:JSON.stringify({action:'updateStatus',adminPw:adminPw,rowId:rowId,status:newStatus})
+    body:JSON.stringify({action:'updateStatus',adminPw:getAdminPw(),rowId:rowId,status:newStatus})
   })
   .then(r=>r.json())
   .then(data=>{
@@ -670,7 +677,7 @@ function deleteReservation(rowId){
   }
   fetch(SCRIPT_URL,{
     method:'POST',
-    body:JSON.stringify({action:'deleteReservation',adminPw:adminPw,rowId:rowId})
+    body:JSON.stringify({action:'deleteReservation',adminPw:getAdminPw(),rowId:rowId})
   })
   .then(r=>r.json())
   .then(data=>{
@@ -784,7 +791,7 @@ function submitReservationEdit(){
   btn.textContent='저장 중...';
   fetch(SCRIPT_URL,{
     method:'POST',
-    body:JSON.stringify({action:'updateReservation',adminPw:adminPw,rowId:editingRowId,updates:updates})
+    body:JSON.stringify({action:'updateReservation',adminPw:getAdminPw(),rowId:editingRowId,updates:updates})
   })
   .then(r=>r.json())
   .then(data=>{
@@ -825,7 +832,7 @@ function submitPost(){
     method:'POST',
     body:JSON.stringify({
       action:'writePost',
-      adminPw:adminPw,
+      adminPw:getAdminPw(),
       title:title,
       content:document.getElementById('wContent').value.trim(),
       category:document.getElementById('wCategory').value,
