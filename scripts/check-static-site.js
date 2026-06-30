@@ -167,6 +167,7 @@ const requiredPageSnippets = {
     'class="mobile-booking-links"',
     "min-width:126px;min-height:40px;text-align:center;white-space:nowrap",
     'class="float-kakao" aria-label="카카오톡 예약 가능일 문의">카톡 가능일 문의</a>',
+    "예약제 운영 · 하루 두 팀 촬영 · 카카오톡 우선 문의",
     '<a href="/status">예약 현황 확인</a>',
     '<a href="/board">공지·예약 현황으로 이동</a>',
     '<a href="/board">공지·예약 현황</a>',
