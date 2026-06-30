@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -6,14 +6,14 @@
 <meta name="theme-color" content="#f7f2ea">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>예약 확인 | 고유재 한옥스튜디오</title>
-<meta name="description" content="고유재 한옥스튜디오 예약 확인 안내. 입금 후 작성한 예약 정보는 휴대폰 번호로 확인하고, 월별 접수 현황은 간단한 숫자로 확인하세요.">
+<meta name="description" content="고유재 한옥스튜디오 예약 확인 안내. 예약확정서를 작성한 예약 정보는 휴대폰 번호로 확인하실 수 있습니다.">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://koyuje-website.vercel.app/board">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="고유재 한옥스튜디오">
 <meta property="og:title" content="예약 확인 | 고유재 한옥스튜디오">
-<meta property="og:description" content="입금 후 작성한 예약 정보를 휴대폰 번호로 확인하고, 고유재의 월별 접수 현황을 간단히 확인할 수 있습니다.">
+<meta property="og:description" content="예약확정서를 작성한 예약 정보를 휴대폰 번호로 확인하실 수 있습니다.">
 <meta property="og:url" content="https://koyuje-website.vercel.app/board">
 <meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
 <meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
@@ -68,12 +68,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .signal-k{font-size:10px;letter-spacing:0.24em;color:var(--gold);margin-bottom:8px;}
 .signal-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;letter-spacing:0.04em;line-height:1.55;}
 .signal-copy{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:0.04em;margin-top:12px;}
-.signal-stats{display:none;grid-template-columns:1fr;gap:1px;background:rgba(28,24,20,0.08);margin-top:18px;max-width:230px;}
-.signal-stats.is-ready{display:grid;}
-.signal-stat{background:var(--paper);padding:16px 16px;min-height:92px;}
-.signal-label{font-size:10px;letter-spacing:0.16em;color:var(--muted);margin-bottom:10px;}
-.signal-num{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--gold);line-height:1;}
-.signal-note{font-size:11px;color:var(--muted);letter-spacing:0.04em;margin-top:8px;}
 .lookup-panel{border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line);padding:28px 0;margin-bottom:28px;}
 .lookup-title{font-family:'Noto Serif KR',serif;font-size:21px;font-weight:300;letter-spacing:0.04em;margin-bottom:8px;}
 .lookup-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:18px;}
@@ -209,7 +203,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .board-guide-list{grid-template-columns:1fr;}
   .board-guide-item{min-height:auto;padding:14px;}
   .signal-panel{padding:20px 18px;}
-  .signal-stats{max-width:none;}
   .lookup-form{grid-template-columns:1fr;}
   .lookup-btn{width:100%;}
   .board-item{grid-template-columns:36px 1fr;}
@@ -239,18 +232,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <div class="hero">
   <div class="hero-label">Reservation Check</div>
   <h1 class="hero-title">예약 확인</h1>
-  <p class="hero-desc">입금 후 작성하신 예약 정보는<br>휴대폰 번호로 조용히 확인하실 수 있습니다.</p>
+  <p class="hero-desc">예약확정서를 작성하신 예약 정보는<br>휴대폰 번호로 확인하실 수 있습니다.</p>
 </div>
 
 <div class="board-wrap">
   <section class="board-guide" aria-label="게시판 이용 안내">
     <div class="board-guide-k">RESERVATION GUIDE</div>
     <h2 class="board-guide-title">하루 두 팀의 촬영을 차분히 준비합니다</h2>
-    <p class="board-guide-copy">고유재는 한 가족의 시간을 충분히 남기기 위해 촬영 일정을 여유 있게 운영합니다. 예약 전 고객은 가능일 문의를 먼저, 입금 후 작성한 고객은 아래 조회를 이용해 주세요.</p>
+    <p class="board-guide-copy">고유재는 한 가족의 시간을 충분히 남기기 위해 촬영 일정을 여유 있게 운영합니다. 예약 전 고객은 가능일 문의를 먼저, 예약확정서를 작성하신 고객은 아래 조회를 이용해 주세요.</p>
     <div class="board-guide-actions" aria-label="예약 관련 빠른 이동">
       <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="guide-kakao">카톡 가능일 문의</a>
       <a href="/status" class="guide-status">예약 현황 확인</a>
-      <a href="/reservation" class="guide-form">입금 후 작성</a>
+      <a href="/reservation" class="guide-form">예약확정서</a>
     </div>
     <div class="board-guide-list">
       <div class="board-guide-item">
@@ -258,7 +251,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <p class="board-guide-desc">촬영 가능일은 카카오톡으로 먼저 확인합니다.</p>
       </div>
       <div class="board-guide-item">
-        <div class="board-guide-label">입금 후 작성</div>
+        <div class="board-guide-label">예약확정서</div>
         <p class="board-guide-desc">예약금 입금 후 촬영 정보를 남겨주세요.</p>
       </div>
       <div class="board-guide-item">
@@ -268,24 +261,17 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     </div>
   </section>
 
-  <section class="signal-panel" aria-label="월별 예약 접수 현황">
+  <section class="signal-panel" aria-label="예약 일정 안내">
     <div>
       <div class="signal-k">MONTHLY RESERVATION</div>
       <h2 class="signal-title">촬영 일정이 순차적으로<br>채워지고 있습니다</h2>
       <p class="signal-copy">고유재는 하루 두 팀만 여유 있게 촬영하기 때문에<br>월별 촬영 가능 일정이 많지 않습니다.<br><br>예약 가능 일정은 문의와 접수 흐름에 따라 순차적으로 안내해 드립니다.</p>
     </div>
-    <div class="signal-stats" id="signalStats" aria-live="polite">
-      <div class="signal-stat">
-        <div class="signal-label">이번 달 접수</div>
-        <div class="signal-num" id="monthCount">—</div>
-        <div class="signal-note" id="monthCode">집계 확인 중</div>
-      </div>
-    </div>
   </section>
 
   <section class="lookup-panel" aria-label="휴대폰 번호 예약 확인">
     <h2 class="lookup-title">예약 정보 확인</h2>
-    <p class="lookup-copy">입금 후 작성하신 예약 정보는 휴대폰 번호 뒤 8자리로 확인하실 수 있습니다. 조회되지 않는 경우 작성 직후 반영 전이거나 입력 번호가 다를 수 있습니다.</p>
+    <p class="lookup-copy">예약확정서를 작성하신 예약 정보는 휴대폰 번호 뒤 8자리로 확인하실 수 있습니다. 조회되지 않는 경우 작성 직후 반영 전이거나 입력 번호가 다를 수 있습니다.</p>
     <div class="lookup-form">
       <input type="tel" class="lookup-input" id="phoneLookup" inputmode="numeric" maxlength="11" placeholder="예) 12345678" aria-label="휴대폰 번호 뒤 8자리">
       <button type="button" class="lookup-btn" id="lookupBtn" onclick="lookupReservation()">예약 확인</button>
@@ -318,25 +304,10 @@ let filteredItems=[];
 const PAGE_SIZE=15;
 
 // 초기 로드
-loadReservationSignal();
 document.getElementById('phoneLookup').addEventListener('keydown',e=>{if(e.key==='Enter')lookupReservation();});
 document.getElementById('phoneLookup').addEventListener('input',e=>{
   e.target.value=e.target.value.replace(/\D/g,'').slice(0,11);
 });
-
-function loadReservationSignal(){
-  fetch(SCRIPT_URL+'?action=reservationStats')
-    .then(r=>r.json())
-    .then(data=>{
-      if(data.result!=='success')throw new Error('stats failed');
-      document.getElementById('monthCount').textContent=(data.currentMonthCount||0)+'건';
-      document.getElementById('monthCode').textContent=(data.currentMonthCode||'이번 달')+' 기준';
-      document.getElementById('signalStats').classList.add('is-ready');
-    })
-    .catch(()=>{
-      document.getElementById('signalStats').classList.remove('is-ready');
-    });
-}
 
 function lookupReservation(){
   const input=document.getElementById('phoneLookup');
