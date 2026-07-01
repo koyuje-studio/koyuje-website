@@ -13,6 +13,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 
 /* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.login-wrap.booting{display:none;}
 .login-card{background:rgba(247,242,234,0.04);border:0.5px solid rgba(247,242,234,0.1);padding:56px 48px;width:100%;max-width:360px;text-align:center;}
 .login-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.15em;color:var(--paper);margin-bottom:4px;}
 .login-logo em{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.25em;display:block;margin-bottom:36px;}
@@ -172,7 +173,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 <body>
 
 <!-- LOGIN -->
-<div class="login-wrap" id="loginWrap">
+<div class="login-wrap booting" id="loginWrap">
   <div class="login-card">
     <div class="login-logo">고유재 한옥스튜디오<em>Admin</em></div>
     <div class="login-title">관리자 로그인</div>
@@ -318,12 +319,7 @@ function doLogin(){
 
   fetchAdminData()
     .then(data=>{
-      allData=data.data||[];
-      document.getElementById('loginWrap').style.display='none';
-      document.getElementById('adminWrap').style.display='block';
-      document.getElementById('loginErr').style.display='none';
-      updateStats();
-      renderCards();
+      applyAdminData(data);
     })
     .catch(()=>{
       adminPw='';
@@ -334,6 +330,43 @@ function doLogin(){
       input.focus();
     })
     .finally(()=>setLoginPending(false));
+}
+
+function applyAdminData(data){
+  allData=data.data||[];
+  document.getElementById('loginWrap').classList.remove('booting');
+  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('adminWrap').style.display='block';
+  document.getElementById('loginErr').style.display='none';
+  updateStats();
+  renderCards();
+}
+
+function showLoginShell(message){
+  document.getElementById('adminWrap').style.display='none';
+  document.getElementById('loginWrap').classList.remove('booting');
+  document.getElementById('loginWrap').style.display='flex';
+  if(message)showLoginError(message);
+}
+
+function bootAdminSession(){
+  const savedPw=getAdminPw();
+  if(!savedPw){
+    showLoginShell();
+    return;
+  }
+  adminPw=savedPw;
+  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('adminWrap').style.display='block';
+  document.getElementById('cardsWrap').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>관리자 인증을 확인하는 중...</div>';
+  fetchAdminData()
+    .then(applyAdminData)
+    .catch(()=>{
+      adminPw='';
+      sessionStorage.removeItem('koyujeAdminPw');
+      allData=[];
+      showLoginShell('저장된 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
+    });
 }
 
 function setLoginPending(isPending){
@@ -880,6 +913,7 @@ function submitPost(){
 document.getElementById('pwInput').addEventListener('keydown',function(e){
   if(e.key==='Enter')doLogin();
 });
+bootAdminSession();
 </script>
 </body>
 </html>

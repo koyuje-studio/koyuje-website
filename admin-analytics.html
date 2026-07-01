@@ -13,6 +13,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--paper);font-weight:300;letter-spacing:.02em}
 .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login.booting{display:none}
 .login-card{width:min(420px,100%);border:1px solid var(--line);background:var(--panel);padding:36px}
 .login-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;margin-bottom:10px}
 .login-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:22px}
@@ -49,7 +50,7 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 </style>
 </head>
 <body>
-<div class="login" id="loginBox">
+<div class="login booting" id="loginBox">
   <div class="login-card">
     <div class="login-title">관리자 통계</div>
     <p class="login-desc">방문, 문의 클릭, 예약확정서 전환 흐름을 확인합니다.</p>
@@ -100,8 +101,19 @@ let currentPeriod='7d';
 
 function getPw(){return sessionStorage.getItem('koyujeAdminPw') || '';}
 function showApp(){
+  document.getElementById('loginBox').classList.remove('booting');
   document.getElementById('loginBox').style.display='none';
   document.getElementById('analyticsWrap').style.display='block';
+}
+function showLogin(message){
+  document.getElementById('analyticsWrap').style.display='none';
+  document.getElementById('loginBox').classList.remove('booting');
+  document.getElementById('loginBox').style.display='flex';
+  if(message){
+    const err=document.getElementById('loginErr');
+    err.textContent=message;
+    err.style.display='block';
+  }
 }
 function login(){
   const pw=document.getElementById('pwInput').value.trim();
@@ -150,7 +162,10 @@ function render(data){
 }
 function loadAnalytics(fromLogin){
   const pw=getPw();
-  if(!pw)return;
+  if(!pw){
+    showLogin();
+    return;
+  }
   fetch(SCRIPT_URL+'?action=analytics&period='+encodeURIComponent(currentPeriod)+'&pw='+encodeURIComponent(pw))
     .then(r=>r.json())
     .then(data=>{
@@ -161,9 +176,10 @@ function loadAnalytics(fromLogin){
     .catch(err=>{
       if(fromLogin){
         sessionStorage.removeItem('koyujeAdminPw');
-        document.getElementById('loginErr').style.display='block';
+        showLogin('비밀번호가 올바르지 않거나 통계 데이터를 불러올 수 없습니다.');
       }else{
-        alert('통계를 불러오지 못했습니다. Apps Script 배포와 비밀번호를 확인해 주세요.\n'+err.message);
+        sessionStorage.removeItem('koyujeAdminPw');
+        showLogin('저장된 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
       }
     });
 }
@@ -175,7 +191,11 @@ document.getElementById('periodButtons').addEventListener('click',e=>{
   loadAnalytics();
 });
 document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
-if(getPw())loadAnalytics();
+if(getPw()){
+  loadAnalytics();
+}else{
+  showLogin();
+}
 </script>
 </body>
 </html>
