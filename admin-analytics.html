@@ -28,6 +28,7 @@ button.active,.btn-gold{background:var(--gold);color:#16120f}
 .body{padding:30px}
 .periods{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.insight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .card{border:1px solid var(--line);background:var(--panel);padding:22px}
 .label{font-size:11px;color:var(--muted);letter-spacing:.14em;margin-bottom:12px}
 .num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold2)}
@@ -42,11 +43,12 @@ button.active,.btn-gold{background:var(--gold);color:#16120f}
 .tables{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th,td{border-bottom:1px solid rgba(247,242,234,.08);padding:10px 4px;text-align:left;color:var(--muted);vertical-align:top}
+td:first-child{overflow-wrap:anywhere}
 td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 .empty{color:var(--muted);font-size:13px;padding:14px 0}
 .error{color:#ff8e8e;font-size:13px;margin-top:10px;display:none}
-@media(max-width:900px){.nav{align-items:flex-start;flex-direction:column}.body{padding:20px 16px}.grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}.tables{grid-template-columns:1fr}}
-@media(max-width:520px){.grid{grid-template-columns:1fr}.funnel{grid-template-columns:1fr}.card,.section{padding:18px}.nav-right{width:100%}.nav-btn,button{flex:1;text-align:center}}
+@media(max-width:900px){.nav{align-items:flex-start;flex-direction:column}.body{padding:20px 16px}.grid,.insight-grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}.tables{grid-template-columns:1fr}}
+@media(max-width:520px){.grid,.insight-grid{grid-template-columns:1fr}.funnel{grid-template-columns:1fr}.card,.section{padding:18px}.nav-right{width:100%}.nav-btn,button{flex:1;text-align:center}}
 </style>
 </head>
 <body>
@@ -84,6 +86,13 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <div class="card"><div class="label">최근 7일 방문자</div><div class="num" id="last7Visitors">—</div></div>
       <div class="card"><div class="label">카카오톡 클릭</div><div class="num" id="kakaoClicks">—</div><div class="sub" id="rangeLabel">선택 기간 기준</div></div>
       <div class="card"><div class="label">예약확정서 제출</div><div class="num" id="reservationSubmits">—</div><div class="sub">선택 기간 기준</div></div>
+    </section>
+
+    <section class="insight-grid">
+      <div class="card"><div class="label">선택 기간 방문자</div><div class="num" id="selectedVisitors">—</div><div class="sub">기간 필터 기준</div></div>
+      <div class="card"><div class="label">예약확정서 진입</div><div class="num" id="reservationPageViews">—</div><div class="sub">작성 페이지 도달</div></div>
+      <div class="card"><div class="label">문의 클릭률</div><div class="num" id="kakaoRate">—</div><div class="sub">방문자 대비</div></div>
+      <div class="card"><div class="label">확정서 제출률</div><div class="num" id="submitRate">—</div><div class="sub">진입자 대비</div></div>
     </section>
 
     <section class="section">
@@ -133,6 +142,10 @@ function renderTable(title,items){
   if(!items||!items.length)return `<div class="section"><div class="section-title">${title}</div><div class="empty">표시할 데이터가 아직 없습니다.</div></div>`;
   return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>건수</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)}</td><td>${item.count}</td></tr>`).join('')}</tbody></table></div>`;
 }
+function percent(part,total){
+  if(!total)return '0%';
+  return (Math.round((part/total)*1000)/10)+'%';
+}
 function render(data){
   showApp();
   const summary=data.summary||{};
@@ -140,6 +153,10 @@ function render(data){
   setText('last7Visitors',summary.last7Visitors||0);
   setText('kakaoClicks',summary.kakaoClicks||0);
   setText('reservationSubmits',summary.reservationSubmits||0);
+  setText('selectedVisitors',summary.selectedVisitors||0);
+  setText('reservationPageViews',summary.reservationPageViews||0);
+  setText('kakaoRate',percent(summary.kakaoClicks||0,summary.selectedVisitors||0));
+  setText('submitRate',percent(summary.reservationSubmits||0,summary.reservationPageViews||0));
   setText('rangeLabel',(data.rangeLabel||'선택 기간')+' 기준');
 
   document.getElementById('funnel').innerHTML=(data.funnel||[]).map(item=>`
@@ -153,6 +170,7 @@ function render(data){
   const rankings=data.rankings||{};
   document.getElementById('tables').innerHTML=[
     renderTable('유입 도메인',rankings.referrerDomains),
+    renderTable('유입 링크',rankings.referrers),
     renderTable('UTM 소스',rankings.utmSources),
     renderTable('UTM 캠페인',rankings.utmCampaigns),
     renderTable('방문 페이지',rankings.pages),
