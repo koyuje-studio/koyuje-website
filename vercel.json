@@ -89,16 +89,19 @@
     { "source": "/reservation/", "destination": "/reservation", "permanent": true },
     { "source": "/board/", "destination": "/board", "permanent": true },
     { "source": "/status/", "destination": "/status", "permanent": true },
+    { "source": "/mvno/", "destination": "/mvno", "permanent": true },
     { "source": "/guide.html", "destination": "/guide", "permanent": true },
     { "source": "/reservation.html", "destination": "/reservation", "permanent": true },
     { "source": "/board.html", "destination": "/board", "permanent": true },
-    { "source": "/status.html", "destination": "/status", "permanent": true }
+    { "source": "/status.html", "destination": "/status", "permanent": true },
+    { "source": "/mvno.html", "destination": "/mvno", "permanent": true }
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/board", "destination": "/board.html" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/admin/analytics", "destination": "/admin-analytics.html" },
+    { "source": "/mvno", "destination": "/mvno.html" },
     { "source": "/reservation", "destination": "/reservation.html" },
     { "source": "/status", "destination": "/status.html" },
     { "source": "/guide", "destination": "/guide.html" },

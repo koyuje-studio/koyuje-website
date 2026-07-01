@@ -398,7 +398,6 @@ const requiredVercelIgnoreLines = [
   "backup-before-sync/",
   "folder-color-tool/",
   "imweb-reservation-widget-full.html",
-  "mvno.html",
 ];
 
 const requiredGitIgnoreLines = [
@@ -414,10 +413,12 @@ const requiredVercelRedirects = [
   ["/reservation/", "/reservation"],
   ["/board/", "/board"],
   ["/status/", "/status"],
+  ["/mvno/", "/mvno"],
   ["/guide.html", "/guide"],
   ["/reservation.html", "/reservation"],
   ["/board.html", "/board"],
   ["/status.html", "/status"],
+  ["/mvno.html", "/mvno"],
 ];
 
 const requiredVercelRewrites = [
@@ -427,6 +428,7 @@ const requiredVercelRewrites = [
   ["/board", "/board.html"],
   ["/status", "/status.html"],
   ["/admin", "/admin.html"],
+  ["/mvno", "/mvno.html"],
   ["/og-image.jpg", "/assets/images/social/og-image.jpg"],
   ["/gallery_01.jpg", "/assets/images/gallery/gallery_01.jpg"],
   ["/0057.jpg", "/assets/images/gallery/0057.jpg"],
