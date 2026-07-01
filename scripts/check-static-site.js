@@ -7,6 +7,7 @@ const requiredFiles = [
   "reservation.html",
   "board.html",
   "status.html",
+  "qr.html",
   "admin-analytics.html",
   "robots.txt",
   "sitemap.xml",
@@ -25,6 +26,7 @@ const requiredFiles = [
   "assets/images/gallery/webp/0075.webp",
   "assets/images/gallery/webp/0138_.webp",
   "assets/images/social/og-image.jpg",
+  "assets/images/payment/gongju-pay-qr.webp",
 ];
 
 const assetSizeLimits = {
@@ -43,6 +45,7 @@ const htmlFiles = [
   "admin.html",
   "admin-analytics.html",
   "status.html",
+  "qr.html",
   "mvno.html",
 ];
 
@@ -54,7 +57,7 @@ const publicPages = {
   "status.html": "https://koyuje.com/status",
 };
 
-const internalPages = ["admin.html", "admin-analytics.html", "mvno.html"];
+const internalPages = ["admin.html", "admin-analytics.html", "mvno.html", "qr.html"];
 const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxFL2mYA0AeKX8uybR2G6LJVv_DQLMryxfjTDpwKoQqX1IoJId4YcqFhsVfhFGvqCAJ/exec";
 const appsScriptPages = ["index.html", "reservation.html", "admin.html", "admin-analytics.html", "board.html", "status.html"];
 
@@ -384,6 +387,8 @@ const requiredRobotsLines = [
   "Disallow: /admin-analytics.html",
   "Disallow: /mvno",
   "Disallow: /mvno.html",
+  "Disallow: /qr",
+  "Disallow: /qr.html",
   "Disallow: /imweb-reservation-widget-full",
   "Disallow: /imweb-reservation-widget-full.html",
   "Disallow: /assets/raw",
@@ -414,11 +419,13 @@ const requiredVercelRedirects = [
   ["/board/", "/board"],
   ["/status/", "/status"],
   ["/mvno/", "/mvno"],
+  ["/qr/", "/qr"],
   ["/guide.html", "/guide"],
   ["/reservation.html", "/reservation"],
   ["/board.html", "/board"],
   ["/status.html", "/status"],
   ["/mvno.html", "/mvno"],
+  ["/qr.html", "/qr"],
 ];
 
 const requiredVercelRewrites = [
@@ -429,6 +436,7 @@ const requiredVercelRewrites = [
   ["/status", "/status.html"],
   ["/admin", "/admin.html"],
   ["/mvno", "/mvno.html"],
+  ["/qr", "/qr.html"],
   ["/og-image.jpg", "/assets/images/social/og-image.jpg"],
   ["/gallery_01.jpg", "/assets/images/gallery/gallery_01.jpg"],
   ["/0057.jpg", "/assets/images/gallery/0057.jpg"],
@@ -446,14 +454,14 @@ const requiredVercelHeaderSources = [
   "/(.*)",
   "/assets/js/runtime-config.js",
   "/assets/(.*)",
-  "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+  "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|qr|qr\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
   "/admin/analytics",
   "/assets/raw/(.*)",
   "/assets/raw",
 ];
 
 const requiredNoindexHeaderSources = [
-  "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+  "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|qr|qr\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
   "/admin/analytics",
   "/assets/raw/(.*)",
   "/assets/raw",

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f7f2ea">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>공주페이 QR 결제 안내 | 고유재 한옥스튜디오</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{color-scheme:light;--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;--line:rgba(28,24,20,0.1);}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;min-height:100vh;}
+.nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;}
+.nav-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.12em;color:var(--ink);text-decoration:none;}
+.nav-logo em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.25em;margin-top:1px;}
+.nav-back{font-size:12px;color:var(--muted);letter-spacing:0.12em;text-decoration:none;}
+.wrap{max-width:760px;margin:0 auto;padding:48px 24px 72px;}
+.intro{border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line);padding:28px 0 26px;margin-bottom:28px;text-align:center;}
+.eyebrow{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:0.28em;margin-bottom:16px;}
+.title{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:300;line-height:1.4;letter-spacing:0.03em;margin-bottom:12px;}
+.desc{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:0.04em;}
+.qr-card{background:#fff;border:0.5px solid rgba(160,120,64,0.18);box-shadow:0 18px 44px rgba(28,24,20,0.06);padding:12px;}
+.qr-card img{display:block;width:100%;height:auto;}
+.note{margin-top:18px;border-left:1px solid var(--gold);background:rgba(160,120,64,0.055);padding:16px 18px;font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;}
+.note strong{color:var(--ink);font-weight:400;}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:12px 28px;border:0.5px solid var(--gold);font-size:12px;letter-spacing:0.14em;text-decoration:none;transition:all .3s;}
+.btn.home{color:var(--gold);}
+.btn.kakao{background:#FAE300;border-color:#FAE300;color:#3A1D1D;}
+.btn.home:hover{background:var(--gold);color:var(--paper);}
+.btn.kakao:hover{background:#f0d800;border-color:#f0d800;}
+@media(max-width:600px){
+  .nav{padding:16px 20px;}
+  .wrap{padding:34px 16px 56px;}
+  .title{font-size:25px;}
+  .qr-card{padding:8px;}
+  .actions{display:grid;grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo" aria-label="고유재 한옥스튜디오 홈">고유재 한옥스튜디오<em>Koyuje Hanok Studio</em></a>
+  <a href="/" class="nav-back">← 홈으로</a>
+</nav>
+
+<main class="wrap">
+  <section class="intro" aria-label="공주페이 QR 결제 안내">
+    <div class="eyebrow">GONGJU PAY</div>
+    <h1 class="title">공주페이 QR 결제 안내</h1>
+    <p class="desc">공주페이 앱 회원가입, 충전, QR 결제 순서를 확인하실 수 있습니다.</p>
+  </section>
+
+  <section class="qr-card" aria-label="공주페이 이용 안내 이미지">
+    <img src="/assets/images/payment/gongju-pay-qr.webp" alt="공주페이 회원가입, 충전, QR 결제 이용 안내" width="935" height="1683" loading="eager" decoding="async">
+  </section>
+
+  <p class="note"><strong>실제 결제 시에는 매장에 비치된 QR코드를 스캔해 주세요.</strong><br>결제 과정에서 확인이 필요하시면 현장에서 안내드리겠습니다.</p>
+
+  <div class="actions">
+    <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="btn kakao">카카오톡 문의</a>
+    <a href="/" class="btn home">홈으로 돌아가기</a>
+  </div>
+</main>
+</body>
+</html>

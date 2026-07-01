@@ -47,7 +47,7 @@
       ]
     },
     {
-      "source": "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
+      "source": "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|qr|qr\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
       "headers": [
         {
           "key": "X-Robots-Tag",
@@ -90,11 +90,13 @@
     { "source": "/board/", "destination": "/board", "permanent": true },
     { "source": "/status/", "destination": "/status", "permanent": true },
     { "source": "/mvno/", "destination": "/mvno", "permanent": true },
+    { "source": "/qr/", "destination": "/qr", "permanent": true },
     { "source": "/guide.html", "destination": "/guide", "permanent": true },
     { "source": "/reservation.html", "destination": "/reservation", "permanent": true },
     { "source": "/board.html", "destination": "/board", "permanent": true },
     { "source": "/status.html", "destination": "/status", "permanent": true },
-    { "source": "/mvno.html", "destination": "/mvno", "permanent": true }
+    { "source": "/mvno.html", "destination": "/mvno", "permanent": true },
+    { "source": "/qr.html", "destination": "/qr", "permanent": true }
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
@@ -102,6 +104,7 @@
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/admin/analytics", "destination": "/admin-analytics.html" },
     { "source": "/mvno", "destination": "/mvno.html" },
+    { "source": "/qr", "destination": "/qr.html" },
     { "source": "/reservation", "destination": "/reservation.html" },
     { "source": "/status", "destination": "/status.html" },
     { "source": "/guide", "destination": "/guide.html" },

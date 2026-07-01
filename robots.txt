@@ -6,6 +6,8 @@ Disallow: /admin/analytics
 Disallow: /admin-analytics.html
 Disallow: /mvno
 Disallow: /mvno.html
+Disallow: /qr
+Disallow: /qr.html
 Disallow: /imweb-reservation-widget-full
 Disallow: /imweb-reservation-widget-full.html
 Disallow: /assets/raw
