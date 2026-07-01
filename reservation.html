@@ -161,6 +161,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .final-check-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--gold);margin-bottom:10px;}
 .final-check-label{font-size:12px;letter-spacing:0.04em;margin-bottom:6px;}
 .final-check-copy{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;}
+.estimate-box{margin-top:22px;border:0.5px solid rgba(160,120,64,0.28);background:rgba(160,120,64,0.04);padding:18px 18px 16px;}
+.estimate-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;border-bottom:0.5px solid rgba(160,120,64,0.18);padding-bottom:12px;margin-bottom:12px;}
+.estimate-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;letter-spacing:0.05em;color:var(--ink);}
+.estimate-total{text-align:right;font-family:'Cormorant Garamond',serif;font-size:28px;line-height:1;color:var(--gold);}
+.estimate-total span{display:block;font-family:'Noto Sans KR',sans-serif;font-size:10px;letter-spacing:0.16em;color:var(--muted);margin-bottom:6px;}
+.estimate-list{display:grid;gap:7px;}
+.estimate-row{display:flex;justify-content:space-between;gap:14px;font-size:12px;color:var(--muted);line-height:1.6;}
+.estimate-row strong{font-weight:400;color:var(--ink);}
+.estimate-note{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;margin-top:12px;}
 
 .submit-area{text-align:center;padding-top:8px;}
 .submit-note{font-size:12px;color:var(--muted);letter-spacing:0.04em;margin-bottom:20px;line-height:1.9;}
@@ -219,6 +228,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .optional-consent,.review-guide{padding:18px 16px;}
   .final-check-grid{grid-template-columns:1fr;}
   .final-check-item{min-height:auto;}
+  .estimate-head{display:block;}
+  .estimate-total{text-align:left;margin-top:14px;}
   .success-actions{display:grid;grid-template-columns:1fr;}
   .success-confirm-row{grid-template-columns:1fr;gap:2px;margin:9px 0;}
   .guide{padding:28px 20px;}
@@ -339,8 +350,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <label class="c-item"><input type="checkbox" name="sibling" value="형제없음"> 형제 없음</label>
         <label class="c-item"><input type="checkbox" name="sibling" value="형제자매기념컷추가"> 형제·자매 기념컷 추가 <span class="price-tag">+ 10만원</span></label>
         <label class="c-item"><input type="checkbox" name="sibling" value="쌍둥이"> 쌍둥이 <span class="price-tag">+ 50만원 (상품 ×2)</span></label>
-        <label class="c-item"><input type="checkbox" name="sibling" value="가족촬영자녀추가실내"> 가족 촬영 자녀 추가 — 실내 <span class="price-tag">+ 10만원 / 1인</span></label>
-        <label class="c-item"><input type="checkbox" name="sibling" value="가족촬영자녀추가야외"> 가족 촬영 자녀 추가 — 야외 <span class="price-tag">+ 20만원 / 1인</span></label>
+        <label class="c-item"><input type="checkbox" name="sibling" value="가족촬영자녀추가실내"> 가족 촬영 자녀 추가 — 실내(돌상컷) <span class="price-tag">+ 10만원 / 1인</span></label>
+        <label class="c-item"><input type="checkbox" name="sibling" value="가족촬영자녀추가야외"> 가족 촬영 자녀 추가 — 야외(가족컷) <span class="price-tag">+ 20만원 / 1인</span></label>
       </div>
     </div>
     <div class="field">
@@ -624,6 +635,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <p class="final-check-copy" id="finalProductCheck">아기 앨범형은 부모님 키·한복·신발 사이즈 입력 없이 제출할 수 있습니다.</p>
       </div>
     </div>
+    <div class="estimate-box" aria-live="polite">
+      <div class="estimate-head">
+        <div>
+          <div class="final-check-k">PRICE ESTIMATE</div>
+          <div class="estimate-title">예상 결제 금액</div>
+        </div>
+        <div class="estimate-total"><span>ESTIMATED TOTAL</span><strong id="estimateTotal">-</strong></div>
+      </div>
+      <div class="estimate-list" id="estimateList">
+        <div class="estimate-row"><strong>촬영 상품을 선택하면 예상 금액이 표시됩니다.</strong><span>-</span></div>
+      </div>
+      <p class="estimate-note">예상 금액은 선택하신 상품과 추가 구성 기준입니다. 최종 금액은 촬영 일정과 세부 상담 후 확정됩니다.</p>
+    </div>
   </div>
   <div class="submit-area">
     <p class="submit-note">
@@ -699,12 +723,22 @@ document.addEventListener('DOMContentLoaded', function() {
     input.addEventListener('change', updateProductDependentSections);
   });
   document.querySelectorAll('input[name="extra"]').forEach(input => {
-    input.addEventListener('change', () => normalizeExtraSelection(input));
+    input.addEventListener('change', () => {
+      normalizeExtraSelection(input);
+      updatePriceEstimate();
+    });
   });
   document.querySelectorAll('input[name="sibling"]').forEach(input => {
-    input.addEventListener('change', () => normalizeSiblingSelection(input));
+    input.addEventListener('change', () => {
+      normalizeSiblingSelection(input);
+      updatePriceEstimate();
+    });
+  });
+  document.querySelectorAll('input[name="weekday"], input[name="siblingShoes"]').forEach(input => {
+    input.addEventListener('change', updatePriceEstimate);
   });
   updateProductDependentSections();
+  updatePriceEstimate();
 });
 
 function populateShootTimeOptions() {
@@ -868,6 +902,7 @@ function updateFamilySizeSections() {
 function updateProductDependentSections() {
   updateFamilySizeSections();
   updateExtraOptions();
+  updatePriceEstimate();
 }
 
 function updateExtraOptions() {
@@ -910,6 +945,74 @@ function normalizeSiblingSelection(changedInput) {
     const noneInput = siblings.find(input => input.value === noneValue);
     if (noneInput) noneInput.checked = false;
   }
+}
+
+function formatWon(amount) {
+  return Number(amount || 0).toLocaleString('ko-KR') + '원';
+}
+
+function addEstimateRow(rows, label, amount) {
+  rows.push({
+    label: label,
+    amount: amount
+  });
+}
+
+function updatePriceEstimate() {
+  const totalEl = document.getElementById('estimateTotal');
+  const listEl = document.getElementById('estimateList');
+  if (!totalEl || !listEl) return;
+
+  const rows = [];
+  let total = 0;
+  const product = getRadio('product');
+  if (product === '아기앨범형') {
+    total += 750000;
+    addEstimateRow(rows, '아기 앨범형', 750000);
+  } else if (product === '가족실내앨범형') {
+    total += 1100000;
+    addEstimateRow(rows, '가족 실내 앨범형', 1100000);
+  }
+
+  if (getRadio('weekday') === '주말/공휴일') {
+    total += 100000;
+    addEstimateRow(rows, '주말 / 공휴일 추가', 100000);
+  }
+
+  const siblingPrices = {
+    '형제자매기념컷추가': ['형제·자매 기념컷 추가', 100000],
+    '쌍둥이': ['쌍둥이 추가', 500000],
+    '가족촬영자녀추가실내': ['가족 촬영 자녀 추가 - 실내(돌상컷)', 100000],
+    '가족촬영자녀추가야외': ['가족 촬영 자녀 추가 - 야외(가족컷)', 200000]
+  };
+  getCheckboxArray('sibling').forEach(value => {
+    const item = siblingPrices[value];
+    if (!item) return;
+    total += item[1];
+    addEstimateRow(rows, item[0], item[1]);
+  });
+
+  if (getRadio('siblingShoes') === '대여신청') {
+    total += 20000;
+    addEstimateRow(rows, '야외 촬영 형제 신발 대여', 20000);
+  }
+
+  const extraPrices = {
+    '야외가족한옥스냅(+30만원)': ['야외 가족 한옥스냅', 300000],
+    '야외가족문화재스냅(+30만원)': ['야외 가족 문화재스냅', 300000],
+    '야외아기컨셉(+20만원)': ['야외 아기 컨셉', 200000]
+  };
+  getVisibleCheckboxArray('extra').forEach(value => {
+    const item = extraPrices[value];
+    if (!item) return;
+    total += item[1];
+    addEstimateRow(rows, item[0], item[1]);
+  });
+
+  totalEl.textContent = rows.length ? formatWon(total) : '-';
+  listEl.innerHTML = rows.length
+    ? rows.map(row => '<div class="estimate-row"><strong>' + escapeHTML(row.label) + '</strong><span>' + formatWon(row.amount) + '</span></div>').join('')
+    : '<div class="estimate-row"><strong>촬영 상품을 선택하면 예상 금액이 표시됩니다.</strong><span>-</span></div>';
 }
 
 function submitForm() {
