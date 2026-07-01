@@ -192,15 +192,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 <div class="admin-wrap" id="adminWrap">
   <nav class="admin-nav">
     <div>
-      <span class="admin-brand">고유재 한옥스튜디오<em>관리자</em></span>
+      <span class="admin-brand">고유재 한옥스튜디오<em>예약 관리</em></span>
     </div>
     <div class="admin-nav-right">
       <span class="admin-today" id="todayLabel"></span>
       <button class="btn-write" onclick="openWriteModal()">✎ 게시글 작성</button>
       <a href="/board.html" target="_blank" rel="noopener" class="btn-refresh" style="text-decoration:none;">게시판 보기</a>
-      <a href="/admin/analytics" class="btn-refresh" style="text-decoration:none;">통계 보기</a>
-      <a href="/qr" target="_blank" rel="noopener" class="btn-qr">공주페이 QR 열기</a>
-      <button class="btn-qr" onclick="copyQrLink()">QR 링크 복사</button>
+      <a href="/admin/analytics" class="btn-refresh" style="text-decoration:none;">통계 분석</a>
+      <button class="btn-qr" onclick="shareQrLink()">공주페이 QR 복사/열기</button>
       <button class="btn-refresh" onclick="loadData()">↻ 새로고침</button>
       <button class="btn-logout" onclick="doLogout()">로그아웃</button>
     </div>
@@ -398,13 +397,14 @@ function doLogout(){
   document.getElementById('loginErr').style.display='none';
 }
 
-function copyQrLink(){
+function shareQrLink(){
   const url=new URL('/qr', location.origin).href;
   const fallback=()=>window.prompt('고객에게 전달할 공주페이 QR 링크입니다.', url);
+  window.open(url,'_blank','noopener');
 
   if(navigator.clipboard&&window.isSecureContext){
     navigator.clipboard.writeText(url)
-      .then(()=>alert('공주페이 QR 링크를 복사했습니다.'))
+      .then(()=>alert('공주페이 QR 링크를 복사하고 새 창으로 열었습니다.'))
       .catch(fallback);
     return;
   }
