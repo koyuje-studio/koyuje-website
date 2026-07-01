@@ -109,6 +109,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .field,.radio-group,.check-group,.address-search-btn,.c-item,.r-item{scroll-margin-top:96px;}
 .address-search-row{display:flex;gap:8px;margin-bottom:8px;}
 .postcode-input{width:120px;flex-shrink:0;}
+.address-trigger{cursor:pointer;}
 .address-search-btn{background:var(--ink);color:var(--paper);border:none;padding:0 16px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;transition:background .3s;}
 .address-search-btn:hover{background:var(--gold);}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
@@ -383,8 +384,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       <label class="f-label">촬영 상품 <span class="req">*</span></label>
       <p class="hint" style="margin-bottom:12px;">가족 실내 앨범형을 선택하시면 부모님 키·한복·신발 사이즈 입력란이 이어서 열립니다.</p>
       <div class="radio-group" style="flex-direction:column;gap:10px;">
-        <label class="r-item"><input type="radio" name="product" value="아기앨범형" required> 아기 앨범형</label>
-        <label class="r-item"><input type="radio" name="product" value="가족실내앨범형"> 가족 실내 앨범형</label>
+        <label class="r-item"><input type="radio" name="product" value="아기앨범형" required> 아기 앨범형 <span class="price-tag">750,000원</span></label>
+        <label class="r-item"><input type="radio" name="product" value="가족실내앨범형"> 가족 실내 앨범형 <span class="price-tag">1,100,000원</span></label>
       </div>
     </div>
   </div>
@@ -499,10 +500,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       <div class="field">
         <label class="f-label">상품 받으실 주소 <span class="req">*</span></label>
         <div class="address-search-row">
-          <input type="text" class="f-input postcode-input" id="postcode" placeholder="우편번호" inputmode="numeric" readonly>
+          <input type="text" class="f-input postcode-input address-trigger" id="postcode" placeholder="우편번호" inputmode="numeric" readonly onclick="searchAddress()" aria-label="주소 검색 열기">
           <button type="button" id="addressSearchBtn" class="address-search-btn" onclick="searchAddress()">주소 검색</button>
         </div>
-        <input type="text" class="f-input" id="addressMain" placeholder="기본 주소" style="margin-bottom:8px;" readonly>
+        <input type="text" class="f-input address-trigger" id="addressMain" placeholder="기본 주소" style="margin-bottom:8px;" readonly onclick="searchAddress()" aria-label="주소 검색 열기">
         <input type="text" class="f-input" id="addressDetail" placeholder="상세 주소 입력 (동/호수 등)" autocomplete="address-line2">
         <input type="hidden" id="address">
       </div>
