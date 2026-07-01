@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIt3a_74Fl2Wgt0J8ySw82k1XL12UD39nG6QZn3Y4TvvXYYskgeOX6lu-rc-9c-uNC/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEUiYjPniWgH-73tJPf6MjGG6sm7N84G4qjLw4kCbIrLmAw6jzRQ_clzjU4YtpKlFO/exec";
   const ALLOWED_PIXEL_HOSTS = ["koyuje.com", "www.koyuje.com"];
   const ADMIN_PATHS = ["/admin", "/admin.html", "/admin/analytics", "/admin-analytics.html"];
   const STORAGE_PREFIX = "koyuje_";
