@@ -855,7 +855,7 @@ function loadHomeNotice() {
           displayTitle = nameMatch ? nameMatch[1] + '님 비밀글' : '비밀글';
         }
         const safeTitle = escapeHTML(displayTitle);
-        const safeDate = escapeHTML(item.date ? item.date.replace(/-/g, '.') : '');
+        const safeDate = escapeHTML(getNoticeDateLabel(item));
         return `
           <a href="/board" class="notice-item">
             <div class="notice-num">${isNotice ? '공지' : '예약 현황'}</div>
@@ -879,6 +879,16 @@ function buildReservationStatusBadge(item) {
     return '<span class="notice-status-badge done">확정완료</span>';
   }
   return '<span class="notice-status-badge">확인중</span>';
+}
+
+function getNoticeDateLabel(item) {
+  if (item.category !== '공지') {
+    const shootDate = String(item.shootDate || '').trim();
+    const shootTime = String(item.shootTime || '').trim();
+    const shootLabel = [shootDate, shootTime].filter(Boolean).join(' ');
+    if (shootLabel) return shootLabel.replace(/-/g, '.');
+  }
+  return item.date ? String(item.date).replace(/-/g, '.') : '';
 }
 
 function isNewReservation(dateText) {

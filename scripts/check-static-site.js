@@ -193,7 +193,7 @@ const requiredPageSnippets = {
     "촬영 정보와 상품별 필요 정보를 작성하시면 예약 정보가 접수됩니다.",
     "function escapeHTML(value)",
     "const safeTitle = escapeHTML(displayTitle)",
-    "const safeDate = escapeHTML(item.date",
+    "const safeDate = escapeHTML(getNoticeDateLabel(item))",
     "고유재 실크 한복 가족 촬영",
     'src="${escapeHTML(img.src)}"',
     '<video class="hero-video" autoplay muted loop playsinline',
