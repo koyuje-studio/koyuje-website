@@ -862,8 +862,8 @@ function loadHomeNotice() {
         if (!isNotice) {
           return `
           <a href="/board" class="notice-item reservation-item">
-            <div class="notice-num">예약 현황</div>
-            <div class="notice-schedule">촬영 일정</div>
+            <div class="notice-num"></div>
+            <div class="notice-schedule">예약 일정</div>
             <div class="notice-date">${safeDate}</div>
             <div class="notice-title">${safeTitle}${isNew ? '<span class="notice-badge">NEW</span>' : ''}${statusBadge}</div>
           </a>`;
