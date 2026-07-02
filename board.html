@@ -115,13 +115,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .cat-badge.notice{color:var(--red);border-color:rgba(139,46,46,0.3);background:rgba(139,46,46,0.05);}
 .status-done{color:var(--green);font-size:13px;}
 .status-wait{color:#8b6914;font-size:13px;}
-.reservation-status-badge{font-size:11px;color:#8b6914;background:rgba(139,105,20,0.08);border:0.5px solid rgba(139,105,20,0.25);padding:2px 8px;letter-spacing:0.08em;white-space:nowrap;}
-.reservation-status-badge::before{content:'⏳';font-size:10px;margin-right:5px;vertical-align:0;animation:none;}
-.reservation-status-badge.done{color:var(--green);background:rgba(58,107,58,0.08);border-color:rgba(58,107,58,0.25);}
+.reservation-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#8b6914;background:rgba(139,105,20,0.08);border-radius:999px;padding:2px 8px;letter-spacing:0.08em;white-space:nowrap;}
+.reservation-status-badge::before{content:'⏳';font-size:10px;margin-right:0;vertical-align:0;animation:none;}
+.reservation-status-badge.done{color:var(--green);background:rgba(58,107,58,0.08);}
 .reservation-status-badge.done::before{content:'✓';animation:none;}
-.reservation-status-badge.cancel{color:var(--red);background:rgba(139,46,46,0.06);border-color:rgba(139,46,46,0.25);}
+.reservation-status-badge.cancel{color:var(--red);background:rgba(139,46,46,0.06);}
 .reservation-status-badge.cancel::before{content:'×';animation:none;}
-.new-badge{font-size:9px;color:#fff;background:#c0392b;padding:2px 7px;letter-spacing:0.1em;font-weight:400;animation:newPulse 1.8s ease-in-out infinite;}
+.new-badge{font-size:9px;color:var(--gold);padding:0;letter-spacing:0.16em;font-weight:400;animation:newTextPulse 1.8s ease-in-out infinite;}
 .board-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:0.05em;}
 
 /* 페이지네이션 */
@@ -194,6 +194,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .spinner{display:inline-block;width:24px;height:24px;border:1px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes newPulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}50%{box-shadow:0 0 0 4px rgba(192,57,43,0.12)}}
+@keyframes newTextPulse{0%,100%{opacity:.55}50%{opacity:1}}
 @keyframes statusBlink{0%,100%{opacity:.35}50%{opacity:1}}
 @media(prefers-reduced-motion:reduce){
   .new-badge,.reservation-status-badge::before{animation:none;}
