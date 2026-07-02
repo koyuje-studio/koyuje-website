@@ -878,7 +878,8 @@ function buildSuccessInfo(payload) {
       successRow('촬영 일정', [payload.shootDate, payload.shootTime].filter(Boolean).join(' ')),
       successRow('요일 구분', payload.weekday),
       successRow('선택 상품', payload.product),
-      successRow('추가 구성', payload.extra || '추가 구성 없음')
+      successRow('추가 구성', payload.extra || '추가 구성 없음'),
+      successRow('예상 결제 금액', payload.estimatedTotal)
     ]),
     successSection('가족 정보', [
       successRow('형제/자매', payload.sibling),
@@ -998,11 +999,7 @@ function addEstimateRow(rows, label, amount) {
   });
 }
 
-function updatePriceEstimate() {
-  const totalEl = document.getElementById('estimateTotal');
-  const listEl = document.getElementById('estimateList');
-  if (!totalEl || !listEl) return;
-
+function calculatePriceEstimate() {
   const rows = [];
   let total = 0;
   const product = getRadio('product');
@@ -1048,6 +1045,18 @@ function updatePriceEstimate() {
     total += item[1];
     addEstimateRow(rows, item[0], item[1]);
   });
+
+  return { rows, total };
+}
+
+function updatePriceEstimate() {
+  const totalEl = document.getElementById('estimateTotal');
+  const listEl = document.getElementById('estimateList');
+  if (!totalEl || !listEl) return;
+
+  const estimate = calculatePriceEstimate();
+  const rows = estimate.rows;
+  const total = estimate.total;
 
   totalEl.textContent = rows.length ? formatWon(total) : '-';
   listEl.innerHTML = rows.length
@@ -1193,6 +1202,8 @@ function submitForm() {
     if (item === '지인소개') return '지인 소개: ' + val('referralName');
     return item;
   }).join(', ');
+  const estimate = calculatePriceEstimate();
+  const estimateItems = estimate.rows.map(row => row.label + ' ' + formatWon(row.amount)).join(', ');
 
   const payload = {
     action: 'reservation',
@@ -1220,6 +1231,9 @@ function submitForm() {
     address: val('address'),
     channel: channel,
     photoUsageConsent: document.getElementById('photoUsageConsent').checked ? '동의' : '미동의',
+    estimatedTotal: estimate.rows.length ? formatWon(estimate.total) : '-',
+    estimatedTotalAmount: String(estimate.total || 0),
+    estimatedItems: estimateItems || '-',
     memo: val('memo')
   };
 

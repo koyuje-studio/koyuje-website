@@ -76,6 +76,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .monthly-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:12px;}
 .monthly-title{font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);}
 .monthly-current{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);line-height:1;}
+.monthly-revenue{font-size:12px;color:rgba(247,242,234,0.58);letter-spacing:0.06em;margin-top:8px;text-align:right;}
+.monthly-revenue strong{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--gold2);margin-left:8px;vertical-align:-2px;}
 .monthly-list{display:flex;flex-wrap:wrap;gap:8px;}
 .monthly-chip{border:0.5px solid rgba(160,120,64,0.28);background:transparent;color:rgba(247,242,234,0.72);padding:6px 10px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.08em;cursor:pointer;transition:all .25s;}
 .monthly-chip:hover,.monthly-chip.active{background:rgba(160,120,64,0.16);border-color:rgba(160,120,64,0.45);color:var(--gold2);}
@@ -219,7 +221,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
           <div class="monthly-title">월별 접수 집계</div>
           <div class="write-hint">삭제 처리된 예약은 집계에서 제외됩니다.</div>
         </div>
-        <div class="monthly-current" id="monthlyCurrent">—</div>
+        <div>
+          <div class="monthly-current" id="monthlyCurrent">—</div>
+          <div class="monthly-revenue">예상 매출 <strong id="monthlyRevenue">—</strong></div>
+        </div>
       </div>
       <div class="monthly-list" id="monthlyList"></div>
     </div>
@@ -482,19 +487,49 @@ function updateMonthlyStats(source){
   source.forEach(item=>{
     const info=getSubmitMonthInfo(item);
     if(!info)return;
-    const prev=map.get(info.key)||{...info,count:0};
+    const prev=map.get(info.key)||{...info,count:0,revenue:0};
     prev.count+=1;
+    if(getStatusClass(item.status)!=='cancel')prev.revenue+=calculateReservationEstimate(item);
     map.set(info.key,prev);
   });
   const entries=Array.from(map.values()).sort((a,b)=>b.key.localeCompare(a.key));
   const nowInfo={year:now.getFullYear(),month:now.getMonth()+1};
   const currentCode='V'+String(nowInfo.year).slice(-1)+String(nowInfo.month).padStart(2,'0');
-  const current=entries.find(item=>item.year===nowInfo.year&&item.month===nowInfo.month);
-  document.getElementById('monthlyCurrent').textContent=currentCode+' · '+(current?current.count:0)+'건';
+  const selected=entries.find(item=>item.key===currentMonthKey);
+  const current=selected||entries.find(item=>item.year===nowInfo.year&&item.month===nowInfo.month);
+  document.getElementById('monthlyCurrent').textContent=(current?current.code:currentCode)+' · '+(current?current.count:0)+'건';
+  document.getElementById('monthlyRevenue').textContent=formatWon(current?current.revenue:0);
   document.getElementById('monthlyList').innerHTML=entries.length
     ? '<button type="button" class="monthly-chip '+(!currentMonthKey?'active':'')+'" onclick="setMonthFilter(\'\')">전체 월</button>'
-      +entries.map(item=>'<button type="button" class="monthly-chip '+(currentMonthKey===item.key?'active':'')+'" onclick="setMonthFilter(\''+escapeAttr(item.key)+'\')">'+escapeHTML(item.code)+' · '+item.count+'건</button>').join('')
+      +entries.map(item=>'<button type="button" class="monthly-chip '+(currentMonthKey===item.key?'active':'')+'" onclick="setMonthFilter(\''+escapeAttr(item.key)+'\')">'+escapeHTML(item.code)+' · '+item.count+'건 · '+escapeHTML(formatWon(item.revenue))+'</button>').join('')
     : '<span class="monthly-chip">집계 없음</span>';
+}
+
+function formatWon(amount){
+  return Number(amount||0).toLocaleString('ko-KR')+'원';
+}
+
+function includesAny(value,patterns){
+  const text=String(value||'');
+  return patterns.some(pattern=>text.includes(pattern));
+}
+
+function calculateReservationEstimate(item){
+  let total=0;
+  if(String(item.product||'').includes('아기앨범형'))total+=750000;
+  if(String(item.product||'').includes('가족실내앨범형'))total+=1100000;
+  if(String(item.weekday||'').includes('주말')||String(item.weekday||'').includes('공휴일'))total+=100000;
+
+  if(includesAny(item.sibling,['형제자매기념컷추가','친형제','친자매']))total+=100000;
+  if(includesAny(item.sibling,['쌍둥이']))total+=500000;
+  if(includesAny(item.sibling,['가족촬영자녀추가실내','실내(돌상컷)']))total+=100000;
+  if(includesAny(item.sibling,['가족촬영자녀추가야외','야외(가족컷)']))total+=200000;
+  if(String(item.siblingShoes||'').includes('대여신청'))total+=20000;
+
+  if(includesAny(item.extra,['야외가족한옥스냅','야외 가족 한옥스냅']))total+=300000;
+  if(includesAny(item.extra,['야외가족문화재스냅','야외 가족 문화재스냅']))total+=300000;
+  if(includesAny(item.extra,['야외아기컨셉','야외 아기 컨셉']))total+=200000;
+  return total;
 }
 
 function setMonthFilter(monthKey){
