@@ -78,7 +78,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .form-helper-links .helper-kakao:hover{background:#f0d800;color:#3A1D1D;border-color:#f0d800;}
 
 .sec{margin-bottom:48px;}
-.sec.is-hidden,.add-card.is-hidden{display:none;}
+.sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden{display:none;}
 .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:14px;border-bottom:0.5px solid var(--line);}
 .sec-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:0.15em;min-width:24px;}
 .sec-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:400;letter-spacing:0.06em;}
@@ -129,6 +129,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .r-item input[type=radio]:checked::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5px;height:5px;border-radius:50%;background:var(--paper);}
 .c-item input[type=checkbox]:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);font-size:9px;color:var(--paper);}
 .price-tag{color:var(--gold);font-size:11px;margin-left:4px;}
+.twin-toggle{margin-top:16px;padding-top:14px;border-top:0.5px solid rgba(28,24,20,0.08);}
+.twin-fields{margin-top:18px;padding:18px 18px 4px;border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.035);}
 
 .add-card{border:0.5px solid var(--line);padding:14px 16px;margin-bottom:6px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;}
 .add-card:hover{border-color:rgba(160,120,64,0.3);background:rgba(160,120,64,0.03);}
@@ -315,7 +317,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="sec-head"><div class="sec-num">01</div><div class="sec-title">아기 정보</div></div>
     <div class="grid2">
       <div class="field">
-        <label class="f-label">아기 이름 <span class="req">*</span></label>
+        <label class="f-label" id="babyNameLabel">아기 이름 <span class="req">*</span></label>
         <input type="text" class="f-input" id="babyName" placeholder="홍길동" autocomplete="off" required>
       </div>
       <div class="field">
@@ -324,11 +326,30 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </div>
     </div>
     <div class="field">
-      <label class="f-label">아기 성별 <span class="req">*</span></label>
+      <label class="f-label" id="babyGenderLabel">아기 성별 <span class="req">*</span></label>
       <div class="radio-group">
         <label class="r-item"><input type="radio" name="babyGender" value="남아" required> 남아</label>
         <label class="r-item"><input type="radio" name="babyGender" value="여아"> 여아</label>
       </div>
+      <div class="twin-toggle">
+        <label class="c-item"><input type="checkbox" id="isTwinBaby"> 쌍둥이입니다 <span class="price-tag">+ 50만원</span></label>
+      </div>
+    </div>
+    <div class="twin-fields is-hidden" id="twinFields">
+      <div class="grid2">
+        <div class="field">
+          <label class="f-label">둘째 아기 이름 <span class="req">*</span></label>
+          <input type="text" class="f-input" id="secondBabyName" placeholder="홍길순" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="f-label">둘째 아기 성별 <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="r-item"><input type="radio" name="secondBabyGender" value="남아"> 남아</label>
+            <label class="r-item"><input type="radio" name="secondBabyGender" value="여아"> 여아</label>
+          </div>
+        </div>
+      </div>
+      <p class="hint">쌍둥이 생년월일은 위 아기 생년월일 기준으로 함께 접수됩니다.</p>
     </div>
   </div>
 
@@ -705,13 +726,22 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('input[name="sibling"]').forEach(input => {
     input.addEventListener('change', () => {
       normalizeSiblingSelection(input);
+      syncTwinFromSibling(input);
       updatePriceEstimate();
     });
   });
   document.querySelectorAll('input[name="weekday"], input[name="siblingShoes"]').forEach(input => {
     input.addEventListener('change', updatePriceEstimate);
   });
+  const twinInput = document.getElementById('isTwinBaby');
+  if (twinInput) {
+    twinInput.addEventListener('change', () => {
+      setTwinBabyMode(twinInput.checked);
+      updatePriceEstimate();
+    });
+  }
   updateProductDependentSections();
+  setTwinBabyMode(false);
   updatePriceEstimate();
 });
 
@@ -759,6 +789,42 @@ function getVisibleCheckboxArray(name) {
   return Array.from(els)
     .filter(input => !input.closest('.is-hidden'))
     .map(e=>e.value);
+}
+function isTwinBabySelected() {
+  const input = document.getElementById('isTwinBaby');
+  return !!(input && input.checked);
+}
+function getSiblingTwinInput() {
+  return Array.from(document.querySelectorAll('input[name="sibling"]')).find(input => input.value === '쌍둥이');
+}
+function setTwinBabyMode(isTwin) {
+  const twinInput = document.getElementById('isTwinBaby');
+  const twinFields = document.getElementById('twinFields');
+  const babyNameLabel = document.getElementById('babyNameLabel');
+  const babyGenderLabel = document.getElementById('babyGenderLabel');
+  const secondName = document.getElementById('secondBabyName');
+  const siblingTwin = getSiblingTwinInput();
+
+  if (twinInput) twinInput.checked = isTwin;
+  if (twinFields) twinFields.classList.toggle('is-hidden', !isTwin);
+  if (babyNameLabel) babyNameLabel.innerHTML = (isTwin ? '첫째 아기 이름' : '아기 이름') + ' <span class="req">*</span>';
+  if (babyGenderLabel) babyGenderLabel.innerHTML = (isTwin ? '첫째 아기 성별' : '아기 성별') + ' <span class="req">*</span>';
+  if (secondName) secondName.required = isTwin;
+  document.querySelectorAll('input[name="secondBabyGender"]').forEach(input => {
+    input.required = isTwin;
+    if (!isTwin) input.checked = false;
+  });
+  if (!isTwin && secondName) secondName.value = '';
+
+  if (siblingTwin && siblingTwin.checked !== isTwin) {
+    siblingTwin.checked = isTwin;
+    normalizeSiblingSelection(siblingTwin);
+  }
+}
+function syncTwinFromSibling(input) {
+  const siblingTwin = getSiblingTwinInput();
+  if (!siblingTwin) return;
+  setTwinBabyMode(siblingTwin.checked);
 }
 function val(id) {
   const el = document.getElementById(id);
@@ -1032,6 +1098,17 @@ function submitForm() {
     focusRadioGroup('babyGender');
     return;
   }
+  const isTwinBaby = isTwinBabySelected();
+  if (isTwinBaby && !val('secondBabyName')) {
+    alert('둘째 아기 이름을 입력해 주세요.');
+    focusField('secondBabyName');
+    return;
+  }
+  if (isTwinBaby && !getRadio('secondBabyGender')) {
+    alert('둘째 아기 성별을 선택해 주세요.');
+    focusRadioGroup('secondBabyGender');
+    return;
+  }
   if (!getRadio('weekday')) {
     alert('촬영 요일 구분을 선택해 주세요.');
     focusRadioGroup('weekday');
@@ -1107,6 +1184,10 @@ function submitForm() {
   const siblingShoes = getRadio('siblingShoes') === '기타' ? '기타: ' + val('siblingShoesSz') : getRadio('siblingShoes');
   // 체크박스 — 복수 선택
   const siblingChecked = getCheckboxes('sibling');
+  const babyNameValue = isTwinBaby ? [val('babyName'), val('secondBabyName')].filter(Boolean).join(' / ') : val('babyName');
+  const babyGenderValue = isTwinBaby ? [getRadio('babyGender'), getRadio('secondBabyGender')].filter(Boolean).join(' / ') : getRadio('babyGender');
+  const twinSummary = isTwinBaby ? '쌍둥이: ' + val('babyName') + ' ' + getRadio('babyGender') + ', ' + val('secondBabyName') + ' ' + getRadio('secondBabyGender') : '';
+  const siblingInfoValue = [twinSummary, val('siblingInfo')].filter(Boolean).join(' / 추가 형제: ');
   const channel = channelCheckedList.map(item => {
     if (item === '기타') return '기타: ' + val('channelEtc');
     if (item === '지인소개') return '지인 소개: ' + val('referralName');
@@ -1115,11 +1196,11 @@ function submitForm() {
 
   const payload = {
     action: 'reservation',
-    babyName: val('babyName'),
-    babyGender: getRadio('babyGender'),
+    babyName: babyNameValue,
+    babyGender: babyGenderValue,
     babyBirth: val('babyBirth'),
     sibling: siblingChecked,
-    siblingInfo: val('siblingInfo'),
+    siblingInfo: siblingInfoValue,
     parentName: val('parentName'),
     phone: val('phone'),
     email: val('email'),
