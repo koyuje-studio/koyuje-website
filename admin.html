@@ -56,6 +56,25 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .write-textarea{resize:vertical;min-height:100px;line-height:1.8;}
 .write-select option{background:#1a1714;}
 .write-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.edit-form{display:block;}
+.edit-section{border-top:0.5px solid rgba(247,242,234,0.08);padding-top:22px;margin-top:22px;}
+.edit-section:first-child{border-top:none;padding-top:0;margin-top:0;}
+.edit-section-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;color:var(--paper);letter-spacing:0.08em;margin-bottom:16px;}
+.edit-section-k{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:12px;letter-spacing:0.18em;margin-right:10px;}
+.edit-options{display:flex;flex-wrap:wrap;gap:8px;}
+.edit-options.column{flex-direction:column;align-items:flex-start;}
+.edit-option{display:inline-flex;align-items:center;gap:8px;min-height:38px;border:0.5px solid rgba(247,242,234,0.14);background:rgba(247,242,234,0.035);color:rgba(247,242,234,0.72);padding:9px 12px;font-size:12px;letter-spacing:0.04em;cursor:pointer;transition:all .2s;}
+.edit-option:hover{border-color:rgba(160,120,64,0.45);color:var(--gold2);}
+.edit-option input{accent-color:var(--gold);}
+.edit-option:has(input:checked){border-color:rgba(160,120,64,0.65);background:rgba(160,120,64,0.13);color:var(--paper);}
+.edit-price{font-size:11px;color:var(--gold2);margin-left:4px;}
+.edit-inline-input{width:120px;background:transparent;border:0;border-bottom:0.5px solid rgba(247,242,234,0.18);color:var(--paper);padding:4px 0;font-family:'Noto Sans KR',sans-serif;font-size:12px;outline:none;}
+.edit-inline-input:focus{border-bottom-color:var(--gold);}
+.edit-hidden{display:none!important;}
+.edit-estimate{border:0.5px solid rgba(160,120,64,0.28);background:rgba(160,120,64,0.08);padding:16px 18px;margin-top:6px;}
+.edit-estimate-k{font-size:10px;letter-spacing:0.18em;color:rgba(247,242,234,0.48);margin-bottom:6px;}
+.edit-estimate-total{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold2);}
+.edit-estimate-items{font-size:12px;color:rgba(247,242,234,0.55);line-height:1.8;margin-top:8px;word-break:keep-all;}
 .btn-write-submit{width:100%;background:var(--gold);color:var(--ink);border:none;padding:14px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .3s;margin-top:8px;}
 .btn-write-submit:hover{background:var(--gold2);}
 .write-close{position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(247,242,234,0.4);font-size:18px;cursor:pointer;}
@@ -869,44 +888,37 @@ function showToast(message){
   },2500);
 }
 
-const editableReservationFields=[
-  ['babyName','아기 이름','text'],
-  ['babyGender','아기 성별','select:babyGender'],
-  ['babyBirth','아기 생년월일','date'],
-  ['sibling','형제 구성','text'],
-  ['siblingInfo','형제 상세','text'],
-  ['parentName','보호자명','text'],
-  ['phone','연락처','text'],
-  ['email','이메일','email'],
-  ['momHeight','엄마 키','number'],
-  ['momSize','엄마 한복 사이즈','select:momSize'],
-  ['momShoes','엄마 신발 사이즈','number'],
-  ['dadHeight','아빠 키','number'],
-  ['dadSize','아빠 한복 사이즈','select:dadSize'],
-  ['dadShoes','아빠 신발 사이즈','number'],
-  ['weekday','촬영 가능 요일','select:weekday'],
-  ['shootDate','촬영 날짜','date'],
-  ['shootTime','촬영 시간','time'],
-  ['product','선택 상품','select:product'],
-  ['extra','추가 구성','text'],
-  ['siblingShoes','형제 신발','text'],
-  ['depositor','입금자명','text'],
-  ['depositConfirmedAt','입금 확인일','date'],
-  ['actualPaymentAmount','실제 입금액','number'],
-  ['paymentMethod','결제수단','select:paymentMethod'],
-  ['address','주소','textarea'],
-  ['channel','유입 경로','text'],
-  ['photoUsageConsent','사진 활용 동의','select:photoUsageConsent'],
-  ['memo','요청 사항','textarea'],
-  ['adminMemo','관리자 메모','textarea']
-];
-
-const editSelectOptions={
+const editOptionGroups={
   babyGender:['남아','여아','남아 / 남아','남아 / 여아','여아 / 남아','여아 / 여아'],
-  weekday:['평일','주말/공휴일'],
-  product:['아기앨범형','가족실내앨범형'],
+  sibling:[
+    ['형제없음','형제 없음',''],
+    ['형제자매기념컷추가','친형제·친자매 기념컷 추가','+ 10만원'],
+    ['쌍둥이','쌍둥이','+ 50만원'],
+    ['가족촬영자녀추가실내','가족 촬영 자녀 추가 — 실내(돌상컷)','+ 10만원 / 1인'],
+    ['가족촬영자녀추가야외','가족 촬영 자녀 추가 — 야외(가족컷)','+ 20만원 / 1인']
+  ],
+  siblingShoes:[
+    ['필요없음','필요 없음',''],
+    ['대여신청','대여 신청','+ 2만원'],
+    ['기타','기타','']
+  ],
+  product:[
+    ['아기앨범형','아기 앨범형','750,000원'],
+    ['가족실내앨범형','가족 실내 앨범형','1,100,000원']
+  ],
   momSize:['55','66','77','기타'],
   dadSize:['90','95','100','105','110','기타'],
+  weekday:[
+    ['평일','평일',''],
+    ['주말/공휴일','주말 / 공휴일','+ 10만원']
+  ],
+  extra:[
+    ['야외가족한옥스냅(+30만원)','야외 가족 한옥스냅','+ 300,000원','family'],
+    ['야외가족문화재스냅(+30만원)','야외 가족 문화재스냅','+ 300,000원','family'],
+    ['야외아기컨셉(+20만원)','야외 아기 컨셉','+ 200,000원','baby'],
+    ['추가구성없음','추가 구성 없이 진행','실내 촬영만 진행','all']
+  ],
+  channel:['SNS','맘카페','포털검색','지인소개','기타'],
   photoUsageConsent:['동의','미동의'],
   paymentMethod:['카드결제','계좌이체','현금결제','공주페이']
 };
@@ -925,27 +937,204 @@ function toDateInput(value){
 function toTimeInput(value){
   if(!value)return'';
   const s=String(value).trim();
+  const ko=s.match(/(오전|오후)\s*(\d{1,2})(?::|시\s*)?(\d{2})?/);
+  if(ko){
+    let h=parseInt(ko[2],10);
+    const m=ko[3]||'00';
+    if(ko[1]==='오후'&&h<12)h+=12;
+    if(ko[1]==='오전'&&h===12)h=0;
+    return String(h).padStart(2,'0')+':'+m;
+  }
   const match=s.match(/^(\d{1,2}):(\d{2})/);
   if(match)return String(match[1]).padStart(2,'0')+':'+match[2];
   return s;
 }
 
-function editValue(item,key,type){
-  if(type==='date')return toDateInput(item[key]);
-  if(type==='time')return toTimeInput(item[key]);
-  return item[key] ?? '';
+function splitValues(value){
+  return String(value||'')
+    .split(/\s*,\s*|\s*\/\s*/)
+    .map(item=>item.trim())
+    .filter(Boolean);
 }
 
-function renderEditSelect(key,label,type,value){
-  const optionKey=type.split(':')[1];
-  const options=editSelectOptions[optionKey]||[];
-  const safeValue=String(value||'');
-  const hasCurrent=safeValue && !options.includes(safeValue);
-  const optionHtml=(hasCurrent?[safeValue]:[]).concat(options).map(option=>{
-    const selected=option===safeValue?' selected':'';
-    return `<option value="${escapeAttr(option)}"${selected}>${escapeHTML(option)}</option>`;
-  }).join('');
-  return `<div class="write-field"><label class="write-label">${label}</label><select class="write-select" data-edit-key="${key}"><option value="">선택</option>${optionHtml}</select></div>`;
+function isCheckedValue(source,value){
+  const normSource=normalizeText(source);
+  return splitValues(source).some(item=>normalizeText(item)===normalizeText(value))||normSource.includes(normalizeText(value));
+}
+
+function sectionTitle(num,title){
+  return `<div class="edit-section-title"><span class="edit-section-k">${num}</span>${title}</div>`;
+}
+
+function editInput(key,label,type,value,attrs){
+  const safe=escapeAttr(type==='date'?toDateInput(value):type==='time'?toTimeInput(value):value ?? '');
+  return `<div class="write-field" ${attrs||''}><label class="write-label">${label}</label><input type="${type}" class="write-input" data-edit-key="${key}" value="${safe}"></div>`;
+}
+
+function editTextarea(key,label,value){
+  return `<div class="write-field" style="grid-column:1/-1;"><label class="write-label">${label}</label><textarea class="write-textarea" data-edit-key="${key}">${escapeHTML(value ?? '')}</textarea></div>`;
+}
+
+function renderEditRadio(key,options,current,column){
+  const currentText=String(current||'');
+  const normalizedCurrent=normalizeText(currentText);
+  return `<div class="edit-options ${column?'column':''}">`+options.map(option=>{
+    const data=Array.isArray(option)?option:[option,option,''];
+    const value=data[0],label=data[1],price=data[2]||'',target=data[3]||'';
+    const normalizedValue=normalizeText(value);
+    const checked=normalizedCurrent===normalizedValue||normalizedCurrent.includes(normalizedValue)||(!normalizedCurrent&&value==='필요없음')?' checked':'';
+    const targetAttr=target?` data-edit-option-target="${target}"`:'';
+    return `<label class="edit-option"${targetAttr}><input type="radio" name="edit_${key}" data-edit-radio-key="${key}" value="${escapeAttr(value)}"${checked}> ${escapeHTML(label)}${price?`<span class="edit-price">${escapeHTML(price)}</span>`:''}</label>`;
+  }).join('')+'</div>';
+}
+
+function renderEditCheckbox(key,options,current,column){
+  return `<div class="edit-options ${column?'column':''}">`+options.map(option=>{
+    const data=Array.isArray(option)?option:[option,option,''];
+    const value=data[0],label=data[1],price=data[2]||'',target=data[3]||'';
+    const checked=isCheckedValue(current,value)?' checked':'';
+    const targetAttr=target?` data-edit-option-target="${target}"`:'';
+    return `<label class="edit-option"${targetAttr}><input type="checkbox" data-edit-checkbox-key="${key}" value="${escapeAttr(value)}"${checked}> ${escapeHTML(label)}${price?`<span class="edit-price">${escapeHTML(price)}</span>`:''}</label>`;
+  }).join('')+'</div>';
+}
+
+function editFieldFromDom(key){
+  const direct=document.querySelector(`[data-edit-key="${key}"]`);
+  if(direct)return direct.value.trim();
+  const radio=document.querySelector(`[data-edit-radio-key="${key}"]:checked`);
+  if(radio)return radio.value;
+  const checks=Array.from(document.querySelectorAll(`[data-edit-checkbox-key="${key}"]:checked`)).map(input=>input.value);
+  return checks.join(', ');
+}
+
+function buildEditPreviewItem(){
+  return {
+    product: editFieldFromDom('product'),
+    weekday: editFieldFromDom('weekday'),
+    sibling: editFieldFromDom('sibling'),
+    siblingShoes: editFieldFromDom('siblingShoes'),
+    extra: editFieldFromDom('extra')
+  };
+}
+
+function updateEditModalState(){
+  const product=editFieldFromDom('product');
+  const isFamily=product==='가족실내앨범형';
+  document.querySelectorAll('[data-edit-family-section]').forEach(section=>section.classList.toggle('edit-hidden',!isFamily));
+  document.querySelectorAll('[data-edit-option-target]').forEach(label=>{
+    const target=label.dataset.editOptionTarget;
+    const visible=target==='all'||(target==='family'&&isFamily)||(target==='baby'&&!isFamily);
+    label.classList.toggle('edit-hidden',!visible);
+    const input=label.querySelector('input');
+    if(input&&!visible)input.checked=false;
+  });
+  const estimate=calculateReservationEstimateBreakdown(buildEditPreviewItem());
+  const total=estimate.total?formatWon(estimate.total):'-';
+  const items=estimate.items.length?estimate.items.map(entry=>entry.label+' '+formatWon(entry.amount)).join(' / '):'선택된 상품 구성이 없습니다';
+  const totalEl=document.getElementById('editEstimateTotal');
+  const itemsEl=document.getElementById('editEstimateItems');
+  if(totalEl)totalEl.textContent=total;
+  if(itemsEl)itemsEl.textContent=items;
+}
+
+function normalizeEditCheckbox(input){
+  const key=input.dataset.editCheckboxKey;
+  if(!key||!input.checked)return;
+  const exclusiveMap={
+    sibling:'형제없음',
+    extra:'추가구성없음'
+  };
+  const exclusive=exclusiveMap[key];
+  if(!exclusive)return;
+  const group=Array.from(document.querySelectorAll(`[data-edit-checkbox-key="${key}"]`));
+  if(input.value===exclusive){
+    group.filter(item=>item!==input).forEach(item=>item.checked=false);
+  }else{
+    const none=group.find(item=>item.value===exclusive);
+    if(none)none.checked=false;
+  }
+}
+
+function renderEditForm(item){
+  return `
+    <div class="edit-form">
+      <div class="edit-section">
+        ${sectionTitle('01','아기 정보')}
+        <div class="write-grid">
+          ${editInput('babyName','아기 이름','text',item.babyName)}
+          ${editInput('babyBirth','아기 생년월일','date',item.babyBirth)}
+          <div class="write-field" style="grid-column:1/-1;"><label class="write-label">아기 성별</label>${renderEditRadio('babyGender',editOptionGroups.babyGender,item.babyGender)}</div>
+        </div>
+      </div>
+      <div class="edit-section">
+        ${sectionTitle('02','형제 / 자매 정보')}
+        <div class="write-field"><label class="write-label">형제 관계</label>${renderEditCheckbox('sibling',editOptionGroups.sibling,item.sibling,true)}</div>
+        ${editInput('siblingInfo','형제 정보 (이름 / 성별 / 나이)','text',item.siblingInfo)}
+        <div class="write-field"><label class="write-label">야외 촬영 시 형제 신발 대여</label>${renderEditRadio('siblingShoes',editOptionGroups.siblingShoes,item.siblingShoes)}</div>
+      </div>
+      <div class="edit-section">
+        ${sectionTitle('03','부모님 정보')}
+        <div class="write-grid">
+          ${editInput('parentName','부모님 성함','text',item.parentName)}
+          ${editInput('phone','연락처','text',item.phone)}
+          ${editInput('email','이메일','email',item.email,'style="grid-column:1/-1;"')}
+        </div>
+      </div>
+      <div class="edit-section">
+        ${sectionTitle('04','촬영 상품')}
+        <div class="write-field"><label class="write-label">촬영 상품</label>${renderEditRadio('product',editOptionGroups.product,item.product,true)}</div>
+      </div>
+      <div class="edit-section" data-edit-family-section>
+        ${sectionTitle('05','엄마 키·한복·신발')}
+        <div class="write-grid">
+          ${editInput('momHeight','엄마 키 (cm)','number',item.momHeight)}
+          <div class="write-field"><label class="write-label">엄마 한복 사이즈</label>${renderEditRadio('momSize',editOptionGroups.momSize,item.momSize)}</div>
+          ${editInput('momShoes','엄마 신발 사이즈 (mm)','number',item.momShoes)}
+        </div>
+      </div>
+      <div class="edit-section" data-edit-family-section>
+        ${sectionTitle('06','아빠 키·한복·신발')}
+        <div class="write-grid">
+          ${editInput('dadHeight','아빠 키 (cm)','number',item.dadHeight)}
+          <div class="write-field"><label class="write-label">아빠 한복 사이즈</label>${renderEditRadio('dadSize',editOptionGroups.dadSize,item.dadSize)}</div>
+          ${editInput('dadShoes','아빠 신발 사이즈 (mm)','number',item.dadShoes)}
+        </div>
+      </div>
+      <div class="edit-section">
+        ${sectionTitle('07','촬영 일정')}
+        <div class="write-field"><label class="write-label">촬영 요일 구분</label>${renderEditRadio('weekday',editOptionGroups.weekday,item.weekday)}</div>
+        <div class="write-grid">
+          ${editInput('shootDate','촬영 날짜','date',item.shootDate)}
+          ${editInput('shootTime','촬영 시간','time',item.shootTime)}
+        </div>
+      </div>
+      <div class="edit-section">
+        ${sectionTitle('08','추가 구성')}
+        <div class="write-field"><label class="write-label">추가 구성</label>${renderEditCheckbox('extra',editOptionGroups.extra,item.extra,true)}</div>
+        <div class="edit-estimate">
+          <div class="edit-estimate-k">예상 결제 금액</div>
+          <div class="edit-estimate-total" id="editEstimateTotal">-</div>
+          <div class="edit-estimate-items" id="editEstimateItems">-</div>
+        </div>
+      </div>
+      <div class="edit-section">
+        ${sectionTitle('09','입금 / 운영 정보')}
+        <div class="write-grid">
+          ${editInput('depositor','입금자명','text',item.depositor)}
+          ${editInput('depositConfirmedAt','입금 확인일','date',item.depositConfirmedAt)}
+          ${editInput('actualPaymentAmount','실제 입금액','number',item.actualPaymentAmount)}
+          <div class="write-field"><label class="write-label">결제수단</label>${renderEditRadio('paymentMethod',editOptionGroups.paymentMethod,item.paymentMethod)}</div>
+        </div>
+      </div>
+      <div class="edit-section">
+        ${sectionTitle('10','배송 / 관리 정보')}
+        ${editTextarea('address','주소',item.address)}
+        <div class="write-field"><label class="write-label">유입 경로</label>${renderEditCheckbox('channel',editOptionGroups.channel,item.channel)}</div>
+        <div class="write-field"><label class="write-label">사진 활용 동의</label>${renderEditRadio('photoUsageConsent',editOptionGroups.photoUsageConsent,item.photoUsageConsent)}</div>
+        ${editTextarea('memo','요청 사항',item.memo)}
+        ${editTextarea('adminMemo','관리자 메모',item.adminMemo)}
+      </div>
+    </div>`;
 }
 
 function openEditModal(rowId){
@@ -953,17 +1142,17 @@ function openEditModal(rowId){
   if(!item){alert('수정할 예약 정보를 찾을 수 없습니다.');return;}
   editingRowId=String(rowId);
   const fields=document.getElementById('editFields');
-  fields.innerHTML=editableReservationFields.map(([key,label,type])=>{
-    const value=escapeAttr(editValue(item,key,type));
-    if(type==='textarea'){
-      return `<div class="write-field" style="grid-column:1/-1;"><label class="write-label">${label}</label><textarea class="write-textarea" data-edit-key="${key}">${value}</textarea></div>`;
-    }
-    if(type.startsWith('select:')){
-      return renderEditSelect(key,label,type,editValue(item,key,type));
-    }
-    return `<div class="write-field"><label class="write-label">${label}</label><input type="${type}" class="write-input" data-edit-key="${key}" value="${value}"></div>`;
-  }).join('');
+  fields.className='edit-form';
+  fields.innerHTML=renderEditForm(item);
+  fields.querySelectorAll('input,textarea,select').forEach(input=>{
+    input.addEventListener('change',()=>{
+      if(input.matches('[data-edit-checkbox-key]'))normalizeEditCheckbox(input);
+      updateEditModalState();
+    });
+    input.addEventListener('input',updateEditModalState);
+  });
   document.getElementById('editModalBg').classList.add('show');
+  updateEditModalState();
 }
 
 function closeEditModal(){
@@ -979,6 +1168,16 @@ function submitReservationEdit(){
   document.querySelectorAll('[data-edit-key]').forEach(input=>{
     updates[input.dataset.editKey]=input.value.trim();
   });
+  const radioKeys=new Set(Array.from(document.querySelectorAll('[data-edit-radio-key]')).map(input=>input.dataset.editRadioKey));
+  radioKeys.forEach(key=>updates[key]=editFieldFromDom(key));
+  const checkboxKeys=new Set(Array.from(document.querySelectorAll('[data-edit-checkbox-key]')).map(input=>input.dataset.editCheckboxKey));
+  checkboxKeys.forEach(key=>updates[key]=editFieldFromDom(key));
+  if(updates.product!=='가족실내앨범형'){
+    ['momHeight','momSize','momShoes','dadHeight','dadSize','dadShoes'].forEach(key=>updates[key]='');
+  }
+  const estimate=calculateReservationEstimateBreakdown(updates);
+  updates.estimatedTotal=estimate.total?formatWon(estimate.total):'';
+  updates.estimatedItems=estimate.items.map(entry=>entry.label+' '+formatWon(entry.amount)).join(' / ');
   btn.disabled=true;
   btn.textContent='저장 중...';
   fetch(SCRIPT_URL,{
