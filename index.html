@@ -254,10 +254,11 @@ img,video{max-width:100%}
 .notice-title{font-size:14px;letter-spacing:.03em}
 .notice-badge{display:inline-block;font-size:9px;letter-spacing:.15em;border:.5px solid var(--gold);color:var(--gold);padding:2px 8px;margin-left:8px;animation:newPulse 1.8s ease-in-out infinite}
 .notice-status-badge{display:inline-block;font-size:10px;letter-spacing:.1em;padding:3px 8px;margin-left:8px;border:.5px solid rgba(160,120,64,.35);color:var(--gold);background:rgba(160,120,64,.06);white-space:nowrap}
-.notice-status-badge::before{content:'●';font-size:7px;margin-right:5px;vertical-align:1px;animation:statusBlink 2.2s ease-in-out infinite}
+.notice-status-badge::before{content:'⏳';font-size:10px;margin-right:5px;vertical-align:0;animation:none}
 .notice-status-badge.done{border-color:rgba(58,107,58,.28);color:var(--green);background:rgba(58,107,58,.08)}
-.notice-status-badge.done::before,.notice-status-badge.cancel::before{animation:none}
+.notice-status-badge.done::before{content:'✓';animation:none}
 .notice-status-badge.cancel{border-color:rgba(139,46,46,.25);color:var(--red);background:rgba(139,46,46,.06)}
+.notice-status-badge.cancel::before{content:'×';animation:none}
 .notice-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:.05em;white-space:nowrap}
 .reservation-item .notice-date{text-align:left;color:var(--ink)}
 .empty-state{padding:32px 0;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.1em}
@@ -883,10 +884,10 @@ function loadHomeNotice() {
 
 function buildReservationStatusBadge(item) {
   const text = String(item.status || item.title || '');
-  if (text.includes('취소') || text.includes('❌')) {
+  if (text.includes('취소') || text.includes('×') || text.includes('❌')) {
     return '<span class="notice-status-badge cancel">취소</span>';
   }
-  if (text.includes('완료') || text.includes('확정') || text.includes('✅')) {
+  if (text.includes('완료') || text.includes('확정') || text.includes('✓') || text.includes('✅')) {
     return '<span class="notice-status-badge done">확정완료</span>';
   }
   return '<span class="notice-status-badge">확인중</span>';

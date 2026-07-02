@@ -116,10 +116,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .status-done{color:var(--green);font-size:13px;}
 .status-wait{color:#8b6914;font-size:13px;}
 .reservation-status-badge{font-size:11px;color:#8b6914;background:rgba(139,105,20,0.08);border:0.5px solid rgba(139,105,20,0.25);padding:2px 8px;letter-spacing:0.08em;white-space:nowrap;}
-.reservation-status-badge::before{content:'●';font-size:7px;margin-right:5px;vertical-align:1px;animation:statusBlink 2.2s ease-in-out infinite;}
+.reservation-status-badge::before{content:'⏳';font-size:10px;margin-right:5px;vertical-align:0;animation:none;}
 .reservation-status-badge.done{color:var(--green);background:rgba(58,107,58,0.08);border-color:rgba(58,107,58,0.25);}
-.reservation-status-badge.done::before,.reservation-status-badge.cancel::before{animation:none;}
+.reservation-status-badge.done::before{content:'✓';animation:none;}
 .reservation-status-badge.cancel{color:var(--red);background:rgba(139,46,46,0.06);border-color:rgba(139,46,46,0.25);}
+.reservation-status-badge.cancel::before{content:'×';animation:none;}
 .new-badge{font-size:9px;color:#fff;background:#c0392b;padding:2px 7px;letter-spacing:0.1em;font-weight:400;animation:newPulse 1.8s ease-in-out infinite;}
 .board-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:0.05em;}
 
@@ -372,8 +373,8 @@ function lookupReservation(){
 
 function statusText(status){
   const s=String(status||'');
-  if(s.includes('완료')||s.includes('✅'))return'예약 확인 완료';
-  if(s.includes('취소')||s.includes('❌'))return'취소';
+  if(s.includes('완료')||s.includes('✓')||s.includes('✅'))return'예약 확인 완료';
+  if(s.includes('취소')||s.includes('×')||s.includes('❌'))return'취소';
   if(s.includes('삭제'))return'확인 필요';
   return'접수 확인중';
 }
@@ -515,10 +516,10 @@ function renderPage(page){
 
 function reservationStatusBadge(item){
   const text=String(item.status||item.title||'');
-  if(text.includes('취소')||text.includes('❌')){
+  if(text.includes('취소')||text.includes('×')||text.includes('❌')){
     return '<span class="reservation-status-badge cancel">취소</span>';
   }
-  if(text.includes('완료')||text.includes('확정')||text.includes('✅')){
+  if(text.includes('완료')||text.includes('확정')||text.includes('✓')||text.includes('✅')){
     return '<span class="reservation-status-badge done">확정완료</span>';
   }
   return '<span class="reservation-status-badge">확인중</span>';
