@@ -251,6 +251,9 @@ img,video{max-width:100%}
 .notice-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.1em}
 .notice-title{font-size:14px;letter-spacing:.03em}
 .notice-badge{display:inline-block;font-size:9px;letter-spacing:.15em;border:.5px solid var(--gold);color:var(--gold);padding:2px 8px;margin-left:8px}
+.notice-status-badge{display:inline-block;font-size:10px;letter-spacing:.1em;padding:3px 8px;margin-left:8px;border:.5px solid rgba(160,120,64,.35);color:var(--gold);background:rgba(160,120,64,.06);white-space:nowrap}
+.notice-status-badge.done{border-color:rgba(58,107,58,.28);color:var(--green);background:rgba(58,107,58,.08)}
+.notice-status-badge.cancel{border-color:rgba(139,46,46,.25);color:var(--red);background:rgba(139,46,46,.06)}
 .notice-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:.05em}
 .empty-state{padding:32px 0;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.1em}
 .empty-state a{display:inline-flex;margin-top:12px;color:var(--gold);text-decoration:none;border-bottom:.5px solid rgba(160,120,64,.35);padding-bottom:2px}
@@ -838,7 +841,13 @@ function loadHomeNotice() {
         let isNew = false;
         if (item.date) isNew = (new Date() - new Date(item.date)) / (1000 * 60 * 60 * 24) <= 10;
         let displayTitle = item.title || '';
-        if (isPrivate) {
+        let statusBadge = '';
+        if (!isNotice) {
+          const nameMatch = item.title && item.title.match(/^(.+?)님/);
+          const babyName = nameMatch ? nameMatch[1] : '예약';
+          displayTitle = babyName + '님 예약확정서 접수완료';
+          statusBadge = buildReservationStatusBadge(item);
+        } else if (isPrivate) {
           const nameMatch = item.title && item.title.match(/^(.+?)님/);
           displayTitle = nameMatch ? nameMatch[1] + '님 비밀글' : '비밀글';
         }
@@ -847,7 +856,7 @@ function loadHomeNotice() {
         return `
           <a href="/board" class="notice-item">
             <div class="notice-num">${isNotice ? '공지' : '예약 현황'}</div>
-            <div class="notice-title">${safeTitle}${isNew ? '<span class="notice-badge">NEW</span>' : ''}</div>
+            <div class="notice-title">${safeTitle}${isNew ? '<span class="notice-badge">NEW</span>' : ''}${statusBadge}</div>
             <div class="notice-date">${safeDate}</div>
           </a>`;
       }).join('');
@@ -856,6 +865,17 @@ function loadHomeNotice() {
       const list = document.getElementById('homeNoticeList');
       if (list) list.innerHTML = '<div class="empty-state">공지사항을 불러오지 못했습니다.<br><a href="/board">공지·예약 현황으로 이동</a></div>';
     });
+}
+
+function buildReservationStatusBadge(item) {
+  const text = String(item.status || item.title || '');
+  if (text.includes('취소') || text.includes('❌')) {
+    return '<span class="notice-status-badge cancel">취소</span>';
+  }
+  if (text.includes('완료') || text.includes('확정') || text.includes('✅')) {
+    return '<span class="notice-status-badge done">확정완료</span>';
+  }
+  return '<span class="notice-status-badge">확인중</span>';
 }
 
 const nav = document.getElementById('navbar');
