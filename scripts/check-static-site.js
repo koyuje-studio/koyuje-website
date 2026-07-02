@@ -1,4 +1,4 @@
-const fs = require("fs");
+﻿const fs = require("fs");
 const vm = require("vm");
 
 const requiredFiles = [
@@ -58,7 +58,7 @@ const publicPages = {
 };
 
 const internalPages = ["admin.html", "admin-analytics.html", "mvno.html", "qr.html"];
-const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyVSPtwwhtsz_SSBlJ8B7gCeO-p3jU5tJSnNEm0T90A3Z_1fFf27EVj0TK5SxPjYi_Q/exec";
+const appsScriptUrl = "https://script.google.com/macros/s/AKfycby7O8u6xomocUEFv0n07g8Rc1WFMWgiuJMdIBMDXSK41f5K5-VlNnF94XvBRJ8DH-p0/exec";
 const appsScriptPages = ["index.html", "reservation.html", "admin.html", "admin-analytics.html", "board.html", "status.html"];
 
 const requiredPublicMeta = [
