@@ -119,6 +119,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .detail-item.full{grid-column:1/-1;}
 .detail-key{font-size:10px;letter-spacing:0.18em;color:rgba(247,242,234,0.35);margin-bottom:5px;}
 .detail-val{font-size:13px;color:rgba(247,242,234,0.8);letter-spacing:0.03em;}
+.detail-val.estimate{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold2);letter-spacing:0.03em;line-height:1.1;}
 .detail-val.missing{color:#e0a45c;}
 .detail-val.blank{color:rgba(247,242,234,0.35);}
 .detail-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px;margin-top:2px;}
@@ -302,7 +303,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 </div>
 
 <script>
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyDBjN1hvPUyBZhFoZDguBUfDZCb_FSbfOOSkDKAMr1Ro6VjM_AmiUhXYNoAskZnZz4/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyVSPtwwhtsz_SSBlJ8B7gCeO-p3jU5tJSnNEm0T90A3Z_1fFf27EVj0TK5SxPjYi_Q/exec';
 
 let allData=[];
 let currentFilter='all';
@@ -506,30 +507,64 @@ function updateMonthlyStats(source){
 }
 
 function formatWon(amount){
-  return Number(amount||0).toLocaleString('ko-KR')+'원';
+  const num=parseWon(amount);
+  return num.toLocaleString('ko-KR')+'원';
+}
+
+function parseWon(value){
+  if(value===null||value===undefined)return 0;
+  if(typeof value==='number')return value;
+  const num=Number(String(value).replace(/[^\d.-]/g,''));
+  return isNaN(num)?0:num;
+}
+
+function normalizeText(value){
+  return String(value||'').replace(/\s+/g,'');
 }
 
 function includesAny(value,patterns){
-  const text=String(value||'');
-  return patterns.some(pattern=>text.includes(pattern));
+  const text=normalizeText(value);
+  return patterns.some(pattern=>text.includes(normalizeText(pattern)));
 }
 
 function calculateReservationEstimate(item){
+  return calculateReservationEstimateBreakdown(item).total;
+}
+
+function calculateReservationEstimateBreakdown(item){
   let total=0;
-  if(String(item.product||'').includes('아기앨범형'))total+=750000;
-  if(String(item.product||'').includes('가족실내앨범형'))total+=1100000;
-  if(String(item.weekday||'').includes('주말')||String(item.weekday||'').includes('공휴일'))total+=100000;
+  const items=[];
+  const add=(label,amount)=>{
+    total+=amount;
+    items.push({label,amount});
+  };
+  if(includesAny(item.product,['아기앨범형']))add('아기 앨범형',750000);
+  if(includesAny(item.product,['가족실내앨범형']))add('가족 실내 앨범형',1100000);
+  if(includesAny(item.weekday,['주말','공휴일']))add('주말/공휴일',100000);
 
-  if(includesAny(item.sibling,['형제자매기념컷추가','친형제','친자매']))total+=100000;
-  if(includesAny(item.sibling,['쌍둥이']))total+=500000;
-  if(includesAny(item.sibling,['가족촬영자녀추가실내','실내(돌상컷)']))total+=100000;
-  if(includesAny(item.sibling,['가족촬영자녀추가야외','야외(가족컷)']))total+=200000;
-  if(String(item.siblingShoes||'').includes('대여신청'))total+=20000;
+  if(includesAny(item.sibling,['형제자매기념컷추가','친형제','친자매']))add('친형제·친자매 기념컷',100000);
+  if(includesAny(item.sibling,['쌍둥이']))add('쌍둥이',500000);
+  if(includesAny(item.sibling,['가족촬영자녀추가실내','실내(돌상컷)']))add('가족 촬영 자녀 추가 - 실내',100000);
+  if(includesAny(item.sibling,['가족촬영자녀추가야외','야외(가족컷)']))add('가족 촬영 자녀 추가 - 야외',200000);
+  if(includesAny(item.siblingShoes,['대여신청']))add('야외 형제 신발 대여',20000);
 
-  if(includesAny(item.extra,['야외가족한옥스냅','야외 가족 한옥스냅']))total+=300000;
-  if(includesAny(item.extra,['야외가족문화재스냅','야외 가족 문화재스냅']))total+=300000;
-  if(includesAny(item.extra,['야외아기컨셉','야외 아기 컨셉']))total+=200000;
-  return total;
+  if(includesAny(item.extra,['야외가족한옥스냅','야외 가족 한옥스냅']))add('야외 가족 한옥스냅',300000);
+  if(includesAny(item.extra,['야외가족문화재스냅','야외 가족 문화재스냅']))add('야외 가족 문화재스냅',300000);
+  if(includesAny(item.extra,['야외아기컨셉','야외 아기 컨셉']))add('야외 아기 컨셉',200000);
+  return {total,items};
+}
+
+function getReservationEstimateDisplay(item){
+  const submittedTotal=parseWon(item.estimatedTotal);
+  const calculated=calculateReservationEstimateBreakdown(item);
+  const total=submittedTotal||calculated.total;
+  const submittedItems=String(item.estimatedItems||'').trim();
+  const items=submittedItems||calculated.items.map(entry=>entry.label+' '+formatWon(entry.amount)).join(' / ');
+  return {
+    total,
+    totalText: total?formatWon(total):'-',
+    itemsText: items||'-'
+  };
 }
 
 function setMonthFilter(monthKey){
@@ -683,6 +718,9 @@ function renderCards(){
     const dadSizeText=[item.dadHeight&&item.dadHeight+'cm',item.dadSize&&'한복 '+item.dadSize,item.dadShoes&&'신발 '+item.dadShoes].filter(Boolean).join(' · ');
     const momDisplay=momMissing?{className:'missing',text:'Apps Script 응답 누락'}:(momSizeText?{className:'',text:momSizeText}:{className:'blank',text:'미입력 또는 빈값'});
     const dadDisplay=dadMissing?{className:'missing',text:'Apps Script 응답 누락'}:(dadSizeText?{className:'',text:dadSizeText}:{className:'blank',text:'미입력 또는 빈값'});
+    const estimate=getReservationEstimateDisplay(item);
+    const actualAmount=parseWon(item.actualPaymentAmount);
+    const actualAmountText=actualAmount?formatWon(actualAmount):'-';
     const parentSizeHTML=(isFamilyProduct||hasParentSize)?`
           <div class="detail-item"><div class="detail-key">엄마 키·한복·신발</div>${detailValueHTML(momDisplay)}</div>
           <div class="detail-item"><div class="detail-key">아빠 키·한복·신발</div>${detailValueHTML(dadDisplay)}</div>`:'';
@@ -723,6 +761,14 @@ function renderCards(){
           <div class="detail-item"><div class="detail-key">형제 상세</div><div class="detail-val">${escapeHTML(item.siblingInfo||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">형제 신발</div><div class="detail-val">${escapeHTML(item.siblingShoes||'-')}</div></div>
           ${parentSizeHTML}
+
+          <div class="detail-section">금액 / 정산</div>
+          <div class="detail-item priority"><div class="detail-key">예상 결제 금액</div><div class="detail-val estimate">${escapeHTML(estimate.totalText)}</div></div>
+          <div class="detail-item wide"><div class="detail-key">예상 금액 구성</div><div class="detail-val" style="font-size:12px;">${escapeHTML(estimate.itemsText)}</div></div>
+          <div class="detail-item"><div class="detail-key">실제 입금액</div><div class="detail-val">${escapeHTML(actualAmountText)}</div></div>
+          <div class="detail-item"><div class="detail-key">결제수단</div><div class="detail-val">${escapeHTML(item.paymentMethod||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">입금 확인일</div><div class="detail-val">${escapeHTML(fPlainDate(item.depositConfirmedAt)||'-')}</div></div>
+          <div class="detail-item full"><div class="detail-key">관리자 메모</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.adminMemo||'-')}</div></div>
 
           <div class="detail-section">관리 정보</div>
           <div class="detail-item"><div class="detail-key">유입 경로</div><div class="detail-val">${escapeHTML(item.channel||'-')}</div></div>
@@ -845,10 +891,14 @@ const editableReservationFields=[
   ['extra','추가 구성','text'],
   ['siblingShoes','형제 신발','text'],
   ['depositor','입금자명','text'],
+  ['depositConfirmedAt','입금 확인일','date'],
+  ['actualPaymentAmount','실제 입금액','number'],
+  ['paymentMethod','결제수단','select:paymentMethod'],
   ['address','주소','textarea'],
   ['channel','유입 경로','text'],
   ['photoUsageConsent','사진 활용 동의','select:photoUsageConsent'],
-  ['memo','요청 사항','textarea']
+  ['memo','요청 사항','textarea'],
+  ['adminMemo','관리자 메모','textarea']
 ];
 
 const editSelectOptions={
@@ -857,7 +907,8 @@ const editSelectOptions={
   product:['아기앨범형','가족실내앨범형'],
   momSize:['55','66','77','기타'],
   dadSize:['90','95','100','105','110','기타'],
-  photoUsageConsent:['동의','미동의']
+  photoUsageConsent:['동의','미동의'],
+  paymentMethod:['카드결제','계좌이체','현금결제','공주페이']
 };
 
 function toDateInput(value){

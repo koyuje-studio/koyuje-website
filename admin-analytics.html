@@ -95,17 +95,25 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <div class="card"><div class="label">확정서 제출률</div><div class="num" id="submitRate">—</div><div class="sub">진입자 대비</div></div>
     </section>
 
+    <section class="grid">
+      <div class="card"><div class="label">예상 매출</div><div class="num" id="expectedRevenue">—</div><div class="sub">취소·삭제 제외</div></div>
+      <div class="card"><div class="label">확정 매출</div><div class="num" id="confirmedRevenue">—</div><div class="sub">확인 완료 기준</div></div>
+      <div class="card"><div class="label">취소 제외 예약</div><div class="num" id="activeReservations">—</div><div class="sub">선택 기간 기준</div></div>
+      <div class="card"><div class="label">취소 건</div><div class="num" id="cancelReservations">—</div><div class="sub">매출 제외</div></div>
+    </section>
+
     <section class="section">
       <div class="section-title">전환 흐름</div>
       <div class="funnel" id="funnel"></div>
     </section>
 
     <section class="tables" id="tables"></section>
+    <section class="tables" id="revenueTables"></section>
   </main>
 </div>
 
 <script>
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyDBjN1hvPUyBZhFoZDguBUfDZCb_FSbfOOSkDKAMr1Ro6VjM_AmiUhXYNoAskZnZz4/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyVSPtwwhtsz_SSBlJ8B7gCeO-p3jU5tJSnNEm0T90A3Z_1fFf27EVj0TK5SxPjYi_Q/exec';
 let currentPeriod='7d';
 
 function getPw(){return sessionStorage.getItem('koyujeAdminPw') || '';}
@@ -142,13 +150,120 @@ function renderTable(title,items){
   if(!items||!items.length)return `<div class="section"><div class="section-title">${title}</div><div class="empty">표시할 데이터가 아직 없습니다.</div></div>`;
   return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>건수</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)}</td><td>${item.count}</td></tr>`).join('')}</tbody></table></div>`;
 }
+function renderRevenueTable(title,items){
+  if(!items||!items.length)return `<div class="section"><div class="section-title">${title}</div><div class="empty">표시할 데이터가 아직 없습니다.</div></div>`;
+  return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>예상 매출</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)} <span style="color:var(--muted);">(${item.count}건)</span></td><td>${formatWon(item.revenue)}</td></tr>`).join('')}</tbody></table></div>`;
+}
 function percent(part,total){
   if(!total)return '0%';
   return (Math.round((part/total)*1000)/10)+'%';
 }
-function render(data){
+function formatWon(amount){
+  return Number(amount||0).toLocaleString('ko-KR')+'원';
+}
+function parseWon(value){
+  if(value===null||value===undefined)return 0;
+  if(typeof value==='number')return value;
+  const num=Number(String(value).replace(/[^\d.-]/g,''));
+  return isNaN(num)?0:num;
+}
+function normalizeText(value){
+  return String(value||'').replace(/\s+/g,'');
+}
+function includesAny(value,patterns){
+  const text=normalizeText(value);
+  return patterns.some(pattern=>text.includes(normalizeText(pattern)));
+}
+function calculateReservationEstimate(item){
+  let total=0;
+  if(includesAny(item.product,['아기앨범형']))total+=750000;
+  if(includesAny(item.product,['가족실내앨범형']))total+=1100000;
+  if(includesAny(item.weekday,['주말','공휴일']))total+=100000;
+  if(includesAny(item.sibling,['형제자매기념컷추가','친형제','친자매']))total+=100000;
+  if(includesAny(item.sibling,['쌍둥이']))total+=500000;
+  if(includesAny(item.sibling,['가족촬영자녀추가실내','실내(돌상컷)']))total+=100000;
+  if(includesAny(item.sibling,['가족촬영자녀추가야외','야외(가족컷)']))total+=200000;
+  if(includesAny(item.siblingShoes,['대여신청']))total+=20000;
+  if(includesAny(item.extra,['야외가족한옥스냅','야외 가족 한옥스냅']))total+=300000;
+  if(includesAny(item.extra,['야외가족문화재스냅','야외 가족 문화재스냅']))total+=300000;
+  if(includesAny(item.extra,['야외아기컨셉','야외 아기 컨셉']))total+=200000;
+  return total;
+}
+function getReservationEstimate(item){
+  return parseWon(item.estimatedTotal)||calculateReservationEstimate(item);
+}
+function getStatusClass(status){
+  const s=String(status||'');
+  if(s.includes('취소')||s.includes('×')||s.includes('❌'))return'cancel';
+  if(s.includes('완료')||s.includes('✓')||s.includes('✅'))return'done';
+  if(s.includes('삭제'))return'deleted';
+  return'waiting';
+}
+function parseSubmitDate(value){
+  if(value instanceof Date)return value;
+  const raw=String(value||'').trim();
+  let parsed=new Date(raw);
+  if(!isNaN(parsed.getTime()))return parsed;
+  const match=raw.match(/(\d{4})[.\-\s년]+(\d{1,2})[.\-\s월]+(\d{1,2})/);
+  if(match){
+    parsed=new Date(Number(match[1]),Number(match[2])-1,Number(match[3]));
+    if(!isNaN(parsed.getTime()))return parsed;
+  }
+  return null;
+}
+function getPeriodRange(period){
+  const now=new Date();
+  const startOfDay=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(period==='today')return{start:startOfDay,end:now};
+  if(period==='yesterday'){
+    const start=new Date(startOfDay.getTime()-86400000);
+    return{start,end:startOfDay};
+  }
+  if(period==='30d')return{start:new Date(now.getTime()-30*86400000),end:now};
+  if(period==='this_month')return{start:new Date(now.getFullYear(),now.getMonth(),1),end:now};
+  if(period==='last_month')return{start:new Date(now.getFullYear(),now.getMonth()-1,1),end:new Date(now.getFullYear(),now.getMonth(),1)};
+  return{start:new Date(now.getTime()-7*86400000),end:now};
+}
+function summarizeReservations(items){
+  const range=getPeriodRange(currentPeriod);
+  const selected=(items||[]).filter(item=>{
+    const dt=parseSubmitDate(item.rowId);
+    return dt&&dt>=range.start&&dt<range.end;
+  });
+  let expectedRevenue=0;
+  let confirmedRevenue=0;
+  let activeReservations=0;
+  let cancelReservations=0;
+  const productMap={};
+  selected.forEach(item=>{
+    const status=getStatusClass(item.status);
+    if(status==='cancel'){
+      cancelReservations+=1;
+      return;
+    }
+    if(status==='deleted')return;
+    const expected=getReservationEstimate(item);
+    const actual=parseWon(item.actualPaymentAmount);
+    activeReservations+=1;
+    expectedRevenue+=expected;
+    if(status==='done')confirmedRevenue+=(actual||expected);
+    const product=String(item.product||'미지정')||'미지정';
+    productMap[product]=productMap[product]||{name:product,count:0,revenue:0};
+    productMap[product].count+=1;
+    productMap[product].revenue+=expected;
+  });
+  return{
+    expectedRevenue,
+    confirmedRevenue,
+    activeReservations,
+    cancelReservations,
+    productRevenue:Object.values(productMap).sort((a,b)=>b.revenue-a.revenue)
+  };
+}
+function render(data,reservations){
   showApp();
   const summary=data.summary||{};
+  const revenue=summarizeReservations(reservations||[]);
   setText('todayVisitors',summary.todayVisitors||0);
   setText('last7Visitors',summary.last7Visitors||0);
   setText('kakaoClicks',summary.kakaoClicks||0);
@@ -158,6 +273,10 @@ function render(data){
   setText('kakaoRate',percent(summary.kakaoClicks||0,summary.selectedVisitors||0));
   setText('submitRate',percent(summary.reservationSubmits||0,summary.reservationPageViews||0));
   setText('rangeLabel',(data.rangeLabel||'선택 기간')+' 기준');
+  setText('expectedRevenue',formatWon(revenue.expectedRevenue));
+  setText('confirmedRevenue',formatWon(revenue.confirmedRevenue));
+  setText('activeReservations',revenue.activeReservations);
+  setText('cancelReservations',revenue.cancelReservations);
 
   document.getElementById('funnel').innerHTML=(data.funnel||[]).map(item=>`
     <div class="funnel-item">
@@ -177,6 +296,9 @@ function render(data){
     renderTable('카카오톡 클릭 위치',rankings.kakaoPages),
     renderTable('예약확정서 진입',rankings.reservationEntryPages)
   ].join('');
+  document.getElementById('revenueTables').innerHTML=[
+    renderRevenueTable('상품별 예상 매출',revenue.productRevenue)
+  ].join('');
 }
 function loadAnalytics(fromLogin){
   const pw=getPw();
@@ -184,12 +306,15 @@ function loadAnalytics(fromLogin){
     showLogin();
     return;
   }
-  fetch(SCRIPT_URL+'?action=analytics&period='+encodeURIComponent(currentPeriod)+'&pw='+encodeURIComponent(pw))
-    .then(r=>r.json())
-    .then(data=>{
+  Promise.all([
+    fetch(SCRIPT_URL+'?action=analytics&period='+encodeURIComponent(currentPeriod)+'&pw='+encodeURIComponent(pw)).then(r=>r.json()),
+    fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(pw)).then(r=>r.json())
+  ])
+    .then(([data,reservationData])=>{
       if(data.result==='error')throw new Error(data.message||'인증 실패');
+      if(reservationData.result==='error')throw new Error(reservationData.message||'예약 데이터 확인 실패');
       document.getElementById('loginErr').style.display='none';
-      render(data);
+      render(data,reservationData.data||[]);
     })
     .catch(err=>{
       if(fromLogin){
