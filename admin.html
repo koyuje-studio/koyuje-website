@@ -790,7 +790,7 @@ function showToast(message){
 
 const editableReservationFields=[
   ['babyName','아기 이름','text'],
-  ['babyGender','아기 성별','text'],
+  ['babyGender','아기 성별','select:babyGender'],
   ['babyBirth','아기 생년월일','date'],
   ['sibling','형제 구성','text'],
   ['siblingInfo','형제 상세','text'],
@@ -798,23 +798,32 @@ const editableReservationFields=[
   ['phone','연락처','text'],
   ['email','이메일','email'],
   ['momHeight','엄마 키','number'],
-  ['momSize','엄마 한복 사이즈','text'],
+  ['momSize','엄마 한복 사이즈','select:momSize'],
   ['momShoes','엄마 신발 사이즈','number'],
   ['dadHeight','아빠 키','number'],
-  ['dadSize','아빠 한복 사이즈','text'],
+  ['dadSize','아빠 한복 사이즈','select:dadSize'],
   ['dadShoes','아빠 신발 사이즈','number'],
-  ['weekday','촬영 가능 요일','text'],
+  ['weekday','촬영 가능 요일','select:weekday'],
   ['shootDate','촬영 날짜','date'],
   ['shootTime','촬영 시간','time'],
-  ['product','선택 상품','text'],
+  ['product','선택 상품','select:product'],
   ['extra','추가 구성','text'],
   ['siblingShoes','형제 신발','text'],
   ['depositor','입금자명','text'],
   ['address','주소','textarea'],
   ['channel','유입 경로','text'],
-  ['photoUsageConsent','사진 활용 동의','text'],
+  ['photoUsageConsent','사진 활용 동의','select:photoUsageConsent'],
   ['memo','요청 사항','textarea']
 ];
+
+const editSelectOptions={
+  babyGender:['남아','여아','남아 / 남아','남아 / 여아','여아 / 남아','여아 / 여아'],
+  weekday:['평일','주말/공휴일'],
+  product:['아기앨범형','가족실내앨범형'],
+  momSize:['55','66','77','기타'],
+  dadSize:['90','95','100','105','110','기타'],
+  photoUsageConsent:['동의','미동의']
+};
 
 function toDateInput(value){
   if(!value)return'';
@@ -841,6 +850,18 @@ function editValue(item,key,type){
   return item[key] ?? '';
 }
 
+function renderEditSelect(key,label,type,value){
+  const optionKey=type.split(':')[1];
+  const options=editSelectOptions[optionKey]||[];
+  const safeValue=String(value||'');
+  const hasCurrent=safeValue && !options.includes(safeValue);
+  const optionHtml=(hasCurrent?[safeValue]:[]).concat(options).map(option=>{
+    const selected=option===safeValue?' selected':'';
+    return `<option value="${escapeAttr(option)}"${selected}>${escapeHTML(option)}</option>`;
+  }).join('');
+  return `<div class="write-field"><label class="write-label">${label}</label><select class="write-select" data-edit-key="${key}"><option value="">선택</option>${optionHtml}</select></div>`;
+}
+
 function openEditModal(rowId){
   const item=allData.find(d=>String(d.rowId)===String(rowId));
   if(!item){alert('수정할 예약 정보를 찾을 수 없습니다.');return;}
@@ -850,6 +871,9 @@ function openEditModal(rowId){
     const value=escapeAttr(editValue(item,key,type));
     if(type==='textarea'){
       return `<div class="write-field" style="grid-column:1/-1;"><label class="write-label">${label}</label><textarea class="write-textarea" data-edit-key="${key}">${value}</textarea></div>`;
+    }
+    if(type.startsWith('select:')){
+      return renderEditSelect(key,label,type,editValue(item,key,type));
     }
     return `<div class="write-field"><label class="write-label">${label}</label><input type="${type}" class="write-input" data-edit-key="${key}" value="${value}"></div>`;
   }).join('');
