@@ -263,6 +263,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
       <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">전체</button>
       <button class="filter-btn" data-filter="waiting" onclick="setFilter('waiting',this)">⏳ 확인중</button>
       <button class="filter-btn" data-filter="done" onclick="setFilter('done',this)">✓ 확인 완료</button>
+      <button class="filter-btn" data-filter="paymentMissing" onclick="setFilter('paymentMissing',this)">정산 미입력</button>
       <button class="filter-btn" data-filter="cancel" onclick="setFilter('cancel',this)">× 취소</button>
       <input type="text" class="search-input" id="searchInput" placeholder="이름 · 연락처 검색" oninput="renderCards()">
     </div>
@@ -701,11 +702,19 @@ function detailValueHTML(state){
   return `<div class="${className}">${escapeHTML(state.text)}</div>`;
 }
 
+function hasPaymentMissing(item){
+  return !parseWon(item.actualPaymentAmount)||!String(item.paymentMethod||'').trim();
+}
+
 function renderCards(){
   const keyword=(document.getElementById('searchInput').value||'').toLowerCase();
   let filtered=getActiveReservations().filter(d=>{
     const sc=getStatusClass(d.status||'');
-    if(currentFilter!=='all'&&sc!==currentFilter)return false;
+    if(currentFilter==='paymentMissing'){
+      if(sc==='cancel'||!hasPaymentMissing(d))return false;
+    }else if(currentFilter!=='all'&&sc!==currentFilter){
+      return false;
+    }
     if(currentMonthKey){
       const info=getSubmitMonthInfo(d);
       if(!info||info.key!==currentMonthKey)return false;
