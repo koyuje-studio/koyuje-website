@@ -975,6 +975,22 @@ function editTextarea(key,label,value){
   return `<div class="write-field" style="grid-column:1/-1;"><label class="write-label">${label}</label><textarea class="write-textarea" data-edit-key="${key}">${escapeHTML(value ?? '')}</textarea></div>`;
 }
 
+function extractPrefixedDetail(source,label){
+  const text=String(source||'');
+  const match=text.match(new RegExp(label+'\\s*:\\s*([^,/]+)'));
+  return match?match[1].trim():'';
+}
+
+function extractSizeEtc(source,options){
+  const text=String(source||'').trim();
+  if(!text||options.includes(text))return'';
+  return text.replace(/^기타\s*:\s*/,'').trim();
+}
+
+function editDetailInput(key,label,value,placeholder){
+  return `<div class="write-field" data-edit-detail-wrap="${key}"><label class="write-label">${label}</label><input type="text" class="write-input" data-edit-detail-key="${key}" value="${escapeAttr(value||'')}" placeholder="${escapeAttr(placeholder||'')}"></div>`;
+}
+
 function renderEditRadio(key,options,current,column){
   const currentText=String(current||'');
   const normalizedCurrent=normalizeText(currentText);
@@ -1007,6 +1023,11 @@ function editFieldFromDom(key){
   return checks.join(', ');
 }
 
+function editDetailValue(key){
+  const input=document.querySelector(`[data-edit-detail-key="${key}"]`);
+  return input?input.value.trim():'';
+}
+
 function buildEditPreviewItem(){
   return {
     product: editFieldFromDom('product'),
@@ -1020,7 +1041,19 @@ function buildEditPreviewItem(){
 function updateEditModalState(){
   const product=editFieldFromDom('product');
   const isFamily=product==='가족실내앨범형';
+  const channel=editFieldFromDom('channel');
   document.querySelectorAll('[data-edit-family-section]').forEach(section=>section.classList.toggle('edit-hidden',!isFamily));
+  const detailVisibility={
+    momSizeEtc:editFieldFromDom('momSize')==='기타',
+    dadSizeEtc:editFieldFromDom('dadSize')==='기타',
+    siblingShoesSz:editFieldFromDom('siblingShoes')==='기타',
+    referralName:isCheckedValue(channel,'지인소개'),
+    channelEtc:isCheckedValue(channel,'기타')
+  };
+  Object.keys(detailVisibility).forEach(key=>{
+    const wrap=document.querySelector(`[data-edit-detail-wrap="${key}"]`);
+    if(wrap)wrap.classList.toggle('edit-hidden',!detailVisibility[key]);
+  });
   document.querySelectorAll('[data-edit-option-target]').forEach(label=>{
     const target=label.dataset.editOptionTarget;
     const visible=target==='all'||(target==='family'&&isFamily)||(target==='baby'&&!isFamily);
@@ -1071,6 +1104,7 @@ function renderEditForm(item){
         <div class="write-field"><label class="write-label">형제 관계</label>${renderEditCheckbox('sibling',editOptionGroups.sibling,item.sibling,true)}</div>
         ${editInput('siblingInfo','형제 정보 (이름 / 성별 / 나이)','text',item.siblingInfo)}
         <div class="write-field"><label class="write-label">야외 촬영 시 형제 신발 대여</label>${renderEditRadio('siblingShoes',editOptionGroups.siblingShoes,item.siblingShoes)}</div>
+        ${editDetailInput('siblingShoesSz','형제 신발 기타 입력',extractPrefixedDetail(item.siblingShoes,'기타'),'발 사이즈')}
       </div>
       <div class="edit-section">
         ${sectionTitle('03','부모님 정보')}
@@ -1089,6 +1123,7 @@ function renderEditForm(item){
         <div class="write-grid">
           ${editInput('momHeight','엄마 키 (cm)','number',item.momHeight)}
           <div class="write-field"><label class="write-label">엄마 한복 사이즈</label>${renderEditRadio('momSize',editOptionGroups.momSize,item.momSize)}</div>
+          ${editDetailInput('momSizeEtc','엄마 한복 사이즈 기타 입력',extractSizeEtc(item.momSize,['55','66','77','기타']),'예) 88')}
           ${editInput('momShoes','엄마 신발 사이즈 (mm)','number',item.momShoes)}
         </div>
       </div>
@@ -1097,6 +1132,7 @@ function renderEditForm(item){
         <div class="write-grid">
           ${editInput('dadHeight','아빠 키 (cm)','number',item.dadHeight)}
           <div class="write-field"><label class="write-label">아빠 한복 사이즈</label>${renderEditRadio('dadSize',editOptionGroups.dadSize,item.dadSize)}</div>
+          ${editDetailInput('dadSizeEtc','아빠 한복 사이즈 기타 입력',extractSizeEtc(item.dadSize,['90','95','100','105','110','기타']),'예) 115')}
           ${editInput('dadShoes','아빠 신발 사이즈 (mm)','number',item.dadShoes)}
         </div>
       </div>
@@ -1130,6 +1166,10 @@ function renderEditForm(item){
         ${sectionTitle('10','배송 / 관리 정보')}
         ${editTextarea('address','주소',item.address)}
         <div class="write-field"><label class="write-label">유입 경로</label>${renderEditCheckbox('channel',editOptionGroups.channel,item.channel)}</div>
+        <div class="write-grid">
+          ${editDetailInput('referralName','지인 소개 상세',extractPrefixedDetail(item.channel,'지인 소개'),'소개자 이름')}
+          ${editDetailInput('channelEtc','기타 유입 경로 상세',extractPrefixedDetail(item.channel,'기타'),'직접 입력')}
+        </div>
         <div class="write-field"><label class="write-label">사진 활용 동의</label>${renderEditRadio('photoUsageConsent',editOptionGroups.photoUsageConsent,item.photoUsageConsent)}</div>
         ${editTextarea('memo','요청 사항',item.memo)}
         ${editTextarea('adminMemo','관리자 메모',item.adminMemo)}
@@ -1172,6 +1212,17 @@ function submitReservationEdit(){
   radioKeys.forEach(key=>updates[key]=editFieldFromDom(key));
   const checkboxKeys=new Set(Array.from(document.querySelectorAll('[data-edit-checkbox-key]')).map(input=>input.dataset.editCheckboxKey));
   checkboxKeys.forEach(key=>updates[key]=editFieldFromDom(key));
+  if(updates.momSize==='기타')updates.momSize='기타: '+editDetailValue('momSizeEtc');
+  if(updates.dadSize==='기타')updates.dadSize='기타: '+editDetailValue('dadSizeEtc');
+  if(updates.siblingShoes==='기타')updates.siblingShoes='기타: '+editDetailValue('siblingShoesSz');
+  if(updates.channel){
+    const channelValues=splitValues(updates.channel).map(item=>{
+      if(item==='지인소개')return '지인 소개: '+editDetailValue('referralName');
+      if(item==='기타')return '기타: '+editDetailValue('channelEtc');
+      return item;
+    });
+    updates.channel=channelValues.join(', ');
+  }
   if(updates.product!=='가족실내앨범형'){
     ['momHeight','momSize','momShoes','dadHeight','dadSize','dadShoes'].forEach(key=>updates[key]='');
   }
