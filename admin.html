@@ -116,13 +116,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .cards-wrap{display:flex;flex-direction:column;gap:2px;}
 .res-card{background:rgba(247,242,234,0.03);border:0.5px solid rgba(247,242,234,0.07);transition:background .2s;}
 .res-card:hover{background:rgba(247,242,234,0.06);}
-.res-card-head{display:grid;grid-template-columns:160px 1fr auto auto;align-items:center;gap:16px;padding:16px 20px;cursor:pointer;}
+.res-card-head{display:grid;grid-template-columns:160px 1fr minmax(190px,auto) auto;align-items:center;gap:16px;padding:16px 20px;cursor:pointer;}
 .res-date{font-size:12px;color:rgba(247,242,234,0.45);letter-spacing:0.05em;}
 .res-name-wrap{}
 .res-name{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;letter-spacing:0.05em;margin-bottom:2px;}
 .res-sub{font-size:11px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;}
 .res-product{font-size:12px;color:rgba(247,242,234,0.5);letter-spacing:0.05em;text-align:right;}
-.res-name,.res-sub,.res-product,.detail-val{overflow-wrap:anywhere;}
+.res-money{font-size:10px;color:rgba(247,242,234,0.4);letter-spacing:0.04em;text-align:right;margin-top:3px;line-height:1.6;}
+.res-money strong{color:var(--gold2);font-weight:300;}
+.res-money .paid{color:#6aaa6a;}
+.res-name,.res-sub,.res-product,.res-money,.detail-val{overflow-wrap:anywhere;}
 .status-select{appearance:none;-webkit-appearance:none;border:0.5px solid;padding:5px 12px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.08em;cursor:pointer;outline:none;transition:all .3s;min-width:110px;text-align:center;}
 .status-select.waiting{color:#c49a20;border-color:rgba(196,154,32,0.4);background:rgba(196,154,32,0.08);}
 .status-select.done{color:#6aaa6a;border-color:rgba(106,170,106,0.4);background:rgba(106,170,106,0.08);}
@@ -182,6 +185,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   .res-date{display:block;order:1;font-size:11px;color:rgba(247,242,234,0.38);}
   .res-name-wrap{order:2;}
   .res-product{display:block;order:3;text-align:left;font-size:11px;color:rgba(247,242,234,0.38);}
+  .res-money{text-align:left;font-size:10px;margin-top:5px;}
   .status-select{order:4;width:100%;min-height:40px;margin-top:2px;}
   .detail-grid{grid-template-columns:1fr 1fr;}
   .detail-item.wide{grid-column:1/-1;}
@@ -758,7 +762,10 @@ function renderCards(){
           <div class="res-name">${escapeHTML(item.babyName||'-')} <span style="font-size:11px;color:rgba(247,242,234,0.35);font-family:'Cormorant Garamond',serif;font-style:italic;">아기</span></div>
           <div class="res-sub">${escapeHTML(item.parentName||'')} · ${escapeHTML(item.phone||'')}</div>
         </div>
-        <div class="res-product">${escapeHTML(item.product||'')}</div>
+        <div>
+          <div class="res-product">${escapeHTML(item.product||'')}</div>
+          <div class="res-money">예상 <strong>${escapeHTML(estimate.totalText)}</strong> · 입금 <strong class="${actualAmount?'paid':''}">${escapeHTML(actualAmountText)}</strong> · ${escapeHTML(item.paymentMethod||'결제수단 미입력')}</div>
+        </div>
         <select class="status-select ${sc}" data-row-id="${escapeAttr(rowId)}" data-prev-status="${escapeAttr(item.status||'⏳ 확인중')}" onchange="updateStatus(this)" onclick="event.stopPropagation()">
           <option value="⏳ 확인중" ${!item.status||item.status.includes('확인중')?'selected':''}>⏳ 확인중</option>
           <option value="✓ 예약 확인 완료" ${item.status&&(item.status.includes('✓')||item.status.includes('✅')||item.status.includes('완료'))?'selected':''}>✓ 예약 확인 완료</option>
