@@ -235,6 +235,7 @@ function summarizeReservations(items){
   let activeReservations=0;
   let cancelReservations=0;
   const productMap={};
+  const paymentMap={};
   selected.forEach(item=>{
     const status=getStatusClass(item.status);
     if(status==='cancel'){
@@ -251,13 +252,19 @@ function summarizeReservations(items){
     productMap[product]=productMap[product]||{name:product,count:0,revenue:0};
     productMap[product].count+=1;
     productMap[product].revenue+=expected;
+    const paymentMethod=String(item.paymentMethod||'결제수단 미입력').trim()||'결제수단 미입력';
+    const paymentRevenue=actual||expected;
+    paymentMap[paymentMethod]=paymentMap[paymentMethod]||{name:paymentMethod,count:0,revenue:0};
+    paymentMap[paymentMethod].count+=1;
+    paymentMap[paymentMethod].revenue+=paymentRevenue;
   });
   return{
     expectedRevenue,
     confirmedRevenue,
     activeReservations,
     cancelReservations,
-    productRevenue:Object.values(productMap).sort((a,b)=>b.revenue-a.revenue)
+    productRevenue:Object.values(productMap).sort((a,b)=>b.revenue-a.revenue),
+    paymentRevenue:Object.values(paymentMap).sort((a,b)=>b.revenue-a.revenue)
   };
 }
 function render(data,reservations){
@@ -297,7 +304,8 @@ function render(data,reservations){
     renderTable('예약확정서 진입',rankings.reservationEntryPages)
   ].join('');
   document.getElementById('revenueTables').innerHTML=[
-    renderRevenueTable('상품별 예상 매출',revenue.productRevenue)
+    renderRevenueTable('상품별 예상 매출',revenue.productRevenue),
+    renderRevenueTable('결제수단별 매출 비중',revenue.paymentRevenue)
   ].join('');
 }
 function loadAnalytics(fromLogin){
