@@ -559,12 +559,15 @@ function getDepositAmount(item){
 }
 
 function getSettlement(item){
+  const expected=getReservationEstimateDisplay(item).total||0;
   const deposit=getDepositAmount(item);
   const balance=parseWon(item.actualPaymentAmount);
   const hairMakeup=parseWon(item.hairMakeupCost);
   const collected=deposit+balance;
   const studioRevenue=Math.max(0,collected-hairMakeup);
-  return {deposit,balance,hairMakeup,collected,studioRevenue};
+  const suggestedBalance=Math.max(0,expected-deposit);
+  const unsettled=Math.max(0,expected-deposit-balance);
+  return {expected,deposit,balance,hairMakeup,collected,studioRevenue,suggestedBalance,unsettled};
 }
 
 function normalizeText(value){
@@ -827,11 +830,14 @@ function renderCards(){
           <div class="detail-item priority"><div class="detail-key">예상 결제 금액</div><div class="detail-val estimate">${escapeHTML(estimate.totalText)}</div></div>
           <div class="detail-item wide"><div class="detail-key">예상 금액 구성</div><div class="detail-val" style="font-size:12px;">${escapeHTML(estimate.itemsText)}</div></div>
           <div class="detail-item"><div class="detail-key">예약금 입금액</div><div class="detail-val">${escapeHTML(formatWon(settlement.deposit))}</div></div>
+          <div class="detail-item"><div class="detail-key">예약금 결제수단</div><div class="detail-val">${escapeHTML(item.depositPaymentMethod||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">잔금 결제액</div><div class="detail-val">${escapeHTML(balanceText)}</div></div>
           <div class="detail-item"><div class="detail-key">헤어·메이크업 비용</div><div class="detail-val">${escapeHTML(hairMakeupText)}</div></div>
+          <div class="detail-item priority"><div class="detail-key">촬영일 잔금 안내</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.suggestedBalance))}</div></div>
+          <div class="detail-item"><div class="detail-key">미정산 차액</div><div class="detail-val">${escapeHTML(formatWon(settlement.unsettled))}</div></div>
           <div class="detail-item"><div class="detail-key">실제 총 수납액</div><div class="detail-val">${escapeHTML(formatWon(settlement.collected))}</div></div>
           <div class="detail-item priority"><div class="detail-key">실제 스튜디오 매출</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.studioRevenue))}</div></div>
-          <div class="detail-item"><div class="detail-key">결제수단</div><div class="detail-val">${escapeHTML(item.paymentMethod||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">잔금 결제수단</div><div class="detail-val">${escapeHTML(item.paymentMethod||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">예약금 입금 확인일</div><div class="detail-val">${escapeHTML(fPlainDate(item.depositConfirmedAt)||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">잔금 결제일</div><div class="detail-val">${escapeHTML(fPlainDate(item.balancePaidAt)||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">관리자 메모</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.adminMemo||'-')}</div></div>
@@ -1085,6 +1091,11 @@ function buildEditPreviewItem(){
   };
 }
 
+function editNumberValue(key){
+  const input=document.querySelector(`[data-edit-key="${key}"]`);
+  return input?parseWon(input.value):0;
+}
+
 function updateEditModalState(){
   const product=editFieldFromDom('product');
   const isFamily=product==='가족실내앨범형';
@@ -1111,10 +1122,23 @@ function updateEditModalState(){
   const estimate=calculateReservationEstimateBreakdown(buildEditPreviewItem());
   const total=estimate.total?formatWon(estimate.total):'-';
   const items=estimate.items.length?estimate.items.map(entry=>entry.label+' '+formatWon(entry.amount)).join(' / '):'선택된 상품 구성이 없습니다';
+  const deposit=editNumberValue('depositAmount')||200000;
+  const balance=editNumberValue('actualPaymentAmount');
+  const hairMakeup=editNumberValue('hairMakeupCost');
+  const suggestedBalance=Math.max(0,estimate.total-deposit);
+  const unsettled=Math.max(0,estimate.total-deposit-balance);
+  const studioRevenue=Math.max(0,deposit+balance-hairMakeup);
+  const settlementText=[
+    '촬영일 잔금 안내 '+formatWon(suggestedBalance),
+    '입력 후 미정산 차액 '+formatWon(unsettled),
+    '헤메 차감 후 스튜디오 매출 '+formatWon(studioRevenue)
+  ].join(' / ');
   const totalEl=document.getElementById('editEstimateTotal');
   const itemsEl=document.getElementById('editEstimateItems');
+  const settlementEl=document.getElementById('editSettlementItems');
   if(totalEl)totalEl.textContent=total;
   if(itemsEl)itemsEl.textContent=items;
+  if(settlementEl)settlementEl.textContent=settlementText;
 }
 
 function normalizeEditCheckbox(input){
@@ -1206,10 +1230,15 @@ function renderEditForm(item){
           ${editInput('depositor','입금자명','text',item.depositor)}
           ${editInput('depositConfirmedAt','예약금 입금 확인일','date',item.depositConfirmedAt)}
           ${editInput('depositAmount','예약금 입금액','number',item.depositAmount||200000)}
+          <div class="write-field"><label class="write-label">예약금 결제수단</label>${renderEditRadio('depositPaymentMethod',editOptionGroups.paymentMethod,item.depositPaymentMethod)}</div>
           ${editInput('actualPaymentAmount','잔금 결제액','number',item.actualPaymentAmount)}
           ${editInput('balancePaidAt','잔금 결제일','date',item.balancePaidAt)}
           ${editInput('hairMakeupCost','헤어·메이크업 비용','number',item.hairMakeupCost)}
-          <div class="write-field"><label class="write-label">결제수단</label>${renderEditRadio('paymentMethod',editOptionGroups.paymentMethod,item.paymentMethod)}</div>
+          <div class="write-field"><label class="write-label">잔금 결제수단</label>${renderEditRadio('paymentMethod',editOptionGroups.paymentMethod,item.paymentMethod)}</div>
+        </div>
+        <div class="edit-estimate">
+          <div class="edit-estimate-k">촬영일 결제 안내</div>
+          <div class="edit-estimate-items" id="editSettlementItems">-</div>
         </div>
       </div>
       <div class="edit-section">
