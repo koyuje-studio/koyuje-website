@@ -120,6 +120,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .filter-row{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center;}
 .filter-btn{font-size:11px;letter-spacing:0.15em;padding:7px 16px;background:none;border:0.5px solid rgba(247,242,234,0.15);color:rgba(247,242,234,0.5);cursor:pointer;transition:all .3s;}
 .filter-btn:hover,.filter-btn.active{background:rgba(160,120,64,0.15);border-color:rgba(160,120,64,0.4);color:var(--gold2);}
+.sort-btn{font-size:11px;letter-spacing:0.12em;padding:7px 12px;background:rgba(247,242,234,0.035);border:0.5px solid rgba(247,242,234,0.12);color:rgba(247,242,234,0.45);cursor:pointer;transition:all .3s;}
+.sort-btn:hover,.sort-btn.active{border-color:rgba(160,120,64,0.45);color:var(--gold2);background:rgba(160,120,64,0.12);}
 .search-input{background:rgba(247,242,234,0.05);border:0.5px solid rgba(247,242,234,0.12);color:var(--paper);padding:7px 14px;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:300;outline:none;margin-left:auto;width:200px;transition:border-color .3s;}
 .search-input:focus{border-color:var(--gold);}
 .search-input::placeholder{color:rgba(247,242,234,0.25);}
@@ -282,6 +284,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
       <button class="filter-btn" data-filter="shootToday" onclick="setFilter('shootToday',this)">오늘 촬영</button>
       <button class="filter-btn" data-filter="shootWeek" onclick="setFilter('shootWeek',this)">이번 주 촬영</button>
       <button class="filter-btn" data-filter="cancel" onclick="setFilter('cancel',this)">× 취소</button>
+      <button class="sort-btn active" data-sort="submitted" onclick="setSortMode('submitted',this)">최신 접수순</button>
+      <button class="sort-btn" data-sort="shootDate" onclick="setSortMode('shootDate',this)">촬영일 빠른순</button>
       <input type="text" class="search-input" id="searchInput" placeholder="이름 · 연락처 검색" oninput="renderCards()">
     </div>
 
@@ -367,6 +371,7 @@ const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyAAe8It1LY5t6kGYXj2n-
 let allData=[];
 let currentFilter='all';
 let currentMonthKey='';
+let currentSortMode='submitted';
 let adminPw='';
 let editingRowId='';
 
@@ -674,6 +679,13 @@ function setFilter(f,el){
   renderCards();
 }
 
+function setSortMode(mode,el){
+  currentSortMode=mode||'submitted';
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderCards();
+}
+
 function getStatusClass(s){
   if(!s||s.includes('확인중'))return'waiting';
   if(s.includes('완료')||s.includes('✓')||s.includes('✅'))return'done';
@@ -772,6 +784,16 @@ function isShootDateInFilter(item,filter){
   return true;
 }
 
+function shootDateTimeValue(item){
+  const date=parseDateOnly(item.shootDate);
+  if(!date)return Number.MAX_SAFE_INTEGER;
+  const time=String(item.shootTime||'').trim();
+  let minutes=0;
+  const match=time.match(/^(\d{1,2}):(\d{2})/);
+  if(match)minutes=Number(match[1])*60+Number(match[2]);
+  return date.getTime()+minutes*60000;
+}
+
 function escapeHTML(value){
   return String(value ?? '')
     .replace(/&/g,'&amp;')
@@ -827,8 +849,12 @@ function renderCards(){
     return true;
   });
 
-  // 최신순 정렬
-  filtered=filtered.slice().reverse();
+  filtered=filtered.slice();
+  if(currentSortMode==='shootDate'){
+    filtered.sort((a,b)=>shootDateTimeValue(a)-shootDateTimeValue(b));
+  }else{
+    filtered.reverse();
+  }
 
   if(filtered.length===0){
     document.getElementById('cardsWrap').innerHTML='<div class="empty-wrap"><div class="empty-icon">📋</div><div class="empty-text">해당하는 예약이 없습니다</div></div>';
