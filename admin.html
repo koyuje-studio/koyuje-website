@@ -1027,6 +1027,12 @@ function editInput(key,label,type,value,attrs){
   return `<div class="write-field" ${attrs||''}><label class="write-label">${label}</label><input type="${type}" class="write-input" data-edit-key="${key}" value="${safe}"></div>`;
 }
 
+function editMoneyInput(key,label,value){
+  const amount=parseWon(value);
+  const safe=amount?amount.toLocaleString('ko-KR'):'';
+  return `<div class="write-field"><label class="write-label">${label}</label><input type="text" inputmode="numeric" class="write-input" data-edit-key="${key}" data-money-input="true" value="${escapeAttr(safe)}" placeholder="예) 1,050,000"></div>`;
+}
+
 function editTextarea(key,label,value){
   return `<div class="write-field" style="grid-column:1/-1;"><label class="write-label">${label}</label><textarea class="write-textarea" data-edit-key="${key}">${escapeHTML(value ?? '')}</textarea></div>`;
 }
@@ -1072,7 +1078,7 @@ function renderEditCheckbox(key,options,current,column){
 
 function editFieldFromDom(key){
   const direct=document.querySelector(`[data-edit-key="${key}"]`);
-  if(direct)return direct.value.trim();
+  if(direct)return direct.dataset.moneyInput==='true'?String(parseWon(direct.value)||''):direct.value.trim();
   const radio=document.querySelector(`[data-edit-radio-key="${key}"]:checked`);
   if(radio)return radio.value;
   const checks=Array.from(document.querySelectorAll(`[data-edit-checkbox-key="${key}"]:checked`)).map(input=>input.value);
@@ -1097,6 +1103,11 @@ function buildEditPreviewItem(){
 function editNumberValue(key){
   const input=document.querySelector(`[data-edit-key="${key}"]`);
   return input?parseWon(input.value):0;
+}
+
+function formatMoneyInput(input){
+  const amount=parseWon(input.value);
+  input.value=amount?amount.toLocaleString('ko-KR'):'';
 }
 
 function updateEditModalState(){
@@ -1232,11 +1243,11 @@ function renderEditForm(item){
         <div class="write-grid">
           ${editInput('depositor','입금자명','text',item.depositor)}
           ${editInput('depositConfirmedAt','예약금 입금 확인일','date',item.depositConfirmedAt)}
-          ${editInput('depositAmount','예약금 입금액','number',item.depositAmount||200000)}
+          ${editMoneyInput('depositAmount','예약금 입금액',item.depositAmount||200000)}
           <div class="write-field"><label class="write-label">예약금 결제수단</label>${renderEditRadio('depositPaymentMethod',editOptionGroups.paymentMethod,item.depositPaymentMethod)}</div>
-          ${editInput('actualPaymentAmount','잔금 결제액','number',item.actualPaymentAmount)}
+          ${editMoneyInput('actualPaymentAmount','잔금 결제액',item.actualPaymentAmount)}
           ${editInput('balancePaidAt','잔금 결제일','date',item.balancePaidAt)}
-          ${editInput('hairMakeupCost','헤어·메이크업 비용','number',item.hairMakeupCost)}
+          ${editMoneyInput('hairMakeupCost','헤어·메이크업 비용',item.hairMakeupCost)}
           <div class="write-field"><label class="write-label">잔금 결제수단</label>${renderEditRadio('paymentMethod',editOptionGroups.paymentMethod,item.paymentMethod)}</div>
         </div>
         <div class="edit-estimate">
@@ -1272,6 +1283,14 @@ function openEditModal(rowId){
       updateEditModalState();
     });
     input.addEventListener('input',updateEditModalState);
+  });
+  fields.querySelectorAll('[data-money-input="true"]').forEach(input=>{
+    formatMoneyInput(input);
+    input.addEventListener('input',()=>{
+      formatMoneyInput(input);
+      updateEditModalState();
+    });
+    input.addEventListener('blur',()=>formatMoneyInput(input));
   });
   document.getElementById('editModalBg').classList.add('show');
   updateEditModalState();
