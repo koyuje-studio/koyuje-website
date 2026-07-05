@@ -99,6 +99,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 /* 통계 */
 .stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:32px;}
 .stat-card{background:rgba(247,242,234,0.04);border:0.5px solid rgba(247,242,234,0.08);padding:20px 24px;}
+.stat-card.action{cursor:pointer;transition:background .25s,border-color .25s,transform .25s;}
+.stat-card.action:hover{background:rgba(160,120,64,0.1);border-color:rgba(160,120,64,0.35);transform:translateY(-1px);}
 .stat-label{font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);margin-bottom:8px;}
 .stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;line-height:1;}
 .stat-num.gold{color:var(--gold);}
@@ -141,9 +143,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .res-badge.payment{color:#d7bb86;border-color:rgba(215,187,134,0.38);background:rgba(215,187,134,0.06);}
 .res-sub{font-size:11px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;}
 .res-product{font-size:12px;color:rgba(247,242,234,0.5);letter-spacing:0.05em;text-align:right;}
-.res-money{font-size:10px;color:rgba(247,242,234,0.4);letter-spacing:0.04em;text-align:right;margin-top:3px;line-height:1.6;}
-.res-money strong{color:var(--gold2);font-weight:300;}
+.res-money{display:flex;justify-content:flex-end;align-items:center;gap:7px;flex-wrap:wrap;font-size:10px;color:rgba(247,242,234,0.38);letter-spacing:0.04em;text-align:right;margin-top:4px;line-height:1.6;}
+.res-money .money-pair{white-space:nowrap;}
+.res-money .money-label{color:rgba(247,242,234,0.34);}
+.res-money strong{color:var(--gold2);font-weight:400;}
 .res-money .paid{color:#6aaa6a;}
+.money-state{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border:0.5px solid rgba(215,187,134,0.24);color:#d7bb86;background:rgba(215,187,134,0.045);}
+.money-state.done{border-color:rgba(106,170,106,0.24);color:#6aaa6a;background:rgba(106,170,106,0.045);}
 .res-name,.res-sub,.res-product,.res-money,.detail-val{overflow-wrap:anywhere;}
 .status-select{appearance:none;-webkit-appearance:none;border:0.5px solid;padding:5px 12px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.08em;cursor:pointer;outline:none;transition:all .3s;min-width:110px;text-align:center;}
 .status-select.waiting{color:#c49a20;border-color:rgba(196,154,32,0.4);background:rgba(196,154,32,0.08);}
@@ -262,7 +268,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
       <div class="stat-card"><div class="stat-label">전체 예약</div><div class="stat-num gold" id="statTotal">—</div></div>
       <div class="stat-card"><div class="stat-label">확인 완료</div><div class="stat-num green" id="statDone">—</div></div>
       <div class="stat-card"><div class="stat-label">확인중</div><div class="stat-num orange" id="statWaiting">—</div></div>
-      <div class="stat-card"><div class="stat-label">정산 미입력</div><div class="stat-num muted-gold" id="statPaymentMissing">—</div></div>
+      <div class="stat-card action" onclick="setFilter('paymentMissing')" title="정산 미입력 예약만 보기"><div class="stat-label">정산 미입력</div><div class="stat-num muted-gold" id="statPaymentMissing">—</div></div>
       <div class="stat-card"><div class="stat-label">취소</div><div class="stat-num red" id="statCancel">—</div></div>
     </div>
 
@@ -680,7 +686,8 @@ function setMonthFilter(monthKey){
 function setFilter(f,el){
   currentFilter=f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
+  const target=el||document.querySelector(`.filter-btn[data-filter="${f}"]`);
+  if(target)target.classList.add('active');
   renderCards();
 }
 
@@ -906,7 +913,11 @@ function renderCards(){
         </div>
         <div>
           <div class="res-product">${escapeHTML(item.product||'')}</div>
-          <div class="res-money">고객잔금 <strong>${escapeHTML(formatWon(settlement.suggestedBalance))}</strong> · 입력잔금 <strong class="${settlement.balance?'paid':''}">${escapeHTML(balanceText)}</strong> · ${escapeHTML(settlementStatus.done?'정산 완료':'정산 미입력')}</div>
+          <div class="res-money">
+            <span class="money-pair"><span class="money-label">고객잔금</span> <strong>${escapeHTML(formatWon(settlement.suggestedBalance))}</strong></span>
+            <span class="money-pair"><span class="money-label">입력잔금</span> <strong class="${settlement.balance?'paid':''}">${escapeHTML(balanceText)}</strong></span>
+            <span class="money-state ${settlementStatus.done?'done':''}">${escapeHTML(settlementStatus.done?'정산 완료':'정산 미입력')}</span>
+          </div>
         </div>
         <select class="status-select ${sc}" data-row-id="${escapeAttr(rowId)}" data-prev-status="${escapeAttr(item.status||'⏳ 확인중')}" onchange="updateStatus(this)" onclick="event.stopPropagation()">
           <option value="⏳ 확인중" ${!item.status||item.status.includes('확인중')?'selected':''}>⏳ 확인중</option>
