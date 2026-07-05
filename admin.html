@@ -580,6 +580,22 @@ function getSettlement(item){
   return {expected,deposit,balance,hairMakeup,collected,studioRevenue,suggestedBalance,unsettled};
 }
 
+function getSettlementStatus(item){
+  const settlement=getSettlement(item);
+  const missing=[];
+  if(!String(item.depositConfirmedAt||'').trim())missing.push('예약금 확인일');
+  if(!String(item.depositPaymentMethod||'').trim())missing.push('예약금 결제수단');
+  if(settlement.suggestedBalance>0){
+    if(!settlement.balance)missing.push('잔금 결제액');
+    if(!String(item.paymentMethod||'').trim())missing.push('잔금 결제수단');
+    if(!String(item.balancePaidAt||'').trim())missing.push('잔금 결제일');
+  }
+  return {
+    done:missing.length===0,
+    text:missing.length?'정산 미입력: '+missing.join(', '):'정산 완료'
+  };
+}
+
 function normalizeText(value){
   return String(value||'').replace(/\s+/g,'');
 }
@@ -734,7 +750,7 @@ function detailValueHTML(state){
 }
 
 function hasPaymentMissing(item){
-  return !parseWon(item.actualPaymentAmount)||!String(item.paymentMethod||'').trim();
+  return !getSettlementStatus(item).done;
 }
 
 function renderCards(){
@@ -790,6 +806,7 @@ function renderCards(){
     const dadDisplay=dadMissing?{className:'missing',text:'Apps Script 응답 누락'}:(dadSizeText?{className:'',text:dadSizeText}:{className:'blank',text:'미입력 또는 빈값'});
     const estimate=getReservationEstimateDisplay(item);
     const settlement=getSettlement(item);
+    const settlementStatus=getSettlementStatus(item);
     const balanceText=settlement.balance?formatWon(settlement.balance):'-';
     const hairMakeupText=settlement.hairMakeup?formatWon(settlement.hairMakeup):'-';
     const parentSizeHTML=(isFamilyProduct||hasParentSize)?`
@@ -805,7 +822,7 @@ function renderCards(){
         </div>
         <div>
           <div class="res-product">${escapeHTML(item.product||'')}</div>
-          <div class="res-money">예상 <strong>${escapeHTML(estimate.totalText)}</strong> · 잔금 <strong class="${settlement.balance?'paid':''}">${escapeHTML(balanceText)}</strong> · 실매출 <strong>${escapeHTML(formatWon(settlement.studioRevenue))}</strong></div>
+          <div class="res-money">고객잔금 <strong>${escapeHTML(formatWon(settlement.suggestedBalance))}</strong> · 입력잔금 <strong class="${settlement.balance?'paid':''}">${escapeHTML(balanceText)}</strong> · ${escapeHTML(settlementStatus.done?'정산 완료':'정산 미입력')}</div>
         </div>
         <select class="status-select ${sc}" data-row-id="${escapeAttr(rowId)}" data-prev-status="${escapeAttr(item.status||'⏳ 확인중')}" onchange="updateStatus(this)" onclick="event.stopPropagation()">
           <option value="⏳ 확인중" ${!item.status||item.status.includes('확인중')?'selected':''}>⏳ 확인중</option>
@@ -846,6 +863,7 @@ function renderCards(){
           <div class="detail-item"><div class="detail-key">잔금 결제일</div><div class="detail-val">${escapeHTML(fPlainDate(item.balancePaidAt)||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">헤어·메이크업 외부 결제</div><div class="detail-val">${escapeHTML(hairMakeupText)}</div></div>
           <div class="detail-item priority"><div class="detail-key">고객 잔금 안내</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.suggestedBalance))}</div></div>
+          <div class="detail-item priority"><div class="detail-key">정산 상태</div><div class="detail-val ${settlementStatus.done?'':'blank'}">${escapeHTML(settlementStatus.text)}</div></div>
           <div class="detail-item"><div class="detail-key">미정산 차액</div><div class="detail-val">${escapeHTML(formatWon(settlement.unsettled))}</div></div>
           <div class="detail-item"><div class="detail-key">실제 총 수납액</div><div class="detail-val">${escapeHTML(formatWon(settlement.collected))}</div></div>
           <div class="detail-item priority"><div class="detail-key">실제 스튜디오 매출</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.studioRevenue))}</div></div>
