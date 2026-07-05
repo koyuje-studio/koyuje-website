@@ -86,7 +86,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .admin-body{padding:32px;}
 
 /* 통계 */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:32px;}
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:32px;}
 .stat-card{background:rgba(247,242,234,0.04);border:0.5px solid rgba(247,242,234,0.08);padding:20px 24px;}
 .stat-label{font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);margin-bottom:8px;}
 .stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;line-height:1;}
@@ -94,6 +94,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .stat-num.green{color:#6aaa6a;}
 .stat-num.orange{color:#e0a050;}
 .stat-num.red{color:#e07070;}
+.stat-num.muted-gold{color:#d7bb86;}
 .monthly-panel{background:rgba(247,242,234,0.035);border:0.5px solid rgba(247,242,234,0.08);padding:18px 20px;margin:-18px 0 28px;}
 .monthly-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:12px;}
 .monthly-title{font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);}
@@ -241,6 +242,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
       <div class="stat-card"><div class="stat-label">전체 예약</div><div class="stat-num gold" id="statTotal">—</div></div>
       <div class="stat-card"><div class="stat-label">확인 완료</div><div class="stat-num green" id="statDone">—</div></div>
       <div class="stat-card"><div class="stat-label">확인중</div><div class="stat-num orange" id="statWaiting">—</div></div>
+      <div class="stat-card"><div class="stat-label">정산 미입력</div><div class="stat-num muted-gold" id="statPaymentMissing">—</div></div>
       <div class="stat-card"><div class="stat-label">취소</div><div class="stat-num red" id="statCancel">—</div></div>
     </div>
 
@@ -480,9 +482,11 @@ function updateStats(){
   const done=activeData.filter(d=>d.status&&(d.status.includes('완료')||d.status.includes('✓')||d.status.includes('✅'))).length;
   const waiting=activeData.filter(d=>!d.status||d.status.includes('확인중')).length;
   const cancel=activeData.filter(d=>d.status&&(d.status.includes('취소')||d.status.includes('×')||d.status.includes('❌'))).length;
+  const paymentMissing=activeData.filter(d=>getStatusClass(d.status)!=='cancel'&&hasPaymentMissing(d)).length;
   document.getElementById('statTotal').textContent=total;
   document.getElementById('statDone').textContent=done;
   document.getElementById('statWaiting').textContent=waiting;
+  document.getElementById('statPaymentMissing').textContent=paymentMissing;
   document.getElementById('statCancel').textContent=cancel;
   updateMonthlyStats(activeData);
 }
