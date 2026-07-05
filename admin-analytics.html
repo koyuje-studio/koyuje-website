@@ -252,6 +252,7 @@ function summarizeReservations(items){
   let cancelReservations=0;
   const productMap={};
   const paymentMap={};
+  const depositPaymentMap={};
   selected.forEach(item=>{
     const status=getStatusClass(item.status);
     if(status==='cancel'){
@@ -275,6 +276,10 @@ function summarizeReservations(items){
     paymentMap[paymentMethod]=paymentMap[paymentMethod]||{name:paymentMethod,count:0,revenue:0};
     paymentMap[paymentMethod].count+=1;
     paymentMap[paymentMethod].revenue+=paymentRevenue;
+    const depositPaymentMethod=String(item.depositPaymentMethod||'예약금 수단 미입력').trim()||'예약금 수단 미입력';
+    depositPaymentMap[depositPaymentMethod]=depositPaymentMap[depositPaymentMethod]||{name:depositPaymentMethod,count:0,revenue:0};
+    depositPaymentMap[depositPaymentMethod].count+=1;
+    depositPaymentMap[depositPaymentMethod].revenue+=settlement.deposit;
   });
   return{
     expectedRevenue,
@@ -284,7 +289,8 @@ function summarizeReservations(items){
     activeReservations,
     cancelReservations,
     productRevenue:Object.values(productMap).sort((a,b)=>b.revenue-a.revenue),
-    paymentRevenue:Object.values(paymentMap).sort((a,b)=>b.revenue-a.revenue)
+    paymentRevenue:Object.values(paymentMap).sort((a,b)=>b.revenue-a.revenue),
+    depositPaymentRevenue:Object.values(depositPaymentMap).sort((a,b)=>b.revenue-a.revenue)
   };
 }
 function render(data,reservations){
@@ -327,6 +333,7 @@ function render(data,reservations){
   ].join('');
   document.getElementById('revenueTables').innerHTML=[
     renderRevenueTable('상품별 예상 매출',revenue.productRevenue),
+    renderRevenueTable('예약금 결제수단별 수납',revenue.depositPaymentRevenue),
     renderRevenueTable('결제수단별 매출 비중',revenue.paymentRevenue)
   ].join('');
 }
