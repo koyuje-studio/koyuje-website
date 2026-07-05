@@ -76,6 +76,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .edit-estimate-k{font-size:10px;letter-spacing:0.18em;color:rgba(247,242,234,0.48);margin-bottom:6px;}
 .edit-estimate-total{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold2);}
 .edit-estimate-items{font-size:12px;color:rgba(247,242,234,0.55);line-height:1.8;margin-top:8px;word-break:keep-all;}
+.edit-settlement-main{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold2);margin-top:4px;}
+.edit-settlement-formula{font-size:12px;color:rgba(247,242,234,0.62);line-height:1.8;margin-top:10px;word-break:keep-all;}
+.edit-settlement-sub{font-size:11px;color:rgba(247,242,234,0.38);line-height:1.8;margin-top:8px;word-break:keep-all;}
 .btn-write-submit{width:100%;background:var(--gold);color:var(--ink);border:none;padding:14px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .3s;margin-top:8px;}
 .btn-write-submit:hover{background:var(--gold2);}
 .edit-submit-bar{position:sticky;bottom:-36px;z-index:6;background:rgba(26,23,20,0.97);backdrop-filter:blur(12px);margin:24px -36px -36px;padding:16px 36px 22px;border-top:0.5px solid rgba(247,242,234,0.08);}
@@ -565,8 +568,8 @@ function getSettlement(item){
   const hairMakeup=parseWon(item.hairMakeupCost);
   const collected=deposit+balance;
   const studioRevenue=Math.max(0,collected-hairMakeup);
-  const suggestedBalance=Math.max(0,expected-deposit);
-  const unsettled=Math.max(0,expected-deposit-balance);
+  const suggestedBalance=Math.max(0,expected-deposit-hairMakeup);
+  const unsettled=Math.max(0,expected-deposit-hairMakeup-balance);
   return {expected,deposit,balance,hairMakeup,collected,studioRevenue,suggestedBalance,unsettled};
 }
 
@@ -833,7 +836,7 @@ function renderCards(){
           <div class="detail-item"><div class="detail-key">예약금 결제수단</div><div class="detail-val">${escapeHTML(item.depositPaymentMethod||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">잔금 결제액</div><div class="detail-val">${escapeHTML(balanceText)}</div></div>
           <div class="detail-item"><div class="detail-key">헤어·메이크업 비용</div><div class="detail-val">${escapeHTML(hairMakeupText)}</div></div>
-          <div class="detail-item priority"><div class="detail-key">촬영일 잔금 안내</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.suggestedBalance))}</div></div>
+          <div class="detail-item priority"><div class="detail-key">고객 잔금 안내</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.suggestedBalance))}</div></div>
           <div class="detail-item"><div class="detail-key">미정산 차액</div><div class="detail-val">${escapeHTML(formatWon(settlement.unsettled))}</div></div>
           <div class="detail-item"><div class="detail-key">실제 총 수납액</div><div class="detail-val">${escapeHTML(formatWon(settlement.collected))}</div></div>
           <div class="detail-item priority"><div class="detail-key">실제 스튜디오 매출</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.studioRevenue))}</div></div>
@@ -1125,20 +1128,20 @@ function updateEditModalState(){
   const deposit=editNumberValue('depositAmount')||200000;
   const balance=editNumberValue('actualPaymentAmount');
   const hairMakeup=editNumberValue('hairMakeupCost');
-  const suggestedBalance=Math.max(0,estimate.total-deposit);
-  const unsettled=Math.max(0,estimate.total-deposit-balance);
+  const suggestedBalance=Math.max(0,estimate.total-deposit-hairMakeup);
+  const unsettled=Math.max(0,estimate.total-deposit-hairMakeup-balance);
   const studioRevenue=Math.max(0,deposit+balance-hairMakeup);
-  const settlementText=[
-    '촬영일 잔금 안내 '+formatWon(suggestedBalance),
-    '입력 후 미정산 차액 '+formatWon(unsettled),
-    '헤메 차감 후 스튜디오 매출 '+formatWon(studioRevenue)
-  ].join(' / ');
+  const settlementText=`
+    <div class="edit-settlement-main">${formatWon(suggestedBalance)}</div>
+    <div class="edit-settlement-formula">예상 ${formatWon(estimate.total)} - 예약금 ${formatWon(deposit)} - 헤메 ${formatWon(hairMakeup)} = 고객 잔금 ${formatWon(suggestedBalance)}</div>
+    <div class="edit-settlement-sub">잔금 입력 후 미정산 차액 ${formatWon(unsettled)} / 헤메 차감 후 스튜디오 매출 ${formatWon(studioRevenue)}</div>
+  `;
   const totalEl=document.getElementById('editEstimateTotal');
   const itemsEl=document.getElementById('editEstimateItems');
   const settlementEl=document.getElementById('editSettlementItems');
   if(totalEl)totalEl.textContent=total;
   if(itemsEl)itemsEl.textContent=items;
-  if(settlementEl)settlementEl.textContent=settlementText;
+  if(settlementEl)settlementEl.innerHTML=settlementText;
 }
 
 function normalizeEditCheckbox(input){
@@ -1237,7 +1240,7 @@ function renderEditForm(item){
           <div class="write-field"><label class="write-label">잔금 결제수단</label>${renderEditRadio('paymentMethod',editOptionGroups.paymentMethod,item.paymentMethod)}</div>
         </div>
         <div class="edit-estimate">
-          <div class="edit-estimate-k">촬영일 결제 안내</div>
+          <div class="edit-estimate-k">고객 잔금 안내</div>
           <div class="edit-estimate-items" id="editSettlementItems">-</div>
         </div>
       </div>
