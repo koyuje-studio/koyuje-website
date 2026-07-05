@@ -49,6 +49,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .write-modal.edit-modal{max-width:760px;}
 .write-modal-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;color:var(--paper);margin-bottom:28px;letter-spacing:0.05em;}
 .edit-modal .write-modal-title{position:sticky;top:-36px;z-index:5;background:rgba(26,23,20,0.96);backdrop-filter:blur(12px);margin:-36px -36px 24px;padding:30px 36px 18px;border-bottom:0.5px solid rgba(247,242,234,0.08);}
+.edit-summary{display:grid;grid-template-columns:1.1fr 1.1fr 1fr 1fr;gap:10px;margin-top:18px;font-family:'Noto Sans KR',sans-serif;}
+.edit-summary-item{border:0.5px solid rgba(247,242,234,0.1);background:rgba(247,242,234,0.035);padding:10px 12px;min-width:0;}
+.edit-summary-k{font-size:9px;letter-spacing:0.18em;color:rgba(247,242,234,0.36);margin-bottom:4px;}
+.edit-summary-v{font-size:12px;color:rgba(247,242,234,0.82);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.edit-summary-v.gold{color:var(--gold2);font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.2;}
 .write-field{margin-bottom:20px;}
 .write-label{display:block;font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.4);margin-bottom:8px;}
 .write-input,.write-select,.write-textarea{width:100%;background:rgba(247,242,234,0.05);border:0.5px solid rgba(247,242,234,0.12);color:var(--paper);padding:11px 14px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:300;outline:none;transition:border-color .3s;-webkit-appearance:none;}
@@ -200,6 +205,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   .write-modal-bg{align-items:flex-end;padding:12px;}
   .write-modal{padding:30px 20px 24px;max-height:92vh;}
   .edit-modal .write-modal-title{top:-30px;margin:-30px -20px 22px;padding:24px 20px 16px;}
+  .edit-summary{grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;}
   .edit-submit-bar{bottom:-24px;margin:22px -20px -24px;padding:14px 20px 18px;}
   .edit-submit-actions{grid-template-columns:1fr;}
   .write-grid{grid-template-columns:1fr;}
@@ -335,7 +341,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 <div class="write-modal-bg" id="editModalBg">
   <div class="write-modal edit-modal">
     <button class="write-close" onclick="closeEditModal()">✕</button>
-    <div class="write-modal-title">예약 정보 수정</div>
+    <div class="write-modal-title">
+      예약 정보 수정
+      <div class="edit-summary" id="editSummary">
+        <div class="edit-summary-item"><div class="edit-summary-k">아기 이름</div><div class="edit-summary-v" id="editSummaryBaby">-</div></div>
+        <div class="edit-summary-item"><div class="edit-summary-k">촬영일</div><div class="edit-summary-v" id="editSummarySchedule">-</div></div>
+        <div class="edit-summary-item"><div class="edit-summary-k">상품</div><div class="edit-summary-v" id="editSummaryProduct">-</div></div>
+        <div class="edit-summary-item"><div class="edit-summary-k">고객 잔금</div><div class="edit-summary-v gold" id="editSummaryBalance">-</div></div>
+      </div>
+    </div>
     <div class="write-grid" id="editFields"></div>
     <div class="edit-submit-bar">
       <div class="edit-submit-actions">
@@ -1170,6 +1184,11 @@ function formatMoneyInput(input){
   input.value=amount?amount.toLocaleString('ko-KR'):'';
 }
 
+function setEditSummary(id,value){
+  const el=document.getElementById(id);
+  if(el)el.textContent=value||'-';
+}
+
 function updateEditModalState(){
   const product=editFieldFromDom('product');
   const isFamily=product==='가족실내앨범형';
@@ -1213,6 +1232,11 @@ function updateEditModalState(){
   if(totalEl)totalEl.textContent=total;
   if(itemsEl)itemsEl.textContent=items;
   if(settlementEl)settlementEl.innerHTML=settlementText;
+  const schedule=[fPlainDate(editFieldFromDom('shootDate')),fTime(editFieldFromDom('shootTime'))].filter(Boolean).join(' ');
+  setEditSummary('editSummaryBaby',editFieldFromDom('babyName'));
+  setEditSummary('editSummarySchedule',schedule);
+  setEditSummary('editSummaryProduct',product);
+  setEditSummary('editSummaryBalance',formatWon(suggestedBalance));
 }
 
 function normalizeEditCheckbox(input){
