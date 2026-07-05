@@ -553,6 +553,20 @@ function parseWon(value){
   return isNaN(num)?0:num;
 }
 
+function getDepositAmount(item){
+  const stored=parseWon(item.depositAmount);
+  return stored||200000;
+}
+
+function getSettlement(item){
+  const deposit=getDepositAmount(item);
+  const balance=parseWon(item.actualPaymentAmount);
+  const hairMakeup=parseWon(item.hairMakeupCost);
+  const collected=deposit+balance;
+  const studioRevenue=Math.max(0,collected-hairMakeup);
+  return {deposit,balance,hairMakeup,collected,studioRevenue};
+}
+
 function normalizeText(value){
   return String(value||'').replace(/\s+/g,'');
 }
@@ -762,8 +776,9 @@ function renderCards(){
     const momDisplay=momMissing?{className:'missing',text:'Apps Script 응답 누락'}:(momSizeText?{className:'',text:momSizeText}:{className:'blank',text:'미입력 또는 빈값'});
     const dadDisplay=dadMissing?{className:'missing',text:'Apps Script 응답 누락'}:(dadSizeText?{className:'',text:dadSizeText}:{className:'blank',text:'미입력 또는 빈값'});
     const estimate=getReservationEstimateDisplay(item);
-    const actualAmount=parseWon(item.actualPaymentAmount);
-    const actualAmountText=actualAmount?formatWon(actualAmount):'-';
+    const settlement=getSettlement(item);
+    const balanceText=settlement.balance?formatWon(settlement.balance):'-';
+    const hairMakeupText=settlement.hairMakeup?formatWon(settlement.hairMakeup):'-';
     const parentSizeHTML=(isFamilyProduct||hasParentSize)?`
           <div class="detail-item"><div class="detail-key">엄마 키·한복·신발</div>${detailValueHTML(momDisplay)}</div>
           <div class="detail-item"><div class="detail-key">아빠 키·한복·신발</div>${detailValueHTML(dadDisplay)}</div>`:'';
@@ -777,7 +792,7 @@ function renderCards(){
         </div>
         <div>
           <div class="res-product">${escapeHTML(item.product||'')}</div>
-          <div class="res-money">예상 <strong>${escapeHTML(estimate.totalText)}</strong> · 입금 <strong class="${actualAmount?'paid':''}">${escapeHTML(actualAmountText)}</strong> · ${escapeHTML(item.paymentMethod||'결제수단 미입력')}</div>
+          <div class="res-money">예상 <strong>${escapeHTML(estimate.totalText)}</strong> · 잔금 <strong class="${settlement.balance?'paid':''}">${escapeHTML(balanceText)}</strong> · 실매출 <strong>${escapeHTML(formatWon(settlement.studioRevenue))}</strong></div>
         </div>
         <select class="status-select ${sc}" data-row-id="${escapeAttr(rowId)}" data-prev-status="${escapeAttr(item.status||'⏳ 확인중')}" onchange="updateStatus(this)" onclick="event.stopPropagation()">
           <option value="⏳ 확인중" ${!item.status||item.status.includes('확인중')?'selected':''}>⏳ 확인중</option>
@@ -811,9 +826,14 @@ function renderCards(){
           <div class="detail-section">금액 / 정산</div>
           <div class="detail-item priority"><div class="detail-key">예상 결제 금액</div><div class="detail-val estimate">${escapeHTML(estimate.totalText)}</div></div>
           <div class="detail-item wide"><div class="detail-key">예상 금액 구성</div><div class="detail-val" style="font-size:12px;">${escapeHTML(estimate.itemsText)}</div></div>
-          <div class="detail-item"><div class="detail-key">실제 입금액</div><div class="detail-val">${escapeHTML(actualAmountText)}</div></div>
+          <div class="detail-item"><div class="detail-key">예약금 입금액</div><div class="detail-val">${escapeHTML(formatWon(settlement.deposit))}</div></div>
+          <div class="detail-item"><div class="detail-key">잔금 결제액</div><div class="detail-val">${escapeHTML(balanceText)}</div></div>
+          <div class="detail-item"><div class="detail-key">헤어·메이크업 비용</div><div class="detail-val">${escapeHTML(hairMakeupText)}</div></div>
+          <div class="detail-item"><div class="detail-key">실제 총 수납액</div><div class="detail-val">${escapeHTML(formatWon(settlement.collected))}</div></div>
+          <div class="detail-item priority"><div class="detail-key">실제 스튜디오 매출</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.studioRevenue))}</div></div>
           <div class="detail-item"><div class="detail-key">결제수단</div><div class="detail-val">${escapeHTML(item.paymentMethod||'-')}</div></div>
-          <div class="detail-item"><div class="detail-key">입금 확인일</div><div class="detail-val">${escapeHTML(fPlainDate(item.depositConfirmedAt)||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">예약금 입금 확인일</div><div class="detail-val">${escapeHTML(fPlainDate(item.depositConfirmedAt)||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">잔금 결제일</div><div class="detail-val">${escapeHTML(fPlainDate(item.balancePaidAt)||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">관리자 메모</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.adminMemo||'-')}</div></div>
 
           <div class="detail-section">관리 정보</div>
@@ -1184,8 +1204,11 @@ function renderEditForm(item){
         ${sectionTitle('09','입금 / 운영 정보')}
         <div class="write-grid">
           ${editInput('depositor','입금자명','text',item.depositor)}
-          ${editInput('depositConfirmedAt','입금 확인일','date',item.depositConfirmedAt)}
-          ${editInput('actualPaymentAmount','실제 입금액','number',item.actualPaymentAmount)}
+          ${editInput('depositConfirmedAt','예약금 입금 확인일','date',item.depositConfirmedAt)}
+          ${editInput('depositAmount','예약금 입금액','number',item.depositAmount||200000)}
+          ${editInput('actualPaymentAmount','잔금 결제액','number',item.actualPaymentAmount)}
+          ${editInput('balancePaidAt','잔금 결제일','date',item.balancePaidAt)}
+          ${editInput('hairMakeupCost','헤어·메이크업 비용','number',item.hairMakeupCost)}
           <div class="write-field"><label class="write-label">결제수단</label>${renderEditRadio('paymentMethod',editOptionGroups.paymentMethod,item.paymentMethod)}</div>
         </div>
       </div>

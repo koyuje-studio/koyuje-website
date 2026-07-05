@@ -97,7 +97,9 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 
     <section class="grid">
       <div class="card"><div class="label">예상 매출</div><div class="num" id="expectedRevenue">—</div><div class="sub">취소·삭제 제외</div></div>
-      <div class="card"><div class="label">확정 매출</div><div class="num" id="confirmedRevenue">—</div><div class="sub">확인 완료 기준</div></div>
+      <div class="card"><div class="label">실제 스튜디오 매출</div><div class="num" id="confirmedRevenue">—</div><div class="sub">예약금+잔금-헤메</div></div>
+      <div class="card"><div class="label">실제 총 수납액</div><div class="num" id="collectedRevenue">—</div><div class="sub">예약금+잔금</div></div>
+      <div class="card"><div class="label">헤어·메이크업 차감</div><div class="num" id="hairMakeupRevenue">—</div><div class="sub">운영 비용 분리</div></div>
       <div class="card"><div class="label">취소 제외 예약</div><div class="num" id="activeReservations">—</div><div class="sub">선택 기간 기준</div></div>
       <div class="card"><div class="label">취소 건</div><div class="num" id="cancelReservations">—</div><div class="sub">매출 제외</div></div>
     </section>
@@ -192,6 +194,18 @@ function calculateReservationEstimate(item){
 function getReservationEstimate(item){
   return parseWon(item.estimatedTotal)||calculateReservationEstimate(item);
 }
+function getDepositAmount(item){
+  const stored=parseWon(item.depositAmount);
+  return stored||200000;
+}
+function getSettlement(item){
+  const deposit=getDepositAmount(item);
+  const balance=parseWon(item.actualPaymentAmount);
+  const hairMakeup=parseWon(item.hairMakeupCost);
+  const collected=deposit+balance;
+  const studioRevenue=Math.max(0,collected-hairMakeup);
+  return {deposit,balance,hairMakeup,collected,studioRevenue};
+}
 function getStatusClass(status){
   const s=String(status||'');
   if(s.includes('취소')||s.includes('×')||s.includes('❌'))return'cancel';
@@ -232,6 +246,8 @@ function summarizeReservations(items){
   });
   let expectedRevenue=0;
   let confirmedRevenue=0;
+  let collectedRevenue=0;
+  let hairMakeupRevenue=0;
   let activeReservations=0;
   let cancelReservations=0;
   const productMap={};
@@ -244,16 +260,18 @@ function summarizeReservations(items){
     }
     if(status==='deleted')return;
     const expected=getReservationEstimate(item);
-    const actual=parseWon(item.actualPaymentAmount);
+    const settlement=getSettlement(item);
     activeReservations+=1;
     expectedRevenue+=expected;
-    if(status==='done')confirmedRevenue+=(actual||expected);
+    collectedRevenue+=settlement.collected;
+    hairMakeupRevenue+=settlement.hairMakeup;
+    if(status==='done')confirmedRevenue+=settlement.studioRevenue;
     const product=String(item.product||'미지정')||'미지정';
     productMap[product]=productMap[product]||{name:product,count:0,revenue:0};
     productMap[product].count+=1;
     productMap[product].revenue+=expected;
     const paymentMethod=String(item.paymentMethod||'결제수단 미입력').trim()||'결제수단 미입력';
-    const paymentRevenue=actual||expected;
+    const paymentRevenue=settlement.balance;
     paymentMap[paymentMethod]=paymentMap[paymentMethod]||{name:paymentMethod,count:0,revenue:0};
     paymentMap[paymentMethod].count+=1;
     paymentMap[paymentMethod].revenue+=paymentRevenue;
@@ -261,6 +279,8 @@ function summarizeReservations(items){
   return{
     expectedRevenue,
     confirmedRevenue,
+    collectedRevenue,
+    hairMakeupRevenue,
     activeReservations,
     cancelReservations,
     productRevenue:Object.values(productMap).sort((a,b)=>b.revenue-a.revenue),
@@ -282,6 +302,8 @@ function render(data,reservations){
   setText('rangeLabel',(data.rangeLabel||'선택 기간')+' 기준');
   setText('expectedRevenue',formatWon(revenue.expectedRevenue));
   setText('confirmedRevenue',formatWon(revenue.confirmedRevenue));
+  setText('collectedRevenue',formatWon(revenue.collectedRevenue));
+  setText('hairMakeupRevenue',formatWon(revenue.hairMakeupRevenue));
   setText('activeReservations',revenue.activeReservations);
   setText('cancelReservations',revenue.cancelReservations);
 
