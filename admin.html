@@ -273,6 +273,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
       <button class="filter-btn" data-filter="waiting" onclick="setFilter('waiting',this)">⏳ 확인중</button>
       <button class="filter-btn" data-filter="done" onclick="setFilter('done',this)">✓ 확인 완료</button>
       <button class="filter-btn" data-filter="paymentMissing" onclick="setFilter('paymentMissing',this)">정산 미입력</button>
+      <button class="filter-btn" data-filter="shootToday" onclick="setFilter('shootToday',this)">오늘 촬영</button>
+      <button class="filter-btn" data-filter="shootWeek" onclick="setFilter('shootWeek',this)">이번 주 촬영</button>
       <button class="filter-btn" data-filter="cancel" onclick="setFilter('cancel',this)">× 취소</button>
       <input type="text" class="search-input" id="searchInput" placeholder="이름 · 연락처 검색" oninput="renderCards()">
     </div>
@@ -725,6 +727,37 @@ function fPlainDate(d){
   return s;
 }
 
+function parseDateOnly(value){
+  if(!value)return null;
+  const s=String(value).trim();
+  const num=parseFloat(s);
+  if(!isNaN(num)&&num>40000&&num<60000){
+    const dt=new Date((num-25569)*86400*1000);
+    return new Date(dt.getUTCFullYear(),dt.getUTCMonth(),dt.getUTCDate());
+  }
+  const match=s.match(/(\d{4})[.\-\s년]+(\d{1,2})[.\-\s월]+(\d{1,2})/);
+  if(match)return new Date(Number(match[1]),Number(match[2])-1,Number(match[3]));
+  const dt=new Date(s);
+  if(!isNaN(dt.getTime()))return new Date(dt.getFullYear(),dt.getMonth(),dt.getDate());
+  return null;
+}
+
+function isShootDateInFilter(item,filter){
+  const shoot=parseDateOnly(item.shootDate);
+  if(!shoot)return false;
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(filter==='shootToday')return shoot.getTime()===today.getTime();
+  if(filter==='shootWeek'){
+    const day=(today.getDay()+6)%7;
+    const start=new Date(today);
+    start.setDate(today.getDate()-day);
+    const end=new Date(start);
+    end.setDate(start.getDate()+7);
+    return shoot>=start&&shoot<end;
+  }
+  return true;
+}
+
 function escapeHTML(value){
   return String(value ?? '')
     .replace(/&/g,'&amp;')
@@ -759,6 +792,8 @@ function renderCards(){
     const sc=getStatusClass(d.status||'');
     if(currentFilter==='paymentMissing'){
       if(sc==='cancel'||!hasPaymentMissing(d))return false;
+    }else if(currentFilter==='shootToday'||currentFilter==='shootWeek'){
+      if(!isShootDateInFilter(d,currentFilter))return false;
     }else if(currentFilter!=='all'&&sc!==currentFilter){
       return false;
     }
