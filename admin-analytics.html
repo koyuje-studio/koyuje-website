@@ -96,10 +96,10 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     </section>
 
     <section class="grid">
-      <div class="card"><div class="label">예상 매출</div><div class="num" id="expectedRevenue">—</div><div class="sub">취소·삭제 제외</div></div>
-      <div class="card"><div class="label">실제 스튜디오 매출</div><div class="num" id="confirmedRevenue">—</div><div class="sub">예약금+잔금-헤메</div></div>
-      <div class="card"><div class="label">실제 총 수납액</div><div class="num" id="collectedRevenue">—</div><div class="sub">예약금+잔금</div></div>
-      <div class="card"><div class="label">헤어·메이크업 차감</div><div class="num" id="hairMakeupRevenue">—</div><div class="sub">운영 비용 분리</div></div>
+      <div class="card"><div class="label">선택 상품 기준 예상액</div><div class="num" id="expectedRevenue">—</div><div class="sub">취소·삭제 제외</div></div>
+      <div class="card"><div class="label">스튜디오 실수납</div><div class="num" id="confirmedRevenue">—</div><div class="sub">예약금+잔금-헤메</div></div>
+      <div class="card"><div class="label">예약금+잔금 수납</div><div class="num" id="collectedRevenue">—</div><div class="sub">고객 결제 입력 기준</div></div>
+      <div class="card"><div class="label">헤메 외부 정산</div><div class="num" id="hairMakeupRevenue">—</div><div class="sub">스튜디오 매출 제외</div></div>
       <div class="card"><div class="label">취소 제외 예약</div><div class="num" id="activeReservations">—</div><div class="sub">선택 기간 기준</div></div>
       <div class="card"><div class="label">취소 건</div><div class="num" id="cancelReservations">—</div><div class="sub">매출 제외</div></div>
     </section>
@@ -154,7 +154,7 @@ function renderTable(title,items){
 }
 function renderRevenueTable(title,items){
   if(!items||!items.length)return `<div class="section"><div class="section-title">${title}</div><div class="empty">표시할 데이터가 아직 없습니다.</div></div>`;
-  return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>예상 매출</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)} <span style="color:var(--muted);">(${item.count}건)</span></td><td>${formatWon(item.revenue)}</td></tr>`).join('')}</tbody></table></div>`;
+  return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>금액</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)} <span style="color:var(--muted);">(${item.count}건)</span></td><td>${formatWon(item.revenue)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function percent(part,total){
   if(!total)return '0%';
@@ -332,9 +332,9 @@ function render(data,reservations){
     renderTable('예약확정서 진입',rankings.reservationEntryPages)
   ].join('');
   document.getElementById('revenueTables').innerHTML=[
-    renderRevenueTable('상품별 예상 매출',revenue.productRevenue),
+    renderRevenueTable('상품별 선택 예상액',revenue.productRevenue),
     renderRevenueTable('예약금 결제수단별 수납',revenue.depositPaymentRevenue),
-    renderRevenueTable('결제수단별 매출 비중',revenue.paymentRevenue)
+    renderRevenueTable('결제수단별 수납 비중',revenue.paymentRevenue)
   ].join('');
 }
 function loadAnalytics(fromLogin){
