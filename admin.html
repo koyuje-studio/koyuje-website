@@ -84,6 +84,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .edit-settlement-main{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold2);margin-top:4px;}
 .edit-settlement-formula{font-size:12px;color:rgba(247,242,234,0.62);line-height:1.8;margin-top:10px;word-break:keep-all;}
 .edit-settlement-sub{font-size:11px;color:rgba(247,242,234,0.38);line-height:1.8;margin-top:8px;word-break:keep-all;}
+.edit-settlement-status{display:inline-flex;align-items:center;margin-top:12px;padding:6px 10px;border:0.5px solid rgba(215,187,134,0.28);background:rgba(215,187,134,0.06);color:#d7bb86;font-size:11px;letter-spacing:0.08em;line-height:1.5;}
+.edit-settlement-status.done{border-color:rgba(106,170,106,0.28);background:rgba(106,170,106,0.065);color:#7ecf9a;}
 .btn-write-submit{width:100%;background:var(--gold);color:var(--ink);border:none;padding:14px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .3s;margin-top:8px;}
 .btn-write-submit:hover{background:var(--gold2);}
 .btn-edit-cancel{width:100%;background:transparent;color:rgba(247,242,234,0.65);border:0.5px solid rgba(247,242,234,0.16);padding:14px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.18em;cursor:pointer;transition:all .3s;}
@@ -1283,10 +1285,20 @@ function updateEditModalState(){
   const suggestedBalance=Math.max(0,estimate.total-deposit-hairMakeup);
   const unsettled=Math.max(0,estimate.total-deposit-hairMakeup-balance);
   const studioRevenue=Math.max(0,deposit+balance-hairMakeup);
+  const settlementMissing=[];
+  if(!editFieldFromDom('depositConfirmedAt'))settlementMissing.push('예약금 확인일');
+  if(!editFieldFromDom('depositPaymentMethod'))settlementMissing.push('예약금 결제수단');
+  if(suggestedBalance>0){
+    if(!balance)settlementMissing.push('잔금 결제액');
+    if(!editFieldFromDom('paymentMethod'))settlementMissing.push('잔금 결제수단');
+    if(!editFieldFromDom('balancePaidAt'))settlementMissing.push('잔금 결제일');
+  }
+  const settlementDone=settlementMissing.length===0;
   const settlementText=`
     <div class="edit-settlement-main">${formatWon(suggestedBalance)}</div>
     <div class="edit-settlement-formula">예상 ${formatWon(estimate.total)} - 예약금 ${formatWon(deposit)} - 헤메 ${formatWon(hairMakeup)} = 고객 잔금 ${formatWon(suggestedBalance)}</div>
     <div class="edit-settlement-sub">잔금 입력 후 미정산 차액 ${formatWon(unsettled)} / 헤메 차감 후 스튜디오 매출 ${formatWon(studioRevenue)}</div>
+    <div class="edit-settlement-status ${settlementDone?'done':''}">${settlementDone?'✓ 정산 입력 완료':'정산 미입력: '+settlementMissing.join(', ')}</div>
   `;
   const totalEl=document.getElementById('editEstimateTotal');
   const itemsEl=document.getElementById('editEstimateItems');
