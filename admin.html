@@ -534,6 +534,29 @@ function copyBalanceGuide(rowId){
     });
 }
 
+function copyReservationConfirmGuide(rowId){
+  const item=allData.find(d=>String(d.rowId)===String(rowId));
+  if(!item){
+    alert('예약 정보를 찾지 못했습니다.');
+    return;
+  }
+  const schedule=[fDate(item.shootDate),fTime(item.shootTime)].filter(value=>value&&value!=='-').join(' ');
+  const lines=[
+    '안녕하세요. 고유재 한옥스튜디오입니다.',
+    '',
+    `${item.babyName||'아기'}님 예약확정서와 예약금 입금 확인이 완료되었습니다.`,
+    schedule?`촬영 일정: ${schedule}`:'',
+    item.product?`선택 상품: ${item.product}`:'',
+    '',
+    '촬영 전 안내 사항은 일정에 맞춰 다시 안내드리겠습니다.',
+    '소중한 촬영을 정성껏 준비하겠습니다.'
+  ].filter(line=>line!==undefined&&line!==null).join('\n');
+  copyTextToClipboard(lines,'고객에게 전달할 예약 확인 안내 문구입니다.')
+    .then(ok=>{
+      if(ok)showToast('✓ 예약 확인 안내 문구가 복사되었습니다');
+    });
+}
+
 function fetchAdminData(){
   return fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(getAdminPw()))
     .then(r=>r.json())
@@ -1025,6 +1048,7 @@ function renderCards(){
           <div class="detail-item full"><div class="detail-key">주소</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.address||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">요청 사항</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.memo||'-')}</div></div>
           <div class="detail-actions">
+            <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();copyReservationConfirmGuide('${escapeAttr(rowId)}')">예약 확인 안내 복사</button>
             <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();copyBalanceGuide('${escapeAttr(rowId)}')">잔금 안내 복사</button>
             <button type="button" class="btn-detail-delete" onclick="event.stopPropagation();deleteReservation('${escapeAttr(rowId)}')">삭제 처리</button>
             <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button>
