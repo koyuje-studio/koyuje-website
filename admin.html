@@ -139,13 +139,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .res-card:hover{background:rgba(247,242,234,0.06);}
 .res-card.waiting{background:linear-gradient(90deg,rgba(196,154,32,0.12),rgba(247,242,234,0.035) 42%);border-color:rgba(196,154,32,0.22);}
 .res-card.waiting::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold2);}
+.res-card.payment-missing{border-color:rgba(215,187,134,0.22);}
+.res-card.payment-missing::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:rgba(215,187,134,0.58);}
 .res-card-head{display:grid;grid-template-columns:160px 1fr minmax(190px,auto) auto;align-items:center;gap:16px;padding:16px 20px;cursor:pointer;}
 .res-date{font-size:12px;color:rgba(247,242,234,0.45);letter-spacing:0.05em;}
 .res-name-wrap{}
 .res-name{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;letter-spacing:0.05em;margin-bottom:2px;}
 .res-badge{display:inline-block;margin-left:8px;vertical-align:2px;font-family:'Noto Sans KR',sans-serif;font-size:9px;letter-spacing:0.14em;border:0.5px solid;padding:2px 5px;}
 .res-badge.waiting{color:var(--gold2);border-color:rgba(196,154,32,0.35);}
-.res-badge.payment{color:#d7bb86;border-color:rgba(215,187,134,0.38);background:rgba(215,187,134,0.06);}
+.res-badge.payment{color:#d7bb86;border-color:rgba(215,187,134,0.42);background:rgba(215,187,134,0.08);}
+.res-badge.amount{color:#e0c48a;border-color:rgba(224,196,138,0.32);background:rgba(224,196,138,0.05);}
 .res-sub{font-size:11px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;}
 .res-product{font-size:12px;color:rgba(247,242,234,0.5);letter-spacing:0.05em;text-align:right;}
 .res-money{display:flex;justify-content:flex-end;align-items:center;gap:7px;flex-wrap:wrap;font-size:10px;color:rgba(247,242,234,0.38);letter-spacing:0.04em;text-align:right;margin-top:4px;line-height:1.6;}
@@ -153,7 +156,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .res-money .money-label{color:rgba(247,242,234,0.34);}
 .res-money strong{color:var(--gold2);font-weight:400;}
 .res-money .paid{color:#6aaa6a;}
-.money-state{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border:0.5px solid rgba(215,187,134,0.24);color:#d7bb86;background:rgba(215,187,134,0.045);}
+.money-state{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border:0.5px solid rgba(215,187,134,0.3);color:#d7bb86;background:rgba(215,187,134,0.065);}
 .money-state.done{border-color:rgba(106,170,106,0.24);color:#6aaa6a;background:rgba(106,170,106,0.045);}
 .res-name,.res-sub,.res-product,.res-money,.detail-val{overflow-wrap:anywhere;}
 .status-select{appearance:none;-webkit-appearance:none;border:0.5px solid;padding:5px 12px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.08em;cursor:pointer;outline:none;transition:all .3s;min-width:110px;text-align:center;}
@@ -1034,13 +1037,14 @@ function renderCards(){
     const hairMakeupText=settlement.hairMakeup?formatWon(settlement.hairMakeup):'-';
     const badges=[
       sc==='waiting'?'<span class="res-badge waiting">확인 필요</span>':'',
-      !settlementStatus.done?'<span class="res-badge payment">정산 미입력</span>':''
+      !settlementStatus.done?'<span class="res-badge payment">정산 미입력</span>':'',
+      !settlementStatus.done&&settlement.unsettled?'<span class="res-badge amount">'+escapeHTML(formatWon(settlement.unsettled))+'</span>':''
     ].join('');
     const parentSizeHTML=(isFamilyProduct||hasParentSize)?`
           <div class="detail-item"><div class="detail-key">엄마 키·한복·신발</div>${detailValueHTML(momDisplay)}</div>
           <div class="detail-item"><div class="detail-key">아빠 키·한복·신발</div>${detailValueHTML(dadDisplay)}</div>`:'';
     return `
-    <div class="res-card ${sc}" id="card_${idx}">
+    <div class="res-card ${sc} ${!settlementStatus.done?'payment-missing':''}" id="card_${idx}">
       <div class="res-card-head" onclick="toggleDetail('detail_${idx}')">
         <div class="res-date">${shootDate} ${shootTime}</div>
         <div class="res-name-wrap">
