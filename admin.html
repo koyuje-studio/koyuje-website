@@ -177,7 +177,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .detail-val.estimate{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold2);letter-spacing:0.03em;line-height:1.1;}
 .detail-val.missing{color:#e0a45c;}
 .detail-val.blank{color:rgba(247,242,234,0.35);}
-.detail-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px;margin-top:2px;flex-wrap:wrap;}
+.detail-actions{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px;}
+.detail-action-group{border:0.5px solid rgba(247,242,234,0.08);background:rgba(247,242,234,0.02);padding:14px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;}
+.detail-action-group.copy{border-color:rgba(160,120,64,0.26);background:rgba(160,120,64,0.045);}
+.detail-action-label{width:100%;font-size:10px;letter-spacing:0.2em;color:rgba(247,242,234,0.34);text-align:left;margin-bottom:2px;}
+.detail-action-group.copy .detail-action-label{color:var(--gold);}
 .btn-detail-edit{background:transparent;border:0.5px solid rgba(160,120,64,0.5);color:var(--gold);padding:10px 16px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.12em;cursor:pointer;transition:all .3s;}
 .btn-detail-edit:hover{background:rgba(160,120,64,0.12);}
 .btn-detail-delete{background:transparent;border:0.5px solid rgba(224,112,112,0.45);color:#e07070;padding:10px 16px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.12em;cursor:pointer;transition:all .3s;}
@@ -229,6 +233,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   .status-select{order:4;width:100%;min-height:40px;margin-top:2px;}
   .detail-grid{grid-template-columns:1fr 1fr;}
   .detail-item.wide{grid-column:1/-1;}
+  .detail-actions{grid-template-columns:1fr;}
+  .detail-action-group{justify-content:stretch;}
+  .detail-action-group button{flex:1 1 100%;}
   .admin-body{padding:20px 16px;}
   .write-modal-bg{align-items:flex-end;padding:12px;}
   .write-modal{padding:30px 20px 24px;max-height:92vh;}
@@ -1100,10 +1107,16 @@ function renderCards(){
           <div class="detail-item full"><div class="detail-key">주소</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.address||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">요청 사항</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.memo||'-')}</div></div>
           <div class="detail-actions">
-            <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();copyReservationConfirmGuide('${escapeAttr(rowId)}')">예약 확인 복사</button>
-            <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();copyBalanceGuide('${escapeAttr(rowId)}')">잔금 안내 복사</button>
-            <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button>
-            <button type="button" class="btn-detail-delete" onclick="event.stopPropagation();deleteReservation('${escapeAttr(rowId)}')">삭제 처리</button>
+            <div class="detail-action-group copy">
+              <div class="detail-action-label">고객 안내 복사</div>
+              <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();copyReservationConfirmGuide('${escapeAttr(rowId)}')">예약 확인 문구</button>
+              <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();copyBalanceGuide('${escapeAttr(rowId)}')">잔금 안내 문구</button>
+            </div>
+            <div class="detail-action-group">
+              <div class="detail-action-label">관리 작업</div>
+              <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button>
+              <button type="button" class="btn-detail-delete" onclick="event.stopPropagation();deleteReservation('${escapeAttr(rowId)}')">삭제 처리</button>
+            </div>
           </div>
         </div>
       </div>
