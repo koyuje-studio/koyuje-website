@@ -498,6 +498,42 @@ function shareQrLink(){
   fallback();
 }
 
+function copyTextToClipboard(text, fallbackTitle){
+  const fallback=()=>window.prompt(fallbackTitle||'복사할 문구입니다.', text);
+  if(navigator.clipboard&&window.isSecureContext){
+    return navigator.clipboard.writeText(text).then(()=>true).catch(()=>{
+      fallback();
+      return false;
+    });
+  }
+  fallback();
+  return Promise.resolve(false);
+}
+
+function copyBalanceGuide(rowId){
+  const item=allData.find(d=>String(d.rowId)===String(rowId));
+  if(!item){
+    alert('예약 정보를 찾지 못했습니다.');
+    return;
+  }
+  const settlement=getSettlement(item);
+  const lines=[
+    '안녕하세요. 고유재 한옥스튜디오입니다.',
+    '',
+    `${item.babyName||'아기'}님 촬영 잔금 안내드립니다.`,
+    `예상 결제 금액: ${formatWon(settlement.expected)}`,
+    `예약금 입금액: ${formatWon(settlement.deposit)}`,
+    `헤어·메이크업 외부 결제 비용: ${formatWon(settlement.hairMakeup)}`,
+    `촬영 후 스튜디오 잔금: ${formatWon(settlement.suggestedBalance)}`,
+    '',
+    '촬영 당일 잔금 결제 시 참고 부탁드립니다.'
+  ];
+  copyTextToClipboard(lines.join('\n'),'고객에게 전달할 잔금 안내 문구입니다.')
+    .then(ok=>{
+      if(ok)showToast('✓ 잔금 안내 문구가 복사되었습니다');
+    });
+}
+
 function fetchAdminData(){
   return fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(getAdminPw()))
     .then(r=>r.json())
@@ -989,6 +1025,7 @@ function renderCards(){
           <div class="detail-item full"><div class="detail-key">주소</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.address||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">요청 사항</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.memo||'-')}</div></div>
           <div class="detail-actions">
+            <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();copyBalanceGuide('${escapeAttr(rowId)}')">잔금 안내 복사</button>
             <button type="button" class="btn-detail-delete" onclick="event.stopPropagation();deleteReservation('${escapeAttr(rowId)}')">삭제 처리</button>
             <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button>
           </div>
