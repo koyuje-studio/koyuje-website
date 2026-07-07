@@ -246,7 +246,7 @@ img,video{max-width:100%}
 .notice-bridge-actions .notice-status:hover,.notice-bridge-actions .notice-form:hover{background:var(--gold);color:var(--paper)}
 .notice-list{display:flex;flex-direction:column;padding:0 60px}
 .notice-item{display:grid;grid-template-columns:80px 1fr 120px;align-items:center;gap:24px;padding:20px 0;border-bottom:.5px solid var(--line);text-decoration:none;color:var(--ink);transition:all .2s}
-.notice-item.reservation-item{grid-template-columns:82px 138px 1fr}
+.notice-item.reservation-item{grid-template-columns:76px 150px minmax(0,1fr);gap:18px}
 .notice-item:first-child{border-top:.5px solid var(--line)}
 .notice-item:hover{padding-left:8px}
 .notice-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.1em}
@@ -846,7 +846,7 @@ function loadHomeNotice() {
       const all = data.data || [];
       const items = [...all.filter(i => i.category === '공지').slice(0, 3), ...all.filter(i => i.category === '예약확정').slice(0, 3)].slice(0, 5);
       if (items.length === 0) {
-        list.innerHTML = '<div class="empty-state">등록된 공지가 없습니다.</div>';
+        list.innerHTML = '<div class="empty-state">표시할 공지와 예약 현황이 아직 없습니다.</div>';
         return;
       }
       list.innerHTML = items.map(item => {
@@ -884,7 +884,7 @@ function loadHomeNotice() {
     })
     .catch(() => {
       const list = document.getElementById('homeNoticeList');
-      if (list) list.innerHTML = '<div class="empty-state">공지사항을 불러오지 못했습니다.<br><a href="/board">공지·예약 현황으로 이동</a></div>';
+      if (list) list.innerHTML = '<div class="empty-state">공지와 예약 현황을 잠시 불러오지 못했습니다.<br><a href="/board">공지·예약 현황으로 이동</a></div>';
     });
 }
 
