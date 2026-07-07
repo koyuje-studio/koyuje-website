@@ -1118,6 +1118,7 @@ function renderCards(){
             </div>
             <div class="detail-action-group">
               <div class="detail-action-label">관리 작업</div>
+              ${!settlementStatus.done?`<button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}','settlement')">정산 입력</button>`:''}
               <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button>
               <button type="button" class="btn-detail-delete" onclick="event.stopPropagation();deleteReservation('${escapeAttr(rowId)}')">삭제 처리</button>
             </div>
@@ -1526,7 +1527,7 @@ function renderEditForm(item){
           <div class="edit-estimate-items" id="editEstimateItems">-</div>
         </div>
       </div>
-      <div class="edit-section">
+      <div class="edit-section" id="editSettlementSection">
         ${sectionTitle('09','입금 / 운영 정보')}
         <div class="write-grid">
           ${editInput('depositor','입금자명','text',item.depositor)}
@@ -1558,7 +1559,7 @@ function renderEditForm(item){
     </div>`;
 }
 
-function openEditModal(rowId){
+function openEditModal(rowId,focusSection){
   const item=allData.find(d=>String(d.rowId)===String(rowId));
   if(!item){alert('수정할 예약 정보를 찾을 수 없습니다.');return;}
   editingRowId=String(rowId);
@@ -1582,6 +1583,12 @@ function openEditModal(rowId){
   });
   document.getElementById('editModalBg').classList.add('show');
   updateEditModalState();
+  if(focusSection==='settlement'){
+    setTimeout(()=>{
+      const target=document.getElementById('editSettlementSection');
+      if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+    },80);
+  }
 }
 
 function closeEditModal(){
