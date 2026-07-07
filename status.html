@@ -100,11 +100,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .status-badge.done{color:var(--green);border-color:rgba(58,107,58,0.3);background:rgba(58,107,58,0.06);}
 .status-badge.cancel{color:var(--red);border-color:rgba(139,46,46,0.3);background:rgba(139,46,46,0.06);}
 .result-card-body{padding:24px;}
+.result-highlight{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-bottom:16px;}
+.result-highlight-item{background:rgba(160,120,64,0.045);padding:16px 18px;}
+.result-highlight-k{font-size:10px;letter-spacing:0.18em;color:var(--gold);margin-bottom:7px;}
+.result-highlight-v{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:300;color:var(--ink);line-height:1.55;letter-spacing:0.04em;}
 .result-row{display:grid;grid-template-columns:100px 1fr;gap:8px;padding:10px 0;border-bottom:0.5px solid var(--line);font-size:13px;}
 .result-row:last-child{border-bottom:none;}
 .result-key{color:var(--muted);letter-spacing:0.08em;}
 .result-val{color:var(--ink);letter-spacing:0.03em;}
 .result-notice{margin-top:12px;background:rgba(160,120,64,0.06);border:0.5px solid rgba(160,120,64,0.2);padding:16px 20px;font-size:12px;color:var(--muted);line-height:1.9;}
+.result-notice strong{color:var(--ink);font-weight:400;}
+.result-notice.done{background:rgba(58,107,58,0.055);border-color:rgba(58,107,58,0.18);}
+.result-notice.cancel{background:rgba(139,46,46,0.045);border-color:rgba(139,46,46,0.16);}
 .no-result{text-align:center;padding:48px 0;}
 .no-result-icon{font-size:40px;margin-bottom:16px;opacity:0.3;}
 .no-result-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:8px;}
@@ -132,6 +139,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .results-wrap{padding:0 16px 60px;}
   .result-card-top{align-items:flex-start;flex-direction:column;gap:12px;padding:18px;}
   .result-card-body{padding:18px;}
+  .result-highlight{grid-template-columns:1fr;}
+  .result-highlight-item{padding:14px 16px;}
   .result-row{grid-template-columns:82px 1fr;font-size:12px;}
 }
 </style>
@@ -352,6 +361,16 @@ function fTime(t){
   if(match){const h=parseInt(match[1]),m=match[2];return(h<12?'오전 ':'오후 ')+(h===0?12:h>12?h-12:h)+'시 '+m+'분';}
   return s;
 }
+function resultNoticeHTML(status){
+  const s=String(status||'');
+  if(s.includes('취소')||s.includes('×')||s.includes('❌')){
+    return '<div class="result-notice cancel"><strong>예약 상태가 취소로 표시되어 있습니다.</strong><br>상태 확인이나 재예약이 필요하시면 카카오톡 채널로 문의해 주세요.</div>';
+  }
+  if(s.includes('완료')||s.includes('✓')||s.includes('✅')){
+    return '<div class="result-notice done"><strong>예약 확인이 완료되었습니다.</strong><br>촬영 전 세부 안내는 일정에 맞춰 카카오톡으로 다시 안내드리겠습니다.</div>';
+  }
+  return '<div class="result-notice"><strong>예약 정보가 접수되었습니다.</strong><br>입금 확인 후 48시간 이내에 예약 확인 연락을 드립니다.<br>추가 확인이 필요하시면 카카오톡 채널로 문의해 주세요.</div>';
+}
 function showResults(data,p){
   document.getElementById('searchSection').style.display='none';
   document.getElementById('resultsSection').style.display='block';
@@ -363,8 +382,9 @@ function showResults(data,p){
   }
   let html=`<div class="result-header"><div class="result-header-label">${pd} 조회 결과</div><div class="result-header-title">총 ${data.data.length}건의 예약이 확인됩니다</div></div>`;
   data.data.forEach(item=>{
-    const w=!item.status||item.status.includes('확인중');
-    html+=`<div class="result-card"><div class="result-card-top"><div class="result-baby">${escapeHTML(item.babyName||'-')}<em>아기</em></div>${badge(item.status)}</div><div class="result-card-body"><div class="result-row"><div class="result-key">촬영 날짜</div><div class="result-val">${escapeHTML(fDate(item.shootDate))}</div></div><div class="result-row"><div class="result-key">촬영 시간</div><div class="result-val">${escapeHTML(fTime(item.shootTime))}</div></div><div class="result-row"><div class="result-key">선택 상품</div><div class="result-val">${escapeHTML(item.product||'-')}</div></div><div class="result-row"><div class="result-key">예약 상태</div><div class="result-val">${escapeHTML(statusText(item.status))}</div></div>${w?'<div class="result-notice">📋 예약 정보가 접수되었습니다.<br>입금 확인 후 <strong style="color:var(--ink);font-weight:400;">48시간 이내</strong>에 예약 확인 연락을 드립니다.<br>추가 확인이 필요하시면 카카오톡 채널로 문의해 주세요.</div>':''}</div></div>`;
+    const shootDate=escapeHTML(fDate(item.shootDate));
+    const shootTime=escapeHTML(fTime(item.shootTime));
+    html+=`<div class="result-card"><div class="result-card-top"><div class="result-baby">${escapeHTML(item.babyName||'-')}<em>아기</em></div>${badge(item.status)}</div><div class="result-card-body"><div class="result-highlight"><div class="result-highlight-item"><div class="result-highlight-k">촬영 일정</div><div class="result-highlight-v">${shootDate}<br>${shootTime}</div></div><div class="result-highlight-item"><div class="result-highlight-k">선택 상품</div><div class="result-highlight-v">${escapeHTML(item.product||'-')}</div></div></div><div class="result-row"><div class="result-key">예약 상태</div><div class="result-val">${escapeHTML(statusText(item.status))}</div></div>${resultNoticeHTML(item.status)}</div></div>`;
   });
   c.innerHTML=html;
   window.scrollTo({top:0,behavior:'smooth'});
