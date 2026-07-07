@@ -147,12 +147,17 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .res-card.waiting::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold2);}
 .res-card.payment-missing{border-color:rgba(215,187,134,0.22);}
 .res-card.payment-missing::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:rgba(215,187,134,0.58);}
+.res-card.schedule-today{border-color:rgba(224,112,112,0.38);background:linear-gradient(90deg,rgba(224,112,112,0.12),rgba(247,242,234,0.035) 42%);}
+.res-card.schedule-soon{border-color:rgba(224,160,80,0.3);background:linear-gradient(90deg,rgba(224,160,80,0.1),rgba(247,242,234,0.035) 42%);}
 .res-card-head{display:grid;grid-template-columns:160px 1fr minmax(190px,auto) auto;align-items:center;gap:16px;padding:16px 20px;cursor:pointer;}
 .res-date{font-size:12px;color:rgba(247,242,234,0.45);letter-spacing:0.05em;}
 .res-name-wrap{}
 .res-name{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;letter-spacing:0.05em;margin-bottom:2px;}
 .res-badge{display:inline-block;margin-left:8px;vertical-align:2px;font-family:'Noto Sans KR',sans-serif;font-size:9px;letter-spacing:0.14em;border:0.5px solid;padding:2px 5px;}
 .res-badge.waiting{color:var(--gold2);border-color:rgba(196,154,32,0.35);}
+.res-badge.today{color:#ff9f9f;border-color:rgba(224,112,112,0.48);background:rgba(224,112,112,0.08);}
+.res-badge.soon{color:#e0a050;border-color:rgba(224,160,80,0.46);background:rgba(224,160,80,0.08);}
+.res-badge.week{color:#d7bb86;border-color:rgba(215,187,134,0.34);background:rgba(215,187,134,0.06);}
 .res-badge.payment{color:#d7bb86;border-color:rgba(215,187,134,0.42);background:rgba(215,187,134,0.08);}
 .res-badge.amount{color:#e0c48a;border-color:rgba(224,196,138,0.32);background:rgba(224,196,138,0.05);}
 .res-sub{font-size:11px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;}
@@ -967,6 +972,18 @@ function isShootDateInFilter(item,filter){
   return true;
 }
 
+function getShootTimingState(item){
+  const shoot=parseDateOnly(item.shootDate);
+  if(!shoot)return null;
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const diffDays=Math.round((shoot.getTime()-today.getTime())/86400000);
+  if(diffDays<0)return null;
+  if(diffDays===0)return {className:'today',label:'오늘 촬영',cardClass:'schedule-today'};
+  if(diffDays<=3)return {className:'soon',label:'촬영 임박',cardClass:'schedule-soon'};
+  if(isShootDateInFilter(item,'shootWeek'))return {className:'week',label:'이번 주 촬영',cardClass:'schedule-week'};
+  return null;
+}
+
 function shootDateTimeValue(item){
   const date=parseDateOnly(item.shootDate);
   if(!date)return Number.MAX_SAFE_INTEGER;
@@ -1077,9 +1094,11 @@ function renderCards(){
     const estimate=getReservationEstimateDisplay(item);
     const settlement=getSettlement(item);
     const settlementStatus=getSettlementStatus(item);
+    const shootTiming=getShootTimingState(item);
     const balanceText=settlement.balance?formatWon(settlement.balance):'-';
     const hairMakeupText=settlement.hairMakeup?formatWon(settlement.hairMakeup):'-';
     const badges=[
+      shootTiming?'<span class="res-badge '+shootTiming.className+'">'+escapeHTML(shootTiming.label)+'</span>':'',
       sc==='waiting'?'<span class="res-badge waiting">확인 필요</span>':'',
       !settlementStatus.done?'<span class="res-badge payment">정산 미입력</span>':'',
       !settlementStatus.done&&settlement.unsettled?'<span class="res-badge amount">'+escapeHTML(formatWon(settlement.unsettled))+'</span>':''
@@ -1088,7 +1107,7 @@ function renderCards(){
           <div class="detail-item"><div class="detail-key">엄마 키·한복·신발</div>${detailValueHTML(momDisplay)}</div>
           <div class="detail-item"><div class="detail-key">아빠 키·한복·신발</div>${detailValueHTML(dadDisplay)}</div>`:'';
     return `
-    <div class="res-card ${sc} ${!settlementStatus.done?'payment-missing':''}" id="card_${idx}">
+    <div class="res-card ${sc} ${shootTiming?shootTiming.cardClass:''} ${!settlementStatus.done?'payment-missing':''}" id="card_${idx}">
       <div class="res-card-head" onclick="toggleDetail('detail_${idx}')">
         <div class="res-date">${shootDate} ${shootTime}</div>
         <div class="res-name-wrap">
