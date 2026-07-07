@@ -82,6 +82,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .edit-estimate-total{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold2);}
 .edit-estimate-items{font-size:12px;color:rgba(247,242,234,0.55);line-height:1.8;margin-top:8px;word-break:keep-all;}
 .edit-settlement-main{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold2);margin-top:4px;}
+.edit-settlement-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;}
+.edit-settlement-card{border:0.5px solid rgba(247,242,234,0.1);background:rgba(247,242,234,0.035);padding:10px 12px;min-width:0;}
+.edit-settlement-card.target{border-color:rgba(160,120,64,0.35);background:rgba(160,120,64,0.1);}
+.edit-settlement-card-k{font-size:9px;letter-spacing:0.16em;color:rgba(247,242,234,0.36);margin-bottom:5px;}
+.edit-settlement-card-v{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1;color:rgba(247,242,234,0.78);white-space:nowrap;}
+.edit-settlement-card.target .edit-settlement-card-v{color:var(--gold2);font-size:26px;}
 .edit-settlement-formula{font-size:12px;color:rgba(247,242,234,0.62);line-height:1.8;margin-top:10px;word-break:keep-all;}
 .edit-settlement-sub{font-size:11px;color:rgba(247,242,234,0.38);line-height:1.8;margin-top:8px;word-break:keep-all;}
 .edit-settlement-status{display:inline-flex;align-items:center;margin-top:12px;padding:6px 10px;border:0.5px solid rgba(215,187,134,0.28);background:rgba(215,187,134,0.06);color:#d7bb86;font-size:11px;letter-spacing:0.08em;line-height:1.5;}
@@ -244,6 +250,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   .write-modal{padding:30px 20px 24px;max-height:92vh;}
   .edit-modal .write-modal-title{top:-30px;margin:-30px -20px 22px;padding:24px 20px 16px;}
   .edit-summary{grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;}
+  .edit-settlement-cards{grid-template-columns:1fr 1fr;}
   .edit-submit-bar{bottom:-24px;margin:22px -20px -24px;padding:14px 20px 18px;}
   .edit-submit-actions{grid-template-columns:1fr;}
   .write-grid{grid-template-columns:1fr;}
@@ -1464,8 +1471,14 @@ function updateEditModalState(){
   const settlementDone=settlementMissing.length===0;
   const settlementText=`
     <div class="edit-settlement-main">${formatWon(suggestedBalance)}</div>
-    <div class="edit-settlement-formula">예상 ${formatWon(estimate.total)} - 예약금 ${formatWon(deposit)} - 헤메 ${formatWon(hairMakeup)} = 고객 잔금 ${formatWon(suggestedBalance)}</div>
-    <div class="edit-settlement-sub">잔금 입력 후 미정산 차액 ${formatWon(unsettled)} / 헤메 차감 후 스튜디오 매출 ${formatWon(studioRevenue)}</div>
+    <div class="edit-settlement-cards">
+      <div class="edit-settlement-card"><div class="edit-settlement-card-k">예상 총액</div><div class="edit-settlement-card-v">${formatWon(estimate.total)}</div></div>
+      <div class="edit-settlement-card"><div class="edit-settlement-card-k">예약금</div><div class="edit-settlement-card-v">${formatWon(deposit)}</div></div>
+      <div class="edit-settlement-card"><div class="edit-settlement-card-k">헤메 별도</div><div class="edit-settlement-card-v">${formatWon(hairMakeup)}</div></div>
+      <div class="edit-settlement-card target"><div class="edit-settlement-card-k">고객 안내 잔금</div><div class="edit-settlement-card-v">${formatWon(suggestedBalance)}</div></div>
+    </div>
+    <div class="edit-settlement-formula">고객 안내 잔금 = 예상 총액 ${formatWon(estimate.total)} - 예약금 ${formatWon(deposit)} - 헤메 별도 ${formatWon(hairMakeup)}</div>
+    <div class="edit-settlement-sub">입력된 잔금 ${formatWon(balance)} / 미정산 차액 ${formatWon(unsettled)} / 헤메 차감 후 스튜디오 매출 ${formatWon(studioRevenue)}</div>
     <div class="edit-settlement-status ${settlementDone?'done':''}">${settlementDone?'✓ 정산 입력 완료':'정산 미입력: '+settlementMissing.join(', ')}</div>
   `;
   const totalEl=document.getElementById('editEstimateTotal');
