@@ -395,7 +395,12 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .stat{border-right:none;border-bottom:.5px solid var(--line);padding:20px 0}
   .stat:not(:first-child){padding-left:0}
   .stat:last-child{border-bottom:none}
-  .notice-bridge-actions{display:grid;grid-template-columns:1fr}.notice-item,.notice-item.reservation-item{grid-template-columns:1fr;gap:6px}.notice-date{text-align:left}
+  .notice-bridge-actions{display:grid;grid-template-columns:1fr}.notice-item,.notice-item.reservation-item{grid-template-columns:1fr;gap:8px;padding:18px 0}.notice-date{text-align:left}
+  .reservation-item .notice-schedule{font-size:10px;letter-spacing:.16em;color:var(--muted)}
+  .reservation-item .notice-date{font-size:13px;color:var(--gold)}
+  .notice-title{font-size:13px;line-height:1.65}
+  .notice-badge{margin-left:6px;padding-left:0}
+  .notice-status-badge{display:inline-flex;margin:6px 0 0 0;vertical-align:middle}
 }
 @media(max-width:600px) and (max-height:700px){
   .hero-content{bottom:calc(104px + env(safe-area-inset-bottom))}
