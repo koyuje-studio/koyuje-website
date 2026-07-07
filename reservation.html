@@ -194,8 +194,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .success-confirm-row{display:grid;grid-template-columns:92px 1fr;gap:10px;margin:5px 0;}
 .success-confirm-label{color:var(--muted);font-size:12px;}
 .success-confirm-value{color:var(--ink);word-break:break-word;}
+.success-confirm-value.amount{font-family:'Cormorant Garamond',serif;font-size:24px;line-height:1.1;color:var(--gold);}
 .success-next{border:0.5px solid rgba(160,120,64,0.2);background:rgba(160,120,64,0.055);padding:16px 18px;margin:-18px 0 28px;text-align:left;font-size:13px;line-height:1.85;color:var(--muted);letter-spacing:0.03em;}
 .success-next strong{color:var(--ink);font-weight:400;}
+.success-payment-note{border:0.5px solid rgba(160,120,64,0.18);background:rgba(160,120,64,0.045);padding:13px 15px;margin-top:12px;font-size:12px;line-height:1.8;color:var(--muted);letter-spacing:0.03em;}
+.success-payment-note strong{color:var(--ink);font-weight:400;}
 .success-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 .btn-check{display:inline-block;background:transparent;border:0.5px solid var(--gold);color:var(--gold);padding:13px 36px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.2em;cursor:pointer;text-decoration:none;transition:all .3s;}
 .btn-check:hover{background:var(--gold);color:var(--paper);}
@@ -861,6 +864,12 @@ function successRow(label, value) {
     displayValue(value) + '</div></div>';
 }
 
+function successAmountRow(label, value) {
+  return '<div class="success-confirm-row"><div class="success-confirm-label">' +
+    escapeHTML(label) + '</div><div class="success-confirm-value amount">' +
+    displayValue(value) + '</div></div>';
+}
+
 function successSection(title, rows) {
   return '<div class="success-confirm-section"><div class="success-confirm-title">' +
     escapeHTML(title) + '</div>' + rows.join('') + '</div>';
@@ -879,8 +888,11 @@ function buildSuccessInfo(payload) {
       successRow('촬영 일정', [payload.shootDate, payload.shootTime].filter(Boolean).join(' ')),
       successRow('요일 구분', payload.weekday),
       successRow('선택 상품', payload.product),
-      successRow('추가 구성', payload.extra || '추가 구성 없음'),
-      successRow('예상 결제 금액', payload.estimatedTotal)
+      successRow('추가 구성', payload.extra || '추가 구성 없음')
+    ]),
+    successSection('결제 안내', [
+      successAmountRow('예상 결제 금액', payload.estimatedTotal),
+      '<div class="success-payment-note"><strong>헤어·메이크업 비용은 외부 선생님께 별도 결제되는 비용입니다.</strong><br>입금자명과 예약 정보 확인 후, 예약금과 별도 비용을 반영해 촬영 당일 스튜디오 잔금을 안내드리겠습니다.</div>'
     ]),
     successSection('가족 정보', [
       successRow('형제/자매', payload.sibling),
