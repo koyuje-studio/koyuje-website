@@ -167,7 +167,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .estimate-row{display:flex;justify-content:space-between;gap:14px;font-size:12px;color:var(--muted);line-height:1.6;}
 .estimate-row strong{font-weight:400;color:var(--ink);}
 .estimate-note{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;margin-top:12px;}
-.estimate-payment-note{border-top:0.5px solid rgba(160,120,64,0.16);margin-top:12px;padding-top:12px;font-size:11px;color:var(--muted);line-height:1.75;letter-spacing:0.03em;}
+.estimate-payment-note{display:none;border-top:0.5px solid rgba(160,120,64,0.16);margin-top:12px;padding-top:12px;font-size:11px;color:var(--muted);line-height:1.75;letter-spacing:0.03em;}
+.estimate-payment-note.show{display:block;}
 .estimate-payment-note strong{color:var(--ink);font-weight:400;}
 
 .submit-area{text-align:center;padding-top:8px;}
@@ -648,7 +649,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <div class="estimate-row"><strong>촬영 상품을 선택하면 예상 금액이 표시됩니다.</strong><span>-</span></div>
       </div>
       <p class="estimate-note">예상 금액은 선택하신 상품과 추가 구성 기준입니다. 최종 금액은 촬영 일정과 세부 상담 후 확정됩니다.</p>
-      <p class="estimate-payment-note"><strong>헤어·메이크업을 신청하신 경우, 해당 비용은 예상 금액에 함께 표시되지만 촬영 당일 외부 선생님께 별도 이체됩니다.</strong><br>고유재에는 예약금과 헤어·메이크업 비용을 제외한 스튜디오 잔금만 안내드립니다.</p>
+      <p class="estimate-payment-note" id="estimatePaymentNote"><strong>헤어·메이크업은 상품 금액에 포함되어 있습니다. 해당 비용은 예상 금액에 함께 표시되지만 촬영 당일 외부 선생님께 별도 이체됩니다.</strong><br>고유재에는 예약금과 헤어·메이크업 비용을 제외한 스튜디오 잔금만 안내드립니다.</p>
     </div>
   </div>
   <div class="submit-area">
@@ -1068,16 +1069,19 @@ function calculatePriceEstimate() {
 function updatePriceEstimate() {
   const totalEl = document.getElementById('estimateTotal');
   const listEl = document.getElementById('estimateList');
+  const paymentNoteEl = document.getElementById('estimatePaymentNote');
   if (!totalEl || !listEl) return;
 
   const estimate = calculatePriceEstimate();
   const rows = estimate.rows;
   const total = estimate.total;
+  const showPaymentNote = getRadio('product') === '가족실내앨범형';
 
   totalEl.textContent = rows.length ? formatWon(total) : '-';
   listEl.innerHTML = rows.length
     ? rows.map(row => '<div class="estimate-row"><strong>' + escapeHTML(row.label) + '</strong><span>' + formatWon(row.amount) + '</span></div>').join('')
     : '<div class="estimate-row"><strong>촬영 상품을 선택하면 예상 금액이 표시됩니다.</strong><span>-</span></div>';
+  if (paymentNoteEl) paymentNoteEl.classList.toggle('show', showPaymentNote);
 }
 
 function submitForm() {
