@@ -167,7 +167,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .estimate-row{display:flex;justify-content:space-between;gap:14px;font-size:12px;color:var(--muted);line-height:1.6;}
 .estimate-row strong{font-weight:400;color:var(--ink);}
 .estimate-note{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;margin-top:12px;}
-.estimate-payment-note{display:none;border-top:0.5px solid rgba(160,120,64,0.16);margin-top:12px;padding-top:12px;font-size:11px;color:var(--muted);line-height:1.75;letter-spacing:0.03em;}
+.estimate-payment-note{display:none;border:0.5px solid rgba(160,120,64,0.2);background:rgba(160,120,64,0.055);margin-top:14px;padding:14px 15px;font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:0.03em;}
 .estimate-payment-note.show{display:block;}
 .estimate-payment-note strong{color:var(--ink);font-weight:400;}
 
@@ -200,7 +200,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .success-confirm-value.amount{font-family:'Cormorant Garamond',serif;font-size:24px;line-height:1.1;color:var(--gold);}
 .success-next{border:0.5px solid rgba(160,120,64,0.2);background:rgba(160,120,64,0.055);padding:16px 18px;margin:-18px 0 28px;text-align:left;font-size:13px;line-height:1.85;color:var(--muted);letter-spacing:0.03em;}
 .success-next strong{color:var(--ink);font-weight:400;}
-.success-payment-note{border:0.5px solid rgba(160,120,64,0.18);background:rgba(160,120,64,0.045);padding:13px 15px;margin-top:12px;font-size:12px;line-height:1.8;color:var(--muted);letter-spacing:0.03em;}
+.success-payment-note{border:0.5px solid rgba(160,120,64,0.2);background:rgba(160,120,64,0.055);padding:14px 15px;margin-top:12px;font-size:12px;line-height:1.8;color:var(--muted);letter-spacing:0.03em;}
 .success-payment-note strong{color:var(--ink);font-weight:400;}
 .success-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 .btn-check{display:inline-block;background:transparent;border:0.5px solid var(--gold);color:var(--gold);padding:13px 36px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.2em;cursor:pointer;text-decoration:none;transition:all .3s;}
@@ -231,6 +231,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .optional-consent,.review-guide{padding:18px 16px;}
   .estimate-head{display:block;}
   .estimate-total{text-align:left;margin-top:14px;}
+  .estimate-payment-note{font-size:12px;padding:14px;}
   .success-actions{display:grid;grid-template-columns:1fr;}
   .success-confirm-row{grid-template-columns:1fr;gap:2px;margin:9px 0;}
   .guide{padding:28px 20px;}
@@ -649,7 +650,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <div class="estimate-row"><strong>촬영 상품을 선택하면 예상 금액이 표시됩니다.</strong><span>-</span></div>
       </div>
       <p class="estimate-note">예상 금액은 선택하신 상품과 추가 구성 기준입니다. 최종 금액은 촬영 일정과 세부 상담 후 확정됩니다.</p>
-      <p class="estimate-payment-note" id="estimatePaymentNote"><strong>헤어·메이크업은 상품 금액에 포함되어 있습니다.</strong><br>해당 비용은 예상 금액에 함께 표시되지만 촬영 당일 외부 선생님께 별도 이체됩니다.</p>
+      <p class="estimate-payment-note" id="estimatePaymentNote"><strong>헤어·메이크업 비용은 예상 금액에 포함되어 있습니다.</strong><br>다만 해당 비용은 촬영 당일 외부 선생님께 별도로 이체해 주시면 됩니다.</p>
     </div>
   </div>
   <div class="submit-area">
@@ -896,7 +897,7 @@ function buildSuccessInfo(payload) {
     ]),
     successSection('결제 안내', [
       successAmountRow('예상 결제 금액', payload.estimatedTotal),
-      '<div class="success-payment-note"><strong>헤어·메이크업은 상품 금액에 포함되어 있습니다.</strong><br>해당 비용은 예상 금액에 함께 표시되지만 촬영 당일 외부 선생님께 별도 이체됩니다.</div>'
+      '<div class="success-payment-note"><strong>헤어·메이크업 비용은 예상 금액에 포함되어 있습니다.</strong><br>다만 해당 비용은 촬영 당일 외부 선생님께 별도로 이체해 주시면 됩니다.</div>'
     ]),
     successSection('가족 정보', [
       successRow('형제/자매', payload.sibling),
