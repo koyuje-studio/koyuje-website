@@ -156,13 +156,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .res-date{font-size:12px;color:rgba(247,242,234,0.45);letter-spacing:0.05em;}
 .res-name-wrap{}
 .res-name{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;letter-spacing:0.05em;margin-bottom:2px;}
-.res-badge{display:inline-block;margin-left:8px;vertical-align:2px;font-family:'Noto Sans KR',sans-serif;font-size:9px;letter-spacing:0.14em;border:0.5px solid;padding:2px 5px;}
-.res-badge.waiting{color:var(--gold2);border-color:rgba(196,154,32,0.35);}
-.res-badge.today{color:#ff9f9f;border-color:rgba(224,112,112,0.48);background:rgba(224,112,112,0.08);}
-.res-badge.soon{color:#e0a050;border-color:rgba(224,160,80,0.46);background:rgba(224,160,80,0.08);}
-.res-badge.week{color:#d7bb86;border-color:rgba(215,187,134,0.34);background:rgba(215,187,134,0.06);}
-.res-badge.payment{color:#d7bb86;border-color:rgba(215,187,134,0.42);background:rgba(215,187,134,0.08);}
-.res-badge.amount{color:#e0c48a;border-color:rgba(224,196,138,0.32);background:rgba(224,196,138,0.05);}
+.res-badge{display:inline-flex;align-items:center;margin-left:7px;vertical-align:2px;font-family:'Noto Sans KR',sans-serif;font-size:9px;letter-spacing:0.12em;border-radius:999px;padding:2px 7px;background:rgba(247,242,234,0.045);}
+.res-badge.waiting{color:var(--gold2);background:rgba(196,154,32,0.08);}
+.res-badge.today{color:#ff9f9f;background:rgba(224,112,112,0.1);}
+.res-badge.soon{color:#e0a050;background:rgba(224,160,80,0.1);}
+.res-badge.week{color:#d7bb86;background:rgba(215,187,134,0.07);}
+.res-badge.payment{color:#d7bb86;background:rgba(215,187,134,0.08);}
 .res-sub{font-size:11px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;}
 .res-product{font-size:12px;color:rgba(247,242,234,0.5);letter-spacing:0.05em;text-align:right;}
 .res-money{display:flex;justify-content:flex-end;align-items:center;gap:7px;flex-wrap:wrap;font-size:10px;color:rgba(247,242,234,0.38);letter-spacing:0.04em;text-align:right;margin-top:4px;line-height:1.6;}
@@ -170,8 +169,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .res-money .money-label{color:rgba(247,242,234,0.34);}
 .res-money strong{color:var(--gold2);font-weight:400;}
 .res-money .paid{color:#6aaa6a;}
-.money-state{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border:0.5px solid rgba(215,187,134,0.3);color:#d7bb86;background:rgba(215,187,134,0.065);}
-.money-state.done{border-color:rgba(106,170,106,0.24);color:#6aaa6a;background:rgba(106,170,106,0.045);}
+.money-state{display:inline-flex;align-items:center;gap:4px;padding:1px 0;color:#d7bb86;background:transparent;}
+.money-state.done{color:#6aaa6a;background:transparent;}
 .res-name,.res-sub,.res-product,.res-money,.detail-val{overflow-wrap:anywhere;}
 .status-select{appearance:none;-webkit-appearance:none;border:0.5px solid;padding:5px 12px;font-family:'Noto Sans KR',sans-serif;font-size:11px;letter-spacing:0.08em;cursor:pointer;outline:none;transition:all .3s;min-width:110px;text-align:center;}
 .status-select.waiting{color:#c49a20;border-color:rgba(196,154,32,0.4);background:rgba(196,154,32,0.08);}
@@ -1103,8 +1102,7 @@ function renderCards(){
     const badges=[
       shootTiming?'<span class="res-badge '+shootTiming.className+'">'+escapeHTML(shootTiming.label)+'</span>':'',
       sc==='waiting'?'<span class="res-badge waiting">확인 필요</span>':'',
-      !settlementStatus.done?'<span class="res-badge payment">정산 미입력</span>':'',
-      !settlementStatus.done&&settlement.unsettled?'<span class="res-badge amount">'+escapeHTML(formatWon(settlement.unsettled))+'</span>':''
+      !settlementStatus.done?'<span class="res-badge payment">정산 필요</span>':''
     ].join('');
     const parentSizeHTML=(isFamilyProduct||hasParentSize)?`
           <div class="detail-item"><div class="detail-key">엄마 키·한복·신발</div>${detailValueHTML(momDisplay)}</div>
@@ -1120,8 +1118,8 @@ function renderCards(){
         <div>
           <div class="res-product">${escapeHTML(item.product||'')}</div>
           <div class="res-money">
-            <span class="money-pair"><span class="money-label">고객잔금</span> <strong>${escapeHTML(formatWon(settlement.suggestedBalance))}</strong></span>
-            <span class="money-pair"><span class="money-label">입력잔금</span> <strong class="${settlement.balance?'paid':''}">${escapeHTML(balanceText)}</strong></span>
+            <span class="money-pair"><span class="money-label">안내잔금</span> <strong>${escapeHTML(formatWon(settlement.suggestedBalance))}</strong></span>
+            <span class="money-pair"><span class="money-label">입금잔금</span> <strong class="${settlement.balance?'paid':''}">${escapeHTML(balanceText)}</strong></span>
             <span class="money-state ${settlementStatus.done?'done':''}">${escapeHTML(settlementStatus.done?'정산 완료':'정산 미입력')}</span>
           </div>
         </div>
