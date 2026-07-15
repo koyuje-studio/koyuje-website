@@ -67,6 +67,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .edit-section:first-child{border-top:none;padding-top:0;margin-top:0;}
 .edit-section-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;color:var(--paper);letter-spacing:0.08em;margin-bottom:16px;}
 .edit-section-k{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:12px;letter-spacing:0.18em;margin-right:10px;}
+.edit-section-guide{border-left:1px solid rgba(160,120,64,0.5);padding:2px 0 2px 13px;margin:-4px 0 18px;font-size:11px;color:rgba(247,242,234,0.46);line-height:1.8;letter-spacing:0.04em;word-break:keep-all;}
 .edit-options{display:flex;flex-wrap:wrap;gap:8px;}
 .edit-options.column{flex-direction:column;align-items:flex-start;}
 .edit-option{display:inline-flex;align-items:center;gap:8px;min-height:38px;border:0.5px solid rgba(247,242,234,0.14);background:rgba(247,242,234,0.035);color:rgba(247,242,234,0.72);padding:9px 12px;font-size:12px;letter-spacing:0.04em;cursor:pointer;transition:all .2s;}
@@ -82,6 +83,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .edit-estimate-total{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold2);}
 .edit-estimate-items{font-size:12px;color:rgba(247,242,234,0.55);line-height:1.8;margin-top:8px;word-break:keep-all;}
 .edit-settlement-main{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--gold2);margin-top:4px;}
+.edit-settlement-label{font-size:11px;color:rgba(247,242,234,0.45);letter-spacing:0.12em;margin-top:6px;}
 .edit-settlement-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;}
 .edit-settlement-card{border:0.5px solid rgba(247,242,234,0.1);background:rgba(247,242,234,0.035);padding:10px 12px;min-width:0;}
 .edit-settlement-card.target{border-color:rgba(160,120,64,0.35);background:rgba(160,120,64,0.1);}
@@ -90,6 +92,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .edit-settlement-card.target .edit-settlement-card-v{color:var(--gold2);font-size:26px;}
 .edit-settlement-formula{font-size:12px;color:rgba(247,242,234,0.62);line-height:1.8;margin-top:10px;word-break:keep-all;}
 .edit-settlement-sub{font-size:11px;color:rgba(247,242,234,0.38);line-height:1.8;margin-top:8px;word-break:keep-all;}
+.edit-settlement-callout{border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.06);padding:10px 12px;margin-top:10px;font-size:11px;color:rgba(247,242,234,0.58);line-height:1.75;letter-spacing:0.04em;word-break:keep-all;}
 .edit-settlement-status{display:inline-flex;align-items:center;margin-top:12px;padding:6px 10px;border:0.5px solid rgba(215,187,134,0.28);background:rgba(215,187,134,0.06);color:#d7bb86;font-size:11px;letter-spacing:0.08em;line-height:1.5;}
 .edit-settlement-status.done{border-color:rgba(106,170,106,0.28);background:rgba(106,170,106,0.065);color:#7ecf9a;}
 .btn-write-submit{width:100%;background:var(--gold);color:var(--ink);border:none;padding:14px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .3s;margin-top:8px;}
@@ -1490,13 +1493,15 @@ function updateEditModalState(){
   const settlementDone=settlementMissing.length===0;
   const settlementText=`
     <div class="edit-settlement-main">${formatWon(suggestedBalance)}</div>
+    <div class="edit-settlement-label">촬영 당일 고객에게 안내할 스튜디오 잔금</div>
     <div class="edit-settlement-cards">
       <div class="edit-settlement-card"><div class="edit-settlement-card-k">예상 총액</div><div class="edit-settlement-card-v">${formatWon(estimate.total)}</div></div>
       <div class="edit-settlement-card"><div class="edit-settlement-card-k">예약금</div><div class="edit-settlement-card-v">${formatWon(deposit)}</div></div>
-      <div class="edit-settlement-card"><div class="edit-settlement-card-k">헤메 별도</div><div class="edit-settlement-card-v">${formatWon(hairMakeup)}</div></div>
+      <div class="edit-settlement-card"><div class="edit-settlement-card-k">헤메 별도 이체</div><div class="edit-settlement-card-v">${formatWon(hairMakeup)}</div></div>
       <div class="edit-settlement-card target"><div class="edit-settlement-card-k">고객 안내 잔금</div><div class="edit-settlement-card-v">${formatWon(suggestedBalance)}</div></div>
     </div>
-    <div class="edit-settlement-formula">고객 안내 잔금 = 예상 총액 ${formatWon(estimate.total)} - 예약금 ${formatWon(deposit)} - 헤메 별도 ${formatWon(hairMakeup)}</div>
+    <div class="edit-settlement-formula">고객 안내 잔금 = 예상 총액 ${formatWon(estimate.total)} - 예약금 ${formatWon(deposit)} - 헤메 별도 이체 ${formatWon(hairMakeup)}</div>
+    <div class="edit-settlement-callout">헤어·메이크업 비용은 고객이 외부 선생님께 별도 이체하는 금액입니다. 고유재에서 받는 잔금 안내 시에는 이 금액을 제외해 안내합니다.</div>
     <div class="edit-settlement-sub">입력된 잔금 ${formatWon(balance)} / 미정산 차액 ${formatWon(unsettled)} / 헤메 차감 후 스튜디오 매출 ${formatWon(studioRevenue)}</div>
     <div class="edit-settlement-status ${settlementDone?'done':''}">${settlementDone?'✓ 정산 입력 완료':'정산 미입력: '+settlementMissing.join(', ')}</div>
   `;
@@ -1598,15 +1603,16 @@ function renderEditForm(item){
       </div>
       <div class="edit-section" id="editSettlementSection">
         ${sectionTitle('09','입금 / 운영 정보')}
+        <div class="edit-section-guide">예약금은 미리 받은 금액, 잔금 결제액은 촬영 후 고유재에서 받는 금액입니다. 헤어·메이크업 비용은 고객 총액에는 포함되지만 외부 선생님께 별도 이체되는 금액으로 분리해 입력합니다.</div>
         <div class="write-grid">
           ${editInput('depositor','입금자명','text',item.depositor)}
           ${editInput('depositConfirmedAt','예약금 입금 확인일','date',item.depositConfirmedAt)}
           ${editMoneyInput('depositAmount','예약금 입금액',item.depositAmount||200000)}
           <div class="write-field"><label class="write-label">예약금 결제수단</label>${renderEditRadio('depositPaymentMethod',editOptionGroups.paymentMethod,item.depositPaymentMethod)}</div>
-          ${editMoneyInput('actualPaymentAmount','잔금 결제액',item.actualPaymentAmount)}
+          ${editMoneyInput('actualPaymentAmount','촬영 후 스튜디오 잔금',item.actualPaymentAmount)}
           <div class="write-field"><label class="write-label">잔금 결제수단</label>${renderEditRadio('paymentMethod',editOptionGroups.paymentMethod,item.paymentMethod)}</div>
           ${editInput('balancePaidAt','잔금 결제일','date',item.balancePaidAt)}
-          ${editMoneyInput('hairMakeupCost','헤어·메이크업 외부 결제 비용',item.hairMakeupCost)}
+          ${editMoneyInput('hairMakeupCost','헤어·메이크업 별도 이체액',item.hairMakeupCost)}
         </div>
         <div class="edit-estimate">
           <div class="edit-estimate-k">고객 잔금 안내</div>
