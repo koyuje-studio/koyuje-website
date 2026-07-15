@@ -252,6 +252,8 @@ img,video{max-width:100%}
 .notice-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.1em}
 .notice-schedule{font-size:12px;color:var(--gold);letter-spacing:.08em;white-space:nowrap}
 .notice-title{font-size:14px;letter-spacing:.03em}
+.notice-title-main{display:inline}
+.notice-title-meta{display:inline}
 .notice-badge{display:inline-block;font-size:9px;letter-spacing:.16em;color:var(--gold);padding:0 0 0 8px;margin-left:6px;vertical-align:1px;animation:newTextPulse 1.8s ease-in-out infinite}
 .notice-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;letter-spacing:.08em;padding:2px 7px;margin-left:8px;color:#8b6914;background:rgba(160,120,64,.08);border-radius:999px;white-space:nowrap}
 .notice-status-badge::before{content:'⏳';font-size:10px;margin-right:0;vertical-align:0;animation:none}
@@ -398,9 +400,11 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .notice-bridge-actions{display:grid;grid-template-columns:1fr}.notice-item,.notice-item.reservation-item{grid-template-columns:1fr;gap:8px;padding:18px 0}.notice-date{text-align:left}
   .reservation-item .notice-schedule{font-size:10px;letter-spacing:.16em;color:var(--muted)}
   .reservation-item .notice-date{font-size:13px;color:var(--gold)}
-  .notice-title{font-size:13px;line-height:1.65}
-  .notice-badge{margin-left:6px;padding-left:0}
-  .notice-status-badge{display:inline-flex;margin:6px 0 0 0;vertical-align:middle}
+  .notice-title{font-size:13px;line-height:1.65;display:flex;flex-wrap:wrap;align-items:center;gap:6px 7px}
+  .notice-title-main{display:inline;min-width:0}
+  .notice-title-meta{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .notice-badge{margin-left:0;padding-left:0}
+  .notice-status-badge{display:inline-flex;margin:0;vertical-align:middle}
 }
 @media(max-width:600px) and (max-height:700px){
   .hero-content{bottom:calc(104px + env(safe-area-inset-bottom))}
@@ -867,11 +871,12 @@ function loadHomeNotice() {
         const safeTitle = escapeHTML(displayTitle);
         const safeDate = escapeHTML(getNoticeDateLabel(item));
         if (!isNotice) {
+          const badgeGroup = `${isNew ? '<span class="notice-badge">NEW</span>' : ''}${statusBadge}`;
           return `
           <a href="/board" class="notice-item reservation-item">
             <div class="notice-schedule">예약 일정</div>
             <div class="notice-date">${safeDate}</div>
-            <div class="notice-title">${safeTitle}${isNew ? '<span class="notice-badge">NEW</span>' : ''}${statusBadge}</div>
+            <div class="notice-title"><span class="notice-title-main">${safeTitle}</span>${badgeGroup ? `<span class="notice-title-meta">${badgeGroup}</span>` : ''}</div>
           </a>`;
         }
         return `
