@@ -27,9 +27,21 @@ button.active,.btn-gold{background:var(--gold);color:#16120f}
 .nav-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .body{padding:30px}
 .periods{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.analytics-hero{border:1px solid var(--line);background:linear-gradient(135deg,rgba(176,138,85,.12),rgba(32,28,24,.76));padding:24px;margin-bottom:18px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:end}
+.hero-k{font-size:11px;letter-spacing:.24em;color:var(--gold2);margin-bottom:10px}
+.hero-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:300;letter-spacing:.04em;margin-bottom:10px}
+.hero-copy{font-size:13px;color:var(--muted);line-height:1.8;word-break:keep-all}
+.hero-meta{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.hero-pill{border:1px solid rgba(215,187,134,.25);background:rgba(215,187,134,.07);padding:8px 12px;font-size:11px;color:var(--gold2);letter-spacing:.08em}
+.group-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:28px 0 12px}
+.group-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;letter-spacing:.06em}
+.group-desc{font-size:12px;color:var(--muted);line-height:1.7;text-align:right}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .insight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .card{border:1px solid var(--line);background:var(--panel);padding:22px}
+.card.primary{border-color:rgba(215,187,134,.32);background:rgba(176,138,85,.08)}
+.card.revenue .num{font-size:34px}
+.card.warning{border-color:rgba(230,170,85,.35);background:rgba(230,170,85,.055)}
 .label{font-size:11px;color:var(--muted);letter-spacing:.14em;margin-bottom:12px}
 .num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold2)}
 .sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.7}
@@ -40,15 +52,15 @@ button.active,.btn-gold{background:var(--gold);color:#16120f}
 .funnel-name{font-size:12px;color:var(--muted);line-height:1.5;min-height:36px}
 .funnel-count{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--gold2);margin-top:8px}
 .funnel-rate{font-size:11px;color:var(--muted)}
-.tables{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.tables{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:18px}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th,td{border-bottom:1px solid rgba(247,242,234,.08);padding:10px 4px;text-align:left;color:var(--muted);vertical-align:top}
 td:first-child{overflow-wrap:anywhere}
 td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 .empty{color:var(--muted);font-size:13px;padding:14px 0}
 .error{color:#ff8e8e;font-size:13px;margin-top:10px;display:none}
-@media(max-width:900px){.nav{align-items:flex-start;flex-direction:column}.body{padding:20px 16px}.grid,.insight-grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}.tables{grid-template-columns:1fr}}
-@media(max-width:520px){.grid,.insight-grid{grid-template-columns:1fr}.funnel{grid-template-columns:1fr}.card,.section{padding:18px}.nav-right{width:100%}.nav-btn,button{flex:1;text-align:center}}
+@media(max-width:900px){.nav{align-items:flex-start;flex-direction:column}.body{padding:20px 16px}.analytics-hero{grid-template-columns:1fr}.hero-meta{justify-content:flex-start}.grid,.insight-grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}.tables{grid-template-columns:1fr}.group-head{align-items:flex-start;flex-direction:column}.group-desc{text-align:left}}
+@media(max-width:520px){.grid,.insight-grid{grid-template-columns:1fr}.funnel{grid-template-columns:1fr}.card,.section,.analytics-hero{padding:18px}.nav-right{width:100%}.nav-btn,button{flex:1;text-align:center}.hero-title{font-size:21px}.card.revenue .num{font-size:31px}}
 </style>
 </head>
 <body>
@@ -72,6 +84,18 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     </div>
   </nav>
   <main class="body">
+    <section class="analytics-hero">
+      <div>
+        <div class="hero-k">KOYUJE ANALYTICS</div>
+        <h1 class="hero-title">예약 흐름과 매출을 한 화면에서 확인합니다</h1>
+        <p class="hero-copy">방문자, 문의 클릭, 예약확정서 제출, 정산 입력 상태를 분리해서 봅니다. 운영 판단은 예약 수와 실수납을 먼저, 광고 판단은 유입과 전환 흐름을 따로 확인하면 됩니다.</p>
+      </div>
+      <div class="hero-meta">
+        <span class="hero-pill">취소·삭제 매출 제외</span>
+        <span class="hero-pill">선택 기간 기준</span>
+      </div>
+    </section>
+
     <div class="periods" id="periodButtons">
       <button data-period="today">오늘</button>
       <button data-period="yesterday">어제</button>
@@ -81,11 +105,15 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <button data-period="last_month">지난 달</button>
     </div>
 
+    <div class="group-head">
+      <div class="group-title">운영 요약</div>
+      <div class="group-desc">방문부터 예약확정서 제출까지의 현재 흐름입니다.</div>
+    </div>
     <section class="grid">
       <div class="card"><div class="label">오늘 방문자</div><div class="num" id="todayVisitors">—</div></div>
       <div class="card"><div class="label">최근 7일 방문자</div><div class="num" id="last7Visitors">—</div></div>
-      <div class="card"><div class="label">카카오톡 클릭</div><div class="num" id="kakaoClicks">—</div><div class="sub" id="rangeLabel">선택 기간 기준</div></div>
-      <div class="card"><div class="label">예약확정서 제출</div><div class="num" id="reservationSubmits">—</div><div class="sub">선택 기간 기준</div></div>
+      <div class="card primary"><div class="label">카카오톡 클릭</div><div class="num" id="kakaoClicks">—</div><div class="sub" id="rangeLabel">선택 기간 기준</div></div>
+      <div class="card primary"><div class="label">예약확정서 제출</div><div class="num" id="reservationSubmits">—</div><div class="sub">선택 기간 기준</div></div>
     </section>
 
     <section class="insight-grid">
@@ -95,23 +123,32 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <div class="card"><div class="label">확정서 제출률</div><div class="num" id="submitRate">—</div><div class="sub">진입자 대비</div></div>
     </section>
 
+    <div class="group-head">
+      <div class="group-title">매출·정산</div>
+      <div class="group-desc">예상액, 실제 수납, 헤어·메이크업 외부 비용을 분리해서 봅니다.</div>
+    </div>
     <section class="grid">
-      <div class="card"><div class="label">선택 상품 기준 예상액</div><div class="num" id="expectedRevenue">—</div><div class="sub">취소·삭제 제외</div></div>
-      <div class="card"><div class="label">스튜디오 실수납</div><div class="num" id="confirmedRevenue">—</div><div class="sub">예약금+잔금-헤메</div></div>
-      <div class="card"><div class="label">예상 대비 미반영액</div><div class="num" id="revenueGap">—</div><div class="sub">예상액-실수납</div></div>
-      <div class="card"><div class="label">예약금+잔금 수납</div><div class="num" id="collectedRevenue">—</div><div class="sub">고객 결제 입력 기준</div></div>
-      <div class="card"><div class="label">헤메 외부 정산</div><div class="num" id="hairMakeupRevenue">—</div><div class="sub">스튜디오 매출 제외</div></div>
+      <div class="card revenue primary"><div class="label">선택 상품 기준 예상액</div><div class="num" id="expectedRevenue">—</div><div class="sub">취소·삭제 제외</div></div>
+      <div class="card revenue primary"><div class="label">스튜디오 실수납</div><div class="num" id="confirmedRevenue">—</div><div class="sub">예약금+잔금-헤메</div></div>
+      <div class="card revenue warning"><div class="label">예상 대비 미반영액</div><div class="num" id="revenueGap">—</div><div class="sub">예상액-실수납</div></div>
+      <div class="card revenue"><div class="label">예약금+잔금 수납</div><div class="num" id="collectedRevenue">—</div><div class="sub">고객 결제 입력 기준</div></div>
+      <div class="card revenue"><div class="label">헤메 외부 정산</div><div class="num" id="hairMakeupRevenue">—</div><div class="sub">스튜디오 매출 제외</div></div>
       <div class="card"><div class="label">취소 제외 예약</div><div class="num" id="activeReservations">—</div><div class="sub">선택 기간 기준</div></div>
       <div class="card"><div class="label">취소 건</div><div class="num" id="cancelReservations">—</div><div class="sub">매출 제외</div></div>
     </section>
 
+    <section class="tables" id="revenueTables"></section>
+
+    <div class="group-head">
+      <div class="group-title">광고·유입 분석</div>
+      <div class="group-desc">어디서 들어와 어떤 행동으로 이어졌는지 확인합니다.</div>
+    </div>
     <section class="section">
       <div class="section-title">전환 흐름</div>
       <div class="funnel" id="funnel"></div>
     </section>
 
     <section class="tables" id="tables"></section>
-    <section class="tables" id="revenueTables"></section>
   </main>
 </div>
 
