@@ -352,9 +352,10 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 @media(max-width:900px){
-  .nav{padding:16px 24px;background:transparent;backdrop-filter:none;border-bottom-color:transparent}.nav.scrolled{padding:12px 24px;background:rgba(247,242,234,.96);backdrop-filter:blur(12px);border-bottom-color:var(--line)}
-  .nav-logo-img{width:126px;filter:brightness(0) invert(1) drop-shadow(0 1px 4px rgba(0,0,0,.18))}.nav.scrolled .nav-logo-img{filter:none}
+  .nav{padding:16px 24px;background:rgba(247,242,234,.96);backdrop-filter:blur(12px);border-bottom-color:var(--line)}.nav.scrolled{padding:12px 24px;background:rgba(247,242,234,.97);border-bottom-color:var(--line)}
+  .nav-logo-img{width:126px;filter:none}.nav.scrolled .nav-logo-img{filter:none}
   .nav-links,.nav-cta{display:none}.nav-toggle{display:flex}
+  .nav-toggle span{background:var(--ink)}
   .hero{min-height:680px;height:100svh}.hero-video,.hero-img{object-position:center top}
   .hero-overlay{background:linear-gradient(to bottom,rgba(14,12,10,.16) 0%,rgba(14,12,10,.24) 32%,rgba(14,12,10,.86) 100%),linear-gradient(to right,rgba(14,12,10,.28),rgba(14,12,10,.1))}
   .hero-content{left:24px;right:24px;bottom:calc(108px + env(safe-area-inset-bottom));max-width:none}
