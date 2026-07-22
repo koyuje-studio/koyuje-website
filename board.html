@@ -326,6 +326,13 @@ let allItems=[];
 let filteredItems=[];
 const PAGE_SIZE=15;
 
+function fetchWithTimeout(url,options,timeoutMs=20000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  return fetch(url,Object.assign({},options,{signal:controller.signal}))
+    .finally(()=>clearTimeout(timer));
+}
+
 // 초기 로드
 document.getElementById('phoneLookup').addEventListener('keydown',e=>{if(e.key==='Enter')lookupReservation();});
 document.getElementById('phoneLookup').addEventListener('input',e=>{
@@ -349,7 +356,7 @@ function lookupReservation(){
   btn.textContent='확인 중';
   result.innerHTML='<div class="result-empty"><div class="spinner"></div><br>예약 정보를 확인하는 중입니다.</div>';
 
-  fetch(SCRIPT_URL,{
+  fetchWithTimeout(SCRIPT_URL,{
     method:'POST',
     body:JSON.stringify({action:'reservationLookup',phone8:phone8})
   })
@@ -374,8 +381,11 @@ function lookupReservation(){
         </div>
       `).join('');
     })
-    .catch(()=>{
-      result.innerHTML='<div class="result-empty">예약 조회 응답을 확인하지 못했습니다.<br>계속 반복되면 카카오톡 채널로 문의해 주세요.</div>';
+    .catch(err=>{
+      const message=err.name==='AbortError'
+        ? '예약 조회 응답이 지연되고 있습니다.<br>잠시 후 다시 시도해 주세요.'
+        : '예약 조회 응답을 확인하지 못했습니다.<br>계속 반복되면 카카오톡 채널로 문의해 주세요.';
+      result.innerHTML='<div class="result-empty">'+message+'</div>';
     })
     .finally(()=>{
       btn.disabled=false;
@@ -394,7 +404,7 @@ function statusText(status){
 function loadBoard(){
   document.getElementById('boardList').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>게시글을 불러오는 중...</div>';
 
-  fetch(SCRIPT_URL+'?action=board&page=1')
+  fetchWithTimeout(SCRIPT_URL+'?action=board&page=1')
     .then(r=>r.json())
     .then(data=>{
       if(data.result!=='success'){showEmpty();return;}
@@ -418,7 +428,7 @@ function loadBoard(){
       const promises = [];
       for(let p = 2; p <= totalPages; p++){
         promises.push(
-          fetch(SCRIPT_URL+'?action=board&page='+p)
+          fetchWithTimeout(SCRIPT_URL+'?action=board&page='+p)
             .then(r=>r.json())
             .then(d=> d.result==='success' ? (d.data||[]) : [])
             .catch(()=>[])
@@ -653,7 +663,7 @@ function submitPw(num){
 
 function fetchPost(num,pw){
   document.getElementById('modalContent').innerHTML='<div class="loading-wrap"><div class="spinner"></div></div>';
-  fetch(SCRIPT_URL,{
+  fetchWithTimeout(SCRIPT_URL,{
     method:'POST',
     body:JSON.stringify({action:'boardDetail',num:num,password:pw})
   })
@@ -685,8 +695,9 @@ function fetchPost(num,pw){
         <div class="modal-meta">${escapeHTML(d.author||'고유재')} · ${escapeHTML(d.date||'')}</div>
         <div class="modal-body">${formatBoardContent(d.content||fallbackContent)}</div>`;
     })
-    .catch(()=>{
-      document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">오류가 발생했습니다.</p><div class="modal-help-actions"><button type="button" class="help-close" onclick="hideModal()">목록으로 돌아가기</button><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
+    .catch(err=>{
+      const message=err.name==='AbortError'?'응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':'오류가 발생했습니다.';
+      document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">'+message+'</p><div class="modal-help-actions"><button type="button" class="help-close" onclick="hideModal()">목록으로 돌아가기</button><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
     });
 }
 
