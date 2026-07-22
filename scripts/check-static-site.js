@@ -295,7 +295,7 @@ const requiredPageSnippets = {
     "class=\"inquiry-form\">예약확정서</a>",
     "function getPhone8()",
     "if(p.length!==8)",
-    "fetch(SCRIPT_URL+'?phone8='+p)",
+    "action:'reservationLookup',phone8:p",
     "throw new Error('INVALID_RESPONSE')",
     "restoreSearchButton();",
     "예약 조회 응답을 확인하지 못했습니다",

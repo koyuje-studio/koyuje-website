@@ -307,7 +307,10 @@ function doSearch(){
   }
   document.getElementById('searchBtn').disabled=true;
   document.getElementById('loading').classList.add('show');
-  fetch(SCRIPT_URL+'?phone8='+p)
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({action:'reservationLookup',phone8:p})
+  })
     .then(r=>r.text())
     .then(text=>{
       try{return JSON.parse(text);}
