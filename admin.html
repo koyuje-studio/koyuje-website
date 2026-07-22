@@ -40,7 +40,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .btn-qr:hover{background:rgba(160,120,64,0.32);border-color:var(--gold);}
 .btn-write{font-size:11px;letter-spacing:0.15em;color:var(--ink);background:var(--gold);border:none;padding:6px 16px;cursor:pointer;transition:all .3s;}
 .btn-write:hover{background:var(--gold2);}
-.btn-login:disabled,.btn-write-submit:disabled,.status-select:disabled{opacity:.55;cursor:wait;}
+.btn-login:disabled,.btn-write-submit:disabled,.status-select:disabled,.btn-detail-delete:disabled{opacity:.55;cursor:wait;}
 
 /* 글쓰기 모달 */
 .write-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px;}
@@ -718,6 +718,10 @@ function requireActiveAdminSession(data){
   return data;
 }
 
+function adminRequestError(err,fallback){
+  return err&&err.name==='AbortError'?'요청 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':fallback;
+}
+
 function adminApi(payload){
   return fetchWithTimeout(SCRIPT_URL,{
     method:'POST',
@@ -1226,7 +1230,7 @@ function renderCards(){
               <div class="detail-action-label">관리 작업</div>
               ${!settlementStatus.done?`<button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}','settlement')">정산 입력</button>`:''}
               <button type="button" class="btn-detail-edit" onclick="event.stopPropagation();openEditModal('${escapeAttr(rowId)}')">예약 정보 수정</button>
-              <button type="button" class="btn-detail-delete" onclick="event.stopPropagation();deleteReservation('${escapeAttr(rowId)}')">삭제 처리</button>
+              <button type="button" class="btn-detail-delete" onclick="event.stopPropagation();deleteReservation('${escapeAttr(rowId)}',this)">삭제 처리</button>
             </div>
           </div>
         </div>
@@ -1269,7 +1273,7 @@ function updateStatus(select){
   .catch(err=>{
     restoreStatusSelect(select,previousStatus);
     if(err.code==='ADMIN_SESSION_EXPIRED')return;
-    alert('저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
+    alert(adminRequestError(err,'저장 중 오류가 발생했습니다. 다시 시도해 주세요.'));
   })
   .finally(()=>{
     select.disabled=false;
@@ -1281,12 +1285,13 @@ function restoreStatusSelect(select,status){
   select.className='status-select '+getStatusClass(status);
 }
 
-function deleteReservation(rowId){
+function deleteReservation(rowId,button){
   const item=allData.find(d=>String(d.rowId)===String(rowId));
   const label=item?[item.babyName,item.phone].filter(Boolean).join(' · '):rowId;
   if(!confirm('이 예약을 삭제 처리할까요?\n\n'+label+'\n\n삭제 처리된 예약은 관리자 목록과 월별 집계에서 제외됩니다.')){
     return;
   }
+  if(button){button.disabled=true;button.textContent='처리 중...';}
   adminApi({action:'deleteReservation',rowId:rowId})
   .then(r=>r.json())
   .then(data=>{
@@ -1303,7 +1308,10 @@ function deleteReservation(rowId){
   })
   .catch(err=>{
     if(err.code==='ADMIN_SESSION_EXPIRED')return;
-    alert('삭제 중 오류가 발생했습니다. 다시 시도해 주세요.');
+    alert(adminRequestError(err,'삭제 중 오류가 발생했습니다. 다시 시도해 주세요.'));
+  })
+  .finally(()=>{
+    if(button&&button.isConnected){button.disabled=false;button.textContent='삭제 처리';}
   });
 }
 
@@ -1754,7 +1762,7 @@ function submitReservationEdit(){
   })
   .catch(err=>{
     if(err.code==='ADMIN_SESSION_EXPIRED')return;
-    alert('수정 저장 실패: '+err.message);
+    alert(adminRequestError(err,'수정 저장 실패: '+err.message));
   })
   .finally(()=>{
     btn.disabled=false;
@@ -1790,7 +1798,6 @@ function submitPost(){
   .then(r=>r.json())
   .then(data=>{
     requireActiveAdminSession(data);
-    btn.disabled=false;btn.textContent='게시글 등록하기';
     if(data.result==='success'){
       closeWriteModal();
       showToast('✓ 게시글이 등록되었습니다');
@@ -1799,7 +1806,8 @@ function submitPost(){
       alert('등록 실패: '+(data.message||'다시 시도해 주세요.'));
     }
   })
-  .catch(err=>{btn.disabled=false;btn.textContent='게시글 등록하기';if(err.code!=='ADMIN_SESSION_EXPIRED')alert('오류가 발생했습니다. 다시 시도해 주세요.');});
+  .catch(err=>{if(err.code!=='ADMIN_SESSION_EXPIRED')alert(adminRequestError(err,'오류가 발생했습니다. 다시 시도해 주세요.'));})
+  .finally(()=>{btn.disabled=false;btn.textContent='게시글 등록하기';});
 }
 
 document.getElementById('pwInput').addEventListener('keydown',function(e){

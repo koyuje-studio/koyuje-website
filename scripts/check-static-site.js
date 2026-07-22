@@ -338,6 +338,9 @@ const requiredPageSnippets = {
   "admin.html": [
     "function fetchWithTimeout(url,options,timeoutMs=20000)",
     "function requireActiveAdminSession(data)",
+    "function adminRequestError(err,fallback)",
+    "deleteReservation('${escapeAttr(rowId)}',this)",
+    "button.textContent='처리 중...'",
     "ADMIN_SESSION_EXPIRED",
     "관리자 인증 응답이 지연되고 있습니다",
     "item.siblingInfo",
@@ -348,7 +351,7 @@ const requiredPageSnippets = {
     "요청 사항",
     "예약 정보 수정",
     "삭제 처리",
-    "function deleteReservation(rowId)",
+    "function deleteReservation(rowId,button)",
     "action:'deleteReservation'",
     "function getAdminToken()",
     "sessionStorage.setItem('koyujeAdminToken',data.token)",
