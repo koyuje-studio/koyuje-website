@@ -152,11 +152,18 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
   </main>
 </div>
 
+<script src="/assets/js/runtime-config.js"></script>
 <script>
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyAAe8It1LY5t6kGYXj2n-VfI9aTrDJsUHmGpWVKEp-D1ekjYN9nrawPwvtubpwZHRe/exec';
+const SCRIPT_URL=(window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
 let currentPeriod='7d';
 
-function getPw(){return sessionStorage.getItem('koyujeAdminPw') || '';}
+function getToken(){return sessionStorage.getItem('koyujeAdminToken') || '';}
+function adminApi(payload){
+  return fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify(Object.assign({},payload,{adminToken:getToken()}))
+  }).then(r=>r.json());
+}
 function showApp(){
   document.getElementById('loginBox').classList.remove('booting');
   document.getElementById('loginBox').style.display='none';
@@ -175,10 +182,20 @@ function showLogin(message){
 function login(){
   const pw=document.getElementById('pwInput').value.trim();
   if(!pw)return;
-  sessionStorage.setItem('koyujeAdminPw',pw);
-  loadAnalytics(true);
+  fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'adminLogin',password:pw})})
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
+      sessionStorage.setItem('koyujeAdminToken',data.token);
+      sessionStorage.removeItem('koyujeAdminPw');
+      loadAnalytics(true);
+    })
+    .catch(err=>showLogin(err.message||'비밀번호를 확인해 주세요.'));
 }
 function logout(){
+  const token=getToken();
+  if(token)fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'adminLogout',adminToken:token})}).catch(()=>{});
+  sessionStorage.removeItem('koyujeAdminToken');
   sessionStorage.removeItem('koyujeAdminPw');
   location.reload();
 }
@@ -279,7 +296,7 @@ function getPeriodRange(period){
 function summarizeReservations(items){
   const range=getPeriodRange(currentPeriod);
   const selected=(items||[]).filter(item=>{
-    const dt=parseSubmitDate(item.rowId);
+    const dt=parseSubmitDate(item.submittedAt||item.rowId);
     return dt&&dt>=range.start&&dt<range.end;
   });
   let expectedRevenue=0;
@@ -377,14 +394,14 @@ function render(data,reservations){
   ].join('');
 }
 function loadAnalytics(fromLogin){
-  const pw=getPw();
-  if(!pw){
+  const token=getToken();
+  if(!token){
     showLogin();
     return;
   }
   Promise.all([
-    fetch(SCRIPT_URL+'?action=analytics&period='+encodeURIComponent(currentPeriod)+'&pw='+encodeURIComponent(pw)).then(r=>r.json()),
-    fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(pw)).then(r=>r.json())
+    adminApi({action:'analytics',period:currentPeriod}),
+    adminApi({action:'admin'})
   ])
     .then(([data,reservationData])=>{
       if(data.result==='error')throw new Error(data.message||'인증 실패');
@@ -394,10 +411,10 @@ function loadAnalytics(fromLogin){
     })
     .catch(err=>{
       if(fromLogin){
-        sessionStorage.removeItem('koyujeAdminPw');
+        sessionStorage.removeItem('koyujeAdminToken');
         showLogin('비밀번호가 올바르지 않거나 통계 데이터를 불러올 수 없습니다.');
       }else{
-        sessionStorage.removeItem('koyujeAdminPw');
+        sessionStorage.removeItem('koyujeAdminToken');
         showLogin('저장된 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
       }
     });
@@ -410,7 +427,8 @@ document.getElementById('periodButtons').addEventListener('click',e=>{
   loadAnalytics();
 });
 document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
-if(getPw()){
+sessionStorage.removeItem('koyujeAdminPw');
+if(getToken()){
   loadAnalytics();
 }else{
   showLogin();

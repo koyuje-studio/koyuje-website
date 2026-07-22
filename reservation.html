@@ -250,7 +250,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .btn-submit{padding:17px 40px;}
 }
 </style>
-<script src="/assets/js/runtime-config.js" defer></script>
+<script src="/assets/js/runtime-config.js"></script>
 <script src="/assets/js/tracking.js" defer></script>
 </head>
 <body>
@@ -693,7 +693,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyAAe8It1LY5t6kGYXj2n-VfI9aTrDJsUHmGpWVKEp-D1ekjYN9nrawPwvtubpwZHRe/exec';
+const SCRIPT_URL = (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
 
 // 전화번호 자동 하이픈
 document.getElementById('phone').addEventListener('input', function(e) {
@@ -1091,6 +1091,23 @@ function updatePriceEstimate() {
   if (paymentNoteEl) paymentNoteEl.classList.toggle('show', showPaymentNote);
 }
 
+function getReservationRequestId() {
+  const key='koyujeReservationRequestId';
+  try {
+    const saved=sessionStorage.getItem(key);
+    if(saved)return saved;
+    const id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'reservation_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    sessionStorage.setItem(key,id);
+    return id;
+  } catch (err) {
+    return 'reservation_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+  }
+}
+
+function clearReservationRequestId() {
+  try { sessionStorage.removeItem('koyujeReservationRequestId'); } catch (err) {}
+}
+
 function submitForm() {
   // 주소 합치기
   updateAddress();
@@ -1234,6 +1251,7 @@ function submitForm() {
 
   const payload = {
     action: 'reservation',
+    requestId: getReservationRequestId(),
     babyName: babyNameValue,
     babyGender: babyGenderValue,
     babyBirth: val('babyBirth'),
@@ -1272,9 +1290,12 @@ function submitForm() {
   submitBtn.disabled = true;
   submitBtn.textContent = '예약확정서를 접수하는 중입니다';
 
+  const controller=new AbortController();
+  const requestTimer=setTimeout(()=>controller.abort(),30000);
   fetch(SCRIPT_URL, {
     method: 'POST',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    signal: controller.signal
   })
   .then(res => res.text())
   .then(text => {
@@ -1288,6 +1309,7 @@ function submitForm() {
     loading.classList.remove('show');
     loading.setAttribute('aria-hidden','true');
     if (data.result === 'success') {
+      clearReservationRequestId();
       if (window.KoyujeTracking) {
         window.KoyujeTracking.trackCompleteRegistration({
           content_name: '예약확정서 제출 완료',
@@ -1307,12 +1329,17 @@ function submitForm() {
   })
   .catch(err => {
     restoreSubmitButton();
+    if (err.name === 'AbortError') {
+      alert('예약 접수 확인이 지연되고 있습니다. 같은 내용으로 다시 제출하셔도 중복 저장되지 않습니다. 잠시 후 다시 시도해 주세요.');
+      return;
+    }
     if (err.message === 'INVALID_RESPONSE') {
       alert('예약 접수 응답을 확인하지 못했습니다. 잠시 후 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.');
       return;
     }
     alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.');
-  });
+  })
+  .finally(()=>clearTimeout(requestTimer));
 }
 </script>
 </body>

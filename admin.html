@@ -428,14 +428,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   </div>
 </div>
 
+<script src="/assets/js/runtime-config.js"></script>
 <script>
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyAAe8It1LY5t6kGYXj2n-VfI9aTrDJsUHmGpWVKEp-D1ekjYN9nrawPwvtubpwZHRe/exec';
+const SCRIPT_URL=(window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
 
 let allData=[];
 let currentFilter='all';
 let currentMonthKey='';
 let currentSortMode='submitted';
-let adminPw='';
+let adminToken='';
 let editingRowId='';
 
 // 오늘 날짜
@@ -452,18 +453,26 @@ function doLogin(){
   }
 
   setLoginPending(true);
-  adminPw=pw;
-  sessionStorage.setItem('koyujeAdminPw', pw);
-
-  fetchAdminData()
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({action:'adminLogin',password:pw})
+  })
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
+      adminToken=data.token;
+      sessionStorage.setItem('koyujeAdminToken',data.token);
+      sessionStorage.removeItem('koyujeAdminPw');
+      return fetchAdminData();
+    })
     .then(data=>{
       applyAdminData(data);
     })
-    .catch(()=>{
-      adminPw='';
-      sessionStorage.removeItem('koyujeAdminPw');
+    .catch(err=>{
+      adminToken='';
+      sessionStorage.removeItem('koyujeAdminToken');
       allData=[];
-      showLoginError('비밀번호가 올바르지 않거나 관리자 데이터를 불러올 수 없습니다.');
+      showLoginError(err.message||'비밀번호가 올바르지 않거나 관리자 데이터를 불러올 수 없습니다.');
       input.value='';
       input.focus();
     })
@@ -488,20 +497,21 @@ function showLoginShell(message){
 }
 
 function bootAdminSession(){
-  const savedPw=getAdminPw();
-  if(!savedPw){
+  const savedToken=getAdminToken();
+  sessionStorage.removeItem('koyujeAdminPw');
+  if(!savedToken){
     showLoginShell();
     return;
   }
-  adminPw=savedPw;
+  adminToken=savedToken;
   document.getElementById('loginWrap').style.display='none';
   document.getElementById('adminWrap').style.display='block';
   document.getElementById('cardsWrap').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>관리자 인증을 확인하는 중...</div>';
   fetchAdminData()
     .then(applyAdminData)
     .catch(()=>{
-      adminPw='';
-      sessionStorage.removeItem('koyujeAdminPw');
+      adminToken='';
+      sessionStorage.removeItem('koyujeAdminToken');
       allData=[];
       showLoginShell('저장된 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
     });
@@ -520,7 +530,10 @@ function showLoginError(message){
 }
 
 function doLogout(){
-  adminPw='';
+  const token=getAdminToken();
+  if(token)fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'adminLogout',adminToken:token})}).catch(()=>{});
+  adminToken='';
+  sessionStorage.removeItem('koyujeAdminToken');
   sessionStorage.removeItem('koyujeAdminPw');
   allData=[];
   document.getElementById('adminWrap').style.display='none';
@@ -671,7 +684,7 @@ function copyReservationConfirmGuide(rowId){
 }
 
 function fetchAdminData(){
-  return fetch(SCRIPT_URL+'?action=admin&pw='+encodeURIComponent(getAdminPw()))
+  return adminApi({action:'admin'})
     .then(r=>r.json())
     .then(data=>{
       if(data.result==='error')throw new Error(data.message||'admin auth failed');
@@ -679,8 +692,15 @@ function fetchAdminData(){
     });
 }
 
-function getAdminPw(){
-  return adminPw || sessionStorage.getItem('koyujeAdminPw') || '';
+function getAdminToken(){
+  return adminToken || sessionStorage.getItem('koyujeAdminToken') || '';
+}
+
+function adminApi(payload){
+  return fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify(Object.assign({},payload,{adminToken:getAdminToken()}))
+  });
 }
 
 function loadData(){
@@ -716,7 +736,7 @@ function getActiveReservations(){
 }
 
 function getSubmitMonthInfo(item){
-  const raw=String(item.rowId||'').trim();
+  const raw=String(item.submittedAt||item.rowId||'').trim();
   let year=0,month=0;
   const iso=raw.match(/^(\d{4})-(\d{1,2})-/);
   const kr=raw.match(/^(\d{4})[.\s년-]+(\d{1,2})/);
@@ -1137,7 +1157,7 @@ function renderCards(){
           <div class="detail-item priority"><div class="detail-key">선택 상품</div><div class="detail-val">${escapeHTML(item.product||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">촬영 가능 요일</div><div class="detail-val">${escapeHTML(item.weekday||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">추가 구성</div><div class="detail-val" style="font-size:12px;">${extra}</div></div>
-          <div class="detail-item"><div class="detail-key">제출 일시</div><div class="detail-val" style="font-size:12px;">${escapeHTML(rowId||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">제출 일시</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.submittedAt||'-')}</div></div>
 
           <div class="detail-section">고객 정보</div>
           <div class="detail-item priority"><div class="detail-key">연락처</div><div class="detail-val">${escapeHTML(item.phone||'-')}</div></div>
@@ -1208,10 +1228,7 @@ function updateStatus(select){
   select.className='status-select '+sc;
   select.disabled=true;
 
-  fetch(SCRIPT_URL,{
-    method:'POST',
-    body:JSON.stringify({action:'updateStatus',adminPw:getAdminPw(),rowId:rowId,status:newStatus})
-  })
+  adminApi({action:'updateStatus',rowId:rowId,status:newStatus})
   .then(r=>r.json())
   .then(data=>{
     if(data.result==='success'){
@@ -1246,10 +1263,7 @@ function deleteReservation(rowId){
   if(!confirm('이 예약을 삭제 처리할까요?\n\n'+label+'\n\n삭제 처리된 예약은 관리자 목록과 월별 집계에서 제외됩니다.')){
     return;
   }
-  fetch(SCRIPT_URL,{
-    method:'POST',
-    body:JSON.stringify({action:'deleteReservation',adminPw:getAdminPw(),rowId:rowId})
-  })
+  adminApi({action:'deleteReservation',rowId:rowId})
   .then(r=>r.json())
   .then(data=>{
     if(data.result==='success'){
@@ -1700,10 +1714,7 @@ function submitReservationEdit(){
   updates.estimatedItems=estimate.items.map(entry=>entry.label+' '+formatWon(entry.amount)).join(' / ');
   btn.disabled=true;
   btn.textContent='저장 중...';
-  fetch(SCRIPT_URL,{
-    method:'POST',
-    body:JSON.stringify({action:'updateReservation',adminPw:getAdminPw(),rowId:editingRowId,updates:updates})
-  })
+  adminApi({action:'updateReservation',rowId:editingRowId,updates:updates})
   .then(r=>r.json())
   .then(data=>{
     if(data.result!=='success')throw new Error(data.message||'저장 실패');
@@ -1739,18 +1750,14 @@ function submitPost(){
   if(!title){alert('제목을 입력해주세요.');document.getElementById('wTitle').focus();return;}
   const btn=document.querySelector('.btn-write-submit');
   btn.disabled=true;btn.textContent='등록 중...';
-  fetch(SCRIPT_URL,{
-    method:'POST',
-    body:JSON.stringify({
+  adminApi({
       action:'writePost',
-      adminPw:getAdminPw(),
       title:title,
       content:document.getElementById('wContent').value.trim(),
       category:document.getElementById('wCategory').value,
       isPublic:document.getElementById('wPublic').value,
       password:document.getElementById('wPassword').value.trim(),
       author:'고유재'
-    })
   })
   .then(r=>r.json())
   .then(data=>{

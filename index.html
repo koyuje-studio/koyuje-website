@@ -433,7 +433,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .hero-proof{display:none}
 }
 </style>
-<script src="/assets/js/runtime-config.js" defer></script>
+<script src="/assets/js/runtime-config.js"></script>
 <script src="/assets/js/tracking.js" defer></script>
 </head>
 <body>
@@ -753,7 +753,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
 </div>
 
 <script>
-const BOARD_URL = 'https://script.google.com/macros/s/AKfycbyAAe8It1LY5t6kGYXj2n-VfI9aTrDJsUHmGpWVKEp-D1ekjYN9nrawPwvtubpwZHRe/exec';
+const BOARD_URL = (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
 const KAKAO_APP_KEY = '3a3bea54fcc2f18a85036be7b91e3b4e';
 const KAKAO_MAP_URL = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_APP_KEY}&autoload=false&libraries=services`;
 const STUDIO_ADDRESS = '충청남도 공주시 봉황로 88';
@@ -1061,9 +1061,7 @@ function buildReservationStatusBadge(item) {
 function getNoticeDateLabel(item) {
   if (item.category !== '공지') {
     const shootDate = String(item.shootDate || '').trim();
-    const shootTime = String(item.shootTime || '').trim();
-    const shootLabel = [shootDate, shootTime].filter(Boolean).join(' ');
-    if (shootLabel) return shootLabel.replace(/-/g, '.');
+    if (shootDate) return shootDate.replace(/-/g, '.');
   }
   return item.date ? String(item.date).replace(/-/g, '.') : '';
 }

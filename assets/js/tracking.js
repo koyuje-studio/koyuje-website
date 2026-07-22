@@ -1,12 +1,12 @@
 (function () {
   "use strict";
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyDBjN1hvPUyBZhFoZDguBUfDZCb_FSbfOOSkDKAMr1Ro6VjM_AmiUhXYNoAskZnZz4/exec";
+  const config = window.KOYUJE_RUNTIME_CONFIG || {};
+  const SCRIPT_URL = String(config.APPS_SCRIPT_URL || "").trim();
   const ALLOWED_PIXEL_HOSTS = ["koyuje.com", "www.koyuje.com"];
   const ADMIN_PATHS = ["/admin", "/admin.html", "/admin/analytics", "/admin-analytics.html"];
   const STORAGE_PREFIX = "koyuje_";
   const DAY = 24 * 60 * 60 * 1000;
-  const config = window.KOYUJE_RUNTIME_CONFIG || {};
   const host = window.location.hostname;
   const path = window.location.pathname;
   const isAdmin = ADMIN_PATHS.some((adminPath) => path === adminPath || path.startsWith(adminPath + "/"));
@@ -141,6 +141,7 @@
   }
 
   function postOwnEvent(payload) {
+    if (!SCRIPT_URL) return;
     const body = JSON.stringify({ action: "trackEvent", event: payload });
     try {
       if (navigator.sendBeacon) {

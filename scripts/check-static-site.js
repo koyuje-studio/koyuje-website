@@ -338,8 +338,9 @@ const requiredPageSnippets = {
     "삭제 처리",
     "function deleteReservation(rowId)",
     "action:'deleteReservation'",
-    "function getAdminPw()",
-    "sessionStorage.setItem('koyujeAdminPw', pw)",
+    "function getAdminToken()",
+    "sessionStorage.setItem('koyujeAdminToken',data.token)",
+    "function adminApi(payload)",
     "월별 접수 집계",
     "function updateMonthlyStats(source)",
     "let currentMonthKey=''",
@@ -799,16 +800,23 @@ for (const file of appsScriptPages) {
   const html = fs.readFileSync(file, "utf8");
   const scriptUrls = [...html.matchAll(/https:\/\/script\.google\.com\/macros\/s\/[^'")\s]+\/exec/g)].map((match) => match[0]);
 
-  if (!scriptUrls.includes(appsScriptUrl)) {
-    console.error(`Missing current Apps Script URL: ${file}`);
+  if (!html.includes('/assets/js/runtime-config.js')) {
+    console.error(`Missing runtime config loader: ${file}`);
     hasError = true;
   }
 
   for (const url of scriptUrls) {
-    if (url !== appsScriptUrl) {
-      console.error(`Unexpected Apps Script URL in ${file}: ${url}`);
-      hasError = true;
-    }
+    console.error(`Apps Script URL must come from runtime config in ${file}: ${url}`);
+    hasError = true;
+  }
+}
+
+for (const configFile of ['scripts/generate-runtime-config.js', 'assets/js/runtime-config.js']) {
+  if (!fs.existsSync(configFile)) continue;
+  const source = fs.readFileSync(configFile, 'utf8');
+  if (!source.includes(appsScriptUrl)) {
+    console.error(`Missing current Apps Script URL: ${configFile}`);
+    hasError = true;
   }
 }
 
