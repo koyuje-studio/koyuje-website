@@ -157,9 +157,16 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 const SCRIPT_URL=(window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
 let currentPeriod='7d';
 
+function fetchWithTimeout(url,options,timeoutMs=20000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  return fetch(url,Object.assign({},options,{signal:controller.signal}))
+    .finally(()=>clearTimeout(timer));
+}
+
 function getToken(){return sessionStorage.getItem('koyujeAdminToken') || '';}
 function adminApi(payload){
-  return fetch(SCRIPT_URL,{
+  return fetchWithTimeout(SCRIPT_URL,{
     method:'POST',
     body:JSON.stringify(Object.assign({},payload,{adminToken:getToken()}))
   }).then(r=>r.json());
@@ -182,7 +189,10 @@ function showLogin(message){
 function login(){
   const pw=document.getElementById('pwInput').value.trim();
   if(!pw)return;
-  fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'adminLogin',password:pw})})
+  const btn=document.querySelector('#loginBox button');
+  btn.disabled=true;
+  btn.textContent='확인 중...';
+  fetchWithTimeout(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'adminLogin',password:pw})})
     .then(r=>r.json())
     .then(data=>{
       if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
@@ -190,7 +200,8 @@ function login(){
       sessionStorage.removeItem('koyujeAdminPw');
       loadAnalytics(true);
     })
-    .catch(err=>showLogin(err.message||'비밀번호를 확인해 주세요.'));
+    .catch(err=>showLogin(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호를 확인해 주세요.')))
+    .finally(()=>{btn.disabled=false;btn.textContent='확인';});
 }
 function logout(){
   const token=getToken();
@@ -410,12 +421,13 @@ function loadAnalytics(fromLogin){
       render(data,reservationData.data||[]);
     })
     .catch(err=>{
+      const delayed=err.name==='AbortError';
       if(fromLogin){
         sessionStorage.removeItem('koyujeAdminToken');
-        showLogin('비밀번호가 올바르지 않거나 통계 데이터를 불러올 수 없습니다.');
+        showLogin(delayed?'통계 응답이 지연되고 있습니다. 잠시 후 다시 로그인해 주세요.':'비밀번호가 올바르지 않거나 통계 데이터를 불러올 수 없습니다.');
       }else{
         sessionStorage.removeItem('koyujeAdminToken');
-        showLogin('저장된 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
+        showLogin(delayed?'통계 응답이 지연되고 있습니다. 잠시 후 다시 로그인해 주세요.':'저장된 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
       }
     });
 }

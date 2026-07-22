@@ -336,6 +336,10 @@ const requiredPageSnippets = {
     "예약 조회 응답이 지연되고 있습니다",
   ],
   "admin.html": [
+    "function fetchWithTimeout(url,options,timeoutMs=20000)",
+    "function requireActiveAdminSession(data)",
+    "ADMIN_SESSION_EXPIRED",
+    "관리자 인증 응답이 지연되고 있습니다",
     "item.siblingInfo",
     "isFamilyProduct",
     "엄마 키·한복·신발",
@@ -362,6 +366,11 @@ const requiredPageSnippets = {
     "사진 활용",
     "유입 경로",
     "min-height:44px",
+  ],
+  "admin-analytics.html": [
+    "function fetchWithTimeout(url,options,timeoutMs=20000)",
+    "관리자 인증 응답이 지연되고 있습니다",
+    "통계 응답이 지연되고 있습니다",
   ],
   "웹사이트가이드.txt": [
     "최종 운영 전 체크리스트",

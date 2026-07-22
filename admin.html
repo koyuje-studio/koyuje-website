@@ -439,6 +439,13 @@ let currentSortMode='submitted';
 let adminToken='';
 let editingRowId='';
 
+function fetchWithTimeout(url,options,timeoutMs=20000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  return fetch(url,Object.assign({},options,{signal:controller.signal}))
+    .finally(()=>clearTimeout(timer));
+}
+
 // 오늘 날짜
 const now=new Date();
 document.getElementById('todayLabel').textContent=now.getFullYear()+'년 '+(now.getMonth()+1)+'월 '+now.getDate()+'일';
@@ -453,7 +460,7 @@ function doLogin(){
   }
 
   setLoginPending(true);
-  fetch(SCRIPT_URL,{
+  fetchWithTimeout(SCRIPT_URL,{
     method:'POST',
     body:JSON.stringify({action:'adminLogin',password:pw})
   })
@@ -472,7 +479,7 @@ function doLogin(){
       adminToken='';
       sessionStorage.removeItem('koyujeAdminToken');
       allData=[];
-      showLoginError(err.message||'비밀번호가 올바르지 않거나 관리자 데이터를 불러올 수 없습니다.');
+      showLoginError(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호가 올바르지 않거나 관리자 데이터를 불러올 수 없습니다.'));
       input.value='';
       input.focus();
     })
@@ -687,6 +694,7 @@ function fetchAdminData(){
   return adminApi({action:'admin'})
     .then(r=>r.json())
     .then(data=>{
+      requireActiveAdminSession(data);
       if(data.result==='error')throw new Error(data.message||'admin auth failed');
       return data;
     });
@@ -696,8 +704,22 @@ function getAdminToken(){
   return adminToken || sessionStorage.getItem('koyujeAdminToken') || '';
 }
 
+function requireActiveAdminSession(data){
+  const message=String((data&&data.message)||'');
+  if(data&&data.result==='error'&&/(인증|세션)/.test(message)){
+    adminToken='';
+    sessionStorage.removeItem('koyujeAdminToken');
+    allData=[];
+    showLoginShell('관리자 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
+    const error=new Error(message||'인증 세션이 만료되었습니다.');
+    error.code='ADMIN_SESSION_EXPIRED';
+    throw error;
+  }
+  return data;
+}
+
 function adminApi(payload){
-  return fetch(SCRIPT_URL,{
+  return fetchWithTimeout(SCRIPT_URL,{
     method:'POST',
     body:JSON.stringify(Object.assign({},payload,{adminToken:getAdminToken()}))
   });
@@ -1231,6 +1253,7 @@ function updateStatus(select){
   adminApi({action:'updateStatus',rowId:rowId,status:newStatus})
   .then(r=>r.json())
   .then(data=>{
+    requireActiveAdminSession(data);
     if(data.result==='success'){
       // 로컬 데이터 업데이트
       const item=allData.find(d=>String(d.rowId)===String(rowId));
@@ -1243,8 +1266,9 @@ function updateStatus(select){
       alert('저장 실패: '+(data.message||'다시 시도해 주세요.'));
     }
   })
-  .catch(()=>{
+  .catch(err=>{
     restoreStatusSelect(select,previousStatus);
+    if(err.code==='ADMIN_SESSION_EXPIRED')return;
     alert('저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
   })
   .finally(()=>{
@@ -1266,6 +1290,7 @@ function deleteReservation(rowId){
   adminApi({action:'deleteReservation',rowId:rowId})
   .then(r=>r.json())
   .then(data=>{
+    requireActiveAdminSession(data);
     if(data.result==='success'){
       const target=allData.find(d=>String(d.rowId)===String(rowId));
       if(target)target.status='🗑️ 삭제';
@@ -1276,7 +1301,8 @@ function deleteReservation(rowId){
       alert('삭제 실패: '+(data.message||'다시 시도해 주세요.'));
     }
   })
-  .catch(()=>{
+  .catch(err=>{
+    if(err.code==='ADMIN_SESSION_EXPIRED')return;
     alert('삭제 중 오류가 발생했습니다. 다시 시도해 주세요.');
   });
 }
@@ -1717,6 +1743,7 @@ function submitReservationEdit(){
   adminApi({action:'updateReservation',rowId:editingRowId,updates:updates})
   .then(r=>r.json())
   .then(data=>{
+    requireActiveAdminSession(data);
     if(data.result!=='success')throw new Error(data.message||'저장 실패');
     const item=allData.find(d=>String(d.rowId)===String(editingRowId));
     if(item)Object.assign(item,updates);
@@ -1726,6 +1753,7 @@ function submitReservationEdit(){
     showToast('✓ 예약 정보가 수정되었습니다');
   })
   .catch(err=>{
+    if(err.code==='ADMIN_SESSION_EXPIRED')return;
     alert('수정 저장 실패: '+err.message);
   })
   .finally(()=>{
@@ -1761,6 +1789,7 @@ function submitPost(){
   })
   .then(r=>r.json())
   .then(data=>{
+    requireActiveAdminSession(data);
     btn.disabled=false;btn.textContent='게시글 등록하기';
     if(data.result==='success'){
       closeWriteModal();
@@ -1770,7 +1799,7 @@ function submitPost(){
       alert('등록 실패: '+(data.message||'다시 시도해 주세요.'));
     }
   })
-  .catch(()=>{btn.disabled=false;btn.textContent='게시글 등록하기';alert('오류가 발생했습니다. 다시 시도해 주세요.');});
+  .catch(err=>{btn.disabled=false;btn.textContent='게시글 등록하기';if(err.code!=='ADMIN_SESSION_EXPIRED')alert('오류가 발생했습니다. 다시 시도해 주세요.');});
 }
 
 document.getElementById('pwInput').addEventListener('keydown',function(e){
