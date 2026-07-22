@@ -35,8 +35,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
 /* NAV */
 .nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.nav-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:400;letter-spacing:0.12em;color:var(--ink);text-decoration:none;}
-.nav-logo em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.25em;margin-top:1px;}
+.nav-logo{display:flex;align-items:center;text-decoration:none;flex:0 0 auto;}
+.nav-logo img{display:block;width:132px;height:auto;}
 .nav-back{font-size:12px;color:var(--muted);letter-spacing:0.12em;text-decoration:none;transition:color .3s;}
 .nav-back:hover{color:var(--ink);}
 
@@ -303,6 +303,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
 @media(max-width:600px){
   .nav{padding:16px 20px;}
+  .nav-logo img{width:116px;}
   .hero{padding:52px 20px 44px;}
   .hero-actions{margin-top:24px;}
   .hero-actions a{flex:1 1 180px;max-width:260px;}
@@ -331,7 +332,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <body>
 
 <nav class="nav">
-  <a href="/" class="nav-logo">고유재 한옥스튜디오<em>Koyuje Hanok Studio</em></a>
+  <a href="/" class="nav-logo" aria-label="고유재 한옥스튜디오 홈"><img src="/assets/images/brand/koyuje-logo.png" alt="" width="1238" height="508" loading="eager" decoding="async"></a>
   <a href="/" class="nav-back">← 홈으로</a>
 </nav>
 
