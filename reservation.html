@@ -1109,6 +1109,14 @@ function clearReservationRequestId() {
 }
 
 function submitForm() {
+  if (!SCRIPT_URL) {
+    alert('예약 접수 시스템 연결 정보를 불러오지 못했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.');
+    return;
+  }
+  if (navigator.onLine === false) {
+    alert('인터넷 연결을 확인한 뒤 다시 제출해 주세요.');
+    return;
+  }
   // 주소 합치기
   updateAddress();
 
