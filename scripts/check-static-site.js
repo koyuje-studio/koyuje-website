@@ -952,6 +952,21 @@ if (fs.existsSync("vercel.json")) {
       hasError = true;
     }
   }
+
+  const globalHeaders = headers.find((entry) => entry.source === "/(.*)");
+  const securityHeaders = new Map((globalHeaders?.headers || []).map((header) => [header.key, header.value]));
+  const requiredSecurityHeaders = new Map([
+    ["X-Content-Type-Options", "nosniff"],
+    ["Referrer-Policy", "strict-origin-when-cross-origin"],
+    ["X-Frame-Options", "SAMEORIGIN"],
+    ["Content-Security-Policy", "frame-ancestors 'self'; base-uri 'self'; object-src 'none'"],
+  ]);
+  for (const [key, value] of requiredSecurityHeaders) {
+    if (securityHeaders.get(key) !== value) {
+      console.error(`Missing or invalid security header: ${key}`);
+      hasError = true;
+    }
+  }
 }
 
 if (hasError) process.exit(1);
