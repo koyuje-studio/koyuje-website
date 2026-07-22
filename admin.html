@@ -431,11 +431,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 <script src="/assets/js/runtime-config.js"></script>
 <script>
 const SCRIPT_URL=(window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+const ADMIN_VIEW_STATE_KEY='koyujeAdminViewState';
+const savedAdminViewState=(()=>{
+  try{return JSON.parse(sessionStorage.getItem(ADMIN_VIEW_STATE_KEY)||'{}');}
+  catch(err){return {};}
+})();
 
 let allData=[];
-let currentFilter='all';
-let currentMonthKey='';
-let currentSortMode='submitted';
+let currentFilter=['all','waiting','done','paymentMissing','shootToday','shootWeek','cancel'].includes(savedAdminViewState.filter)?savedAdminViewState.filter:'all';
+let currentMonthKey=/^\d{4}-\d{2}$/.test(savedAdminViewState.month||'')?savedAdminViewState.month:'';
+let currentSortMode=['submitted','shootDate'].includes(savedAdminViewState.sort)?savedAdminViewState.sort:'submitted';
 let adminToken='';
 let editingRowId='';
 
@@ -492,6 +497,7 @@ function applyAdminData(data){
   document.getElementById('loginWrap').style.display='none';
   document.getElementById('adminWrap').style.display='block';
   document.getElementById('loginErr').style.display='none';
+  syncAdminViewControls();
   updateStats();
   renderCards();
 }
@@ -722,6 +728,17 @@ function adminRequestError(err,fallback){
   return err&&err.name==='AbortError'?'요청 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':fallback;
 }
 
+function saveAdminViewState(){
+  try{
+    sessionStorage.setItem(ADMIN_VIEW_STATE_KEY,JSON.stringify({filter:currentFilter,month:currentMonthKey,sort:currentSortMode}));
+  }catch(err){}
+}
+
+function syncAdminViewControls(){
+  document.querySelectorAll('.filter-btn').forEach(button=>button.classList.toggle('active',button.dataset.filter===currentFilter));
+  document.querySelectorAll('.sort-btn').forEach(button=>button.classList.toggle('active',button.dataset.sort===currentSortMode));
+}
+
 function adminApi(payload){
   return fetchWithTimeout(SCRIPT_URL,{
     method:'POST',
@@ -798,6 +815,10 @@ function updateMonthlyStats(source){
   const nowInfo={year:now.getFullYear(),month:now.getMonth()+1};
   const currentCode='V'+String(nowInfo.year).slice(-1)+String(nowInfo.month).padStart(2,'0');
   const selected=entries.find(item=>item.key===currentMonthKey);
+  if(currentMonthKey&&!selected){
+    currentMonthKey='';
+    saveAdminViewState();
+  }
   const current=selected||entries.find(item=>item.year===nowInfo.year&&item.month===nowInfo.month);
   document.getElementById('monthlyCurrent').textContent=(current?current.code:currentCode)+' · '+(current?current.count:0)+'건';
   document.getElementById('monthlyRevenue').textContent=formatWon(current?current.revenue:0);
@@ -903,12 +924,14 @@ function getReservationEstimateDisplay(item){
 
 function setMonthFilter(monthKey){
   currentMonthKey=monthKey||'';
+  saveAdminViewState();
   updateMonthlyStats(getActiveReservations());
   renderCards();
 }
 
 function setFilter(f,el){
   currentFilter=f;
+  saveAdminViewState();
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   const target=el||document.querySelector(`.filter-btn[data-filter="${f}"]`);
   if(target)target.classList.add('active');
@@ -917,6 +940,7 @@ function setFilter(f,el){
 
 function setSortMode(mode,el){
   currentSortMode=mode||'submitted';
+  saveAdminViewState();
   document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
   if(el)el.classList.add('active');
   renderCards();
