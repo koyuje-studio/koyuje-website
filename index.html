@@ -184,23 +184,23 @@ body.gallery-opened{overflow:hidden}
 .pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
 .pkg-card{border:.5px solid var(--line);padding:36px 32px;position:relative;transition:all .3s;display:flex;flex-direction:column}
 .pkg-card:hover{border-color:var(--gold);background:rgba(160,120,64,.03)}
-.pkg-card.featured{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pkg-card.featured{background:var(--paper2);color:var(--ink);border-color:rgba(160,120,64,.42)}
 .pkg-badge{display:inline-block;align-self:flex-start;font-size:9px;letter-spacing:.2em;background:var(--gold);color:var(--ink);padding:3px 10px;margin-bottom:20px}
 .pkg-name{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:6px;letter-spacing:.03em}
 .pkg-name-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.15em;margin-bottom:20px}
-.pkg-card.featured .pkg-name-en{color:rgba(247,242,234,.4)}
+.pkg-card.featured .pkg-name-en{color:var(--muted)}
 .pkg-price{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--ink);margin-bottom:4px;line-height:1}
-.pkg-card.featured .pkg-price{color:var(--gold2)}
+.pkg-card.featured .pkg-price{color:var(--gold)}
 .pkg-price-note{font-size:11px;color:var(--muted);letter-spacing:.1em;margin-bottom:24px}
 .pkg-divider{height:.5px;background:var(--line);margin-bottom:20px}
-.pkg-card.featured .pkg-divider{background:rgba(247,242,234,.1)}
+.pkg-card.featured .pkg-divider{background:var(--line)}
 .pkg-features{list-style:none;margin-bottom:28px}
 .pkg-features li{font-size:13px;color:var(--muted);padding:6px 0;letter-spacing:.03em;display:flex;align-items:center;gap:8px}
 .pkg-features li::before{content:'·';color:var(--gold);font-size:18px;line-height:0}
-.pkg-card.featured .pkg-features li{color:rgba(247,242,234,.7)}
+.pkg-card.featured .pkg-features li{color:var(--muted)}
 .pkg-recommend{font-size:12px;color:var(--muted);line-height:1.75;letter-spacing:.04em;border-top:.5px solid var(--line);padding-top:16px;margin-bottom:22px}
 .pkg-recommend strong{display:block;font-size:10px;color:var(--gold);letter-spacing:.2em;margin-bottom:4px}
-.pkg-card.featured .pkg-recommend{border-color:rgba(247,242,234,.1);color:rgba(247,242,234,.64)}
+.pkg-card.featured .pkg-recommend{border-color:var(--line);color:var(--muted)}
 .pkg-desc{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:.03em}
 .pkg-details{border-top:.5px solid var(--line);padding-top:14px;margin:0 0 24px;color:var(--muted)}
 .pkg-details summary{cursor:pointer;font-size:11px;letter-spacing:.12em;color:var(--gold);list-style:none;border:.5px solid rgba(160,120,64,.28);padding:10px 12px;background:rgba(160,120,64,.035)}
@@ -209,7 +209,7 @@ body.gallery-opened{overflow:hidden}
 .pkg-details[open] summary::after{content:'▴'}
 .pkg-details-list{list-style:none;margin-top:12px}
 .pkg-details-list li{font-size:12px;line-height:1.8;padding:3px 0;letter-spacing:.03em}
-.pkg-card.featured .pkg-details{border-color:rgba(247,242,234,.1);color:rgba(247,242,234,.6)}
+.pkg-card.featured .pkg-details{border-color:var(--line);color:var(--muted)}
 .pkg-option-note{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:.04em;border:.5px solid var(--line);padding:14px 16px;margin-top:auto;background:rgba(160,120,64,.04)}
 .btn-pkg{display:inline-block;width:100%;text-align:center;border:.5px solid var(--gold);color:var(--gold);padding:12px;font-size:11px;letter-spacing:.2em;text-decoration:none;transition:all .3s;margin-top:auto}
 .btn-pkg:hover{background:var(--gold);color:var(--paper)}
@@ -235,21 +235,21 @@ body.gallery-opened{overflow:hidden}
 .booking-bridge-actions .bridge-secondary{border:.5px solid var(--gold);color:var(--gold)}
 .booking-bridge-actions .bridge-secondary:hover{background:var(--gold);color:var(--paper)}
 
-.process{padding:80px 60px;background:var(--ink);color:var(--paper);border-bottom:.5px solid rgba(247,242,234,.08)}
+.process{padding:80px 60px;background:var(--paper2);color:var(--ink);border-bottom:.5px solid var(--line)}
 .process-header{margin-bottom:56px}
-.process-header .sec-eyebrow{color:var(--gold2)}
-.process-header .sec-title{color:var(--paper)}
+.process-header .sec-eyebrow{color:var(--gold)}
+.process-header .sec-title{color:var(--ink)}
 .process-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
-.process-step{padding:28px 24px;border:.5px solid rgba(247,242,234,.07);position:relative}
+.process-step{padding:28px 24px;border:.5px solid var(--line);position:relative}
 .step-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:36px;font-weight:300;color:var(--gold);opacity:.3;line-height:1;margin-bottom:16px}
 .step-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;margin-bottom:10px;letter-spacing:.05em}
-.step-desc{font-size:12px;color:rgba(247,242,234,.4);line-height:1.8;letter-spacing:.03em}
-.step-arrow{position:absolute;top:28px;right:-1px;width:20px;height:20px;border-top:.5px solid rgba(247,242,234,.15);border-right:.5px solid rgba(247,242,234,.15);transform:rotate(45deg);background:var(--ink);z-index:1}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:.03em}
+.step-arrow{position:absolute;top:28px;right:-1px;width:20px;height:20px;border-top:.5px solid var(--line);border-right:.5px solid var(--line);transform:rotate(45deg);background:var(--paper2);z-index:1}
 .process-step:last-child .step-arrow{display:none}
 .process-actions{margin-top:28px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .process-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:11px 20px;font-size:12px;letter-spacing:.12em;text-decoration:none;transition:all .3s}
 .process-kakao{background:var(--gold);color:var(--ink)}
-.process-form{border:.5px solid rgba(247,242,234,.22);color:var(--paper)}
+.process-form{border:.5px solid rgba(160,120,64,.55);color:var(--gold)}
 .process-kakao:hover{background:var(--gold2)}
 .process-form:hover{border-color:var(--gold);color:var(--gold)}
 
