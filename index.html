@@ -156,6 +156,7 @@ img,video{max-width:100%}
 .gallery-item:hover img{transform:scale(1.06)}
 .gallery-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,24,20,.5) 0%,transparent 50%);opacity:0;transition:opacity .3s}
 .gallery-item:hover .gallery-overlay{opacity:1}
+.gallery-caption{display:none;position:absolute;z-index:2;left:18px;right:18px;bottom:17px;color:#f7f2ea;font-family:'Noto Serif KR',serif;font-size:12px;font-weight:300;line-height:1.6;letter-spacing:.04em;text-align:left;text-shadow:0 1px 8px rgba(20,17,14,.5)}
 .gallery-footer{display:flex;justify-content:center;padding:34px 24px 0}
 .gallery-open{min-width:220px;padding:14px 24px;border:.5px solid var(--gold);background:transparent;color:var(--ink);font-family:inherit;font-size:11px;letter-spacing:.14em;cursor:pointer;transition:background .3s,color .3s}
 .gallery-open:hover{background:var(--ink);color:var(--paper)}
@@ -371,6 +372,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .gallery-item img{transform:none!important}
 }
 @media(max-width:900px){
   .nav{padding:16px 24px;background:rgba(247,242,234,.96);backdrop-filter:blur(12px);border-bottom-color:var(--line)}.nav.scrolled{padding:12px 24px;background:rgba(247,242,234,.97);border-bottom-color:var(--line)}
@@ -409,7 +411,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .hero-lead{font-size:13px;line-height:1.75;margin-bottom:18px;max-width:310px;opacity:1;animation:none}
   .hero-actions{flex-direction:column;align-items:flex-start;opacity:1;animation:none}.btn-primary{width:100%;max-width:280px;text-align:center}.btn-ghost-light{display:none}
   .hero-proof{margin-top:16px;gap:6px;opacity:1;animation:none}.hero-proof-item{font-size:9px;padding:7px 8px}.hero-scroll{display:none}
-  .gallery{padding:64px 0}.gallery-grid{gap:3px;padding:0 16px}.gallery-item:nth-child(1){aspect-ratio:4/3}.gallery-item:nth-child(3),.gallery-item:nth-child(6){aspect-ratio:16/11}.gallery-footer{padding-top:26px}.gallery-open{width:100%;min-height:46px}.gallery-lightbox-head{padding:10px 12px}.gallery-lightbox-stage{padding:12px}.gallery-lightbox-image{max-height:calc(100dvh - 170px)}.gallery-lightbox-nav{top:auto;bottom:10px;width:46px;height:46px;background:rgba(20,17,14,.55);transform:none}.gallery-lightbox-prev{left:14px}.gallery-lightbox-next{right:14px}.gallery-lightbox-foot{padding:14px 18px calc(18px + env(safe-area-inset-bottom));font-size:10px}.insta-grid{grid-template-columns:repeat(2,1fr);padding:0 16px}
+  .gallery{padding:64px 0}.gallery-grid{display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding:0 16px}.gallery-item:nth-child(n){width:100%;grid-column:auto;aspect-ratio:4/3;--gallery-drift:0px}.gallery-item:nth-child(2){width:78%;margin-left:auto;aspect-ratio:3/4}.gallery-item:nth-child(3){width:92%;aspect-ratio:16/11}.gallery-item:nth-child(4){width:84%;margin-left:auto;aspect-ratio:4/3}.gallery-item:nth-child(5){width:76%;aspect-ratio:3/4}.gallery-item:nth-child(6){width:100%;aspect-ratio:16/11}.gallery-item:nth-child(7){width:88%;margin-left:auto;aspect-ratio:4/3}.gallery-item.reveal{transform:translate3d(-14px,48px,0);transition:opacity 1s ease,transform 1.05s cubic-bezier(.22,.61,.36,1)}.gallery-item:nth-child(even).reveal{transform:translate3d(14px,48px,0)}.gallery-item.reveal.visible{transform:translate3d(0,0,0)}.gallery-item img{transform:translate3d(0,var(--gallery-drift),0) scale(1.08);transition:transform 1.5s cubic-bezier(.22,.61,.36,1)}.gallery-item.visible img{transform:translate3d(0,var(--gallery-drift),0) scale(1.045)}.gallery-item .gallery-overlay{opacity:1;background:linear-gradient(to top,rgba(24,20,16,.58) 0%,rgba(24,20,16,.08) 42%,transparent 68%)}.gallery-caption{display:block;opacity:0;transform:translateY(10px);transition:opacity .8s ease .28s,transform .8s ease .28s}.gallery-item.visible .gallery-caption{opacity:1;transform:translateY(0)}.gallery-footer{padding-top:30px}.gallery-open{width:100%;min-height:46px}.gallery-lightbox-head{padding:10px 12px}.gallery-lightbox-stage{padding:12px}.gallery-lightbox-image{max-height:calc(100dvh - 170px)}.gallery-lightbox-nav{top:auto;bottom:10px;width:46px;height:46px;background:rgba(20,17,14,.55);transform:none}.gallery-lightbox-prev{left:14px}.gallery-lightbox-next{right:14px}.gallery-lightbox-foot{padding:14px 18px calc(18px + env(safe-area-inset-bottom));font-size:10px}.insta-grid{grid-template-columns:repeat(2,1fr);padding:0 16px}
   .packages{padding:56px 18px}.packages-header{margin-bottom:34px}.pkg-card{padding:28px 22px}.pkg-name{font-size:21px}.pkg-price{font-size:34px}.pkg-price-note{margin-bottom:18px}.pkg-divider{margin-bottom:16px}.pkg-features li{font-size:13px;padding:5px 0}.pkg-recommend{font-size:12px;padding-top:14px}.pkg-details summary{font-size:10px}.btn-pkg{padding:13px 10px;font-size:10px;letter-spacing:.08em}
   .booking-bridge{margin-top:24px;padding:22px 0}.booking-bridge-title{font-size:21px}.booking-bridge-list{grid-template-columns:1fr}.booking-bridge-item{min-height:auto;padding:16px 14px}.booking-bridge-actions{gap:8px}.booking-bridge-actions a{width:100%;min-height:44px}
   .process-steps{grid-template-columns:1fr}.process-step .step-arrow{display:none}.process-actions{display:grid;grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}
@@ -529,13 +531,13 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
     <button type="button" class="btn-more reveal" data-open-gallery>전체 작품 보기 →</button>
   </div>
   <div class="gallery-grid">
-    <button type="button" class="gallery-item reveal" data-gallery-index="0"><img src="/assets/images/gallery/webp/270708.webp" alt="전통 돌상 앞에서 함께한 가족사진" width="1350" height="1165" loading="lazy" decoding="async"><span class="gallery-overlay"></span></button>
-    <button type="button" class="gallery-item reveal reveal-delay-1" data-gallery-index="1"><img src="/assets/images/gallery/webp/260523.webp" alt="벚꽃빛 아래에서 촬영한 아기 돌사진" width="1022" height="1538" loading="lazy" decoding="async"><span class="gallery-overlay"></span></button>
-    <button type="button" class="gallery-item reveal reveal-delay-2" data-gallery-index="2"><img src="/assets/images/gallery/webp/260523_2.webp" alt="한옥 마당에서 촬영한 가족사진" width="1506" height="1001" loading="lazy" decoding="async"><span class="gallery-overlay"></span></button>
-    <button type="button" class="gallery-item reveal reveal-delay-3" data-gallery-index="3"><img src="/assets/images/gallery/webp/260708_1.webp" alt="고목과 한옥 담장 아래 가족사진" width="1448" height="1086" loading="lazy" decoding="async"><span class="gallery-overlay"></span></button>
-    <button type="button" class="gallery-item reveal" data-gallery-index="4"><img src="/assets/images/gallery/webp/260710.webp" alt="붉은 회랑에서 촬영한 아기 한복사진" width="1024" height="1536" loading="lazy" decoding="async"><span class="gallery-overlay"></span></button>
-    <button type="button" class="gallery-item reveal reveal-delay-1" data-gallery-index="5"><img src="/assets/images/gallery/webp/260717.webp" alt="화사한 벚꽃 돌상 앞 아기사진" width="1469" height="977" loading="lazy" decoding="async"><span class="gallery-overlay"></span></button>
-    <button type="button" class="gallery-item reveal reveal-delay-2" data-gallery-index="6"><img src="/assets/images/gallery/webp/270713.webp" alt="가야금과 함께한 모자 한복사진" width="1448" height="1086" loading="lazy" decoding="async"><span class="gallery-overlay"></span></button>
+    <button type="button" class="gallery-item reveal" data-gallery-index="0"><img src="/assets/images/gallery/webp/270708.webp" alt="전통 돌상 앞에서 함께한 가족사진" width="1350" height="1165" loading="lazy" decoding="async"><span class="gallery-overlay"></span><span class="gallery-caption">가족의 온기가 머무는 전통 돌상</span></button>
+    <button type="button" class="gallery-item reveal reveal-delay-1" data-gallery-index="1"><img src="/assets/images/gallery/webp/260523.webp" alt="벚꽃빛 아래에서 촬영한 아기 돌사진" width="1022" height="1538" loading="lazy" decoding="async"><span class="gallery-overlay"></span><span class="gallery-caption">봄빛을 닮은 아기의 첫 생일</span></button>
+    <button type="button" class="gallery-item reveal reveal-delay-2" data-gallery-index="2"><img src="/assets/images/gallery/webp/260523_2.webp" alt="한옥 마당에서 촬영한 가족사진" width="1506" height="1001" loading="lazy" decoding="async"><span class="gallery-overlay"></span><span class="gallery-caption">한옥의 선과 가족의 다정한 순간</span></button>
+    <button type="button" class="gallery-item reveal reveal-delay-3" data-gallery-index="3"><img src="/assets/images/gallery/webp/260708_1.webp" alt="고목과 한옥 담장 아래 가족사진" width="1448" height="1086" loading="lazy" decoding="async"><span class="gallery-overlay"></span><span class="gallery-caption">계절의 초록 속에 담은 가족</span></button>
+    <button type="button" class="gallery-item reveal" data-gallery-index="4"><img src="/assets/images/gallery/webp/260710.webp" alt="붉은 회랑에서 촬영한 아기 한복사진" width="1024" height="1536" loading="lazy" decoding="async"><span class="gallery-overlay"></span><span class="gallery-caption">고운 한복과 붉은 회랑의 빛</span></button>
+    <button type="button" class="gallery-item reveal reveal-delay-1" data-gallery-index="5"><img src="/assets/images/gallery/webp/260717.webp" alt="화사한 벚꽃 돌상 앞 아기사진" width="1469" height="977" loading="lazy" decoding="async"><span class="gallery-overlay"></span><span class="gallery-caption">화사한 꽃빛 사이로 번지는 웃음</span></button>
+    <button type="button" class="gallery-item reveal reveal-delay-2" data-gallery-index="6"><img src="/assets/images/gallery/webp/270713.webp" alt="가야금과 함께한 모자 한복사진" width="1448" height="1086" loading="lazy" decoding="async"><span class="gallery-overlay"></span><span class="gallery-caption">한복의 결을 따라 흐르는 고요한 시간</span></button>
   </div>
   <div class="gallery-footer reveal"><button type="button" class="gallery-open" data-open-gallery>전체 작품 24장 감상하기</button></div>
 </section>
@@ -931,6 +933,39 @@ function observeReveals(root = document) {
   reveals.forEach(el => io.observe(el));
 }
 
+function initMobileGalleryMotion() {
+  const items = Array.from(document.querySelectorAll('.gallery-grid .gallery-item'));
+  if (!items.length) return;
+  const mobile = window.matchMedia('(max-width:600px)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)');
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    if (!mobile.matches || reducedMotion.matches) {
+      items.forEach(item => item.style.removeProperty('--gallery-drift'));
+      return;
+    }
+    const viewportCenter = window.innerHeight / 2;
+    items.forEach(item => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.top + rect.height / 2;
+      const progress = Math.max(-1, Math.min(1, (itemCenter - viewportCenter) / (window.innerHeight * .72)));
+      item.style.setProperty('--gallery-drift', (progress * -9).toFixed(1) + 'px');
+    });
+  }
+
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive:true });
+  window.addEventListener('resize', requestUpdate, { passive:true });
+  requestUpdate();
+}
+
 function escapeHTML(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;',
@@ -1076,6 +1111,7 @@ if (video) {
 
 observeReveals();
 initPortfolioGallery();
+initMobileGalleryMotion();
 lazyLoadMap();
 runIdle(loadHomeNotice, 700);
 runIdle(loadInstagramGallery, 1100);
