@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/images/hero/_0049_poster.webp" type="image/webp" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -114,7 +114,7 @@ img,video{max-width:100%}
 
 .marquee-wrap{padding:16px 0;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);overflow:hidden;background:var(--paper2)}
 .marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 25s linear infinite}
-.marquee-item{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--muted);letter-spacing:.1em;white-space:nowrap;display:flex;align-items:center;gap:48px}
+.marquee-item{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:14px;color:var(--muted);letter-spacing:.1em;white-space:nowrap;display:flex;align-items:center;gap:48px}
 .marquee-item::after{content:'◆';font-size:7px;color:var(--gold);font-style:normal}
 
 .quick-info{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:.5px solid var(--line);background:rgba(247,242,234,.96)}
@@ -129,7 +129,7 @@ img,video{max-width:100%}
 .about-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
 .about-img:hover img{transform:scale(1.04)}
 .about-content{padding:80px 72px;display:flex;flex-direction:column;justify-content:center;border-left:.5px solid var(--line)}
-.sec-eyebrow{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:.28em;margin-bottom:24px;display:flex;align-items:center;gap:14px}
+.sec-eyebrow{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:12px;color:var(--gold);letter-spacing:.28em;margin-bottom:24px;display:flex;align-items:center;gap:14px}
 .sec-eyebrow::before{content:'';width:32px;height:.5px;background:var(--gold)}
 .sec-title{font-family:'Noto Serif KR',serif;font-size:clamp(28px,3vw,40px);font-weight:300;line-height:1.4;margin-bottom:28px;letter-spacing:-.01em}
 .sec-body{font-size:14px;line-height:2.1;color:var(--muted);letter-spacing:.04em;margin-bottom:40px}
@@ -166,7 +166,7 @@ img,video{max-width:100%}
 .gallery-lightbox[open]{display:grid;grid-template-rows:auto 1fr auto}
 .gallery-lightbox::backdrop{background:rgba(20,17,14,.9)}
 .gallery-lightbox-head{display:flex;align-items:center;justify-content:space-between;padding:18px 26px;border-bottom:.5px solid rgba(247,242,234,.14)}
-.gallery-lightbox-brand{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:.2em;color:var(--gold2)}
+.gallery-lightbox-brand{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:300;letter-spacing:.2em;color:var(--gold2)}
 .gallery-lightbox-close,.gallery-lightbox-nav{display:grid;place-items:center;border:0;background:transparent;color:var(--paper);cursor:pointer}
 .gallery-lightbox-close{width:44px;height:44px;font-size:30px;font-weight:200}
 .gallery-lightbox-stage{position:relative;display:grid;place-items:center;min-height:0;padding:22px 84px}
@@ -188,7 +188,7 @@ body.gallery-opened{overflow:hidden}
 .pkg-card.featured{background:var(--paper2);color:var(--ink);border-color:rgba(160,120,64,.42)}
 .pkg-badge{display:inline-block;align-self:flex-start;font-size:9px;letter-spacing:.2em;background:var(--gold);color:var(--ink);padding:3px 10px;margin-bottom:20px}
 .pkg-name{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:6px;letter-spacing:.03em}
-.pkg-name-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.15em;margin-bottom:20px}
+.pkg-name-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:12px;color:var(--muted);letter-spacing:.15em;margin-bottom:20px}
 .pkg-card.featured .pkg-name-en{color:var(--muted)}
 .pkg-price{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--ink);margin-bottom:4px;line-height:1}
 .pkg-card.featured .pkg-price{color:var(--gold)}
@@ -226,7 +226,7 @@ body.gallery-opened{overflow:hidden}
 .booking-bridge-copy{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:.04em;max-width:340px}
 .booking-bridge-list{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
 .booking-bridge-item{background:var(--paper);padding:18px 16px;min-height:126px}
-.booking-bridge-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--gold);margin-bottom:12px}
+.booking-bridge-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18px;color:var(--gold);margin-bottom:12px}
 .booking-bridge-label{font-size:13px;letter-spacing:.04em;margin-bottom:6px}
 .booking-bridge-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:.03em}
 .booking-bridge-actions{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
@@ -270,7 +270,7 @@ body.gallery-opened{overflow:hidden}
 .notice-item.reservation-item{grid-template-columns:76px 150px minmax(0,1fr);gap:18px}
 .notice-item:first-child{border-top:.5px solid var(--line)}
 .notice-item:hover{padding-left:8px}
-.notice-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.1em}
+.notice-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:12px;color:var(--muted);letter-spacing:.1em}
 .notice-schedule{font-size:12px;color:var(--gold);letter-spacing:.08em;white-space:nowrap}
 .notice-title{font-size:14px;letter-spacing:.03em}
 .notice-title-main{display:inline}
@@ -301,7 +301,7 @@ body.gallery-opened{overflow:hidden}
 .location{display:grid;grid-template-columns:1fr 1fr;border-bottom:.5px solid var(--line);position:relative;z-index:1}
 .location-map{background:#e8e0d4;min-height:400px;position:relative;overflow:hidden;z-index:1}
 .map-fallback{height:100%;min-height:400px;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;background:#e8e0d4;color:var(--muted)}
-.map-title{font-family:'Noto Serif KR',serif;font-size:18px;color:var(--ink);margin-bottom:10px}
+.map-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;color:var(--ink);margin-bottom:10px}
 .map-copy{font-size:13px;line-height:1.8;margin-bottom:18px}
 .map-link{display:inline-block;padding:12px 22px;font-size:12px;letter-spacing:.08em;text-decoration:none;margin:4px}
 .map-link.kakao{background:#FAE300;color:#3A1D1D}

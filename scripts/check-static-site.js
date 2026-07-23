@@ -173,6 +173,7 @@ const requiredClassHrefRules = {
 const requiredPageSnippets = {
   "index.html": [
     ":where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold)",
+    "family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap",
     'class="float-reserve" aria-label="예약확정서">예약확정서</a>',
     'class="notice-form">예약확정서</a>',
     'class="mobile-booking-links"',
