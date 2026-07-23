@@ -21,10 +21,14 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet"></noscript>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-:root{color-scheme:light;--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;--line:rgba(28,24,20,0.1);--green:#3a6b3a;--red:#8b2e2e;}
+:root{color-scheme:light;--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#8b642f;--gold2:#c49a58;--muted:#73675b;--line:rgba(28,24,20,0.1);--green:#3a6b3a;--red:#8b2e2e;}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;min-height:100vh;}
 :where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 .nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
@@ -36,7 +40,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .hero-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold2);letter-spacing:0.3em;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:12px;}
 .hero-label::before,.hero-label::after{content:'';width:24px;height:0.5px;background:var(--gold);}
 .hero-title{font-family:'Noto Serif KR',serif;font-size:36px;font-weight:300;color:var(--paper);line-height:1.3;margin-bottom:12px;}
-.hero-desc{font-size:13px;color:rgba(247,242,234,0.45);letter-spacing:0.05em;line-height:1.9;}
+.hero-desc{font-size:13px;color:rgba(247,242,234,0.68);letter-spacing:0.05em;line-height:1.9;}
 .search-wrap{max-width:480px;margin:0 auto;padding:56px 40px;}
 .search-card{background:var(--paper);border:0.5px solid var(--line);padding:40px;text-align:center;}
 .inquiry-strip{border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.045);padding:18px 18px 16px;margin-bottom:30px;text-align:left;}
@@ -49,7 +53,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .inquiry-actions .inquiry-kakao:hover{background:#f0d800;}
 .inquiry-actions .inquiry-form{border:0.5px solid rgba(160,120,64,0.35);color:var(--gold);}
 .inquiry-actions .inquiry-form:hover{background:var(--gold);color:var(--paper);}
-.search-icon{font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--gold);opacity:0.4;margin-bottom:20px;line-height:1;}
+.search-icon{font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--gold);margin-bottom:20px;line-height:1;}
 .search-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:8px;}
 .search-desc{font-size:13px;color:var(--muted);margin-bottom:32px;line-height:1.8;}
 .phone-input-wrap{margin-bottom:28px;}
@@ -97,7 +101,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .result-baby{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;letter-spacing:0.05em;}
 .result-baby em{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--muted);letter-spacing:0.15em;margin-left:8px;}
 .status-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:0.1em;padding:6px 14px;border:0.5px solid;}
-.status-badge.waiting{color:#8b6914;border-color:rgba(139,105,20,0.3);background:rgba(139,105,20,0.06);}
+.status-badge.waiting{color:#74570f;border-color:rgba(116,87,15,0.35);background:rgba(116,87,15,0.06);}
 .status-badge.done{color:var(--green);border-color:rgba(58,107,58,0.3);background:rgba(58,107,58,0.06);}
 .status-badge.cancel{color:var(--red);border-color:rgba(139,46,46,0.3);background:rgba(139,46,46,0.06);}
 .result-card-body{padding:24px;}
@@ -153,7 +157,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .no-result{padding:40px 0;}
 }
 </style>
-<script src="/assets/js/runtime-config.js"></script>
+<script src="/assets/js/runtime-config.js" defer></script>
 <script src="/assets/js/tracking.js" defer></script>
 </head>
 <body>
@@ -163,6 +167,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <a href="/" class="nav-back">← 홈으로</a>
 </nav>
 
+<main id="mainContent">
 <div class="hero">
   <div class="hero-label">예약 현황 확인</div>
   <h1 class="hero-title">예약이 잘 접수되었는지<br>확인해보세요</h1>
@@ -250,8 +255,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   </div>
 </div>
 
+</main>
 <script>
-const SCRIPT_URL=(window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+function getScriptUrl(){
+  return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+}
 const ids=['d1','d2','d3','d4','d5','d6','d7','d8'];
 ids.forEach((id,i)=>{
   const el=document.getElementById(id);
@@ -276,6 +284,20 @@ ids.forEach((id,i)=>{
     } else {
       this.classList.remove('filled');
     }
+  });
+  el.addEventListener('paste',function(e){
+    const pasted=(e.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,'');
+    if(pasted.length<2)return;
+    e.preventDefault();
+    const normalized=pasted.length>=10&&pasted.startsWith('010')?pasted.slice(3):pasted;
+    const digits=normalized.slice(0,8);
+    const start=digits.length===8?0:i;
+    digits.slice(0,8-start).split('').forEach((digit,offset)=>{
+      const input=document.getElementById(ids[start+offset]);
+      input.value=digit;
+      input.classList.add('filled');
+    });
+    document.getElementById(ids[Math.min(start+digits.length,7)]).focus();
   });
   el.addEventListener('focus',function(){this.select();});
 });
@@ -309,12 +331,17 @@ function doSearch(){
     for(let id of ids){if(!document.getElementById(id).value){document.getElementById(id).focus();break;}}
     return;
   }
+  const scriptUrl=getScriptUrl();
+  if(!scriptUrl){
+    alert('예약 조회 시스템 연결 정보를 불러오지 못했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.');
+    return;
+  }
   if (window.KoyujeTracking) {
     window.KoyujeTracking.trackSearch('reservation_status');
   }
   document.getElementById('searchBtn').disabled=true;
   document.getElementById('loading').classList.add('show');
-  fetchWithTimeout(SCRIPT_URL,{
+  fetchWithTimeout(scriptUrl,{
     method:'POST',
     body:JSON.stringify({action:'reservationLookup',phone8:p})
   })
