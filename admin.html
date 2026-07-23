@@ -31,6 +31,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .admin-brand{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:400;letter-spacing:0.12em;color:var(--paper);}
 .admin-brand em{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.2em;margin-left:8px;}
 .admin-nav-right{display:flex;align-items:center;gap:20px;}
+.admin-actions{display:flex;align-items:center;gap:20px;}
 .admin-today{font-size:12px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;}
 .btn-logout{font-size:11px;letter-spacing:0.15em;color:rgba(247,242,234,0.4);background:none;border:0.5px solid rgba(247,242,234,0.15);padding:6px 14px;cursor:pointer;transition:all .3s;}
 .btn-logout:hover{color:var(--paper);border-color:rgba(247,242,234,0.4);}
@@ -230,16 +231,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   .admin-nav{align-items:flex-start;gap:14px;flex-direction:column;padding:16px;}
   .admin-brand{display:block;font-size:13px;}
   .admin-brand em{display:block;margin-left:0;margin-top:2px;}
-  .admin-nav-right{width:100%;gap:8px;flex-wrap:wrap;}
-  .admin-today{width:100%;font-size:11px;}
+  .admin-nav{position:relative;}
+  .admin-nav-right{display:block;width:100%;}
+  .admin-today{display:block;width:100%;font-size:11px;margin-bottom:9px;}
+  .admin-actions{width:100%;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:5px;scrollbar-width:thin;scrollbar-color:rgba(160,120,64,0.5) transparent;}
+  .admin-actions>*{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:44px;white-space:nowrap;}
   .copy-preview{left:16px;right:16px;bottom:76px;width:auto;}
-  .btn-write,.btn-refresh,.btn-qr,.btn-logout{padding:8px 11px;font-size:10px;letter-spacing:0.1em;}
+  .btn-write,.btn-refresh,.btn-qr,.btn-logout{padding:9px 13px;font-size:10px;letter-spacing:0.1em;}
   .stats-row{grid-template-columns:repeat(2,1fr);}
   .stat-card{padding:16px;}
   .stat-num{font-size:30px;}
   .monthly-head{align-items:flex-start;flex-direction:column;}
   .filter-row{gap:6px;}
-  .filter-btn{flex:1 1 calc(50% - 6px);padding:9px 10px;}
+  .filter-btn,.sort-btn{flex:1 1 calc(50% - 6px);min-height:44px;padding:9px 10px;}
+  .monthly-chip{min-height:44px;padding:9px 12px;}
   .search-input{margin-left:0;width:100%;padding:10px 14px;}
   .res-card-head{grid-template-columns:1fr;align-items:start;gap:10px;}
   .res-date{display:block;order:1;font-size:11px;color:rgba(247,242,234,0.38);}
@@ -261,6 +266,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   .edit-submit-bar{bottom:-24px;margin:22px -20px -24px;padding:14px 20px 18px;}
   .edit-submit-actions{grid-template-columns:1fr;}
   .write-grid{grid-template-columns:1fr;}
+  .edit-option{min-height:44px;}
+  .write-close{width:44px;height:44px;top:8px;right:8px;}
   .save-toast{left:16px;right:16px;bottom:18px;text-align:center;}
 }
 @media(max-width:480px){
@@ -293,11 +300,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
     </div>
     <div class="admin-nav-right">
       <span class="admin-today" id="todayLabel"></span>
-      <button class="btn-write" onclick="openWriteModal()">✎ 게시글 작성</button>
-      <a href="/admin/analytics" class="btn-refresh" style="text-decoration:none;">통계 분석</a>
-      <button class="btn-qr" onclick="shareQrLink()">공주페이 QR 복사/열기</button>
-      <button class="btn-refresh" onclick="loadData()">↻ 새로고침</button>
-      <button class="btn-logout" onclick="doLogout()">로그아웃</button>
+      <div class="admin-actions" aria-label="관리자 주요 메뉴">
+        <button class="btn-write" onclick="openWriteModal()">✎ 게시글 작성</button>
+        <a href="/admin/analytics" class="btn-refresh" style="text-decoration:none;">통계 분석</a>
+        <button class="btn-qr" onclick="shareQrLink()">공주페이 QR 복사/열기</button>
+        <button class="btn-refresh" onclick="loadData()">↻ 새로고침</button>
+        <button class="btn-logout" onclick="doLogout()">로그아웃</button>
+      </div>
     </div>
   </nav>
 
