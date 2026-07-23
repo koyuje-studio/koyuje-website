@@ -456,10 +456,9 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
 </nav>
 
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline id="heroVideo" poster="/assets/images/hero/_0049_poster.webp" preload="metadata" width="2000" height="2000">
-    <source src="/assets/video/hero/_0049_mobile.mp4" type="video/mp4" media="(max-width: 900px)">
-    <source src="/assets/video/hero/_0049_desktop.webm" type="video/webm" media="(min-width: 901px)">
-    <source src="/assets/video/hero/_0049_animation.mp4" type="video/mp4">
+  <video class="hero-video" muted loop playsinline aria-hidden="true" id="heroVideo" poster="/assets/images/hero/_0049_poster.webp" preload="none" width="2000" height="2000">
+    <source data-src="/assets/video/hero/_0049_mobile.mp4" type="video/mp4" media="(max-width: 900px)">
+    <source data-src="/assets/video/hero/_0049_desktop.webm" type="video/webm" media="(min-width: 901px)">
   </video>
   <img src="/assets/images/hero/_0049_poster.webp" alt="고유재 한옥스튜디오 돌촬영 공간" class="hero-img" id="heroImg" width="1200" height="1200" fetchpriority="high" decoding="async">
   <div class="hero-overlay"></div>
@@ -1103,9 +1102,21 @@ function showHeroImage() {
 if (video) {
   video.addEventListener('error', showHeroImage);
   video.addEventListener('stalled', showHeroImage, { once:true });
-  setTimeout(() => {
-    if (video.readyState < 2) showHeroImage();
-  }, 3500);
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const saveData = Boolean(navigator.connection && navigator.connection.saveData);
+  if (reducedMotion || saveData) {
+    showHeroImage();
+  } else {
+    video.querySelectorAll('source[data-src]').forEach(source => {
+      source.src = source.dataset.src;
+    });
+    video.load();
+    const playback = video.play();
+    if (playback && typeof playback.catch === 'function') playback.catch(showHeroImage);
+    setTimeout(() => {
+      if (video.readyState < 2) showHeroImage();
+    }, 3500);
+  }
 }
 
 observeReveals();
