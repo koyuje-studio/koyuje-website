@@ -380,6 +380,9 @@ const requiredPageSnippets = {
     "function fetchWithTimeout(url,options,timeoutMs=20000)",
     "관리자 인증 응답이 지연되고 있습니다",
     "통계 응답이 지연되고 있습니다",
+    ".periods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))",
+    ".grid,.insight-grid{grid-template-columns:repeat(2,minmax(0,1fr))",
+    ".nav-right>*{flex:0 0 auto",
   ],
   "웹사이트가이드.txt": [
     "최종 운영 전 체크리스트",
