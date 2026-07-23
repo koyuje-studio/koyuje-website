@@ -25,7 +25,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/images/hero/_0049_poster.webp" type="image/webp" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -434,7 +436,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
   .hero-proof{display:none}
 }
 </style>
-<script src="/assets/js/runtime-config.js"></script>
+<script src="/assets/js/runtime-config.js" defer></script>
 <script src="/assets/js/tracking.js" defer></script>
 </head>
 <body>
@@ -753,7 +755,9 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
 </div>
 
 <script>
-const BOARD_URL = (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+function getBoardUrl() {
+  return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+}
 const KAKAO_APP_KEY = '3a3bea54fcc2f18a85036be7b91e3b4e';
 const KAKAO_MAP_URL = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_APP_KEY}&autoload=false&libraries=services`;
 const STUDIO_ADDRESS = '충청남도 공주시 봉황로 88';
@@ -989,14 +993,18 @@ function renderGallery(images) {
 }
 
 function loadInstagramGallery() {
-  fetch(BOARD_URL + '?action=gallery')
+  const boardUrl = getBoardUrl();
+  if (!boardUrl) return;
+  fetch(boardUrl + '?action=gallery')
     .then(r => r.json())
     .then(data => renderGallery(data.result === 'success' && data.data && data.data.length > 0 ? data.data : galleryFallback))
     .catch(() => renderGallery(galleryFallback));
 }
 
 function loadHomeNotice() {
-  fetch(BOARD_URL + '?action=board&page=1')
+  const boardUrl = getBoardUrl();
+  if (!boardUrl) return;
+  fetch(boardUrl + '?action=board&page=1')
     .then(r => r.json())
     .then(data => {
       const list = document.getElementById('homeNoticeList');
