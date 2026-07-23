@@ -537,6 +537,8 @@ let editingRowId='';
 let adminEmailChallengeId='';
 let adminEmailResendTimer=0;
 let adminPasswordResetMode=false;
+let adminLoginLockTimer=0;
+let adminLoginLockRemaining=0;
 
 function fetchWithTimeout(url,options,timeoutMs=20000){
   const controller=new AbortController();
@@ -615,7 +617,11 @@ function doLogin(){
         codeInput.focus();
         return null;
       }
-      if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
+      if(data.result!=='success'||!data.token)throw Object.assign(new Error(data.message||'인증 실패'),{
+        rateLimited:data.rateLimited,
+        retryAfter:data.retryAfter,
+        codeExpired:data.codeExpired
+      });
       saveAdminSession(data.token,data.expiresIn);
       sessionStorage.removeItem('koyujeAdminPw');
       resetAdminEmailLogin();
@@ -626,6 +632,7 @@ function doLogin(){
     })
     .catch(err=>{
       showLoginError(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호가 올바르지 않거나 관리자 데이터를 불러올 수 없습니다.'));
+      if(err.rateLimited)startAdminLoginLockTimer(err.retryAfter||900);
       if(adminEmailChallengeId&&!err.codeExpired){
         codeInput.value='';
         codeInput.focus();
@@ -633,7 +640,7 @@ function doLogin(){
         clearAdminSession();
         allData=[];
         resetAdminEmailLogin();
-        input.focus();
+        if(!err.rateLimited)input.focus();
       }
     })
     .finally(()=>setLoginPending(false));
@@ -791,8 +798,32 @@ function bootAdminSession(){
 
 function setLoginPending(isPending){
   const btn=document.querySelector('.btn-login');
+  if(!isPending&&adminLoginLockRemaining>0)return;
   btn.disabled=isPending;
   btn.textContent=isPending?'확인 중...':(adminPasswordResetMode?'새 비밀번호 설정':(adminEmailChallengeId?'인증코드 확인':'로그인'));
+}
+
+function startAdminLoginLockTimer(seconds){
+  clearInterval(adminLoginLockTimer);
+  adminLoginLockRemaining=Math.max(1,Number(seconds)||900);
+  const button=document.querySelector('.btn-login');
+  const render=()=>{
+    if(adminLoginLockRemaining<=0){
+      clearInterval(adminLoginLockTimer);
+      adminLoginLockRemaining=0;
+      setLoginPending(false);
+      return;
+    }
+    const minutes=Math.floor(adminLoginLockRemaining/60);
+    const secondsLeft=String(adminLoginLockRemaining%60).padStart(2,'0');
+    button.disabled=true;
+    button.textContent='로그인 대기 '+minutes+':'+secondsLeft;
+  };
+  render();
+  adminLoginLockTimer=setInterval(()=>{
+    adminLoginLockRemaining-=1;
+    render();
+  },1000);
 }
 
 function showLoginError(message){

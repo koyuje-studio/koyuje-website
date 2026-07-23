@@ -200,6 +200,8 @@ let currentPeriod='7d';
 let adminEmailChallengeId='';
 let adminEmailResendTimer=0;
 let adminPasswordResetMode=false;
+let adminLoginLockTimer=0;
+let adminLoginLockRemaining=0;
 
 function getScriptUrl(){
   return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
@@ -317,13 +319,18 @@ function login(){
         codeInput.focus();
         return;
       }
-      if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
+      if(data.result!=='success'||!data.token)throw Object.assign(new Error(data.message||'인증 실패'),{
+        rateLimited:data.rateLimited,
+        retryAfter:data.retryAfter,
+        codeExpired:data.codeExpired
+      });
       saveAdminSession(data.token,data.expiresIn);
       sessionStorage.removeItem('koyujeAdminPw');
       resetAdminEmailLogin();
       loadAnalytics(true);
     })
     .catch(err=>{
+      if(err.rateLimited)startAdminLoginLockTimer(err.retryAfter||900);
       if(adminEmailChallengeId&&!err.codeExpired){
         showLogin(err.message||'인증코드를 확인해 주세요.');
         codeInput.value='';
@@ -333,7 +340,35 @@ function login(){
         showLogin(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호를 확인해 주세요.'));
       }
     })
-    .finally(()=>{btn.disabled=false;btn.textContent=adminPasswordResetMode?'새 비밀번호 설정':(adminEmailChallengeId?'인증코드 확인':'확인');});
+    .finally(()=>{
+      if(adminLoginLockRemaining>0)return;
+      btn.disabled=false;
+      btn.textContent=adminPasswordResetMode?'새 비밀번호 설정':(adminEmailChallengeId?'인증코드 확인':'확인');
+    });
+}
+
+function startAdminLoginLockTimer(seconds){
+  clearInterval(adminLoginLockTimer);
+  adminLoginLockRemaining=Math.max(1,Number(seconds)||900);
+  const button=document.querySelector('#loginBox .btn-gold');
+  const render=()=>{
+    if(adminLoginLockRemaining<=0){
+      clearInterval(adminLoginLockTimer);
+      adminLoginLockRemaining=0;
+      button.disabled=false;
+      button.textContent='확인';
+      return;
+    }
+    const minutes=Math.floor(adminLoginLockRemaining/60);
+    const secondsLeft=String(adminLoginLockRemaining%60).padStart(2,'0');
+    button.disabled=true;
+    button.textContent='로그인 대기 '+minutes+':'+secondsLeft;
+  };
+  render();
+  adminLoginLockTimer=setInterval(()=>{
+    adminLoginLockRemaining-=1;
+    render();
+  },1000);
 }
 
 function resetAdminEmailLogin(){
