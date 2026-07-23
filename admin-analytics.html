@@ -635,14 +635,15 @@ function render(data,reservations){
   showApp();
   const summary=data.summary||{};
   const revenue=summarizeReservations(reservations||[]);
+  const reservationSubmitCount=revenue.activeReservations+revenue.cancelReservations;
   setText('todayVisitors',summary.todayVisitors||0);
   setText('last7Visitors',summary.last7Visitors||0);
   setText('kakaoClicks',summary.kakaoClicks||0);
-  setText('reservationSubmits',summary.reservationSubmits||0);
+  setText('reservationSubmits',reservationSubmitCount);
   setText('selectedVisitors',summary.selectedVisitors||0);
   setText('reservationPageViews',summary.reservationPageViews||0);
   setText('kakaoRate',percent(summary.kakaoClicks||0,summary.selectedVisitors||0));
-  setText('submitRate',percent(summary.reservationSubmits||0,summary.reservationPageViews||0));
+  setText('submitRate',percent(reservationSubmitCount,summary.reservationPageViews||0));
   setText('rangeLabel',(data.rangeLabel||'선택 기간')+' 기준');
   setText('expectedRevenue',formatWon(revenue.expectedRevenue));
   setText('confirmedRevenue',formatWon(revenue.confirmedRevenue));
@@ -652,13 +653,19 @@ function render(data,reservations){
   setText('activeReservations',revenue.activeReservations);
   setText('cancelReservations',revenue.cancelReservations);
 
-  document.getElementById('funnel').innerHTML=(data.funnel||[]).map(item=>`
+  const funnelPageViews=((data.funnel||[]).find(item=>item.event==='page_view')||{}).count||0;
+  document.getElementById('funnel').innerHTML=(data.funnel||[]).map(item=>{
+    const count=item.event==='reservation_submit'?reservationSubmitCount:item.count;
+    const rate=item.event==='reservation_submit'&&funnelPageViews
+      ?Math.round((reservationSubmitCount/funnelPageViews)*1000)/10
+      :item.rate;
+    return `
     <div class="funnel-item">
       <div class="funnel-name">${escapeHTML(item.label)}</div>
-      <div class="funnel-count">${escapeHTML(item.count)}</div>
-      <div class="funnel-rate">${escapeHTML(item.rate)}%</div>
+      <div class="funnel-count">${escapeHTML(count)}</div>
+      <div class="funnel-rate">${escapeHTML(rate)}%</div>
     </div>
-  `).join('');
+  `;}).join('');
 
   const rankings=data.rankings||{};
   document.getElementById('tables').innerHTML=[
