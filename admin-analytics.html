@@ -2,16 +2,22 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
+<meta name="description" content="고유재 한옥스튜디오 내부 예약·매출 통계 분석 페이지입니다.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>통계 분석 | 고유재 관리자</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400;500&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <style>
-:root{color-scheme:dark;--bg:#15120f;--panel:#201c18;--panel2:#27231e;--line:rgba(247,242,234,.12);--paper:#f7f2ea;--muted:rgba(247,242,234,.55);--gold:#b08a55;--gold2:#d7bb86;--green:#7ecf9a;--orange:#e6aa55}
+:root{color-scheme:dark;--bg:#15120f;--panel:#201c18;--panel2:#27231e;--line:rgba(247,242,234,.12);--paper:#f7f2ea;--muted:#8f8377;--gold:#c49a58;--gold2:#d7bb86;--green:#7ecf9a;--orange:#e6aa55}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--paper);font-weight:300;letter-spacing:.02em}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
 .login.booting{display:none}
 .login-card{width:min(420px,100%);border:1px solid var(--line);background:var(--panel);padding:36px}
@@ -20,6 +26,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--pape
 .login input{width:100%;background:#111;border:1px solid var(--line);color:var(--paper);padding:14px;font-size:16px;margin-bottom:12px}
 button,.nav-btn{border:1px solid rgba(176,138,85,.55);background:transparent;color:var(--paper);padding:12px 16px;min-height:44px;font-size:12px;letter-spacing:.08em;cursor:pointer;text-decoration:none}
 button.active,.btn-gold{background:var(--gold);color:#16120f}
+button:disabled{opacity:.5;cursor:wait}
 .wrap{display:none;min-height:100vh}
 .nav{position:sticky;top:0;z-index:10;background:rgba(15,13,11,.96);border-bottom:1px solid var(--line);padding:16px 28px;display:flex;justify-content:space-between;gap:16px;align-items:center}
 .brand{font-family:'Noto Serif KR',serif;font-size:15px;letter-spacing:.12em}
@@ -59,6 +66,8 @@ td:first-child{overflow-wrap:anywhere}
 td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 .empty{color:var(--muted);font-size:13px;padding:14px 0}
 .error{color:#ff8e8e;font-size:13px;margin-top:10px;display:none}
+.status{display:none;border:1px solid rgba(215,187,134,.24);background:rgba(215,187,134,.06);color:var(--gold2);padding:12px 14px;margin-bottom:18px;font-size:12px;line-height:1.7}
+.status.show{display:block}
 @media(max-width:900px){.nav{align-items:flex-start;flex-direction:column}.body{padding:20px 16px}.analytics-hero{grid-template-columns:1fr}.hero-meta{justify-content:flex-start}.grid,.insight-grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}.tables{grid-template-columns:1fr}.group-head{align-items:flex-start;flex-direction:column}.group-desc{text-align:left}}
 @media(max-width:520px){
   .nav{position:relative;padding:16px;}
@@ -84,22 +93,23 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
   <div class="login-card">
     <div class="login-title">통계 분석 로그인</div>
     <p class="login-desc">방문, 문의 클릭, 예약확정서 전환 흐름을 확인합니다.</p>
+    <label class="sr-only" for="pwInput">관리자 비밀번호</label>
     <input type="password" id="pwInput" placeholder="관리자 비밀번호" autocomplete="current-password">
-    <button class="btn-gold" onclick="login()">확인</button>
-    <div class="error" id="loginErr">비밀번호를 확인해 주세요.</div>
+    <button type="button" class="btn-gold" onclick="login()">확인</button>
+    <div class="error" id="loginErr" role="alert" aria-live="polite">비밀번호를 확인해 주세요.</div>
   </div>
 </div>
 
 <div class="wrap" id="analyticsWrap">
-  <nav class="nav">
+  <nav class="nav" aria-label="통계 관리자 주요 메뉴">
     <div class="brand">고유재 한옥스튜디오<em>통계 분석</em></div>
     <div class="nav-right">
       <a class="nav-btn" href="/admin">예약 관리로 이동</a>
-      <button onclick="loadAnalytics()">새로고침</button>
-      <button onclick="logout()">로그아웃</button>
+      <button type="button" id="refreshButton" onclick="loadAnalytics()">새로고침</button>
+      <button type="button" onclick="logout()">로그아웃</button>
     </div>
   </nav>
-  <main class="body">
+  <main class="body" id="mainContent">
     <section class="analytics-hero">
       <div>
         <div class="hero-k">KOYUJE ANALYTICS</div>
@@ -112,7 +122,7 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       </div>
     </section>
 
-    <div class="periods" id="periodButtons">
+    <div class="periods" id="periodButtons" role="group" aria-label="통계 조회 기간">
       <button data-period="today">오늘</button>
       <button data-period="yesterday">어제</button>
       <button data-period="7d" class="active">최근 7일</button>
@@ -120,6 +130,7 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <button data-period="this_month">이번 달</button>
       <button data-period="last_month">지난 달</button>
     </div>
+    <div class="status" id="analyticsStatus" role="status" aria-live="polite"></div>
 
     <div class="group-head">
       <div class="group-title">운영 요약</div>
@@ -168,10 +179,13 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
   </main>
 </div>
 
-<script src="/assets/js/runtime-config.js"></script>
+<script src="/assets/js/runtime-config.js" defer></script>
 <script>
-const SCRIPT_URL=(window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
 let currentPeriod='7d';
+
+function getScriptUrl(){
+  return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+}
 
 function fetchWithTimeout(url,options,timeoutMs=20000){
   const controller=new AbortController();
@@ -182,7 +196,9 @@ function fetchWithTimeout(url,options,timeoutMs=20000){
 
 function getToken(){return sessionStorage.getItem('koyujeAdminToken') || '';}
 function adminApi(payload){
-  return fetchWithTimeout(SCRIPT_URL,{
+  const scriptUrl=getScriptUrl();
+  if(!scriptUrl)return Promise.reject(new Error('관리자 시스템 연결 정보가 없습니다.'));
+  return fetchWithTimeout(scriptUrl,{
     method:'POST',
     body:JSON.stringify(Object.assign({},payload,{adminToken:getToken()}))
   }).then(r=>r.json());
@@ -196,19 +212,27 @@ function showLogin(message){
   document.getElementById('analyticsWrap').style.display='none';
   document.getElementById('loginBox').classList.remove('booting');
   document.getElementById('loginBox').style.display='flex';
+  const err=document.getElementById('loginErr');
+  err.style.display='none';
   if(message){
-    const err=document.getElementById('loginErr');
     err.textContent=message;
     err.style.display='block';
   }
+  window.setTimeout(()=>document.getElementById('pwInput').focus(),0);
 }
 function login(){
   const pw=document.getElementById('pwInput').value.trim();
   if(!pw)return;
+  const scriptUrl=getScriptUrl();
+  if(!scriptUrl){
+    showLogin('관리자 시스템 연결 정보가 없습니다. 잠시 후 다시 시도해 주세요.');
+    return;
+  }
   const btn=document.querySelector('#loginBox button');
+  document.getElementById('loginErr').style.display='none';
   btn.disabled=true;
   btn.textContent='확인 중...';
-  fetchWithTimeout(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'adminLogin',password:pw})})
+  fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify({action:'adminLogin',password:pw})})
     .then(r=>r.json())
     .then(data=>{
       if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
@@ -221,7 +245,8 @@ function login(){
 }
 function logout(){
   const token=getToken();
-  if(token)fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'adminLogout',adminToken:token})}).catch(()=>{});
+  const scriptUrl=getScriptUrl();
+  if(token&&scriptUrl)fetch(scriptUrl,{method:'POST',body:JSON.stringify({action:'adminLogout',adminToken:token})}).catch(()=>{});
   sessionStorage.removeItem('koyujeAdminToken');
   sessionStorage.removeItem('koyujeAdminPw');
   location.reload();
@@ -232,11 +257,11 @@ function escapeHTML(value){
 }
 function renderTable(title,items){
   if(!items||!items.length)return `<div class="section"><div class="section-title">${title}</div><div class="empty">표시할 데이터가 아직 없습니다.</div></div>`;
-  return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>건수</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)}</td><td>${item.count}</td></tr>`).join('')}</tbody></table></div>`;
+  return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>건수</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)}</td><td>${escapeHTML(item.count)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function renderRevenueTable(title,items){
   if(!items||!items.length)return `<div class="section"><div class="section-title">${title}</div><div class="empty">표시할 데이터가 아직 없습니다.</div></div>`;
-  return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>금액</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)} <span style="color:var(--muted);">(${item.count}건)</span></td><td>${formatWon(item.revenue)}</td></tr>`).join('')}</tbody></table></div>`;
+  return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>금액</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)} <span style="color:var(--muted);">(${escapeHTML(item.count)}건)</span></td><td>${formatWon(item.revenue)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function percent(part,total){
   if(!total)return '0%';
@@ -399,8 +424,8 @@ function render(data,reservations){
   document.getElementById('funnel').innerHTML=(data.funnel||[]).map(item=>`
     <div class="funnel-item">
       <div class="funnel-name">${escapeHTML(item.label)}</div>
-      <div class="funnel-count">${item.count}</div>
-      <div class="funnel-rate">${item.rate}%</div>
+      <div class="funnel-count">${escapeHTML(item.count)}</div>
+      <div class="funnel-rate">${escapeHTML(item.rate)}%</div>
     </div>
   `).join('');
 
@@ -420,32 +445,57 @@ function render(data,reservations){
     renderRevenueTable('결제수단별 수납 비중',revenue.paymentRevenue)
   ].join('');
 }
-function loadAnalytics(fromLogin){
+function requireActiveAdminSession(data){
+  const message=String((data&&data.message)||'');
+  if(data&&data.result==='error'&&/(인증|세션)/.test(message)){
+    sessionStorage.removeItem('koyujeAdminToken');
+    const error=new Error(message||'인증 세션이 만료되었습니다.');
+    error.code='ADMIN_SESSION_EXPIRED';
+    throw error;
+  }
+  return data;
+}
+function setAnalyticsStatus(message){
+  const status=document.getElementById('analyticsStatus');
+  status.textContent=message||'';
+  status.classList.toggle('show',Boolean(message));
+}
+function setAnalyticsBusy(isBusy){
+  document.getElementById('mainContent').setAttribute('aria-busy',String(isBusy));
+  document.getElementById('refreshButton').disabled=isBusy;
+  document.querySelectorAll('#periodButtons button').forEach(button=>{button.disabled=isBusy;});
+}
+function loadAnalytics(){
   const token=getToken();
   if(!token){
-    showLogin();
-    return;
+    showLogin('관리자 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
+    return Promise.resolve();
   }
-  Promise.all([
+  showApp();
+  setAnalyticsStatus('통계 데이터를 불러오는 중입니다.');
+  setAnalyticsBusy(true);
+  return Promise.all([
     adminApi({action:'analytics',period:currentPeriod}),
     adminApi({action:'admin'})
   ])
     .then(([data,reservationData])=>{
+      requireActiveAdminSession(data);
+      requireActiveAdminSession(reservationData);
       if(data.result==='error')throw new Error(data.message||'인증 실패');
       if(reservationData.result==='error')throw new Error(reservationData.message||'예약 데이터 확인 실패');
       document.getElementById('loginErr').style.display='none';
       render(data,reservationData.data||[]);
+      setAnalyticsStatus('');
     })
     .catch(err=>{
       const delayed=err.name==='AbortError';
-      if(fromLogin){
-        sessionStorage.removeItem('koyujeAdminToken');
-        showLogin(delayed?'통계 응답이 지연되고 있습니다. 잠시 후 다시 로그인해 주세요.':'비밀번호가 올바르지 않거나 통계 데이터를 불러올 수 없습니다.');
-      }else{
-        sessionStorage.removeItem('koyujeAdminToken');
-        showLogin(delayed?'통계 응답이 지연되고 있습니다. 잠시 후 다시 로그인해 주세요.':'저장된 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
+      if(err.code==='ADMIN_SESSION_EXPIRED'){
+        showLogin('관리자 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
+        return;
       }
-    });
+      setAnalyticsStatus(delayed?'통계 응답이 지연되고 있습니다. 잠시 후 새로고침해 주세요.':(err.message||'통계 데이터를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.'));
+    })
+    .finally(()=>setAnalyticsBusy(false));
 }
 document.getElementById('periodButtons').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-period]');
@@ -455,12 +505,15 @@ document.getElementById('periodButtons').addEventListener('click',e=>{
   loadAnalytics();
 });
 document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
-sessionStorage.removeItem('koyujeAdminPw');
-if(getToken()){
-  loadAnalytics();
-}else{
-  showLogin();
+function bootAnalyticsSession(){
+  sessionStorage.removeItem('koyujeAdminPw');
+  if(getToken()){
+    loadAnalytics();
+  }else{
+    showLogin();
+  }
 }
+window.addEventListener('DOMContentLoaded',bootAnalyticsSession);
 </script>
 </body>
 </html>
