@@ -24,8 +24,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--pape
 .login-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;margin-bottom:10px}
 .login-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:22px}
 .login input{width:100%;background:#111;border:1px solid var(--line);color:var(--paper);padding:14px;font-size:16px;margin-bottom:12px}
-.login input.login-totp{display:none;letter-spacing:.28em}
-.login input.login-totp.show{display:block}
+.login input.login-email-code{display:none;letter-spacing:.28em}
+.login input.login-email-code.show{display:block}
+.login-resend{display:none;width:100%;min-height:36px;margin:-2px 0 12px;padding:6px;border:0;color:var(--gold2);font-size:11px}
+.login-resend.show{display:block}
 button,.nav-btn{border:1px solid rgba(176,138,85,.55);background:transparent;color:var(--paper);padding:12px 16px;min-height:44px;font-size:12px;letter-spacing:.08em;cursor:pointer;text-decoration:none}
 button.active,.btn-gold{background:var(--gold);color:#16120f}
 button:disabled{opacity:.5;cursor:wait}
@@ -97,8 +99,9 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     <p class="login-desc">방문, 문의 클릭, 예약확정서 전환 흐름을 확인합니다.</p>
     <label class="sr-only" for="pwInput">관리자 비밀번호</label>
     <input type="password" id="pwInput" placeholder="관리자 비밀번호" autocomplete="current-password">
-    <label class="sr-only" for="totpInput">인증 앱 6자리 코드</label>
-    <input type="text" class="login-totp" id="totpInput" placeholder="인증 앱 6자리 코드" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+    <label class="sr-only" for="emailOtpInput">이메일 6자리 인증코드</label>
+    <input type="text" class="login-email-code" id="emailOtpInput" placeholder="이메일 6자리 인증코드" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+    <button type="button" class="login-resend" id="emailOtpResend" onclick="resendAdminEmailCode()">인증코드 다시 받기</button>
     <button type="button" class="btn-gold" onclick="login()">확인</button>
     <div class="error" id="loginErr" role="alert" aria-live="polite">비밀번호를 확인해 주세요.</div>
   </div>
@@ -186,6 +189,8 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 <script src="/assets/js/runtime-config.js" defer></script>
 <script>
 let currentPeriod='7d';
+let adminEmailChallengeId='';
+let adminEmailResendTimer=0;
 
 function getScriptUrl(){
   return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
@@ -198,7 +203,24 @@ function fetchWithTimeout(url,options,timeoutMs=20000){
     .finally(()=>clearTimeout(timer));
 }
 
-function getToken(){return sessionStorage.getItem('koyujeAdminToken') || '';}
+function getToken(){
+  try{
+    const stored=JSON.parse(localStorage.getItem('koyujeAdminSession')||'null');
+    if(stored&&stored.token&&Date.now()<Number(stored.expiresAt||0))return stored.token;
+  }catch(err){}
+  clearAdminSession();
+  return '';
+}
+function saveAdminSession(token,expiresIn){
+  localStorage.setItem('koyujeAdminSession',JSON.stringify({
+    token,
+    expiresAt:Date.now()+(Number(expiresIn)||24*60*60)*1000
+  }));
+}
+function clearAdminSession(){
+  localStorage.removeItem('koyujeAdminSession');
+  sessionStorage.removeItem('koyujeAdminToken');
+}
 function adminApi(payload){
   const scriptUrl=getScriptUrl();
   if(!scriptUrl)return Promise.reject(new Error('관리자 시스템 연결 정보가 없습니다.'));
@@ -222,13 +244,18 @@ function showLogin(message){
     err.textContent=message;
     err.style.display='block';
   }
-  window.setTimeout(()=>document.getElementById('pwInput').focus(),0);
+  window.setTimeout(()=>document.getElementById(adminEmailChallengeId?'emailOtpInput':'pwInput').focus(),0);
 }
 function login(){
   const pw=document.getElementById('pwInput').value.trim();
-  const totpInput=document.getElementById('totpInput');
-  const totpCode=totpInput.value.trim();
-  if(!pw)return;
+  const codeInput=document.getElementById('emailOtpInput');
+  const emailCode=codeInput.value.trim();
+  if(!adminEmailChallengeId&&!pw)return;
+  if(adminEmailChallengeId&&!/^\d{6}$/.test(emailCode)){
+    showLogin('이메일로 받은 6자리 인증코드를 입력해 주세요.');
+    codeInput.focus();
+    return;
+  }
   const scriptUrl=getScriptUrl();
   if(!scriptUrl){
     showLogin('관리자 시스템 연결 정보가 없습니다. 잠시 후 다시 시도해 주세요.');
@@ -238,43 +265,98 @@ function login(){
   document.getElementById('loginErr').style.display='none';
   btn.disabled=true;
   btn.textContent='확인 중...';
-  fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify({action:'adminLogin',password:pw,totpCode})})
+  const payload=adminEmailChallengeId
+    ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
+    : {action:'adminLogin',password:pw};
+  fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify(payload)})
     .then(r=>r.json())
     .then(data=>{
-      if(data.requiresTotp){
-        const error=new Error(data.message||'인증 앱 코드를 입력해 주세요.');
-        error.requiresTotp=true;
-        throw error;
+      if(data.requiresEmailOtp&&data.challengeId){
+        adminEmailChallengeId=data.challengeId;
+        document.getElementById('pwInput').disabled=true;
+        codeInput.classList.add('show');
+        document.getElementById('emailOtpResend').classList.add('show');
+        startAdminEmailResendTimer(data.retryAfter||60);
+        showLogin(data.message||'관리자 이메일로 발송된 인증코드를 입력해 주세요.');
+        codeInput.focus();
+        return;
       }
       if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
-      sessionStorage.setItem('koyujeAdminToken',data.token);
+      saveAdminSession(data.token,data.expiresIn);
       sessionStorage.removeItem('koyujeAdminPw');
-      document.getElementById('pwInput').value='';
-      totpInput.value='';
-      totpInput.classList.remove('show');
+      resetAdminEmailLogin();
       loadAnalytics(true);
     })
     .catch(err=>{
-      if(err.requiresTotp){
-        const error=document.getElementById('loginErr');
-        error.textContent=err.message;
-        error.style.display='block';
-        totpInput.classList.add('show');
-        totpInput.focus();
-        return;
+      if(adminEmailChallengeId&&!err.codeExpired){
+        showLogin(err.message||'인증코드를 확인해 주세요.');
+        codeInput.value='';
+        codeInput.focus();
+      }else{
+        resetAdminEmailLogin();
+        showLogin(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호를 확인해 주세요.'));
       }
-      document.getElementById('pwInput').value='';
-      totpInput.value='';
-      totpInput.classList.remove('show');
-      showLogin(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호를 확인해 주세요.'));
     })
-    .finally(()=>{btn.disabled=false;btn.textContent='확인';});
+    .finally(()=>{btn.disabled=false;btn.textContent=adminEmailChallengeId?'인증코드 확인':'확인';});
+}
+
+function resetAdminEmailLogin(){
+  adminEmailChallengeId='';
+  clearInterval(adminEmailResendTimer);
+  const password=document.getElementById('pwInput');
+  const code=document.getElementById('emailOtpInput');
+  const resend=document.getElementById('emailOtpResend');
+  password.value='';
+  password.disabled=false;
+  code.value='';
+  code.classList.remove('show');
+  resend.classList.remove('show');
+  resend.disabled=false;
+  resend.textContent='인증코드 다시 받기';
+}
+
+function startAdminEmailResendTimer(seconds){
+  clearInterval(adminEmailResendTimer);
+  const button=document.getElementById('emailOtpResend');
+  let remaining=Math.max(0,Number(seconds)||0);
+  const render=()=>{
+    button.disabled=remaining>0;
+    button.textContent=remaining>0?'인증코드 다시 받기 ('+remaining+'초)':'인증코드 다시 받기';
+  };
+  render();
+  adminEmailResendTimer=setInterval(()=>{
+    remaining-=1;
+    render();
+    if(remaining<=0)clearInterval(adminEmailResendTimer);
+  },1000);
+}
+
+function resendAdminEmailCode(){
+  if(!adminEmailChallengeId)return;
+  const button=document.getElementById('emailOtpResend');
+  button.disabled=true;
+  fetchWithTimeout(getScriptUrl(),{
+    method:'POST',
+    body:JSON.stringify({action:'adminResendEmailOtp',challengeId:adminEmailChallengeId})
+  })
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result!=='success')throw Object.assign(new Error(data.message||'인증코드를 다시 보내지 못했습니다.'),{codeExpired:data.codeExpired,retryAfter:data.retryAfter});
+      document.getElementById('emailOtpInput').value='';
+      showLogin(data.message);
+      startAdminEmailResendTimer(data.retryAfter||60);
+    })
+    .catch(err=>{
+      showLogin(err.message||'인증코드를 다시 보내지 못했습니다.');
+      if(err.codeExpired)resetAdminEmailLogin();
+      else startAdminEmailResendTimer(err.retryAfter||5);
+    });
 }
 function logout(){
   const token=getToken();
   const scriptUrl=getScriptUrl();
   if(token&&scriptUrl)fetch(scriptUrl,{method:'POST',body:JSON.stringify({action:'adminLogout',adminToken:token})}).catch(()=>{});
-  sessionStorage.removeItem('koyujeAdminToken');
+  clearAdminSession();
   sessionStorage.removeItem('koyujeAdminPw');
   location.reload();
 }
@@ -475,7 +557,7 @@ function render(data,reservations){
 function requireActiveAdminSession(data){
   const message=String((data&&data.message)||'');
   if(data&&data.result==='error'&&/(인증|세션)/.test(message)){
-    sessionStorage.removeItem('koyujeAdminToken');
+    clearAdminSession();
     const error=new Error(message||'인증 세션이 만료되었습니다.');
     error.code='ADMIN_SESSION_EXPIRED';
     throw error;
@@ -532,10 +614,10 @@ document.getElementById('periodButtons').addEventListener('click',e=>{
   loadAnalytics();
 });
 document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
-document.getElementById('totpInput').addEventListener('input',function(){
+document.getElementById('emailOtpInput').addEventListener('input',function(){
   this.value=this.value.replace(/\D/g,'').slice(0,6);
 });
-document.getElementById('totpInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+document.getElementById('emailOtpInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
 function bootAnalyticsSession(){
   sessionStorage.removeItem('koyujeAdminPw');
   if(getToken()){

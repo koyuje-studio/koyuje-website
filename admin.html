@@ -29,8 +29,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .pw-input{width:100%;background:rgba(247,242,234,0.05);border:0.5px solid rgba(247,242,234,0.15);color:var(--paper);padding:14px 16px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:300;outline:none;text-align:center;letter-spacing:0.2em;margin-bottom:16px;transition:border-color .3s;}
 .pw-input:focus{border-color:var(--gold);}
 .pw-input::placeholder{color:rgba(247,242,234,0.58);letter-spacing:0.05em;}
-.pw-input.login-totp{display:none;letter-spacing:0.35em;}
-.pw-input.login-totp.show{display:block;}
+.pw-input.login-email-code{display:none;letter-spacing:0.35em;}
+.pw-input.login-email-code.show{display:block;}
+.login-resend{display:none;width:100%;margin:-4px 0 16px;background:none;border:0;color:var(--gold2);font-size:11px;letter-spacing:0.08em;cursor:pointer;}
+.login-resend.show{display:block;}
 .btn-login{width:100%;background:var(--gold);color:var(--ink);border:none;padding:15px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .3s;}
 .btn-login:hover{background:var(--gold2);}
 .login-err{font-size:12px;color:#e07070;margin-top:12px;letter-spacing:0.05em;display:none;}
@@ -315,8 +317,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
     <div class="login-title">관리자 로그인</div>
     <label class="sr-only" for="pwInput">관리자 비밀번호</label>
     <input type="password" class="pw-input" id="pwInput" placeholder="비밀번호 입력" autocomplete="current-password">
-    <label class="sr-only" for="totpInput">인증 앱 6자리 코드</label>
-    <input type="text" class="pw-input login-totp" id="totpInput" placeholder="인증 앱 6자리 코드" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+    <label class="sr-only" for="emailOtpInput">이메일 6자리 인증코드</label>
+    <input type="text" class="pw-input login-email-code" id="emailOtpInput" placeholder="이메일 6자리 인증코드" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+    <button type="button" class="login-resend" id="emailOtpResend" onclick="resendAdminEmailCode()">인증코드 다시 받기</button>
     <button type="button" class="btn-login" onclick="doLogin()">로그인</button>
     <div class="login-err" id="loginErr" role="alert" aria-live="polite">비밀번호가 올바르지 않습니다.</div>
   </div>
@@ -495,38 +498,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
     </section>
 
     <section class="security-section">
-      <div class="security-section-title">인증 앱 2단계 인증</div>
-      <p class="security-copy">Google Authenticator 또는 Microsoft Authenticator에 설정키를 등록한 뒤 6자리 코드를 확인합니다.</p>
-      <div class="security-status" id="totpStatus">상태 확인 중</div>
-      <div class="security-actions" id="totpEnableActions">
-        <button type="button" class="btn-refresh" onclick="beginTotpSetup()">인증 앱 설정 시작</button>
-      </div>
-      <div class="security-setup" id="totpSetupBox">
-        <div class="write-label">인증 앱에 입력할 설정키</div>
-        <code class="security-secret" id="totpSecret">-</code>
-        <div class="security-actions">
-          <button type="button" class="btn-refresh" onclick="copyTotpSecret()">설정키 복사</button>
-          <a class="btn-refresh" id="totpOpenLink" href="#" rel="nofollow">인증 앱으로 열기</a>
-        </div>
-        <div class="write-field" style="margin-top:16px;">
-          <label class="write-label" for="totpConfirmCode">인증 앱 6자리 코드</label>
-          <input type="text" class="write-input" id="totpConfirmCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
-        </div>
-        <button type="button" class="btn-write-submit" id="totpConfirmBtn" onclick="confirmTotpSetup()">2단계 인증 켜기</button>
-      </div>
-      <div class="security-setup" id="totpDisableBox">
-        <div class="security-grid">
-          <div class="write-field">
-            <label class="write-label" for="totpDisablePassword">현재 비밀번호</label>
-            <input type="password" class="write-input" id="totpDisablePassword" autocomplete="current-password">
-          </div>
-          <div class="write-field">
-            <label class="write-label" for="totpDisableCode">인증 앱 6자리 코드</label>
-            <input type="text" class="write-input" id="totpDisableCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
-          </div>
-        </div>
-        <button type="button" class="btn-edit-cancel" id="totpDisableBtn" onclick="disableTotp()">2단계 인증 해제</button>
-      </div>
+      <div class="security-section-title">이메일 2단계 인증</div>
+      <p class="security-copy">비밀번호 확인 후 관리자 이메일로 발송되는 6자리 코드를 입력해야 로그인됩니다.</p>
+      <div class="security-status enabled" id="emailOtpStatus">사용 중 · 상태 확인 중</div>
+      <p class="security-copy" id="emailOtpSummary">인증코드는 5분 동안 유효하며, 로그인은 인증 후 24시간 유지됩니다.</p>
     </section>
     <div class="security-message" id="securityMessage" role="alert" aria-live="polite"></div>
   </div>
@@ -550,6 +525,8 @@ let currentMonthKey=/^\d{4}-\d{2}$/.test(savedAdminViewState.month||'')?savedAdm
 let currentSortMode=['submitted','shootDate'].includes(savedAdminViewState.sort)?savedAdminViewState.sort:'submitted';
 let adminToken='';
 let editingRowId='';
+let adminEmailChallengeId='';
+let adminEmailResendTimer=0;
 
 function fetchWithTimeout(url,options,timeoutMs=20000){
   const controller=new AbortController();
@@ -565,11 +542,16 @@ document.getElementById('todayLabel').textContent=now.getFullYear()+'년 '+(now.
 function doLogin(){
   const input=document.getElementById('pwInput');
   const pw=input.value.trim();
-  const totpInput=document.getElementById('totpInput');
-  const totpCode=totpInput.value.trim();
-  if(!pw){
+  const codeInput=document.getElementById('emailOtpInput');
+  const emailCode=codeInput.value.trim();
+  if(!adminEmailChallengeId&&!pw){
     showLoginError('비밀번호를 입력해 주세요.');
     input.focus();
+    return;
+  }
+  if(adminEmailChallengeId&&!/^\d{6}$/.test(emailCode)){
+    showLoginError('이메일로 받은 6자리 인증코드를 입력해 주세요.');
+    codeInput.focus();
     return;
   }
   const scriptUrl=getScriptUrl();
@@ -579,45 +561,98 @@ function doLogin(){
   }
 
   setLoginPending(true);
-  fetchWithTimeout(scriptUrl,{
-    method:'POST',
-    body:JSON.stringify({action:'adminLogin',password:pw,totpCode})
-  })
+  const payload=adminEmailChallengeId
+    ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
+    : {action:'adminLogin',password:pw};
+  fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify(payload)})
     .then(r=>r.json())
     .then(data=>{
-      if(data.requiresTotp){
-        const error=new Error(data.message||'인증 앱 코드를 입력해 주세요.');
-        error.requiresTotp=true;
-        throw error;
+      if(data.requiresEmailOtp&&data.challengeId){
+        adminEmailChallengeId=data.challengeId;
+        input.disabled=true;
+        codeInput.classList.add('show');
+        document.getElementById('emailOtpResend').classList.add('show');
+        startAdminEmailResendTimer(data.retryAfter||60);
+        showLoginError(data.message||'관리자 이메일로 발송된 인증코드를 입력해 주세요.');
+        codeInput.focus();
+        return null;
       }
       if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
-      adminToken=data.token;
-      sessionStorage.setItem('koyujeAdminToken',data.token);
+      saveAdminSession(data.token,data.expiresIn);
       sessionStorage.removeItem('koyujeAdminPw');
-      input.value='';
-      totpInput.value='';
-      totpInput.classList.remove('show');
+      resetAdminEmailLogin();
       return fetchAdminData();
     })
     .then(data=>{
-      applyAdminData(data);
+      if(data)applyAdminData(data);
     })
     .catch(err=>{
-      adminToken='';
-      sessionStorage.removeItem('koyujeAdminToken');
-      allData=[];
       showLoginError(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호가 올바르지 않거나 관리자 데이터를 불러올 수 없습니다.'));
-      if(err.requiresTotp){
-        totpInput.classList.add('show');
-        totpInput.focus();
+      if(adminEmailChallengeId&&!err.codeExpired){
+        codeInput.value='';
+        codeInput.focus();
       }else{
-        input.value='';
-        totpInput.value='';
-        totpInput.classList.remove('show');
+        clearAdminSession();
+        allData=[];
+        resetAdminEmailLogin();
         input.focus();
       }
     })
     .finally(()=>setLoginPending(false));
+}
+
+function resetAdminEmailLogin(){
+  adminEmailChallengeId='';
+  clearInterval(adminEmailResendTimer);
+  const password=document.getElementById('pwInput');
+  const code=document.getElementById('emailOtpInput');
+  const resend=document.getElementById('emailOtpResend');
+  password.value='';
+  password.disabled=false;
+  code.value='';
+  code.classList.remove('show');
+  resend.classList.remove('show');
+  resend.disabled=false;
+  resend.textContent='인증코드 다시 받기';
+}
+
+function startAdminEmailResendTimer(seconds){
+  clearInterval(adminEmailResendTimer);
+  const button=document.getElementById('emailOtpResend');
+  let remaining=Math.max(0,Number(seconds)||0);
+  const render=()=>{
+    button.disabled=remaining>0;
+    button.textContent=remaining>0?'인증코드 다시 받기 ('+remaining+'초)':'인증코드 다시 받기';
+  };
+  render();
+  adminEmailResendTimer=setInterval(()=>{
+    remaining-=1;
+    render();
+    if(remaining<=0)clearInterval(adminEmailResendTimer);
+  },1000);
+}
+
+function resendAdminEmailCode(){
+  if(!adminEmailChallengeId)return;
+  const scriptUrl=getScriptUrl();
+  const button=document.getElementById('emailOtpResend');
+  button.disabled=true;
+  fetchWithTimeout(scriptUrl,{
+    method:'POST',
+    body:JSON.stringify({action:'adminResendEmailOtp',challengeId:adminEmailChallengeId})
+  })
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.result!=='success')throw Object.assign(new Error(data.message||'인증코드를 다시 보내지 못했습니다.'),{codeExpired:data.codeExpired,retryAfter:data.retryAfter});
+      document.getElementById('emailOtpInput').value='';
+      showLoginError(data.message);
+      startAdminEmailResendTimer(data.retryAfter||60);
+    })
+    .catch(err=>{
+      showLoginError(err.message||'인증코드를 다시 보내지 못했습니다.');
+      if(err.codeExpired)resetAdminEmailLogin();
+      else startAdminEmailResendTimer(err.retryAfter||5);
+    });
 }
 
 function applyAdminData(data){
@@ -656,8 +691,7 @@ function bootAdminSession(){
   fetchAdminData()
     .then(applyAdminData)
     .catch(()=>{
-      adminToken='';
-      sessionStorage.removeItem('koyujeAdminToken');
+      clearAdminSession();
       allData=[];
       showLoginShell('저장된 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
     });
@@ -666,7 +700,7 @@ function bootAdminSession(){
 function setLoginPending(isPending){
   const btn=document.querySelector('.btn-login');
   btn.disabled=isPending;
-  btn.textContent=isPending?'확인 중...':'로그인';
+  btn.textContent=isPending?'확인 중...':(adminEmailChallengeId?'인증코드 확인':'로그인');
 }
 
 function showLoginError(message){
@@ -679,22 +713,18 @@ function doLogout(){
   const token=getAdminToken();
   const scriptUrl=getScriptUrl();
   if(token&&scriptUrl)fetch(scriptUrl,{method:'POST',body:JSON.stringify({action:'adminLogout',adminToken:token})}).catch(()=>{});
-  adminToken='';
-  sessionStorage.removeItem('koyujeAdminToken');
+  clearAdminSession();
   sessionStorage.removeItem('koyujeAdminPw');
   allData=[];
   document.getElementById('adminWrap').style.display='none';
   document.getElementById('loginWrap').style.display='flex';
-  document.getElementById('pwInput').value='';
-  document.getElementById('totpInput').value='';
-  document.getElementById('totpInput').classList.remove('show');
+  resetAdminEmailLogin();
   document.getElementById('loginErr').style.display='none';
 }
 
 function replaceAdminToken(token){
   if(!token)return;
-  adminToken=token;
-  sessionStorage.setItem('koyujeAdminToken',token);
+  saveAdminSession(token,24*60*60);
 }
 
 function setSecurityMessage(message,isSuccess){
@@ -717,10 +747,9 @@ function openSecurityModal(){
 
 function closeSecurityModal(){
   document.getElementById('securityModalBg').classList.remove('show');
-  ['securityCurrentPw','securityNewPw','securityNewPwConfirm','totpConfirmCode','totpDisablePassword','totpDisableCode'].forEach(id=>{
+  ['securityCurrentPw','securityNewPw','securityNewPwConfirm'].forEach(id=>{
     document.getElementById(id).value='';
   });
-  document.getElementById('totpSetupBox').classList.remove('show');
   setSecurityMessage('');
 }
 
@@ -730,13 +759,8 @@ function loadSecurityStatus(){
     .then(data=>{
       requireActiveAdminSession(data);
       if(data.result!=='success')throw new Error(data.message||'보안 상태를 확인하지 못했습니다.');
-      const enabled=!!data.totpEnabled;
-      const status=document.getElementById('totpStatus');
-      status.textContent=enabled?'사용 중':'사용 안 함';
-      status.classList.toggle('enabled',enabled);
-      document.getElementById('totpEnableActions').style.display=enabled?'none':'flex';
-      document.getElementById('totpDisableBox').classList.toggle('show',enabled);
-      if(enabled)document.getElementById('totpSetupBox').classList.remove('show');
+      document.getElementById('emailOtpStatus').textContent='사용 중 · '+(data.maskedEmail||'관리자 이메일');
+      document.getElementById('emailOtpSummary').textContent='인증코드는 5분 동안 유효하며, 로그인은 인증 후 '+(data.sessionHours||24)+'시간 유지됩니다.';
     })
     .catch(err=>{if(err.code!=='ADMIN_SESSION_EXPIRED')setSecurityMessage(err.message||'보안 상태를 확인하지 못했습니다.');});
 }
@@ -764,69 +788,6 @@ function changeAdminPassword(){
     })
     .catch(err=>{if(err.code!=='ADMIN_SESSION_EXPIRED')setSecurityMessage(err.message||'비밀번호를 변경하지 못했습니다.');})
     .finally(()=>setSecurityButtonPending(button,false,'변경 중...','비밀번호 변경하기'));
-}
-
-function beginTotpSetup(){
-  setSecurityMessage('');
-  adminApi({action:'adminTotpBegin'})
-    .then(r=>r.json())
-    .then(data=>{
-      requireActiveAdminSession(data);
-      if(data.result!=='success'||!data.secret)throw new Error(data.message||'인증키를 발급하지 못했습니다.');
-      document.getElementById('totpSecret').textContent=data.secret;
-      document.getElementById('totpOpenLink').href=data.otpauthUri||'#';
-      document.getElementById('totpSetupBox').classList.add('show');
-      document.getElementById('totpConfirmCode').focus();
-      setSecurityMessage('설정키는 10분 동안 유효합니다. 인증 앱 등록 후 코드를 입력해 주세요.',true);
-    })
-    .catch(err=>{if(err.code!=='ADMIN_SESSION_EXPIRED')setSecurityMessage(err.message||'인증키를 발급하지 못했습니다.');});
-}
-
-function copyTotpSecret(){
-  copyTextToClipboard(document.getElementById('totpSecret').textContent,'인증 앱 설정키입니다.')
-    .then(ok=>{if(ok)setSecurityMessage('설정키를 복사했습니다.',true);});
-}
-
-function confirmTotpSetup(){
-  const totpCode=document.getElementById('totpConfirmCode').value.trim();
-  if(!/^\d{6}$/.test(totpCode)){
-    setSecurityMessage('인증 앱의 6자리 코드를 입력해 주세요.');
-    return;
-  }
-  const button=document.getElementById('totpConfirmBtn');
-  setSecurityButtonPending(button,true,'확인 중...','2단계 인증 켜기');
-  adminApi({action:'adminTotpConfirm',totpCode})
-    .then(r=>r.json())
-    .then(data=>{
-      requireActiveAdminSession(data);
-      if(data.result!=='success'||!data.token)throw new Error(data.message||'2단계 인증을 켜지 못했습니다.');
-      replaceAdminToken(data.token);
-      document.getElementById('totpConfirmCode').value='';
-      setSecurityMessage('인증 앱 2단계 인증이 활성화되었습니다.',true);
-      loadSecurityStatus();
-    })
-    .catch(err=>{if(err.code!=='ADMIN_SESSION_EXPIRED')setSecurityMessage(err.message||'2단계 인증을 켜지 못했습니다.');})
-    .finally(()=>setSecurityButtonPending(button,false,'확인 중...','2단계 인증 켜기'));
-}
-
-function disableTotp(){
-  const currentPassword=document.getElementById('totpDisablePassword').value;
-  const totpCode=document.getElementById('totpDisableCode').value.trim();
-  const button=document.getElementById('totpDisableBtn');
-  setSecurityButtonPending(button,true,'해제 중...','2단계 인증 해제');
-  adminApi({action:'adminTotpDisable',currentPassword,totpCode})
-    .then(r=>r.json())
-    .then(data=>{
-      requireActiveAdminSession(data);
-      if(data.result!=='success'||!data.token)throw new Error(data.message||'2단계 인증을 해제하지 못했습니다.');
-      replaceAdminToken(data.token);
-      document.getElementById('totpDisablePassword').value='';
-      document.getElementById('totpDisableCode').value='';
-      setSecurityMessage('2단계 인증이 해제되었습니다.',true);
-      loadSecurityStatus();
-    })
-    .catch(err=>{if(err.code!=='ADMIN_SESSION_EXPIRED')setSecurityMessage(err.message||'2단계 인증을 해제하지 못했습니다.');})
-    .finally(()=>setSecurityButtonPending(button,false,'해제 중...','2단계 인증 해제'));
 }
 
 function shareQrLink(){
@@ -981,14 +942,33 @@ function fetchAdminData(){
 }
 
 function getAdminToken(){
-  return adminToken || sessionStorage.getItem('koyujeAdminToken') || '';
+  if(adminToken)return adminToken;
+  try{
+    const stored=JSON.parse(localStorage.getItem('koyujeAdminSession')||'null');
+    if(stored&&stored.token&&Date.now()<Number(stored.expiresAt||0))return stored.token;
+  }catch(err){}
+  clearAdminSession();
+  return '';
+}
+
+function saveAdminSession(token,expiresIn){
+  adminToken=token;
+  localStorage.setItem('koyujeAdminSession',JSON.stringify({
+    token,
+    expiresAt:Date.now()+(Number(expiresIn)||24*60*60)*1000
+  }));
+}
+
+function clearAdminSession(){
+  adminToken='';
+  localStorage.removeItem('koyujeAdminSession');
+  sessionStorage.removeItem('koyujeAdminToken');
 }
 
 function requireActiveAdminSession(data){
   const message=String((data&&data.message)||'');
   if(data&&data.result==='error'&&/(인증|세션)/.test(message)){
-    adminToken='';
-    sessionStorage.removeItem('koyujeAdminToken');
+    clearAdminSession();
     allData=[];
     showLoginShell('관리자 로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
     const error=new Error(message||'인증 세션이 만료되었습니다.');
@@ -2113,10 +2093,10 @@ function submitPost(){
 document.getElementById('pwInput').addEventListener('keydown',function(e){
   if(e.key==='Enter')doLogin();
 });
-document.getElementById('totpInput').addEventListener('input',function(){
+document.getElementById('emailOtpInput').addEventListener('input',function(){
   this.value=this.value.replace(/\D/g,'').slice(0,6);
 });
-document.getElementById('totpInput').addEventListener('keydown',function(e){
+document.getElementById('emailOtpInput').addEventListener('keydown',function(e){
   if(e.key==='Enter')doLogin();
 });
 window.addEventListener('DOMContentLoaded',bootAdminSession);

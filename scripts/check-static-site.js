@@ -102,6 +102,7 @@ const blockedSensitiveSnippets = [
   /const\s+ADMIN_PW\s*=/,
   /const\s+ADMIN_PASSWORD_HASH\s*=\s*['"][a-f0-9]{64}['"]/i,
   /const\s+ADMIN_TOTP_SECRET\s*=\s*['"][A-Z2-7]{16,}['"]/i,
+  /const\s+ADMIN_EMAIL_CODE\s*=\s*['"]\d{6}['"]/i,
 ];
 
 const blockedInquiryLinks = [
@@ -425,13 +426,14 @@ const requiredPageSnippets = {
     "function deleteReservation(rowId,button)",
     "action:'deleteReservation'",
     "function getAdminToken()",
-    "sessionStorage.setItem('koyujeAdminToken',data.token)",
+    "function saveAdminSession(token,expiresIn)",
+    "localStorage.setItem('koyujeAdminSession'",
     "function adminApi(payload)",
     'id="securityModalBg"',
     "action:'adminChangePassword'",
-    "action:'adminTotpBegin'",
-    "action:'adminTotpConfirm'",
-    "action:'adminTotpDisable'",
+    "action:'adminVerifyEmailOtp'",
+    "action:'adminResendEmailOtp'",
+    "24시간 유지",
     'autocomplete="one-time-code"',
     "월별 접수 집계",
     "function updateMonthlyStats(source)",
@@ -465,7 +467,9 @@ const requiredPageSnippets = {
     "window.addEventListener('DOMContentLoaded',bootAnalyticsSession)",
     "관리자 인증 응답이 지연되고 있습니다",
     'autocomplete="one-time-code"',
-    "data.requiresTotp",
+    "data.requiresEmailOtp",
+    "action:'adminVerifyEmailOtp'",
+    "action:'adminResendEmailOtp'",
     "통계 응답이 지연되고 있습니다",
     ".periods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))",
     ".grid,.insight-grid{grid-template-columns:repeat(2,minmax(0,1fr))",
@@ -924,13 +928,15 @@ if (fs.existsSync("apps-script-code.gs")) {
   for (const snippet of [
     "ADMIN_PASSWORD_HASH_PROPERTY",
     "ADMIN_AUTH_VERSION_PROPERTY",
-    "ADMIN_TOTP_SECRET_PROPERTY",
+    "ADMIN_LOGIN_EMAIL",
+    "ADMIN_SESSION_TTL_SECONDS = 24 * 60 * 60",
+    "ADMIN_EMAIL_CODE_TTL_SECONDS = 5 * 60",
     "PropertiesService.getScriptProperties().getProperty",
-    "function isValidTotpCode",
+    "function verifyAdminEmailCode",
+    "function resendAdminEmailCode",
+    "MailApp.sendEmail",
+    "function cleanupExpiredAdminSessions",
     "function handleAdminPasswordChange",
-    "function beginAdminTotpSetup",
-    "function confirmAdminTotpSetup",
-    "function disableAdminTotp",
   ]) {
     if (!appsScriptSource.includes(snippet)) {
       console.error(`Missing Apps Script credential property lookup: ${snippet}`);
