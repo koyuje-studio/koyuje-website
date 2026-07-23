@@ -321,6 +321,8 @@ const requiredPageSnippets = {
     "번호 다시 입력",
     "작성 직후에는 아직 예약 현황에 반영되지 않았을 수 있습니다.",
     "resetSearch()",
+    ".pin-group{flex:1;min-width:0;gap:2px;}",
+    ".pin-input{flex:1;width:100%;min-width:0;height:50px",
   ],
   "board.html": [
     '<meta name="description" content="고유재 한옥스튜디오 예약 확인 안내. 예약확정서를 작성한 예약 정보는 휴대폰 번호로 확인하실 수 있습니다.">',
@@ -334,6 +336,8 @@ const requiredPageSnippets = {
     "function fetchWithTimeout(url,options,timeoutMs=20000)",
     "공지·예약 현황",
     "class=\"guide-form\">예약확정서</a>",
+    ".board-guide-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px",
+    ".modal-help-actions a,.modal-help-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:44px",
     "010을 제외한 뒤 8자리",
     "예약 조회 응답을 확인하지 못했습니다",
     "예약 조회 응답이 지연되고 있습니다",

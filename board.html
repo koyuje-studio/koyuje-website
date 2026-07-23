@@ -55,7 +55,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .board-guide-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;letter-spacing:0.04em;margin-bottom:8px;}
 .board-guide-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:18px;}
 .board-guide-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
-.board-guide-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:10px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
+.board-guide-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
 .board-guide-actions .guide-kakao{background:#FAE300;color:#3A1D1D;}
 .board-guide-actions .guide-kakao:hover{background:#f0d800;}
 .board-guide-actions .guide-status,.board-guide-actions .guide-form{border:0.5px solid rgba(160,120,64,0.35);color:var(--gold);}
@@ -88,7 +88,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
 /* 필터 */
 .board-filter{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-.filter-btn{font-size:11px;letter-spacing:0.15em;padding:7px 16px;background:none;border:0.5px solid var(--line);color:var(--muted);cursor:pointer;transition:all .3s;}
+.filter-btn{min-height:44px;font-size:11px;letter-spacing:0.15em;padding:7px 16px;background:none;border:0.5px solid var(--line);color:var(--muted);cursor:pointer;transition:all .3s;}
 .filter-btn.active,.filter-btn:hover{border-color:var(--gold);color:var(--gold);}
 
 /* 게시판 목록 */
@@ -127,7 +127,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 /* 페이지네이션 */
 .pagination{display:flex;justify-content:center;gap:6px;margin-top:40px;}
 .page-btn{
-  width:36px;height:36px;
+  width:44px;height:44px;
   display:flex;align-items:center;justify-content:center;
   border:0.5px solid var(--line);
   font-size:13px;color:var(--muted);
@@ -152,6 +152,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 }
 .modal-close{
   position:absolute;top:16px;right:16px;
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;
   background:none;border:none;font-size:20px;
   color:var(--muted);cursor:pointer;
 }
@@ -183,7 +184,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .pw-error{font-size:12px;color:var(--red);margin-top:8px;display:none;}
 .modal-help{margin-top:18px;border-top:0.5px solid var(--line);padding-top:16px;font-size:12px;color:var(--muted);line-height:1.75;letter-spacing:0.03em;}
 .modal-help-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
-.modal-help-actions a,.modal-help-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;border:0;background:none;font-family:'Noto Sans KR',sans-serif;cursor:pointer;}
+.modal-help-actions a,.modal-help-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;border:0;background:none;font-family:'Noto Sans KR',sans-serif;cursor:pointer;}
 .modal-help-actions .help-kakao{background:#FAE300;color:#3A1D1D;}
 .modal-help-actions .help-kakao:hover{background:#f0d800;}
 .modal-help-actions .help-close,.modal-help-actions .help-call{border:0.5px solid var(--gold);color:var(--gold);}
@@ -229,6 +230,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .board-title{align-items:flex-start;flex-wrap:wrap;line-height:1.55;}
   .board-date{display:none;}
   .modal{padding:28px 20px;}
+  .pw-input{min-height:48px;}
   .modal-help-actions{display:grid;grid-template-columns:1fr;}
 }
 </style>

@@ -43,7 +43,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .inquiry-title{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:300;letter-spacing:0.04em;margin-bottom:8px;}
 .inquiry-copy{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:0.04em;margin-bottom:14px;}
 .inquiry-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.inquiry-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 13px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
+.inquiry-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 13px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
 .inquiry-actions .inquiry-kakao{background:#FAE300;color:#3A1D1D;}
 .inquiry-actions .inquiry-kakao:hover{background:#f0d800;}
 .inquiry-actions .inquiry-form{border:0.5px solid rgba(160,120,64,0.35);color:var(--gold);}
@@ -82,7 +82,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .support-k{font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:8px;}
 .support-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:14px;}
 .support-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
-.support-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:10px 18px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
+.support-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
 .support-actions .support-kakao{background:#FAE300;color:#3A1D1D;}
 .support-actions .support-kakao:hover{background:#f0d800;}
 .support-actions .support-call{border:0.5px solid var(--gold);color:var(--gold);}
@@ -132,8 +132,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .phone-row{gap:4px;justify-content:space-between;}
   .phone-fixed{height:50px;font-size:17px;padding:0 9px;}
   .phone-dash{font-size:14px;}
-  .pin-group{gap:2px;}
-  .pin-input{width:31px;height:50px;font-size:18px;}
+  .pin-group{flex:1;min-width:0;gap:2px;}
+  .pin-input{flex:1;width:100%;min-width:0;height:50px;font-size:18px;}
   .status-guide{padding:0 16px 40px;}
   .status-guide-item{grid-template-columns:1fr;gap:6px;padding:16px 14px;}
   .support-actions{display:grid;grid-template-columns:1fr;}
