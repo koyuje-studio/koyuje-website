@@ -100,6 +100,7 @@ const blockedPublicHrefPatterns = [
 
 const blockedSensitiveSnippets = [
   /const\s+ADMIN_PW\s*=/,
+  /const\s+ADMIN_PASSWORD_HASH\s*=\s*['"][a-f0-9]{64}['"]/i,
 ];
 
 const blockedInquiryLinks = [
@@ -898,6 +899,24 @@ for (const file of htmlFiles) {
 
   if (internalPages.includes(file)) {
     requireIncludes(file, html, '<meta name="robots" content="noindex,nofollow">', "noindex robots meta");
+  }
+}
+
+if (fs.existsSync("apps-script-code.gs")) {
+  const appsScriptSource = fs.readFileSync("apps-script-code.gs", "utf8");
+
+  for (const pattern of blockedSensitiveSnippets) {
+    if (pattern.test(appsScriptSource)) {
+      console.error("Sensitive admin credential pattern found: apps-script-code.gs");
+      hasError = true;
+    }
+  }
+
+  for (const snippet of ["ADMIN_PASSWORD_HASH_PROPERTY", "PropertiesService.getScriptProperties().getProperty"]) {
+    if (!appsScriptSource.includes(snippet)) {
+      console.error(`Missing Apps Script credential property lookup: ${snippet}`);
+      hasError = true;
+    }
   }
 }
 
