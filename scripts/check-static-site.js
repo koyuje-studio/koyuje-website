@@ -388,6 +388,8 @@ const requiredPageSnippets = {
     "예약 조회 응답이 지연되고 있습니다",
   ],
   "admin.html": [
+    '<meta name="robots" content="noindex,nofollow">',
+    '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
     ":where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold2)",
     '<main id="mainContent">',
     '<label class="sr-only" for="pwInput">관리자 비밀번호</label>',
