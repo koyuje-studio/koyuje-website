@@ -21,10 +21,14 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet"></noscript>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-:root{color-scheme:light;--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;--line:rgba(28,24,20,0.1);--green:#3a6b3a;--red:#8b2e2e;}
+:root{color-scheme:light;--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#8b642f;--gold2:#c49a58;--muted:#73675b;--line:rgba(28,24,20,0.1);--green:#3a6b3a;--red:#8b2e2e;}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;min-height:100vh;}
 :where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 
@@ -43,7 +47,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .hero-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold2);letter-spacing:0.3em;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:12px;}
 .hero-label::before,.hero-label::after{content:'';width:24px;height:0.5px;background:var(--gold);}
 .hero-title{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:300;color:var(--paper);margin-bottom:10px;}
-.hero-desc{font-size:13px;color:rgba(247,242,234,0.4);letter-spacing:0.05em;line-height:1.8;}
+.hero-desc{font-size:13px;color:rgba(247,242,234,0.68);letter-spacing:0.05em;line-height:1.8;}
 
 .board-wrap{max-width:800px;margin:0 auto;padding:48px 40px 80px;}
 
@@ -75,7 +79,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .lookup-form{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;}
 .lookup-input{width:100%;border:0;border-bottom:0.5px solid var(--line);background:transparent;padding:13px 0;font-family:'Noto Sans KR',sans-serif;font-size:18px;color:var(--ink);outline:none;letter-spacing:0.08em;}
 .lookup-input:focus{border-bottom-color:var(--gold);}
-.lookup-input::placeholder{color:rgba(122,110,98,0.45);}
+.lookup-input::placeholder{color:rgba(115,103,91,0.75);}
 .lookup-btn{min-height:48px;border:0;background:var(--ink);color:var(--paper);padding:0 24px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.18em;cursor:pointer;transition:all .3s;}
 .lookup-btn:hover{background:var(--gold);}
 .lookup-hint{font-size:11px;color:var(--muted);letter-spacing:0.06em;margin-top:10px;}
@@ -87,124 +91,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .result-meta{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:0.04em;}
 .result-empty{border:0.5px solid var(--line);padding:24px 18px;margin-top:20px;text-align:center;color:var(--muted);font-size:12px;line-height:1.9;letter-spacing:0.04em;}
 
-/* 필터 */
-.board-filter{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-.filter-btn{min-height:44px;font-size:11px;letter-spacing:0.15em;padding:7px 16px;background:none;border:0.5px solid var(--line);color:var(--muted);cursor:pointer;transition:all .3s;}
-.filter-btn.active,.filter-btn:hover{border-color:var(--gold);color:var(--gold);}
-
-/* 게시판 목록 */
-.board-list{display:flex;flex-direction:column;}
-.board-item{
-  display:grid;grid-template-columns:48px 1fr;
-  align-items:center;gap:16px;
-  padding:16px 0;border-bottom:0.5px solid var(--line);
-  cursor:pointer;transition:all .2s;
-  text-decoration:none;color:var(--ink);
-}
-.board-item:first-child{border-top:0.5px solid var(--line);}
-.board-item:hover{padding-left:6px;}
-.board-date{display:none;}
-.board-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:0.1em;text-align:center;}
-.board-title-wrap{}
-.board-title{font-size:14px;letter-spacing:0.03em;margin-bottom:3px;display:flex;align-items:center;gap:8px;}
-.board-meta{font-size:11px;color:var(--muted);letter-spacing:0.05em;}
-.cat-badge{
-  display:inline-block;font-size:9px;letter-spacing:0.15em;
-  padding:2px 8px;border:0.5px solid;
-}
-.cat-badge.reservation{color:var(--gold);border-color:rgba(160,120,64,0.3);background:rgba(160,120,64,0.05);}
-.cat-badge.notice{color:var(--red);border-color:rgba(139,46,46,0.3);background:rgba(139,46,46,0.05);}
-.status-done{color:var(--green);font-size:13px;}
-.status-wait{color:#8b6914;font-size:13px;}
-.reservation-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#8b6914;background:rgba(139,105,20,0.08);border-radius:999px;padding:2px 8px;letter-spacing:0.08em;white-space:nowrap;}
-.reservation-status-badge::before{content:'⏳';font-size:10px;margin-right:0;vertical-align:0;animation:none;}
-.reservation-status-badge.done{color:var(--green);background:rgba(58,107,58,0.08);}
-.reservation-status-badge.done::before{content:'✓';animation:none;}
-.reservation-status-badge.cancel{color:var(--red);background:rgba(139,46,46,0.06);}
-.reservation-status-badge.cancel::before{content:'×';animation:none;}
-.new-badge{font-size:9px;color:var(--gold);padding:0;letter-spacing:0.16em;font-weight:400;animation:newTextPulse 1.8s ease-in-out infinite;}
-.board-date{font-size:12px;color:var(--muted);text-align:right;letter-spacing:0.05em;}
-
-/* 페이지네이션 */
-.pagination{display:flex;justify-content:center;gap:6px;margin-top:40px;}
-.page-btn{
-  width:44px;height:44px;
-  display:flex;align-items:center;justify-content:center;
-  border:0.5px solid var(--line);
-  font-size:13px;color:var(--muted);
-  cursor:pointer;transition:all .3s;background:none;
-}
-.page-btn.active,.page-btn:hover{border-color:var(--gold);color:var(--gold);}
-.page-btn:disabled{opacity:0.3;cursor:not-allowed;}
-
-/* 글 상세 모달 */
-.modal-bg{
-  display:none;position:fixed;inset:0;
-  background:rgba(28,24,20,0.6);z-index:100;
-  align-items:center;justify-content:center;
-  padding:20px;
-}
-.modal-bg.show{display:flex;}
-.modal{
-  background:var(--paper);
-  width:100%;max-width:520px;
-  max-height:80vh;overflow-y:auto;
-  padding:40px;position:relative;
-}
-.modal-close{
-  position:absolute;top:16px;right:16px;
-  width:44px;height:44px;display:flex;align-items:center;justify-content:center;
-  background:none;border:none;font-size:20px;
-  color:var(--muted);cursor:pointer;
-}
-.modal-cat{font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;}
-.modal-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:6px;line-height:1.4;}
-.modal-meta{font-size:12px;color:var(--muted);margin-bottom:24px;padding-bottom:20px;border-bottom:0.5px solid var(--line);}
-.modal-body{font-size:14px;line-height:2;color:var(--muted);}
-
-/* 비밀번호 입력 */
-.pw-form{text-align:center;padding:20px 0;}
-.pw-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;margin-bottom:8px;}
-.pw-desc{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.8;}
-.pw-input{
-  width:100%;border:none;border-bottom:0.5px solid var(--line);
-  background:transparent;padding:12px 0;
-  font-size:20px;text-align:center;letter-spacing:0.3em;
-  outline:none;transition:border-color .3s;
-  font-family:'Cormorant Garamond',serif;
-}
-.pw-input:focus{border-bottom-color:var(--gold);}
-.pw-hint{font-size:11px;color:var(--muted);margin-top:10px;letter-spacing:0.1em;}
-.btn-pw{
-  margin-top:24px;width:100%;
-  background:var(--ink);color:var(--paper);border:none;
-  padding:14px;font-family:'Noto Sans KR',sans-serif;
-  font-size:12px;letter-spacing:0.2em;cursor:pointer;transition:all .3s;
-}
-.btn-pw:hover{background:var(--gold);}
-.pw-error{font-size:12px;color:var(--red);margin-top:8px;display:none;}
-.modal-help{margin-top:18px;border-top:0.5px solid var(--line);padding-top:16px;font-size:12px;color:var(--muted);line-height:1.75;letter-spacing:0.03em;}
-.modal-help-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
-.modal-help-actions a,.modal-help-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;border:0;background:none;font-family:'Noto Sans KR',sans-serif;cursor:pointer;}
-.modal-help-actions .help-kakao{background:#FAE300;color:#3A1D1D;}
-.modal-help-actions .help-kakao:hover{background:#f0d800;}
-.modal-help-actions .help-close,.modal-help-actions .help-call{border:0.5px solid var(--gold);color:var(--gold);}
-.modal-help-actions .help-close:hover,.modal-help-actions .help-call:hover{background:var(--gold);color:var(--paper);}
-
 /* 로딩 */
 .loading-wrap{text-align:center;padding:60px 0;color:var(--muted);font-size:13px;letter-spacing:0.1em;}
 .spinner{display:inline-block;width:24px;height:24px;border:1px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes newPulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}50%{box-shadow:0 0 0 4px rgba(192,57,43,0.12)}}
-@keyframes newTextPulse{0%,100%{opacity:.55}50%{opacity:1}}
-@keyframes statusBlink{0%,100%{opacity:.35}50%{opacity:1}}
-@media(prefers-reduced-motion:reduce){
-  .new-badge,.reservation-status-badge::before{animation:none;}
-}
-
-.empty-wrap{text-align:center;padding:60px 0;}
-.empty-text{font-size:13px;color:var(--muted);letter-spacing:0.1em;}
-
 .bottom-link{text-align:center;padding:24px 0 0;font-size:12px;color:var(--muted);}
 .bottom-link a{color:var(--gold);text-decoration:none;}
 
@@ -227,15 +117,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .result-head{align-items:flex-start;flex-direction:column;gap:8px;}
   .result-name{font-size:17px;line-height:1.5;}
   .result-meta{line-height:1.9;}
-  .board-item{grid-template-columns:36px 1fr;}
-  .board-title{align-items:flex-start;flex-wrap:wrap;line-height:1.55;}
-  .board-date{display:none;}
-  .modal{padding:28px 20px;}
-  .pw-input{min-height:48px;}
-  .modal-help-actions{display:grid;grid-template-columns:1fr;}
 }
 </style>
-<script src="/assets/js/runtime-config.js"></script>
+<script src="/assets/js/runtime-config.js" defer></script>
 <script src="/assets/js/tracking.js" defer></script>
 </head>
 <body>
@@ -255,6 +139,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   </button>
 </nav>
 
+<main id="mainContent">
 <div class="hero">
   <div class="hero-label">Reservation Check</div>
   <h1 class="hero-title">예약 확인</h1>
@@ -306,34 +191,32 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="result-list" id="lookupResult"></div>
   </section>
 
-  <div class="pagination" id="pagination"></div>
-
   <div class="bottom-link">
     예약 가능일 문의 · <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener">카카오톡 채널</a>
   </div>
 </div>
 
-<!-- 모달 -->
-<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="게시글 상세" tabindex="-1">
-    <button type="button" class="modal-close" aria-label="게시글 닫기" onclick="closeModal()">✕</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
+</main>
 <script>
-const SCRIPT_URL=(window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
-let currentPage=1;
-let currentFilter='all';
-let allItems=[];
-let filteredItems=[];
-const PAGE_SIZE=15;
+function getScriptUrl(){
+  return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+}
 
 function fetchWithTimeout(url,options,timeoutMs=20000){
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),timeoutMs);
   return fetch(url,Object.assign({},options,{signal:controller.signal}))
     .finally(()=>clearTimeout(timer));
+}
+
+function escapeHTML(value){
+  return String(value??'').replace(/[&<>"']/g,char=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[char]));
 }
 
 // 초기 로드
@@ -355,11 +238,17 @@ function lookupReservation(){
     return;
   }
 
+  const scriptUrl=getScriptUrl();
+  if(!scriptUrl){
+    result.innerHTML='<div class="result-empty">예약 조회 시스템 연결 정보를 불러오지 못했습니다.<br>페이지를 새로고침한 뒤 다시 시도해 주세요.</div>';
+    return;
+  }
+
   btn.disabled=true;
   btn.textContent='확인 중';
   result.innerHTML='<div class="result-empty"><div class="spinner"></div><br>예약 정보를 확인하는 중입니다.</div>';
 
-  fetchWithTimeout(SCRIPT_URL,{
+  fetchWithTimeout(scriptUrl,{
     method:'POST',
     body:JSON.stringify({action:'reservationLookup',phone8:phone8})
   })
@@ -403,319 +292,6 @@ function statusText(status){
   if(s.includes('삭제'))return'확인 필요';
   return'접수 확인중';
 }
-
-function loadBoard(){
-  document.getElementById('boardList').innerHTML='<div class="loading-wrap"><div class="spinner"></div><br>게시글을 불러오는 중...</div>';
-
-  fetchWithTimeout(SCRIPT_URL+'?action=board&page=1')
-    .then(r=>r.json())
-    .then(data=>{
-      if(data.result!=='success'){showEmpty();return;}
-
-      const firstBatch = data.data || [];
-      const total = data.total || firstBatch.length;
-      const limit = data.limit || 15;
-      const totalPages = Math.ceil(total / limit);
-
-      if(totalPages <= 1){
-        allItems = firstBatch;
-        applyFilter();
-        return;
-      }
-
-      // 1페이지 먼저 즉시 표시
-      allItems = firstBatch;
-      applyFilter();
-
-      // 나머지 페이지 백그라운드에서 병렬 fetch
-      const promises = [];
-      for(let p = 2; p <= totalPages; p++){
-        promises.push(
-          fetchWithTimeout(SCRIPT_URL+'?action=board&page='+p)
-            .then(r=>r.json())
-            .then(d=> d.result==='success' ? (d.data||[]) : [])
-            .catch(()=>[])
-        );
-      }
-
-      Promise.all(promises).then(results=>{
-        let allData = [...firstBatch];
-        results.forEach(r=>{ allData = allData.concat(r); });
-        allItems = allData;
-        applyFilter();
-      });
-    })
-    .catch(()=>showEmpty());
-}
-
-function setFilter(cat,el){
-  currentFilter=cat;
-  currentPage=1;
-  document.querySelectorAll('.filter-btn').forEach(b=>{
-    b.classList.remove('active');
-    b.setAttribute('aria-pressed','false');
-  });
-  el.classList.add('active');
-  el.setAttribute('aria-pressed','true');
-  applyFilter();
-}
-
-function applyFilter(){
-  let base = [...allItems];
-
-  // 공지는 항상 최상단 고정
-  const notices = base.filter(i => i.category === '공지');
-  const others = base.filter(i => i.category !== '공지');
-
-  if(currentFilter === 'all'){
-    filteredItems = [...notices, ...others];
-  } else if(currentFilter === '공지'){
-    filteredItems = notices;
-  } else {
-    filteredItems = others.filter(i => i.category === currentFilter);
-  }
-
-  renderPage(1);
-}
-
-function renderPage(page){
-  currentPage=page;
-  const start=(page-1)*PAGE_SIZE;
-  const items=filteredItems.slice(start,start+PAGE_SIZE);
-  const list=document.getElementById('boardList');
-
-  if(items.length===0){showEmpty();return;}
-
-  list.innerHTML=items.map((item,idx)=>{
-    const globalNum=filteredItems.length-(start+idx);
-    const isNotice=item.category==='공지';
-    const catClass=isNotice?'notice':'reservation';
-    const catLabel=isNotice?'공지':'예약 현황';
-    const isPrivate=item.isPublic==='비공개'||item.hasPassword;
-
-    // 이름 추출 (제목에서 "님" 앞까지 전체)
-    const nameMatch = item.title && item.title.match(/^(.+?)님/);
-    const displayName = nameMatch ? nameMatch[1] : '';
-
-    // 상태 추출
-    const statusBadge = isNotice ? '' : reservationStatusBadge(item);
-
-    // NEW 뱃지 (10일 이내)
-    const isNew = isNewReservation(item.date);
-    const newBadge = isNew
-      ? '<span class="new-badge">NEW</span>'
-      : '';
-
-    // 제목
-    const displayTitle = !isNotice && displayName
-      ? `${escapeHTML(displayName)}님 예약확정서 접수완료`
-      : isPrivate && displayName
-      ? `${escapeHTML(displayName)}님 <span style="color:var(--muted);font-size:12px;">🔒</span>`
-      : isPrivate
-      ? '<span style="color:var(--muted);">🔒 비밀글</span>'
-      : escapeHTML(item.title||'');
-    const accessibleTitle = !isNotice && displayName
-      ? `${displayName}님 예약확정서 접수완료`
-      : isPrivate && displayName
-      ? `${displayName}님 비밀글`
-      : isPrivate
-      ? '비밀글'
-      : (item.title||'게시글');
-
-    return `
-    <div class="board-item" role="button" tabindex="0" aria-label="게시글 열기: ${escapeAttr(accessibleTitle)}" data-num="${escapeAttr(item.num)}" data-pw="${escapeAttr(item.hasPassword)}" onclick="openPost(this.dataset.num,this.dataset.pw)" onkeydown="openPostFromKey(event,this.dataset.num,this.dataset.pw)">
-      <div class="board-num">${isNotice?'📌':globalNum}</div>
-      <div class="board-title-wrap">
-        <div class="board-title" style="gap:8px;align-items:center;">
-          <span class="cat-badge ${catClass}">${catLabel}</span>
-          <span style="font-size:14px;letter-spacing:0.03em;">${displayTitle}</span>
-          ${statusBadge}
-          ${newBadge}
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  renderPagination();
-}
-
-function reservationStatusBadge(item){
-  const text=String(item.status||item.title||'');
-  if(text.includes('취소')||text.includes('×')||text.includes('❌')){
-    return '<span class="reservation-status-badge cancel">취소</span>';
-  }
-  if(text.includes('완료')||text.includes('확정')||text.includes('✓')||text.includes('✅')){
-    return '<span class="reservation-status-badge done">확정완료</span>';
-  }
-  return '<span class="reservation-status-badge">확인중</span>';
-}
-
-function isNewReservation(dateText){
-  const created=parseBoardDate(dateText);
-  if(!created)return false;
-  const diffDays=(Date.now()-created.getTime())/(1000*60*60*24);
-  return diffDays>=0&&diffDays<=10;
-}
-
-function parseBoardDate(dateText){
-  const text=String(dateText||'');
-  const match=text.match(/(\d{4})\s*[.\-년]\s*(\d{1,2})\s*[.\-월]\s*(\d{1,2})/);
-  if(!match){
-    const fallback=new Date(text);
-    return Number.isNaN(fallback.getTime())?null:fallback;
-  }
-  return new Date(Number(match[1]),Number(match[2])-1,Number(match[3]));
-}
-
-function escapeAttr(value){
-  return String(value ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;');
-}
-
-function escapeHTML(value){
-  return String(value ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;');
-}
-
-function formatBoardContent(value){
-  return escapeHTML(value).replace(/\r?\n/g,'<br>');
-}
-
-function openPostFromKey(event,num,hasPw){
-  if(event.key!=='Enter'&&event.key!==' ')return;
-  event.preventDefault();
-  openPost(num,hasPw);
-}
-
-function renderPagination(){
-  const total=Math.ceil(filteredItems.length/PAGE_SIZE);
-  if(total<=1){document.getElementById('pagination').innerHTML='';return;}
-  let html='';
-  const start=Math.max(1,currentPage-2);
-  const end=Math.min(total,currentPage+2);
-  if(currentPage>1)html+=`<button type="button" class="page-btn" aria-label="이전 페이지" onclick="renderPage(${currentPage-1})">‹</button>`;
-  for(let i=start;i<=end;i++){
-    html+=`<button type="button" class="page-btn ${i===currentPage?'active':''}" ${i===currentPage?'aria-current="page"':''} onclick="renderPage(${i})">${i}</button>`;
-  }
-  if(currentPage<total)html+=`<button type="button" class="page-btn" aria-label="다음 페이지" onclick="renderPage(${currentPage+1})">›</button>`;
-  document.getElementById('pagination').innerHTML=html;
-}
-
-function formatDate(d){
-  if(!d)return'';
-  const s=String(d).slice(0,10);
-  const parts=s.split('-');
-  if(parts.length===3)return parts[1]+'월 '+parts[2]+'일';
-  return s;
-}
-
-function showEmpty(){
-  document.getElementById('boardList').innerHTML='<div class="empty-wrap"><div class="empty-text">게시글이 없습니다.</div></div>';
-  document.getElementById('pagination').innerHTML='';
-}
-
-// 글 열기
-function openPost(num, hasPw){
-  const modal=document.getElementById('modal');
-  const bg=document.getElementById('modalBg');
-  bg.classList.add('show');
-  modal.focus();
-
-  if(hasPw==='true'){
-    showPwForm(num);
-  } else {
-    fetchPost(num,'');
-  }
-}
-
-function showPwForm(num){
-  document.getElementById('modalContent').innerHTML=`
-    <div class="pw-form">
-      <div class="pw-title">🔒 예약 확인 글입니다</div>
-      <p class="pw-desc">예약 시 남겨주신<br><strong style="color:var(--ink);font-weight:400;">전화번호 끝 4자리</strong>로 확인합니다.</p>
-      <input type="number" class="pw-input" id="pwInput" placeholder="0000" maxlength="4" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)">
-      <p class="pw-hint">예) 010-1234-<strong>5678</strong> → 5678 입력</p>
-      <div class="pw-error" id="pwError">전화번호 끝 4자리를 다시 확인해 주세요.</div>
-      <button type="button" class="btn-pw" onclick="submitPw('${num}')">확인</button>
-      <div class="modal-help">
-        열람되지 않는 경우, 예약 시 입력한 번호가 다를 수 있습니다.
-        <div class="modal-help-actions">
-          <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a>
-        </div>
-      </div>
-    </div>`;
-  setTimeout(()=>document.getElementById('pwInput').focus(),100);
-  document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitPw(num);});
-}
-
-function submitPw(num){
-  const pw = document.getElementById('pwInput').value;
-  if(!pw || pw.length < 4){ document.getElementById('pwError').style.display='block'; return; }
-  // 4자리 맞춰서 앞에 0 채우기
-  const pwPadded = pw.padStart(4,'0');
-  fetchPost(num, pwPadded);
-}
-
-function fetchPost(num,pw){
-  document.getElementById('modalContent').innerHTML='<div class="loading-wrap"><div class="spinner"></div></div>';
-  fetchWithTimeout(SCRIPT_URL,{
-    method:'POST',
-    body:JSON.stringify({action:'boardDetail',num:num,password:pw})
-  })
-    .then(r=>r.json())
-    .then(data=>{
-      if(data.result==='needPassword'){
-        showPwForm(num);
-        setTimeout(()=>{
-          const err=document.getElementById('pwError');
-          if(err)err.style.display='block';
-        },100);
-        return;
-      }
-      if(data.result!=='success'){
-        document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">글을 불러올 수 없습니다.</p><div class="modal-help-actions"><button type="button" class="help-close" onclick="hideModal()">목록으로 돌아가기</button><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
-        return;
-      }
-      const d=data.data;
-      const isDone=d.title&&d.title.includes('✅');
-      const isWait=d.title&&d.title.includes('⏳');
-      const fallbackContent = isDone
-        ? '예약 확인이 완료되었습니다. 촬영 당일 뵙겠습니다! 감사합니다 😊'
-        : isWait
-        ? '예약 정보가 접수되었습니다. 입금 확인 후 48시간 이내에 예약 확인 연락을 드리겠습니다.'
-        : '내용이 없습니다.';
-      document.getElementById('modalContent').innerHTML=`
-        <div class="modal-cat">${escapeHTML(d.category==='공지'?'공지':'예약 현황')}</div>
-        <div class="modal-title">${escapeHTML(d.title||'')}</div>
-        <div class="modal-meta">${escapeHTML(d.author||'고유재')} · ${escapeHTML(d.date||'')}</div>
-        <div class="modal-body">${formatBoardContent(d.content||fallbackContent)}</div>`;
-    })
-    .catch(err=>{
-      const message=err.name==='AbortError'?'응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':'오류가 발생했습니다.';
-      document.getElementById('modalContent').innerHTML='<div style="text-align:center;color:var(--muted);padding:40px 0;"><p style="margin-bottom:14px;">'+message+'</p><div class="modal-help-actions"><button type="button" class="help-close" onclick="hideModal()">목록으로 돌아가기</button><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="help-kakao">카카오톡 문의</a></div></div>';
-    });
-}
-
-function closeModal(e){
-  if(e&&e.target!==document.getElementById('modalBg')&&e.type!=='click')return;
-  if(e&&e.currentTarget===document.getElementById('modalBg')&&e.target!==e.currentTarget)return;
-  hideModal();
-}
-
-function hideModal(){
-  document.getElementById('modalBg').classList.remove('show');
-}
-
-document.querySelector('.modal-close') && document.querySelector('.modal-close').addEventListener('click',hideModal);
-document.addEventListener('keydown',e=>{if(e.key==='Escape')hideModal();});
 // 모바일 메뉴
 const boardToggle = document.getElementById('boardNavToggle');
 if(boardToggle){
