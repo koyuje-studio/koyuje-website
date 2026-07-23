@@ -445,6 +445,7 @@ const requiredPageSnippets = {
     '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
     ':where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold2)',
     '<label class="sr-only" for="pwInput">관리자 비밀번호</label>',
+    '<main class="login booting" id="loginBox" aria-label="통계 관리자 로그인">',
     'id="loginErr" role="alert" aria-live="polite"',
     'id="mainContent"',
     'role="group" aria-label="통계 조회 기간"',
