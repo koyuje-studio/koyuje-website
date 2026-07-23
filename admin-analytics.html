@@ -171,9 +171,9 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     </div>
     <section class="grid">
       <div class="card revenue primary"><div class="label">선택 상품 기준 예상액</div><div class="num" id="expectedRevenue">—</div><div class="sub">취소·삭제 제외</div></div>
-      <div class="card revenue primary"><div class="label">스튜디오 실수납</div><div class="num" id="confirmedRevenue">—</div><div class="sub">예약금+잔금-헤메</div></div>
+      <div class="card revenue primary"><div class="label">스튜디오 실수납</div><div class="num" id="confirmedRevenue">—</div><div class="sub">예약금 + 스튜디오 잔금</div></div>
       <div class="card revenue warning"><div class="label">예상 대비 미반영액</div><div class="num" id="revenueGap">—</div><div class="sub">예상액-실수납</div></div>
-      <div class="card revenue"><div class="label">예약금+잔금 수납</div><div class="num" id="collectedRevenue">—</div><div class="sub">고객 결제 입력 기준</div></div>
+      <div class="card revenue"><div class="label">고객 총 결제 입력</div><div class="num" id="collectedRevenue">—</div><div class="sub">스튜디오 수납 + 헤메 외부 정산</div></div>
       <div class="card revenue"><div class="label">헤메 외부 정산</div><div class="num" id="hairMakeupRevenue">—</div><div class="sub">스튜디오 매출 제외</div></div>
       <div class="card"><div class="label">취소 제외 예약</div><div class="num" id="activeReservations">—</div><div class="sub">선택 기간 기준</div></div>
       <div class="card"><div class="label">취소 건</div><div class="num" id="cancelReservations">—</div><div class="sub">매출 제외</div></div>
@@ -646,7 +646,7 @@ function render(data,reservations){
   setText('rangeLabel',(data.rangeLabel||'선택 기간')+' 기준');
   setText('expectedRevenue',formatWon(revenue.expectedRevenue));
   setText('confirmedRevenue',formatWon(revenue.confirmedRevenue));
-  setText('revenueGap',formatWon(Math.max(revenue.expectedRevenue-revenue.confirmedRevenue,0)));
+  setText('revenueGap',formatWon(Math.max(revenue.expectedRevenue-revenue.collectedRevenue,0)));
   setText('collectedRevenue',formatWon(revenue.collectedRevenue));
   setText('hairMakeupRevenue',formatWon(revenue.hairMakeupRevenue));
   setText('activeReservations',revenue.activeReservations);
