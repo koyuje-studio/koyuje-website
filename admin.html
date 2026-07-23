@@ -1229,8 +1229,8 @@ function getSettlement(item){
   const deposit=getDepositAmount(item);
   const balance=parseWon(item.actualPaymentAmount);
   const hairMakeup=parseWon(item.hairMakeupCost);
-  const collected=deposit+balance;
-  const studioRevenue=Math.max(0,collected-hairMakeup);
+  const studioRevenue=deposit+balance;
+  const collected=studioRevenue+hairMakeup;
   const suggestedBalance=Math.max(0,expected-deposit-hairMakeup);
   const unsettled=Math.max(0,expected-deposit-hairMakeup-balance);
   return {expected,deposit,balance,hairMakeup,collected,studioRevenue,suggestedBalance,unsettled};
@@ -1930,7 +1930,7 @@ function updateEditModalState(){
   const hairMakeup=editNumberValue('hairMakeupCost');
   const suggestedBalance=Math.max(0,estimate.total-deposit-hairMakeup);
   const unsettled=Math.max(0,estimate.total-deposit-hairMakeup-balance);
-  const studioRevenue=Math.max(0,deposit+balance-hairMakeup);
+  const studioRevenue=deposit+balance;
   const settlementMissing=[];
   if(!editFieldFromDom('depositConfirmedAt'))settlementMissing.push('예약금 확인일');
   if(!editFieldFromDom('depositPaymentMethod'))settlementMissing.push('예약금 결제수단');
@@ -1951,7 +1951,7 @@ function updateEditModalState(){
     </div>
     <div class="edit-settlement-formula">고객 안내 잔금 = 예상 총액 ${formatWon(estimate.total)} - 예약금 ${formatWon(deposit)} - 헤메 별도 이체 ${formatWon(hairMakeup)}</div>
     <div class="edit-settlement-callout">헤어·메이크업 비용은 고객이 외부 선생님께 별도 이체하는 금액입니다. 고유재에서 받는 잔금 안내 시에는 이 금액을 제외해 안내합니다.</div>
-    <div class="edit-settlement-sub">입력된 잔금 ${formatWon(balance)} / 미정산 차액 ${formatWon(unsettled)} / 헤메 차감 후 스튜디오 매출 ${formatWon(studioRevenue)}</div>
+    <div class="edit-settlement-sub">입력된 잔금 ${formatWon(balance)} / 미정산 차액 ${formatWon(unsettled)} / 스튜디오 수납액 ${formatWon(studioRevenue)}</div>
     <div class="edit-settlement-status ${settlementDone?'done':''}">${settlementDone?'✓ 정산 입력 완료':'정산 미입력: '+settlementMissing.join(', ')}</div>
   `;
   const totalEl=document.getElementById('editEstimateTotal');

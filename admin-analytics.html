@@ -540,8 +540,8 @@ function getSettlement(item){
   const deposit=getDepositAmount(item);
   const balance=parseWon(item.actualPaymentAmount);
   const hairMakeup=parseWon(item.hairMakeupCost);
-  const collected=deposit+balance;
-  const studioRevenue=Math.max(0,collected-hairMakeup);
+  const studioRevenue=deposit+balance;
+  const collected=studioRevenue+hairMakeup;
   return {deposit,balance,hairMakeup,collected,studioRevenue};
 }
 function getStatusClass(status){
