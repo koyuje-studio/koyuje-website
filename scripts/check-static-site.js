@@ -511,7 +511,7 @@ const requiredPageSnippets = {
 };
 
 const expectedSitemapUrls = Object.values(publicPages);
-const expectedSitemapLastmod = "2026-07-01";
+const expectedSitemapLastmod = "2026-07-23";
 const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
 const requiredRobotsLines = [
   "User-agent: *",
