@@ -21,14 +21,17 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&family=Noto+Sans+KR:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet"></noscript>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
   color-scheme:light;
   --ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;
-  --gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;
+  --gold:#8b642f;--gold2:#c49a58;--muted:#73675b;--soft:#73675b;
   --line:rgba(28,24,20,0.1);--red:#8b2e2e;--green:#3a6b3a;
 }
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;}
@@ -52,15 +55,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:24px;}
 .step{background:rgba(247,242,234,0.04);border:0.5px solid rgba(247,242,234,0.07);padding:20px 18px;}
 .step.active{background:rgba(160,120,64,0.12);border-color:rgba(160,120,64,0.3);}
-.step-n{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold);letter-spacing:0.2em;margin-bottom:6px;}
+.step-n{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--gold2);letter-spacing:0.2em;margin-bottom:6px;}
 .step-t{font-size:13px;color:rgba(247,242,234,0.85);margin-bottom:4px;}
-.step-d{font-size:11px;color:rgba(247,242,234,0.38);line-height:1.7;}
-.step-badge{display:inline-block;font-size:9px;letter-spacing:0.15em;background:var(--gold);color:var(--ink);padding:2px 7px;margin-bottom:8px;}
+.step-d{font-size:11px;color:rgba(247,242,234,0.65);line-height:1.7;}
+.step-badge{display:inline-block;font-size:9px;letter-spacing:0.15em;background:var(--gold);color:var(--paper);padding:2px 7px;margin-bottom:8px;}
 .account{background:rgba(160,120,64,0.1);border:0.5px solid rgba(160,120,64,0.22);padding:18px 22px;display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
 .account-label{font-size:10px;letter-spacing:0.2em;color:var(--gold2);margin-bottom:5px;}
 .account-num{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--paper);letter-spacing:0.08em;}
-.account-name{font-size:11px;color:rgba(247,242,234,0.4);margin-top:3px;letter-spacing:0.1em;}
-.account-note{font-size:12px;color:rgba(247,242,234,0.38);line-height:1.9;letter-spacing:0.03em;}
+.account-name{font-size:11px;color:rgba(247,242,234,0.65);margin-top:3px;letter-spacing:0.1em;}
+.account-note{font-size:12px;color:rgba(247,242,234,0.65);line-height:1.9;letter-spacing:0.03em;}
 
 /* FORM WRAP */
 .form-wrap{max-width:720px;margin:0 auto;padding:48px 40px;}
@@ -82,7 +85,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden{display:none;}
 .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:14px;border-bottom:0.5px solid var(--line);}
 .sec-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:0.15em;min-width:24px;}
-.sec-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:400;letter-spacing:0.06em;}
+.sec-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;letter-spacing:0.06em;}
 
 .field{margin-bottom:20px;}
 .f-label{display:block;font-size:11px;letter-spacing:0.18em;color:var(--muted);margin-bottom:7px;}
@@ -114,6 +117,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .address-trigger{cursor:pointer;}
 .address-search-btn{background:var(--ink);color:var(--paper);border:none;padding:0 16px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;transition:background .3s;}
 .address-search-btn:hover{background:var(--gold);}
+.address-search-btn:disabled{background:var(--muted);cursor:wait;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
 
@@ -262,7 +266,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .btn-submit{padding:17px 40px;}
 }
 </style>
-<script src="/assets/js/runtime-config.js"></script>
+<script src="/assets/js/runtime-config.js" defer></script>
 <script src="/assets/js/tracking.js" defer></script>
 </head>
 <body>
@@ -279,6 +283,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <a href="/" class="nav-back">← 홈으로</a>
 </nav>
 
+<main id="mainContent">
 <!-- GUIDE BANNER -->
 <div class="guide">
   <div class="guide-label">예약 접수 안내</div>
@@ -704,8 +709,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   </div>
 </div>
 
+</main>
 <script>
-const SCRIPT_URL = (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+function getScriptUrl() {
+  return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+}
 
 // 전화번호 자동 하이픈
 document.getElementById('phone').addEventListener('input', function(e) {
@@ -719,22 +727,48 @@ document.getElementById('phone').addEventListener('input', function(e) {
   }
 });
 
-// 카카오 주소 검색
-function searchAddress() {
-  if (!window.daum || !window.daum.Postcode) {
+// 카카오 주소 검색은 사용자가 요청할 때만 불러옵니다.
+let postcodeLoader;
+function loadPostcodeScript() {
+  if (window.daum && window.daum.Postcode) return Promise.resolve();
+  if (postcodeLoader) return postcodeLoader;
+
+  postcodeLoader = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.async = true;
+    script.onload = () => window.daum && window.daum.Postcode ? resolve() : reject(new Error('POSTCODE_UNAVAILABLE'));
+    script.onerror = () => reject(new Error('POSTCODE_LOAD_FAILED'));
+    document.head.appendChild(script);
+  }).catch(error => {
+    postcodeLoader = null;
+    throw error;
+  });
+  return postcodeLoader;
+}
+
+async function searchAddress() {
+  const button = document.getElementById('addressSearchBtn');
+  const originalText = button.textContent;
+  button.disabled = true;
+  button.textContent = '불러오는 중...';
+  try {
+    await loadPostcodeScript();
+    new daum.Postcode({
+      oncomplete: function(data) {
+        document.getElementById('postcode').value = data.zonecode;
+        document.getElementById('addressMain').value = data.roadAddress || data.jibunAddress;
+        document.getElementById('addressDetail').focus();
+        updateAddress();
+      }
+    }).open();
+  } catch (error) {
     alert('주소 검색을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
     focusField('addressSearchBtn');
-    return;
+  } finally {
+    button.disabled = false;
+    button.textContent = originalText;
   }
-  new daum.Postcode({
-    oncomplete: function(data) {
-      document.getElementById('postcode').value = data.zonecode;
-      document.getElementById('addressMain').value = data.roadAddress || data.jibunAddress;
-      document.getElementById('addressDetail').focus();
-      // hidden address 업데이트
-      updateAddress();
-    }
-  }).open();
 }
 
 // 상세주소 입력시 hidden address 업데이트
@@ -1121,7 +1155,8 @@ function clearReservationRequestId() {
 }
 
 function submitForm() {
-  if (!SCRIPT_URL) {
+  const scriptUrl = getScriptUrl();
+  if (!scriptUrl) {
     alert('예약 접수 시스템 연결 정보를 불러오지 못했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.');
     return;
   }
@@ -1312,7 +1347,7 @@ function submitForm() {
 
   const controller=new AbortController();
   const requestTimer=setTimeout(()=>controller.abort(),30000);
-  fetch(SCRIPT_URL, {
+  fetch(scriptUrl, {
     method: 'POST',
     body: JSON.stringify(payload),
     signal: controller.signal
