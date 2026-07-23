@@ -32,6 +32,7 @@
   --line:rgba(28,24,20,0.1);--red:#8b2e2e;--green:#3a6b3a;
 }
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 
 /* NAV */
 .nav{
@@ -341,11 +342,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="sec-head"><div class="sec-num">01</div><div class="sec-title">아기 정보</div></div>
     <div class="grid2">
       <div class="field">
-        <label class="f-label" id="babyNameLabel">아기 이름 <span class="req">*</span></label>
+        <label class="f-label" id="babyNameLabel" for="babyName">아기 이름 <span class="req">*</span></label>
         <input type="text" class="f-input" id="babyName" placeholder="홍길동" autocomplete="off" required>
       </div>
       <div class="field">
-        <label class="f-label">아기 생년월일 <span class="req">*</span></label>
+        <label class="f-label" for="babyBirth">아기 생년월일 <span class="req">*</span></label>
         <input type="date" class="f-input" id="babyBirth" required>
       </div>
     </div>
@@ -362,7 +363,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="twin-fields is-hidden" id="twinFields">
       <div class="grid2">
         <div class="field">
-          <label class="f-label">둘째 아기 이름 <span class="req">*</span></label>
+          <label class="f-label" for="secondBabyName">둘째 아기 이름 <span class="req">*</span></label>
           <input type="text" class="f-input" id="secondBabyName" placeholder="홍길순" autocomplete="off">
         </div>
         <div class="field">
@@ -393,7 +394,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </div>
     </div>
     <div class="field">
-      <label class="f-label">형제 정보 (이름 / 성별 / 나이)</label>
+      <label class="f-label" for="siblingInfo">형제 정보 (이름 / 성별 / 나이)</label>
       <input type="text" class="f-input" id="siblingInfo" placeholder="예) 홍길순 / 여 / 5세">
     </div>
     <div class="field">
@@ -411,16 +412,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="sec-head"><div class="sec-num">03</div><div class="sec-title">부모님 정보</div></div>
     <div class="grid2">
       <div class="field">
-        <label class="f-label">부모님 성함 <span class="req">*</span></label>
+        <label class="f-label" for="parentName">부모님 성함 <span class="req">*</span></label>
         <input type="text" class="f-input" id="parentName" placeholder="홍길동 / 김영희" autocomplete="name" required>
       </div>
       <div class="field">
-        <label class="f-label">연락처 <span class="req">*</span></label>
+        <label class="f-label" for="phone">연락처 <span class="req">*</span></label>
         <input type="tel" class="f-input" id="phone" placeholder="010-0000-0000" maxlength="13" inputmode="tel" autocomplete="tel" required>
       </div>
     </div>
     <div class="field">
-      <label class="f-label">이메일 <span class="req">*</span></label>
+      <label class="f-label" for="email">이메일 <span class="req">*</span></label>
       <input type="email" class="f-input" id="email" placeholder="촬영 원본 및 수정본 발송용" inputmode="email" autocomplete="email" required>
       <p class="hint">예약 접수 안내와 촬영 결과물 발송에 사용되니 메일 주소를 한 번 더 확인해 주세요.</p>
     </div>
@@ -445,7 +446,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <p class="hint" style="margin-bottom:16px;">가족 실내 앨범형 선택 시 필요한 항목입니다.</p>
     <div class="grid3">
       <div class="field">
-        <label class="f-label">엄마 키 (cm)</label>
+        <label class="f-label" for="momHeight">엄마 키 (cm)</label>
         <input type="number" class="f-input" id="momHeight" placeholder="예) 162" inputmode="numeric">
       </div>
       <div class="field">
@@ -458,7 +459,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         </div>
       </div>
       <div class="field">
-        <label class="f-label">엄마 신발 사이즈 (mm)</label>
+        <label class="f-label" for="momShoes">엄마 신발 사이즈 (mm)</label>
         <input type="number" class="f-input" id="momShoes" placeholder="예) 240" inputmode="numeric">
       </div>
     </div>
@@ -470,7 +471,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <p class="hint" style="margin-bottom:16px;">가족 실내 앨범형 선택 시 필요한 항목입니다. 아빠 신발은 295 이하만 대여 가능합니다.</p>
     <div class="grid3">
       <div class="field">
-        <label class="f-label">아빠 키 (cm)</label>
+        <label class="f-label" for="dadHeight">아빠 키 (cm)</label>
         <input type="number" class="f-input" id="dadHeight" placeholder="예) 178" inputmode="numeric">
       </div>
       <div class="field">
@@ -485,7 +486,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         </div>
       </div>
       <div class="field">
-        <label class="f-label">아빠 신발 사이즈 (mm)</label>
+        <label class="f-label" for="dadShoes">아빠 신발 사이즈 (mm)</label>
         <input type="number" class="f-input" id="dadShoes" placeholder="예) 270" inputmode="numeric">
       </div>
     </div>
@@ -504,11 +505,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     </div>
     <div class="grid2">
       <div class="field">
-        <label class="f-label">촬영 날짜 <span class="req">*</span></label>
+        <label class="f-label" for="shootDate">촬영 날짜 <span class="req">*</span></label>
         <input type="date" class="f-input" id="shootDate" required>
       </div>
       <div class="field">
-        <label class="f-label">촬영 시간 <span class="req">*</span></label>
+        <label class="f-label" for="shootTime">촬영 시간 <span class="req">*</span></label>
         <select class="f-input" id="shootTime" required>
           <option value="">촬영 시간을 선택해 주세요</option>
         </select>
@@ -543,7 +544,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="sec-head"><div class="sec-num">09</div><div class="sec-title">입금 및 배송 정보</div></div>
     <div class="grid2">
       <div class="field">
-        <label class="f-label">예약금 입금자명 <span class="req">*</span></label>
+        <label class="f-label" for="depositor">예약금 입금자명 <span class="req">*</span></label>
         <input type="text" class="f-input" id="depositor" placeholder="입금하신 분 성함" required>
       </div>
       <div class="field">
@@ -568,7 +569,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </div>
     </div>
     <div class="field">
-      <label class="f-label">남기고 싶은 말씀</label>
+      <label class="f-label" for="memo">남기고 싶은 말씀</label>
       <textarea class="f-textarea" id="memo" placeholder="궁금하신 점이나 요청 사항을 자유롭게 적어 주세요."></textarea>
     </div>
   </div>

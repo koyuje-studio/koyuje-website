@@ -26,6 +26,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{color-scheme:light;--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;--line:rgba(28,24,20,0.1);--green:#3a6b3a;--red:#8b2e2e;}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;min-height:100vh;}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 .nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
 .nav-logo{display:flex;align-items:center;text-decoration:none;flex:0 0 auto;}
 .nav-logo img{display:block;width:132px;height:auto;}
@@ -185,27 +186,27 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
     <div class="phone-input-wrap">
       <div class="phone-label">휴대폰 번호 입력</div>
-      <div class="phone-row">
+      <div class="phone-row" role="group" aria-label="휴대폰 번호 뒤 8자리">
         <div class="phone-fixed">010</div>
         <div class="phone-dash">—</div>
         <div class="pin-group">
-          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d1">
-          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d2">
-          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d3">
-          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d4">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d1" aria-label="뒤 8자리 중 첫 번째 숫자">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d2" aria-label="뒤 8자리 중 두 번째 숫자">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d3" aria-label="뒤 8자리 중 세 번째 숫자">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d4" aria-label="뒤 8자리 중 네 번째 숫자">
         </div>
         <div class="phone-dash">—</div>
         <div class="pin-group">
-          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d5">
-          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d6">
-          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d7">
-          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d8">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d5" aria-label="뒤 8자리 중 다섯 번째 숫자">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d6" aria-label="뒤 8자리 중 여섯 번째 숫자">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d7" aria-label="뒤 8자리 중 일곱 번째 숫자">
+          <input type="text" inputmode="numeric" maxlength="1" class="pin-input" id="d8" aria-label="뒤 8자리 중 여덟 번째 숫자">
         </div>
       </div>
       <div class="phone-hint">예) 010 — <strong>1234</strong> — <strong>5678</strong></div>
     </div>
 
-    <button class="btn-search" id="searchBtn" onclick="doSearch()">예약 현황 조회</button>
+    <button type="button" class="btn-search" id="searchBtn" onclick="doSearch()">예약 현황 조회</button>
     <div class="loading" id="loading"><div class="spinner"></div></div>
     <p class="search-hint">· 조회되지 않으면 카카오톡으로 문의해 주세요</p>
   </div>
@@ -242,7 +243,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <div class="results-wrap" id="resultsSection">
   <div id="resultsContent"></div>
   <div style="text-align:center;padding-top:16px;">
-    <button class="btn-reset" onclick="resetSearch()">다시 조회하기</button>
+    <button type="button" class="btn-reset" onclick="resetSearch()">다시 조회하기</button>
   </div>
   <div class="bottom-link">
     예약 상태 문의 · <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener">카카오톡 채널</a>

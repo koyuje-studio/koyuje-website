@@ -26,6 +26,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{color-scheme:light;--ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;--gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;--line:rgba(28,24,20,0.1);--green:#3a6b3a;--red:#8b2e2e;}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;min-height:100vh;}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 
 .nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
 .nav-logo{display:flex;align-items:center;text-decoration:none;flex:0 0 auto;}
@@ -643,7 +644,7 @@ function showPwForm(num){
       <input type="number" class="pw-input" id="pwInput" placeholder="0000" maxlength="4" oninput="if(this.value.length>4)this.value=this.value.slice(0,4)">
       <p class="pw-hint">예) 010-1234-<strong>5678</strong> → 5678 입력</p>
       <div class="pw-error" id="pwError">전화번호 끝 4자리를 다시 확인해 주세요.</div>
-      <button class="btn-pw" onclick="submitPw('${num}')">확인</button>
+      <button type="button" class="btn-pw" onclick="submitPw('${num}')">확인</button>
       <div class="modal-help">
         열람되지 않는 경우, 예약 시 입력한 번호가 다를 수 있습니다.
         <div class="modal-help-actions">
@@ -723,7 +724,7 @@ if(boardToggle){
   mobileMenu.innerHTML=`
     <div style="position:absolute;top:0;left:0;right:0;padding:18px 20px;display:flex;align-items:center;border-bottom:0.5px solid rgba(28,24,20,0.1);">
       <span style="font-family:'Noto Serif KR',serif;font-size:16px;color:var(--ink);">고유재 한옥스튜디오</span>
-      <button id="boardMenuClose" style="margin-left:auto;background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:0.15em;">✕ 닫기</button>
+      <button type="button" id="boardMenuClose" aria-label="모바일 메뉴 닫기" style="margin-left:auto;background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:0.15em;">✕ 닫기</button>
     </div>
     <a href="/#about" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">스튜디오 소개</a>
     <a href="/#gallery" style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:0.1em;padding:12px 0;">갤러리</a>

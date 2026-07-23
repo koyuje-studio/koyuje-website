@@ -172,6 +172,7 @@ const requiredClassHrefRules = {
 
 const requiredPageSnippets = {
   "index.html": [
+    ":where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold)",
     'class="float-reserve" aria-label="예약확정서">예약확정서</a>',
     'class="notice-form">예약확정서</a>',
     'class="mobile-booking-links"',
@@ -223,6 +224,9 @@ const requiredPageSnippets = {
     "가족 실내 앨범형</strong> · 선택 시 부모님 키·한복·신발 사이즈",
   ],
   "reservation.html": [
+    ":where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold)",
+    "for=\"babyName\"",
+    "for=\"shootTime\"",
     "<title>예약확정서 | 고유재 한옥스튜디오</title>",
     '<meta property="og:title" content="예약확정서 | 고유재 한옥스튜디오">',
     '<meta property="og:description" content="예약 가능일 확인과 예약금 입금 후 아기 정보, 촬영 일정, 상품별 필요 정보를 작성하는 고유재 한옥스튜디오 예약 정보 접수 양식입니다.">',
@@ -294,6 +298,8 @@ const requiredPageSnippets = {
     "extra: getVisibleCheckboxes('extra')",
   ],
   "status.html": [
+    ":where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold)",
+    "role=\"group\" aria-label=\"휴대폰 번호 뒤 8자리\"",
     '<meta name="description" content="고유재 한옥스튜디오 예약 현황 확인. 예약확정서를 작성한 예약 정보의 접수 확인중, 예약 확인 완료 상태를 휴대폰 번호로 확인하세요.">',
     '<meta property="og:description" content="예약확정서를 작성한 예약 정보의 접수 확인중, 예약 확인 완료 상태를 확인하고 조회되지 않는 경우 카카오톡으로 문의할 수 있습니다.">',
     "예약확정서를 작성한 예약 정보는 48시간 이내에 확인 후 연락드립니다.",
@@ -328,6 +334,8 @@ const requiredPageSnippets = {
     ".pin-input{flex:1;width:100%;min-width:0;height:50px",
   ],
   "board.html": [
+    ":where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold)",
+    "type=\"button\" class=\"btn-pw\"",
     '<meta name="description" content="고유재 한옥스튜디오 예약 확인 안내. 예약확정서를 작성한 예약 정보는 휴대폰 번호로 확인하실 수 있습니다.">',
     "Reservation Check",
     "하루 두 팀의 촬영을 차분히 준비합니다",
