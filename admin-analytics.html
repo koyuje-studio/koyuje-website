@@ -24,6 +24,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--pape
 .login-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:300;margin-bottom:10px}
 .login-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:22px}
 .login input{width:100%;background:#111;border:1px solid var(--line);color:var(--paper);padding:14px;font-size:16px;margin-bottom:12px}
+.login input.login-totp{display:none;letter-spacing:.28em}
+.login input.login-totp.show{display:block}
 button,.nav-btn{border:1px solid rgba(176,138,85,.55);background:transparent;color:var(--paper);padding:12px 16px;min-height:44px;font-size:12px;letter-spacing:.08em;cursor:pointer;text-decoration:none}
 button.active,.btn-gold{background:var(--gold);color:#16120f}
 button:disabled{opacity:.5;cursor:wait}
@@ -95,6 +97,8 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     <p class="login-desc">방문, 문의 클릭, 예약확정서 전환 흐름을 확인합니다.</p>
     <label class="sr-only" for="pwInput">관리자 비밀번호</label>
     <input type="password" id="pwInput" placeholder="관리자 비밀번호" autocomplete="current-password">
+    <label class="sr-only" for="totpInput">인증 앱 6자리 코드</label>
+    <input type="text" class="login-totp" id="totpInput" placeholder="인증 앱 6자리 코드" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
     <button type="button" class="btn-gold" onclick="login()">확인</button>
     <div class="error" id="loginErr" role="alert" aria-live="polite">비밀번호를 확인해 주세요.</div>
   </div>
@@ -222,6 +226,8 @@ function showLogin(message){
 }
 function login(){
   const pw=document.getElementById('pwInput').value.trim();
+  const totpInput=document.getElementById('totpInput');
+  const totpCode=totpInput.value.trim();
   if(!pw)return;
   const scriptUrl=getScriptUrl();
   if(!scriptUrl){
@@ -232,15 +238,36 @@ function login(){
   document.getElementById('loginErr').style.display='none';
   btn.disabled=true;
   btn.textContent='확인 중...';
-  fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify({action:'adminLogin',password:pw})})
+  fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify({action:'adminLogin',password:pw,totpCode})})
     .then(r=>r.json())
     .then(data=>{
+      if(data.requiresTotp){
+        const error=new Error(data.message||'인증 앱 코드를 입력해 주세요.');
+        error.requiresTotp=true;
+        throw error;
+      }
       if(data.result!=='success'||!data.token)throw new Error(data.message||'인증 실패');
       sessionStorage.setItem('koyujeAdminToken',data.token);
       sessionStorage.removeItem('koyujeAdminPw');
+      document.getElementById('pwInput').value='';
+      totpInput.value='';
+      totpInput.classList.remove('show');
       loadAnalytics(true);
     })
-    .catch(err=>showLogin(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호를 확인해 주세요.')))
+    .catch(err=>{
+      if(err.requiresTotp){
+        const error=document.getElementById('loginErr');
+        error.textContent=err.message;
+        error.style.display='block';
+        totpInput.classList.add('show');
+        totpInput.focus();
+        return;
+      }
+      document.getElementById('pwInput').value='';
+      totpInput.value='';
+      totpInput.classList.remove('show');
+      showLogin(err.name==='AbortError'?'관리자 인증 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호를 확인해 주세요.'));
+    })
     .finally(()=>{btn.disabled=false;btn.textContent='확인';});
 }
 function logout(){
@@ -505,6 +532,10 @@ document.getElementById('periodButtons').addEventListener('click',e=>{
   loadAnalytics();
 });
 document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+document.getElementById('totpInput').addEventListener('input',function(){
+  this.value=this.value.replace(/\D/g,'').slice(0,6);
+});
+document.getElementById('totpInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
 function bootAnalyticsSession(){
   sessionStorage.removeItem('koyujeAdminPw');
   if(getToken()){
