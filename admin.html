@@ -545,6 +545,18 @@ function fetchWithTimeout(url,options,timeoutMs=20000){
     .finally(()=>clearTimeout(timer));
 }
 
+function getAdminClientId(){
+  const storageKey='koyujeAdminClientId';
+  let clientId=localStorage.getItem(storageKey);
+  if(!/^[A-Za-z0-9_-]{16,128}$/.test(clientId||'')){
+    clientId=window.crypto&&crypto.randomUUID
+      ? crypto.randomUUID().replace(/-/g,'')
+      : Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);
+    localStorage.setItem(storageKey,clientId);
+  }
+  return clientId;
+}
+
 // 오늘 날짜
 const now=new Date();
 document.getElementById('todayLabel').textContent=now.getFullYear()+'년 '+(now.getMonth()+1)+'월 '+now.getDate()+'일';
@@ -589,7 +601,7 @@ function doLogin(){
     ? {action:'adminResetPassword',challengeId:adminEmailChallengeId,emailCode,newPassword}
     : adminEmailChallengeId
       ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
-      : {action:'adminLogin',password:pw};
+      : {action:'adminLogin',password:pw,clientId:getAdminClientId()};
   fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify(payload)})
     .then(r=>r.json())
     .then(data=>{
