@@ -69,7 +69,7 @@
 :root{
   color-scheme:light;
   --ink:#1c1814;--paper:#f7f2ea;--paper2:#f0e9dc;
-  --gold:#a07840;--gold2:#c49a58;--muted:#7a6e62;
+  --gold:#8b642f;--gold2:#c49a58;--muted:#74685c;
   --line:rgba(28,24,20,.1);--white:#fff;
 }
 html{scroll-behavior:smooth}
@@ -188,7 +188,7 @@ body.gallery-opened{overflow:hidden}
 .pkg-card{border:.5px solid var(--line);padding:36px 32px;position:relative;transition:all .3s;display:flex;flex-direction:column}
 .pkg-card:hover{border-color:var(--gold);background:rgba(160,120,64,.03)}
 .pkg-card.featured{background:var(--paper2);color:var(--ink);border-color:rgba(160,120,64,.42)}
-.pkg-badge{display:inline-block;align-self:flex-start;font-size:9px;letter-spacing:.2em;background:var(--gold);color:var(--ink);padding:3px 10px;margin-bottom:20px}
+.pkg-badge{display:inline-block;align-self:flex-start;font-size:9px;letter-spacing:.2em;background:var(--gold);color:var(--paper);padding:3px 10px;margin-bottom:20px}
 .pkg-name{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:6px;letter-spacing:.03em}
 .pkg-name-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:12px;color:var(--muted);letter-spacing:.15em;margin-bottom:20px}
 .pkg-card.featured .pkg-name-en{color:var(--muted)}
@@ -216,7 +216,7 @@ body.gallery-opened{overflow:hidden}
 .pkg-option-note{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:.04em;border:.5px solid var(--line);padding:14px 16px;margin-top:auto;background:rgba(160,120,64,.04)}
 .btn-pkg{display:inline-block;width:100%;text-align:center;border:.5px solid var(--gold);color:var(--gold);padding:12px;font-size:11px;letter-spacing:.2em;text-decoration:none;transition:all .3s;margin-top:auto}
 .btn-pkg:hover{background:var(--gold);color:var(--paper)}
-.pkg-card.featured .btn-pkg{background:var(--gold);color:var(--ink)}
+.pkg-card.featured .btn-pkg{background:var(--gold);color:var(--paper)}
 .pkg-card.featured .btn-pkg:hover{background:var(--gold2)}
 .pkg-notes{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:2px}
 .pkg-note{padding:20px 24px;background:var(--paper2);border:.5px solid var(--line);font-size:12px;color:var(--muted);line-height:1.9;letter-spacing:.04em}
@@ -244,14 +244,14 @@ body.gallery-opened{overflow:hidden}
 .process-header .sec-title{color:var(--ink)}
 .process-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
 .process-step{padding:28px 24px;border:.5px solid var(--line);position:relative}
-.step-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:36px;font-weight:300;color:var(--gold);opacity:.3;line-height:1;margin-bottom:16px}
+.step-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:36px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:16px}
 .step-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;margin-bottom:10px;letter-spacing:.05em}
 .step-desc{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:.03em}
 .step-arrow{position:absolute;top:28px;right:-1px;width:20px;height:20px;border-top:.5px solid var(--line);border-right:.5px solid var(--line);transform:rotate(45deg);background:var(--paper2);z-index:1}
 .process-step:last-child .step-arrow{display:none}
 .process-actions{margin-top:28px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .process-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:11px 20px;font-size:12px;letter-spacing:.12em;text-decoration:none;transition:all .3s}
-.process-kakao{background:var(--gold);color:var(--ink)}
+.process-kakao{background:var(--gold);color:var(--paper)}
 .process-form{border:.5px solid rgba(160,120,64,.55);color:var(--gold)}
 .process-kakao:hover{background:var(--gold2)}
 .process-form:hover{border-color:var(--gold);color:var(--gold)}
@@ -738,7 +738,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.5);padding:64px 60px 40px}
 </footer>
 
 <div class="float-cta" aria-label="빠른 예약 안내와 문의">
-  <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="float-kakao" aria-label="카카오톡 예약 가능일 문의">카톡 가능일 문의</a>
+  <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="float-kakao" aria-label="카톡 가능일 문의">카톡 가능일 문의</a>
   <a href="/reservation" class="float-reserve" aria-label="예약확정서">예약확정서</a>
 </div>
 
