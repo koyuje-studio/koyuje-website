@@ -31,8 +31,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 .pw-input::placeholder{color:rgba(247,242,234,0.58);letter-spacing:0.05em;}
 .pw-input.login-email-code{display:none;letter-spacing:0.35em;}
 .pw-input.login-email-code.show{display:block;}
+.pw-input.login-reset-password{display:none;letter-spacing:0.05em;}
+.pw-input.login-reset-password.show{display:block;}
 .login-resend{display:none;width:100%;margin:-4px 0 16px;background:none;border:0;color:var(--gold2);font-size:11px;letter-spacing:0.08em;cursor:pointer;}
 .login-resend.show{display:block;}
+.login-recovery{width:100%;margin-top:14px;background:none;border:0;color:rgba(247,242,234,0.48);font-size:11px;letter-spacing:0.05em;cursor:pointer;}
+.login-recovery:hover{color:var(--gold2);}
 .btn-login{width:100%;background:var(--gold);color:var(--ink);border:none;padding:15px;font-family:'Noto Sans KR',sans-serif;font-size:12px;letter-spacing:0.22em;cursor:pointer;transition:all .3s;}
 .btn-login:hover{background:var(--gold2);}
 .login-err{font-size:12px;color:#e07070;margin-top:12px;letter-spacing:0.05em;display:none;}
@@ -319,8 +323,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
     <input type="password" class="pw-input" id="pwInput" placeholder="비밀번호 입력" autocomplete="current-password">
     <label class="sr-only" for="emailOtpInput">이메일 6자리 인증코드</label>
     <input type="text" class="pw-input login-email-code" id="emailOtpInput" placeholder="이메일 6자리 인증코드" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+    <label class="sr-only" for="resetPasswordInput">새 관리자 비밀번호</label>
+    <input type="password" class="pw-input login-reset-password" id="resetPasswordInput" placeholder="새 비밀번호 · 10자 이상" autocomplete="new-password">
+    <label class="sr-only" for="resetPasswordConfirmInput">새 관리자 비밀번호 확인</label>
+    <input type="password" class="pw-input login-reset-password" id="resetPasswordConfirmInput" placeholder="새 비밀번호 확인" autocomplete="new-password">
     <button type="button" class="login-resend" id="emailOtpResend" onclick="resendAdminEmailCode()">인증코드 다시 받기</button>
     <button type="button" class="btn-login" onclick="doLogin()">로그인</button>
+    <button type="button" class="login-recovery" id="passwordRecoveryBtn" onclick="beginAdminPasswordReset()">비밀번호를 잊으셨나요?</button>
     <div class="login-err" id="loginErr" role="alert" aria-live="polite">비밀번호가 올바르지 않습니다.</div>
   </div>
 </div>
@@ -527,6 +536,7 @@ let adminToken='';
 let editingRowId='';
 let adminEmailChallengeId='';
 let adminEmailResendTimer=0;
+let adminPasswordResetMode=false;
 
 function fetchWithTimeout(url,options,timeoutMs=20000){
   const controller=new AbortController();
@@ -544,6 +554,8 @@ function doLogin(){
   const pw=input.value.trim();
   const codeInput=document.getElementById('emailOtpInput');
   const emailCode=codeInput.value.trim();
+  const newPassword=document.getElementById('resetPasswordInput').value;
+  const newPasswordConfirm=document.getElementById('resetPasswordConfirmInput').value;
   if(!adminEmailChallengeId&&!pw){
     showLoginError('비밀번호를 입력해 주세요.');
     input.focus();
@@ -554,6 +566,18 @@ function doLogin(){
     codeInput.focus();
     return;
   }
+  if(adminPasswordResetMode){
+    if(newPassword!==newPasswordConfirm){
+      showLoginError('새 비밀번호 확인 값이 일치하지 않습니다.');
+      document.getElementById('resetPasswordConfirmInput').focus();
+      return;
+    }
+    if(newPassword.length<10){
+      showLoginError('새 비밀번호는 10자 이상으로 입력해 주세요.');
+      document.getElementById('resetPasswordInput').focus();
+      return;
+    }
+  }
   const scriptUrl=getScriptUrl();
   if(!scriptUrl){
     showLoginError('관리자 시스템 연결 정보를 불러오지 못했습니다. 페이지를 새로고침해 주세요.');
@@ -561,9 +585,11 @@ function doLogin(){
   }
 
   setLoginPending(true);
-  const payload=adminEmailChallengeId
-    ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
-    : {action:'adminLogin',password:pw};
+  const payload=adminPasswordResetMode
+    ? {action:'adminResetPassword',challengeId:adminEmailChallengeId,emailCode,newPassword}
+    : adminEmailChallengeId
+      ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
+      : {action:'adminLogin',password:pw};
   fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify(payload)})
     .then(r=>r.json())
     .then(data=>{
@@ -603,17 +629,71 @@ function doLogin(){
 
 function resetAdminEmailLogin(){
   adminEmailChallengeId='';
+  adminPasswordResetMode=false;
   clearInterval(adminEmailResendTimer);
   const password=document.getElementById('pwInput');
   const code=document.getElementById('emailOtpInput');
   const resend=document.getElementById('emailOtpResend');
+  const resetPassword=document.getElementById('resetPasswordInput');
+  const resetPasswordConfirm=document.getElementById('resetPasswordConfirmInput');
+  const recovery=document.getElementById('passwordRecoveryBtn');
   password.value='';
   password.disabled=false;
   code.value='';
   code.classList.remove('show');
+  resetPassword.value='';
+  resetPassword.classList.remove('show');
+  resetPasswordConfirm.value='';
+  resetPasswordConfirm.classList.remove('show');
   resend.classList.remove('show');
   resend.disabled=false;
   resend.textContent='인증코드 다시 받기';
+  recovery.disabled=false;
+  recovery.textContent='비밀번호를 잊으셨나요?';
+}
+
+function beginAdminPasswordReset(){
+  if(adminPasswordResetMode){
+    resetAdminEmailLogin();
+    document.getElementById('loginErr').style.display='none';
+    document.getElementById('pwInput').focus();
+    setLoginPending(false);
+    return;
+  }
+  const scriptUrl=getScriptUrl();
+  if(!scriptUrl){
+    showLoginError('관리자 시스템 연결 정보를 불러오지 못했습니다.');
+    return;
+  }
+  const recovery=document.getElementById('passwordRecoveryBtn');
+  recovery.disabled=true;
+  recovery.textContent='인증코드 요청 중...';
+  fetchWithTimeout(scriptUrl,{
+    method:'POST',
+    body:JSON.stringify({action:'adminBeginPasswordReset'})
+  })
+    .then(r=>r.json())
+    .then(data=>{
+      if(!data.requiresEmailOtp||!data.challengeId)throw new Error(data.message||'비밀번호 재설정을 시작하지 못했습니다.');
+      adminPasswordResetMode=true;
+      adminEmailChallengeId=data.challengeId;
+      document.getElementById('pwInput').disabled=true;
+      document.getElementById('emailOtpInput').classList.add('show');
+      document.getElementById('resetPasswordInput').classList.add('show');
+      document.getElementById('resetPasswordConfirmInput').classList.add('show');
+      document.getElementById('emailOtpResend').classList.add('show');
+      recovery.disabled=false;
+      recovery.textContent='로그인으로 돌아가기';
+      startAdminEmailResendTimer(data.retryAfter||60);
+      showLoginError((data.maskedEmail||'관리자 이메일')+'으로 재설정 인증코드를 발송했습니다.');
+      document.getElementById('emailOtpInput').focus();
+      setLoginPending(false);
+    })
+    .catch(err=>{
+      recovery.disabled=false;
+      recovery.textContent='비밀번호를 잊으셨나요?';
+      showLoginError(err.name==='AbortError'?'인증코드 발송이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.':(err.message||'비밀번호 재설정을 시작하지 못했습니다.'));
+    });
 }
 
 function startAdminEmailResendTimer(seconds){
@@ -700,7 +780,7 @@ function bootAdminSession(){
 function setLoginPending(isPending){
   const btn=document.querySelector('.btn-login');
   btn.disabled=isPending;
-  btn.textContent=isPending?'확인 중...':(adminEmailChallengeId?'인증코드 확인':'로그인');
+  btn.textContent=isPending?'확인 중...':(adminPasswordResetMode?'새 비밀번호 설정':(adminEmailChallengeId?'인증코드 확인':'로그인'));
 }
 
 function showLoginError(message){
