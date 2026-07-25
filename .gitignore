@@ -10,6 +10,7 @@ assets/raw/
 # Keep full-resolution gallery originals local; deploy optimized WebP files only.
 /assets/images/gallery/*.jpg
 apps-script-code.gs
+private-data/
 
 .vercel
 .env*
