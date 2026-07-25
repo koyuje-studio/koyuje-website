@@ -46,6 +46,19 @@
       ]
     },
     {
+      "source": "/assets/data/historical-reservations.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
       "source": "/:asset(og-image\\.jpg|gallery_01\\.jpg|0057\\.jpg|0073\\.jpg|0075\\.jpg|0138_\\.jpg|_0049\\.jpg|_0049_poster\\.webp|_0049_mobile\\.mp4|_0049_desktop\\.webm|_0049_animation\\.mp4)",
       "headers": [
         {

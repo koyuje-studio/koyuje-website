@@ -75,6 +75,14 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 .error{color:#ff8e8e;font-size:13px;margin-top:10px;display:none}
 .status{display:none;border:1px solid rgba(215,187,134,.24);background:rgba(215,187,134,.06);color:var(--gold2);padding:12px 14px;margin-bottom:18px;font-size:12px;line-height:1.7}
 .status.show{display:block}
+.history-years{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.history-chart{display:grid;gap:11px}
+.history-row{display:grid;grid-template-columns:88px minmax(0,1fr) 54px;gap:12px;align-items:center}
+.history-name{font-size:12px;color:var(--muted);white-space:nowrap}
+.history-track{height:7px;background:rgba(247,242,234,.07);overflow:hidden}
+.history-fill{height:100%;min-width:2px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.history-count{text-align:right;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold2)}
+.history-note{font-size:11px;color:var(--muted);line-height:1.8;margin:-4px 0 18px}
 @media(max-width:900px){.nav{align-items:flex-start;flex-direction:column}.body{padding:20px 16px}.analytics-hero{grid-template-columns:1fr}.hero-meta{justify-content:flex-start}.grid,.insight-grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}.tables{grid-template-columns:1fr}.group-head{align-items:flex-start;flex-direction:column}.group-desc{text-align:left}}
 @media(max-width:520px){
   .nav{position:relative;padding:16px;}
@@ -91,6 +99,9 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
   .card.revenue .num{font-size:26px;}
   .sub{font-size:11px;}
   .hero-title{font-size:21px;}
+  .history-years{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+  .history-years button{width:100%;padding:10px 6px;font-size:11px;}
+  .history-row{grid-template-columns:72px minmax(0,1fr) 42px;gap:8px;}
 }
 @media(max-width:350px){.grid,.insight-grid,.funnel{grid-template-columns:1fr}}
 </style>
@@ -191,6 +202,19 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     </section>
 
     <section class="tables" id="tables"></section>
+
+    <div class="group-head">
+      <div class="group-title">과거 예약 분석</div>
+      <div class="group-desc">2022년 11월부터 2026년 6월까지 Imweb 예약확정서 1,127건의 익명 집계입니다.</div>
+    </div>
+    <div class="history-years" id="historicalYearButtons" role="group" aria-label="과거 예약 조회 연도"></div>
+    <section class="insight-grid" id="historicalSummary" aria-live="polite"></section>
+    <section class="section">
+      <div class="section-title" id="historicalChartTitle">연도별 예약 건수</div>
+      <div class="history-chart" id="historicalChart"></div>
+    </section>
+    <section class="tables" id="historicalTables"></section>
+    <p class="history-note">과거 자료는 예약 건수와 고객 경향 분석용입니다. 당시 실제 결제액 정보가 없어 현재 매출 통계에는 합산하지 않습니다. 유입 경로는 복수 선택이 가능해 합계가 예약 건수보다 클 수 있습니다.</p>
   </main>
 </div>
 
@@ -202,6 +226,8 @@ let adminEmailResendTimer=0;
 let adminPasswordResetMode=false;
 let adminLoginLockTimer=0;
 let adminLoginLockRemaining=0;
+let historicalData=null;
+let historicalYear='all';
 
 function getScriptUrl(){
   return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
@@ -494,6 +520,70 @@ function renderRevenueTable(title,items){
   if(!items||!items.length)return `<div class="section"><div class="section-title">${title}</div><div class="empty">표시할 데이터가 아직 없습니다.</div></div>`;
   return `<div class="section"><div class="section-title">${title}</div><table><thead><tr><th>항목</th><th>금액</th></tr></thead><tbody>${items.map(item=>`<tr><td>${escapeHTML(item.name)} <span style="color:var(--muted);">(${escapeHTML(item.count)}건)</span></td><td>${formatWon(item.revenue)}</td></tr>`).join('')}</tbody></table></div>`;
 }
+function renderHistoricalButtons(data){
+  const container=document.getElementById('historicalYearButtons');
+  const buttons=[{value:'all',label:'전체'}].concat((data.years||[]).map(item=>({
+    value:String(item.year),
+    label:item.year+(item.year===2022?' · 11–12월':item.year===2026?' · 1–6월':'')
+  })));
+  container.innerHTML=buttons.map(item=>`<button type="button" data-history-year="${item.value}" class="${String(historicalYear)===item.value?'active':''}">${escapeHTML(item.label)}</button>`).join('');
+}
+function getHistoricalSelection(data){
+  if(historicalYear==='all')return Object.assign({months:[]},data.all||{});
+  return (data.years||[]).find(item=>String(item.year)===String(historicalYear))||null;
+}
+function renderHistoricalChart(items){
+  const max=Math.max(1,...items.map(item=>Number(item.count||0)));
+  return items.map(item=>`
+    <div class="history-row">
+      <div class="history-name">${escapeHTML(item.label)}</div>
+      <div class="history-track" aria-hidden="true"><div class="history-fill" style="width:${Math.max(2,Math.round((Number(item.count||0)/max)*100))}%"></div></div>
+      <div class="history-count">${escapeHTML(item.count)}</div>
+    </div>
+  `).join('');
+}
+function renderHistorical(data){
+  if(!data){
+    document.getElementById('historicalSummary').innerHTML='<div class="empty">과거 예약 집계를 불러오지 못했습니다.</div>';
+    document.getElementById('historicalChart').innerHTML='';
+    document.getElementById('historicalTables').innerHTML='';
+    return;
+  }
+  historicalData=data;
+  renderHistoricalButtons(data);
+  const selected=getHistoricalSelection(data);
+  if(!selected)return;
+  const months=historicalYear==='all'
+    ?(data.years||[]).flatMap(item=>item.months||[])
+    :(selected.months||[]);
+  const topRegion=(selected.regions||[])[0]||{name:'—',count:0};
+  const topProduct=(selected.products||[])[0]||{name:'—',count:0};
+  const average=months.length?Math.round((Number(selected.total||0)/months.length)*10)/10:0;
+  document.getElementById('historicalSummary').innerHTML=[
+    `<div class="card primary"><div class="label">예약확정서</div><div class="num">${escapeHTML(Number(selected.total||0).toLocaleString('ko-KR'))}</div><div class="sub">${historicalYear==='all'?'전체 기간':escapeHTML(historicalYear+'년')} 기준</div></div>`,
+    `<div class="card"><div class="label">월평균 접수</div><div class="num">${escapeHTML(average)}</div><div class="sub">${escapeHTML(months.length)}개월 기준</div></div>`,
+    `<div class="card"><div class="label">최다 방문 지역</div><div class="num">${escapeHTML(topRegion.name)}</div><div class="sub">${escapeHTML(topRegion.count)}건</div></div>`,
+    `<div class="card"><div class="label">최다 선택 상품</div><div class="num" style="font-size:24px">${escapeHTML(topProduct.name)}</div><div class="sub">${escapeHTML(topProduct.count)}건</div></div>`
+  ].join('');
+  const chartItems=historicalYear==='all'
+    ?(data.years||[]).map(item=>({label:String(item.year)+(item.partial?'*':''),count:item.total}))
+    :(selected.months||[]).map(item=>({label:item.month+'월',count:item.count}));
+  document.getElementById('historicalChartTitle').textContent=historicalYear==='all'?'연도별 예약 건수':'월별 예약 건수';
+  document.getElementById('historicalChart').innerHTML=renderHistoricalChart(chartItems);
+  document.getElementById('historicalTables').innerHTML=[
+    renderTable('방문 지역',selected.regions),
+    renderTable('선택 상품',selected.products),
+    renderTable('유입 경로 언급 · 복수 응답',selected.channels)
+  ].join('');
+}
+function loadHistoricalData(){
+  if(historicalData)return Promise.resolve(historicalData);
+  return fetchWithTimeout('/assets/data/historical-reservations.json',{cache:'no-store'},10000)
+    .then(response=>{
+      if(!response.ok)throw new Error('과거 예약 집계를 불러오지 못했습니다.');
+      return response.json();
+    });
+}
 function percent(part,total){
   if(!total)return '0%';
   return (Math.round((part/total)*1000)/10)+'%';
@@ -714,15 +804,17 @@ function loadAnalytics(){
   setAnalyticsBusy(true);
   return Promise.all([
     adminApi({action:'analytics',period:currentPeriod}),
-    adminApi({action:'admin'})
+    adminApi({action:'admin'}),
+    loadHistoricalData().catch(()=>null)
   ])
-    .then(([data,reservationData])=>{
+    .then(([data,reservationData,historyData])=>{
       requireActiveAdminSession(data);
       requireActiveAdminSession(reservationData);
       if(data.result==='error')throw new Error(data.message||'인증 실패');
       if(reservationData.result==='error')throw new Error(reservationData.message||'예약 데이터 확인 실패');
       document.getElementById('loginErr').style.display='none';
       render(data,reservationData.data||[]);
+      renderHistorical(historyData);
       setAnalyticsStatus('');
     })
     .catch(err=>{
@@ -741,6 +833,12 @@ document.getElementById('periodButtons').addEventListener('click',e=>{
   currentPeriod=btn.dataset.period;
   document.querySelectorAll('#periodButtons button').forEach(item=>item.classList.toggle('active',item===btn));
   loadAnalytics();
+});
+document.getElementById('historicalYearButtons').addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-history-year]');
+  if(!btn||!historicalData)return;
+  historicalYear=btn.dataset.historyYear;
+  renderHistorical(historicalData);
 });
 document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
 document.getElementById('emailOtpInput').addEventListener('input',function(){
