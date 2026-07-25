@@ -694,6 +694,14 @@ function getHistoricalSelection(data){
   if(historicalYear==='all')return Object.assign({months:[]},data.all||{});
   return (data.years||[]).find(item=>String(item.year)===String(historicalYear))||null;
 }
+function getHistoricalMonth(data,year,month){
+  const yearData=(data.years||[]).find(item=>Number(item.year)===Number(year));
+  return yearData&&(yearData.months||[]).find(item=>Number(item.month)===Number(month))||null;
+}
+function formatHistoricalChange(rate){
+  if(rate===null)return'—';
+  return`${rate>0?'+':''}${rate}%`;
+}
 function renderHistoricalChart(items,selectable){
   const max=Math.max(1,...items.map(item=>Number(item.count||0)));
   return items.map(item=>{
@@ -826,7 +834,22 @@ function renderHistorical(data){
     document.getElementById('historicalMonthBreakdown').innerHTML='<div class="section"><div class="section-title">월별 상세 순위</div><div class="empty">연도를 선택한 뒤 확인할 달을 눌러 주세요.</div></div>';
   }else if(historicalMonth){
     const monthData=(selected.months||[]).find(item=>String(item.month)===historicalMonth);
-    document.getElementById('historicalMonthBreakdown').innerHTML=`<div class="group-head history-subhead"><div class="group-title">${escapeHTML(historicalYear)}년 ${escapeHTML(historicalMonth)}월 상세 순위</div><div class="group-desc">예약 접수월 기준</div></div><div class="tables">${
+    const selectedYear=Number(historicalYear);
+    const selectedMonth=Number(historicalMonth);
+    const currentCount=Number((monthData&&monthData.count)||0);
+    const previousYearMonth=getHistoricalMonth(data,selectedYear-1,selectedMonth);
+    const previousMonthDate=new Date(selectedYear,selectedMonth-2,1);
+    const previousMonth=getHistoricalMonth(data,previousMonthDate.getFullYear(),previousMonthDate.getMonth()+1);
+    const yearChange=getChangeRate(currentCount,Number((previousYearMonth&&previousYearMonth.count)||0));
+    const monthChange=getChangeRate(currentCount,Number((previousMonth&&previousMonth.count)||0));
+    document.getElementById('historicalMonthBreakdown').innerHTML=`<div class="group-head history-subhead"><div class="group-title">${escapeHTML(historicalYear)}년 ${escapeHTML(historicalMonth)}월 상세 순위</div><div class="group-desc">예약 접수월 기준</div></div>
+    <div class="insight-grid">
+      <div class="card primary"><div class="label">해당 월 접수</div><div class="num">${escapeHTML(currentCount)}</div><div class="sub">${escapeHTML(historicalYear)}년 ${escapeHTML(historicalMonth)}월</div></div>
+      <div class="card"><div class="label">전년 동월 접수</div><div class="num">${previousYearMonth?escapeHTML(previousYearMonth.count):'—'}</div><div class="sub">${escapeHTML(selectedYear-1)}년 ${escapeHTML(historicalMonth)}월</div></div>
+      <div class="card"><div class="label">전년 동월 대비</div><div class="num">${escapeHTML(formatHistoricalChange(yearChange))}</div><div class="sub">접수 건수 증감</div></div>
+      <div class="card"><div class="label">직전 달 대비</div><div class="num">${escapeHTML(formatHistoricalChange(monthChange))}</div><div class="sub">${escapeHTML(previousMonthDate.getFullYear())}년 ${escapeHTML(previousMonthDate.getMonth()+1)}월 기준</div></div>
+    </div>
+    <div class="tables">${
       [
         renderTable('방문 지역',monthData&&monthData.regions),
         renderTable('선택 상품',monthData&&monthData.products),
