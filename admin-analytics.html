@@ -228,8 +228,17 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <div class="section-title">지역별 연도 비교</div>
       <div class="history-table-wrap" id="historicalRegionTrend"></div>
     </section>
+    <div class="group-head history-subhead">
+      <div class="group-title">시즌·상품 운영</div>
+      <div class="group-desc">2023~2025년 월평균과 전체 상품·유입 비중을 기준으로 봅니다.</div>
+    </div>
+    <section class="insight-grid" id="historicalMarketingInsights"></section>
+    <section class="section">
+      <div class="section-title">월별 평균 예약 접수</div>
+      <div class="history-chart" id="historicalSeasonality"></div>
+    </section>
     <section class="tables" id="historicalTables"></section>
-    <p class="history-note">과거 자료는 예약 건수와 고객 경향 분석용입니다. 당시 실제 결제액 정보가 없어 현재 매출 통계에는 합산하지 않습니다. 유입 경로는 복수 선택이 가능해 합계가 예약 건수보다 클 수 있습니다.</p>
+    <p class="history-note">과거 자료는 예약 건수와 고객 경향 분석용입니다. 당시 실제 결제액 정보가 없어 현재 매출 통계에는 합산하지 않습니다. 유입 경로는 복수 선택이 가능해 합계가 예약 건수보다 클 수 있습니다. 집중 접수월 광고는 실제 문의 성과를 확인하며 2~4주 앞서 조정하는 기준으로 활용해 주세요.</p>
   </main>
 </div>
 
@@ -607,12 +616,44 @@ function renderHistoricalAdInsights(data){
   ].join('');
   renderHistoricalRegionTrend(data);
 }
+function getHistoricalSeasonality(data){
+  const completeYears=(data.years||[]).filter(item=>item.year>=2023&&item.year<=2025);
+  return Array.from({length:12},(_,index)=>{
+    const month=index+1;
+    const counts=completeYears.map(year=>{
+      const item=(year.months||[]).find(entry=>Number(entry.month)===month);
+      return Number((item&&item.count)||0);
+    });
+    const average=counts.length?Math.round((counts.reduce((sum,count)=>sum+count,0)/counts.length)*10)/10:0;
+    return{month,label:month+'월',count:average};
+  });
+}
+function renderHistoricalMarketingInsights(data){
+  const seasonality=getHistoricalSeasonality(data);
+  const ranked=seasonality.slice().sort((a,b)=>b.count-a.count);
+  const peak=ranked[0]||{label:'—',count:0};
+  const nextPeaks=ranked.slice(1,3).map(item=>item.label).join(' · ')||'—';
+  const products=(data.all&&data.all.products)||[];
+  const topProduct=products[0]||{name:'—',count:0};
+  const productRate=data.total?Math.round((Number(topProduct.count||0)/Number(data.total))*1000)/10:0;
+  const channels=(data.all&&data.all.channels)||[];
+  const channelNames=channels.slice(0,3).map(item=>item.name).join(' · ')||'—';
+  document.getElementById('historicalMarketingInsights').innerHTML=[
+    `<div class="card primary"><div class="label">최다 접수월</div><div class="num">${escapeHTML(peak.label)}</div><div class="sub">3개년 월평균 ${escapeHTML(peak.count)}건</div></div>`,
+    `<div class="card"><div class="label">다음 상위월</div><div class="num" style="font-size:25px">${escapeHTML(nextPeaks)}</div><div class="sub">집중월 전 사전 광고 기준</div></div>`,
+    `<div class="card"><div class="label">대표 광고 상품</div><div class="num" style="font-size:24px">${escapeHTML(topProduct.name)}</div><div class="sub">전체 예약의 ${escapeHTML(productRate)}%</div></div>`,
+    `<div class="card"><div class="label">핵심 유입축</div><div class="num" style="font-size:24px">${escapeHTML(channelNames)}</div><div class="sub">복수 응답 언급 상위 3개</div></div>`
+  ].join('');
+  document.getElementById('historicalSeasonality').innerHTML=renderHistoricalChart(seasonality);
+}
 function renderHistorical(data){
   if(!data){
     document.getElementById('historicalSummary').innerHTML='<div class="empty">과거 예약 집계를 불러오지 못했습니다.</div>';
     document.getElementById('historicalChart').innerHTML='';
     document.getElementById('historicalAdInsights').innerHTML='';
     document.getElementById('historicalRegionTrend').innerHTML='';
+    document.getElementById('historicalMarketingInsights').innerHTML='';
+    document.getElementById('historicalSeasonality').innerHTML='';
     document.getElementById('historicalTables').innerHTML='';
     return;
   }
@@ -638,6 +679,7 @@ function renderHistorical(data){
   document.getElementById('historicalChartTitle').textContent=historicalYear==='all'?'연도별 예약 건수':'월별 예약 건수';
   document.getElementById('historicalChart').innerHTML=renderHistoricalChart(chartItems);
   renderHistoricalAdInsights(data);
+  renderHistoricalMarketingInsights(data);
   document.getElementById('historicalTables').innerHTML=[
     renderTable('방문 지역',selected.regions),
     renderTable('선택 상품',selected.products),
