@@ -210,13 +210,13 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     <section class="tables" id="tables"></section>
 
     <div class="group-head">
-      <div class="group-title">과거 예약 분석</div>
+      <div class="group-title">과거 예약 접수 분석</div>
       <div class="group-desc">2022년 11월부터 2026년 6월까지 Imweb 예약확정서 1,127건의 익명 집계입니다.</div>
     </div>
     <div class="history-years" id="historicalYearButtons" role="group" aria-label="과거 예약 조회 연도"></div>
     <section class="insight-grid" id="historicalSummary" aria-live="polite"></section>
     <section class="section">
-      <div class="section-title" id="historicalChartTitle">연도별 예약 건수</div>
+      <div class="section-title" id="historicalChartTitle">연도별 예약 접수 건수</div>
       <div class="history-chart" id="historicalChart"></div>
     </section>
     <div class="group-head history-subhead">
@@ -238,7 +238,7 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <div class="history-chart" id="historicalSeasonality"></div>
     </section>
     <section class="tables" id="historicalTables"></section>
-    <p class="history-note">2022년 11월~2026년 6월은 이전 홈페이지 자료이며, 2026년 7월부터는 현재 예약확정서 접수 건이 자동 합산됩니다. 삭제 처리된 예약은 제외됩니다. 당시 실제 결제액 정보가 없어 현재 매출 통계에는 합산하지 않습니다. 유입 경로는 복수 선택이 가능해 합계가 예약 건수보다 클 수 있습니다.</p>
+    <p class="history-note">모든 건수는 촬영 예정일이 아니라 예약확정서를 작성한 접수월 기준입니다. 2022년 11월~2026년 6월은 이전 홈페이지 자료이며, 2026년 7월부터는 현재 예약확정서 접수 건이 자동 합산됩니다. 삭제 처리된 예약은 제외됩니다. 당시 실제 결제액 정보가 없어 현재 매출 통계에는 합산하지 않습니다. 유입 경로는 복수 선택이 가능해 합계가 예약 접수 건수보다 클 수 있습니다.</p>
   </main>
 </div>
 
@@ -774,7 +774,7 @@ function renderHistorical(data){
   const topProduct=(selected.products||[])[0]||{name:'—',count:0};
   const average=months.length?Math.round((Number(selected.total||0)/months.length)*10)/10:0;
   document.getElementById('historicalSummary').innerHTML=[
-    `<div class="card primary"><div class="label">예약확정서</div><div class="num">${escapeHTML(Number(selected.total||0).toLocaleString('ko-KR'))}</div><div class="sub">${historicalYear==='all'?'전체 기간':escapeHTML(historicalYear+'년')} 기준</div></div>`,
+    `<div class="card primary"><div class="label">예약 접수 건수</div><div class="num">${escapeHTML(Number(selected.total||0).toLocaleString('ko-KR'))}</div><div class="sub">${historicalYear==='all'?'전체 기간':escapeHTML(historicalYear+'년')} · 접수월 기준</div></div>`,
     `<div class="card"><div class="label">월평균 접수</div><div class="num">${escapeHTML(average)}</div><div class="sub">${escapeHTML(months.length)}개월 기준</div></div>`,
     `<div class="card"><div class="label">최다 방문 지역</div><div class="num">${escapeHTML(topRegion.name)}</div><div class="sub">${escapeHTML(topRegion.count)}건</div></div>`,
     `<div class="card"><div class="label">최다 선택 상품</div><div class="num" style="font-size:24px">${escapeHTML(topProduct.name)}</div><div class="sub">${escapeHTML(topProduct.count)}건</div></div>`
@@ -782,7 +782,7 @@ function renderHistorical(data){
   const chartItems=historicalYear==='all'
     ?(data.years||[]).map(item=>({label:String(item.year)+(item.partial?'*':''),count:item.total}))
     :(selected.months||[]).map(item=>({label:item.month+'월',count:item.count}));
-  document.getElementById('historicalChartTitle').textContent=historicalYear==='all'?'연도별 예약 건수':'월별 예약 건수';
+  document.getElementById('historicalChartTitle').textContent=historicalYear==='all'?'연도별 예약 접수 건수':'월별 예약 접수 건수';
   document.getElementById('historicalChart').innerHTML=renderHistoricalChart(chartItems);
   renderHistoricalAdInsights(data);
   renderHistoricalMarketingInsights(data);
