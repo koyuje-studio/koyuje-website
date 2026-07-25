@@ -609,10 +609,12 @@ function normalizeHistoricalProduct(product){
 }
 function getHistoricalChannelGroups(channel){
   const value=String(channel||'');
+  if(!value.trim())return['미입력'];
   const groups=[];
   if(/SNS|인스타|페이스북|쓰레드/i.test(value))groups.push('SNS');
   if(/포털|검색|네이버|다음|구글/i.test(value))groups.push('포털 검색');
-  if(/지인|소개/.test(value))groups.push('지인 소개');
+  if(/첫째|둘째|큰아이|재방문|재촬영|현장예약|찍은\s*곳|촬영했|촬영지|^\d+월.*촬영/.test(value))groups.push('재방문');
+  if(/지인|소개|추천|엄마/.test(value))groups.push('지인 소개');
   if(/카페/.test(value))groups.push('맘카페');
   if(/블로그/.test(value))groups.push('블로그');
   return groups.length?[...new Set(groups)]:['기타'];
