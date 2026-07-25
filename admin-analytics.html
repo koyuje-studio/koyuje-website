@@ -233,7 +233,7 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <div class="section-title" id="historicalChartTitle">연도별 예약 접수 건수</div>
       <div class="history-chart" id="historicalChart"></div>
     </section>
-    <section id="historicalMonthRegions" aria-live="polite"></section>
+    <section id="historicalMonthBreakdown" aria-live="polite"></section>
     <div class="group-head history-subhead">
       <div class="group-title">지역·광고 인사이트</div>
       <div class="group-desc">완전한 연간 자료가 있는 2024년과 2025년을 비교합니다.</div>
@@ -642,7 +642,9 @@ function mergeLiveReservationsIntoHistory(base,reservations){
         month,
         label:`${year}년 ${month}월`,
         count:0,
-        regions:[]
+        regions:[],
+        products:[],
+        channels:[]
       };
       yearData.months.push(monthData);
     }
@@ -653,19 +655,27 @@ function mergeLiveReservationsIntoHistory(base,reservations){
     const region=normalizeHistoricalRegion(item.address);
     const product=normalizeHistoricalProduct(item.product);
     monthData.regions=monthData.regions||[];
+    monthData.products=monthData.products||[];
+    monthData.channels=monthData.channels||[];
     addHistoricalCount(monthData.regions,region);
+    addHistoricalCount(monthData.products,product);
     addHistoricalCount(yearData.regions,region);
     addHistoricalCount(yearData.products,product);
     addHistoricalCount(merged.all.regions,region);
     addHistoricalCount(merged.all.products,product);
     getHistoricalChannelGroups(item.channel).forEach(channel=>{
+      addHistoricalCount(monthData.channels,channel);
       addHistoricalCount(yearData.channels,channel);
       addHistoricalCount(merged.all.channels,channel);
     });
   });
   (merged.years||[]).forEach(year=>{
     year.months=(year.months||[]).sort((a,b)=>Number(a.month)-Number(b.month));
-    year.months.forEach(month=>{month.regions=sortHistoricalCounts(month.regions||[]);});
+    year.months.forEach(month=>{
+      month.regions=sortHistoricalCounts(month.regions||[]);
+      month.products=sortHistoricalCounts(month.products||[]);
+      month.channels=sortHistoricalCounts(month.channels||[]);
+    });
     year.regions=sortHistoricalCounts(year.regions);
     year.products=sortHistoricalCounts(year.products);
     year.channels=sortHistoricalCounts(year.channels);
@@ -788,7 +798,7 @@ function renderHistorical(data){
     document.getElementById('historicalMarketingInsights').innerHTML='';
     document.getElementById('historicalSeasonality').innerHTML='';
     document.getElementById('historicalTables').innerHTML='';
-    document.getElementById('historicalMonthRegions').innerHTML='';
+    document.getElementById('historicalMonthBreakdown').innerHTML='';
     return;
   }
   historicalData=data;
@@ -813,15 +823,18 @@ function renderHistorical(data){
   document.getElementById('historicalChartTitle').textContent=historicalYear==='all'?'연도별 예약 접수 건수':'월별 예약 접수 건수';
   document.getElementById('historicalChart').innerHTML=renderHistoricalChart(chartItems,historicalYear!=='all');
   if(historicalYear==='all'){
-    document.getElementById('historicalMonthRegions').innerHTML='<div class="section"><div class="section-title">월별 방문 지역 순위</div><div class="empty">연도를 선택한 뒤 확인할 달을 눌러 주세요.</div></div>';
+    document.getElementById('historicalMonthBreakdown').innerHTML='<div class="section"><div class="section-title">월별 상세 순위</div><div class="empty">연도를 선택한 뒤 확인할 달을 눌러 주세요.</div></div>';
   }else if(historicalMonth){
     const monthData=(selected.months||[]).find(item=>String(item.month)===historicalMonth);
-    document.getElementById('historicalMonthRegions').innerHTML=renderTable(
-      `${historicalYear}년 ${historicalMonth}월 방문 지역 순위`,
-      (monthData&&monthData.regions)||[]
-    );
+    document.getElementById('historicalMonthBreakdown').innerHTML=`<div class="group-head history-subhead"><div class="group-title">${escapeHTML(historicalYear)}년 ${escapeHTML(historicalMonth)}월 상세 순위</div><div class="group-desc">예약 접수월 기준</div></div><div class="tables">${
+      [
+        renderTable('방문 지역',monthData&&monthData.regions),
+        renderTable('선택 상품',monthData&&monthData.products),
+        renderTable('유입 경로 언급 · 복수 응답',monthData&&monthData.channels)
+      ].join('')
+    }</div>`;
   }else{
-    document.getElementById('historicalMonthRegions').innerHTML='<div class="section"><div class="section-title">월별 방문 지역 순위</div><div class="empty">위 월별 접수 건수에서 확인할 달을 눌러 주세요.</div></div>';
+    document.getElementById('historicalMonthBreakdown').innerHTML='<div class="section"><div class="section-title">월별 상세 순위</div><div class="empty">위 월별 접수 건수에서 확인할 달을 눌러 주세요.</div></div>';
   }
   renderHistoricalAdInsights(data);
   renderHistoricalMarketingInsights(data);
