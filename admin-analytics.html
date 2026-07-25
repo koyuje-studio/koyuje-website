@@ -238,7 +238,7 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <div class="history-chart" id="historicalSeasonality"></div>
     </section>
     <section class="tables" id="historicalTables"></section>
-    <p class="history-note">과거 자료는 예약 건수와 고객 경향 분석용입니다. 당시 실제 결제액 정보가 없어 현재 매출 통계에는 합산하지 않습니다. 유입 경로는 복수 선택이 가능해 합계가 예약 건수보다 클 수 있습니다. 집중 접수월 광고는 실제 문의 성과를 확인하며 2~4주 앞서 조정하는 기준으로 활용해 주세요.</p>
+    <p class="history-note">2022년 11월~2026년 6월은 이전 홈페이지 자료이며, 2026년 7월부터는 현재 예약확정서 접수 건이 자동 합산됩니다. 삭제 처리된 예약은 제외됩니다. 당시 실제 결제액 정보가 없어 현재 매출 통계에는 합산하지 않습니다. 유입 경로는 복수 선택이 가능해 합계가 예약 건수보다 클 수 있습니다.</p>
   </main>
 </div>
 
@@ -251,7 +251,9 @@ let adminPasswordResetMode=false;
 let adminLoginLockTimer=0;
 let adminLoginLockRemaining=0;
 let historicalData=null;
+let historicalBaseData=null;
 let historicalYear='all';
+const HISTORICAL_LIVE_START=new Date(2026,6,1);
 
 function getScriptUrl(){
   return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
@@ -548,9 +550,113 @@ function renderHistoricalButtons(data){
   const container=document.getElementById('historicalYearButtons');
   const buttons=[{value:'all',label:'전체'}].concat((data.years||[]).map(item=>({
     value:String(item.year),
-    label:item.year+(item.year===2022?' · 11–12월':item.year===2026?' · 1–6월':'')
+    label:item.year+(item.partial&&item.months&&item.months.length
+      ?` · ${item.months[0].month}–${item.months[item.months.length-1].month}월`
+      :'')
   })));
   container.innerHTML=buttons.map(item=>`<button type="button" data-history-year="${item.value}" class="${String(historicalYear)===item.value?'active':''}">${escapeHTML(item.label)}</button>`).join('');
+}
+function sortHistoricalCounts(items){
+  return (items||[]).sort((a,b)=>Number(b.count||0)-Number(a.count||0)||String(a.name||'').localeCompare(String(b.name||''),'ko'));
+}
+function addHistoricalCount(items,name){
+  const safeName=String(name||'미입력').trim()||'미입력';
+  const current=(items||[]).find(item=>item.name===safeName);
+  if(current)current.count=Number(current.count||0)+1;
+  else items.push({name:safeName,count:1});
+}
+function normalizeHistoricalRegion(address){
+  const value=String(address||'').trim();
+  if(!value)return'미입력';
+  const rules=[
+    [/서울/,'서울'],[/경기/,'경기'],[/인천/,'인천'],[/대전/,'대전'],[/세종/,'세종'],
+    [/충청남도|충남/,'충남'],[/충청북도|충북/,'충북'],[/전북특별자치도|전라북도|전북/,'전북'],
+    [/전라남도|전남/,'전남'],[/광주/,'광주'],[/대구/,'대구'],[/부산/,'부산'],[/울산/,'울산'],
+    [/경상북도|경북/,'경북'],[/경상남도|경남/,'경남'],[/강원특별자치도|강원도|강원/,'강원'],
+    [/제주특별자치도|제주/,'제주']
+  ];
+  const found=rules.find(([pattern])=>pattern.test(value));
+  return found?found[1]:'기타';
+}
+function normalizeHistoricalProduct(product){
+  const raw=String(product||'').trim();
+  const value=raw.replace(/\s+/g,'');
+  if(value.includes('가족실내앨범형'))return'가족 실내 앨범형';
+  if(/아기(단독)?앨범형/.test(value))return'아기 앨범형';
+  if(value.includes('가족야외앨범형'))return'가족 야외 앨범형';
+  if(value.includes('가족야외화보형'))return'가족 야외 화보형';
+  if(value.includes('가족돌상촬영'))return'가족 돌상 촬영';
+  if(value.includes('겨울한정'))return'겨울 한정 가족 앨범형';
+  if(value.includes('가족앨범형'))return'가족 앨범형';
+  if(value.includes('아기액자형'))return'아기 액자형';
+  return raw||'미입력';
+}
+function getHistoricalChannelGroups(channel){
+  const value=String(channel||'');
+  const groups=[];
+  if(/SNS|인스타|페이스북|쓰레드/i.test(value))groups.push('SNS');
+  if(/포털|검색|네이버|다음|구글/i.test(value))groups.push('포털 검색');
+  if(/지인|소개/.test(value))groups.push('지인 소개');
+  if(/카페/.test(value))groups.push('맘카페');
+  if(/블로그/.test(value))groups.push('블로그');
+  return groups.length?[...new Set(groups)]:['기타'];
+}
+function mergeLiveReservationsIntoHistory(base,reservations){
+  if(!base)return null;
+  const merged=JSON.parse(JSON.stringify(base));
+  const live=(reservations||[]).filter(item=>{
+    const submitted=parseSubmitDate(item.submittedAt||item.rowId);
+    return submitted&&submitted>=HISTORICAL_LIVE_START&&getStatusClass(item.status)!=='deleted';
+  });
+  live.forEach(item=>{
+    const submitted=parseSubmitDate(item.submittedAt||item.rowId);
+    const year=submitted.getFullYear();
+    const month=submitted.getMonth()+1;
+    let yearData=(merged.years||[]).find(entry=>Number(entry.year)===year);
+    if(!yearData){
+      yearData={year,partial:true,months:[],total:0,regions:[],products:[],channels:[]};
+      merged.years.push(yearData);
+    }
+    let monthData=(yearData.months||[]).find(entry=>Number(entry.month)===month);
+    if(!monthData){
+      monthData={
+        code:'V'+String(year).slice(-1)+String(month).padStart(2,'0'),
+        month,
+        label:`${year}년 ${month}월`,
+        count:0
+      };
+      yearData.months.push(monthData);
+    }
+    monthData.count=Number(monthData.count||0)+1;
+    yearData.total=Number(yearData.total||0)+1;
+    merged.total=Number(merged.total||0)+1;
+    merged.all.total=Number(merged.all.total||0)+1;
+    const region=normalizeHistoricalRegion(item.address);
+    const product=normalizeHistoricalProduct(item.product);
+    addHistoricalCount(yearData.regions,region);
+    addHistoricalCount(yearData.products,product);
+    addHistoricalCount(merged.all.regions,region);
+    addHistoricalCount(merged.all.products,product);
+    getHistoricalChannelGroups(item.channel).forEach(channel=>{
+      addHistoricalCount(yearData.channels,channel);
+      addHistoricalCount(merged.all.channels,channel);
+    });
+  });
+  (merged.years||[]).forEach(year=>{
+    year.months=(year.months||[]).sort((a,b)=>Number(a.month)-Number(b.month));
+    year.regions=sortHistoricalCounts(year.regions);
+    year.products=sortHistoricalCounts(year.products);
+    year.channels=sortHistoricalCounts(year.channels);
+  });
+  merged.years=(merged.years||[]).sort((a,b)=>Number(a.year)-Number(b.year));
+  merged.all.regions=sortHistoricalCounts(merged.all.regions);
+  merged.all.products=sortHistoricalCounts(merged.all.products);
+  merged.all.channels=sortHistoricalCounts(merged.all.channels);
+  if(live.length){
+    const latest=live.map(item=>parseSubmitDate(item.submittedAt||item.rowId)).sort((a,b)=>b-a)[0];
+    merged.period.end=`${latest.getFullYear()}-${String(latest.getMonth()+1).padStart(2,'0')}`;
+  }
+  return merged;
 }
 function getHistoricalSelection(data){
   if(historicalYear==='all')return Object.assign({months:[]},data.all||{});
@@ -687,11 +793,15 @@ function renderHistorical(data){
   ].join('');
 }
 function loadHistoricalData(){
-  if(historicalData)return Promise.resolve(historicalData);
+  if(historicalBaseData)return Promise.resolve(historicalBaseData);
   return fetchWithTimeout('/assets/data/historical-reservations.json',{cache:'no-store'},10000)
     .then(response=>{
       if(!response.ok)throw new Error('과거 예약 집계를 불러오지 못했습니다.');
       return response.json();
+    })
+    .then(data=>{
+      historicalBaseData=data;
+      return historicalBaseData;
     });
 }
 function percent(part,total){
@@ -924,7 +1034,7 @@ function loadAnalytics(){
       if(reservationData.result==='error')throw new Error(reservationData.message||'예약 데이터 확인 실패');
       document.getElementById('loginErr').style.display='none';
       render(data,reservationData.data||[]);
-      renderHistorical(historyData);
+      renderHistorical(mergeLiveReservationsIntoHistory(historyData,reservationData.data||[]));
       setAnalyticsStatus('');
     })
     .catch(err=>{
