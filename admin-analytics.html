@@ -83,6 +83,12 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 .history-fill{height:100%;min-width:2px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
 .history-count{text-align:right;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold2)}
 .history-note{font-size:11px;color:var(--muted);line-height:1.8;margin:-4px 0 18px}
+.history-subhead{margin-top:10px}
+.history-table-wrap{overflow-x:auto;overscroll-behavior-x:contain}
+.history-trend{min-width:620px}
+.history-trend th:not(:first-child),.history-trend td:not(:first-child){text-align:right}
+.history-trend .positive{color:var(--green)}
+.history-trend .negative{color:#ff8e8e}
 @media(max-width:900px){.nav{align-items:flex-start;flex-direction:column}.body{padding:20px 16px}.analytics-hero{grid-template-columns:1fr}.hero-meta{justify-content:flex-start}.grid,.insight-grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}.tables{grid-template-columns:1fr}.group-head{align-items:flex-start;flex-direction:column}.group-desc{text-align:left}}
 @media(max-width:520px){
   .nav{position:relative;padding:16px;}
@@ -212,6 +218,15 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     <section class="section">
       <div class="section-title" id="historicalChartTitle">연도별 예약 건수</div>
       <div class="history-chart" id="historicalChart"></div>
+    </section>
+    <div class="group-head history-subhead">
+      <div class="group-title">지역·광고 인사이트</div>
+      <div class="group-desc">완전한 연간 자료가 있는 2024년과 2025년을 비교합니다.</div>
+    </div>
+    <section class="insight-grid" id="historicalAdInsights"></section>
+    <section class="section">
+      <div class="section-title">지역별 연도 비교</div>
+      <div class="history-table-wrap" id="historicalRegionTrend"></div>
     </section>
     <section class="tables" id="historicalTables"></section>
     <p class="history-note">과거 자료는 예약 건수와 고객 경향 분석용입니다. 당시 실제 결제액 정보가 없어 현재 매출 통계에는 합산하지 않습니다. 유입 경로는 복수 선택이 가능해 합계가 예약 건수보다 클 수 있습니다.</p>
@@ -542,10 +557,62 @@ function renderHistoricalChart(items){
     </div>
   `).join('');
 }
+function getHistoricalYear(data,year){
+  return (data.years||[]).find(item=>Number(item.year)===Number(year))||{total:0,regions:[]};
+}
+function getHistoricalRegionCount(yearData,name){
+  const item=(yearData.regions||[]).find(region=>region.name===name);
+  return Number((item&&item.count)||0);
+}
+function getChangeRate(current,previous){
+  if(!previous)return null;
+  return Math.round(((current-previous)/previous)*1000)/10;
+}
+function renderHistoricalRegionTrend(data){
+  const years=[2023,2024,2025,2026].map(year=>getHistoricalYear(data,year));
+  const regions=(data.all&&data.all.regions||[]).slice(0,6).map(item=>item.name);
+  const rows=regions.map(region=>{
+    const counts=years.map(year=>getHistoricalRegionCount(year,region));
+    const change=getChangeRate(counts[2],counts[1]);
+    const changeClass=change===null?'':change>=0?'positive':'negative';
+    const changeText=change===null?'—':`${change>0?'+':''}${change}%`;
+    return `<tr><td>${escapeHTML(region)}</td>${counts.map(count=>`<td>${escapeHTML(count)}</td>`).join('')}<td class="${changeClass}">${escapeHTML(changeText)}</td></tr>`;
+  }).join('');
+  document.getElementById('historicalRegionTrend').innerHTML=`
+    <table class="history-trend">
+      <thead><tr><th>지역</th><th>2023</th><th>2024</th><th>2025</th><th>2026 상반기</th><th>25년 증감</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+function renderHistoricalAdInsights(data){
+  const all=data.all||{};
+  const regions=all.regions||[];
+  const coreNames=['대전','세종','충남'];
+  const coreCount=regions.filter(item=>coreNames.includes(item.name)).reduce((sum,item)=>sum+Number(item.count||0),0);
+  const coreRate=all.total?Math.round((coreCount/all.total)*1000)/10:0;
+  const y2024=getHistoricalYear(data,2024);
+  const y2025=getHistoricalYear(data,2025);
+  const annualGrowth=getChangeRate(Number(y2025.total||0),Number(y2024.total||0));
+  const growthCandidates=['대전','세종','충남','충북'].map(name=>{
+    const previous=getHistoricalRegionCount(y2024,name);
+    const current=getHistoricalRegionCount(y2025,name);
+    return{name,rate:getChangeRate(current,previous),current};
+  }).filter(item=>item.rate!==null).sort((a,b)=>b.rate-a.rate);
+  const growth=growthCandidates[0]||{name:'—',rate:0};
+  document.getElementById('historicalAdInsights').innerHTML=[
+    `<div class="card primary"><div class="label">핵심 생활권</div><div class="num">${escapeHTML(coreRate)}%</div><div class="sub">대전·세종·충남 · ${escapeHTML(coreCount)}건</div></div>`,
+    `<div class="card"><div class="label">성장 테스트 권역</div><div class="num">${escapeHTML(growth.name)}</div><div class="sub">2025년 전년 대비 ${growth.rate>0?'+':''}${escapeHTML(growth.rate)}%</div></div>`,
+    `<div class="card"><div class="label">연간 예약 증감</div><div class="num">${annualGrowth>0?'+':''}${escapeHTML(annualGrowth)}%</div><div class="sub">2025년 358건 · 2024년 336건</div></div>`,
+    `<div class="card warning"><div class="label">광고 예산 시작점</div><div class="num" style="font-size:25px">75 · 20 · 5</div><div class="sub">핵심권역 75% · 충북 20% · 기타 실험 5%</div></div>`
+  ].join('');
+  renderHistoricalRegionTrend(data);
+}
 function renderHistorical(data){
   if(!data){
     document.getElementById('historicalSummary').innerHTML='<div class="empty">과거 예약 집계를 불러오지 못했습니다.</div>';
     document.getElementById('historicalChart').innerHTML='';
+    document.getElementById('historicalAdInsights').innerHTML='';
+    document.getElementById('historicalRegionTrend').innerHTML='';
     document.getElementById('historicalTables').innerHTML='';
     return;
   }
@@ -570,6 +637,7 @@ function renderHistorical(data){
     :(selected.months||[]).map(item=>({label:item.month+'월',count:item.count}));
   document.getElementById('historicalChartTitle').textContent=historicalYear==='all'?'연도별 예약 건수':'월별 예약 건수';
   document.getElementById('historicalChart').innerHTML=renderHistoricalChart(chartItems);
+  renderHistoricalAdInsights(data);
   document.getElementById('historicalTables').innerHTML=[
     renderTable('방문 지역',selected.regions),
     renderTable('선택 상품',selected.products),
