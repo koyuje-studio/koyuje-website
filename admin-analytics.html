@@ -210,6 +210,17 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
     <section class="tables" id="tables"></section>
 
     <div class="group-head">
+      <div class="group-title">촬영 일정 현황</div>
+      <div class="group-desc">예약 접수월 통계와 별개로, 실제 촬영 예정일을 오늘 기준으로 확인합니다.</div>
+    </div>
+    <section class="insight-grid" id="shootScheduleSummary" aria-live="polite"></section>
+    <section class="section">
+      <div class="section-title">향후 6개월 촬영 예정 건수</div>
+      <div class="history-chart" id="shootScheduleChart"></div>
+    </section>
+    <p class="history-note">현재 예약확정서의 촬영 예정일 기준이며 취소·삭제 건은 제외됩니다. 예약 접수월 통계에는 영향을 주지 않습니다.</p>
+
+    <div class="group-head">
       <div class="group-title">과거 예약 접수 분석</div>
       <div class="group-desc">2022년 11월부터 2026년 6월까지 Imweb 예약확정서 1,127건의 익명 집계입니다.</div>
     </div>
@@ -854,6 +865,43 @@ function getSettlement(item){
   const collected=studioRevenue+hairMakeup;
   return {deposit,balance,hairMakeup,collected,studioRevenue};
 }
+function parseShootDate(value){
+  const match=String(value||'').match(/(\d{4})[.\-/년\s]+(\d{1,2})[.\-/월\s]+(\d{1,2})/);
+  if(!match)return null;
+  const parsed=new Date(Number(match[1]),Number(match[2])-1,Number(match[3]));
+  return isNaN(parsed.getTime())?null:parsed;
+}
+function renderShootSchedule(items){
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  const nextMonthStart=new Date(today.getFullYear(),today.getMonth()+1,1);
+  const followingMonthStart=new Date(today.getFullYear(),today.getMonth()+2,1);
+  const ninetyDaysLater=new Date(today);
+  ninetyDaysLater.setDate(today.getDate()+90);
+  const active=(items||[]).map(item=>({
+    item,
+    date:parseShootDate(item.shootDate)
+  })).filter(entry=>entry.date&&entry.date>=today&&!['cancel','deleted'].includes(getStatusClass(entry.item.status)));
+  const thisMonth=active.filter(entry=>entry.date<nextMonthStart).length;
+  const nextMonth=active.filter(entry=>entry.date>=nextMonthStart&&entry.date<followingMonthStart).length;
+  const next90Days=active.filter(entry=>entry.date<ninetyDaysLater).length;
+  const todayCount=active.filter(entry=>entry.date.getTime()===today.getTime()).length;
+  document.getElementById('shootScheduleSummary').innerHTML=[
+    `<div class="card primary"><div class="label">오늘 촬영</div><div class="num">${escapeHTML(todayCount)}</div><div class="sub">촬영 예정일 기준</div></div>`,
+    `<div class="card"><div class="label">이번 달 남은 촬영</div><div class="num">${escapeHTML(thisMonth)}</div><div class="sub">오늘 포함</div></div>`,
+    `<div class="card"><div class="label">다음 달 촬영</div><div class="num">${escapeHTML(nextMonth)}</div><div class="sub">${escapeHTML(nextMonthStart.getMonth()+1)}월 예정</div></div>`,
+    `<div class="card"><div class="label">향후 90일 촬영</div><div class="num">${escapeHTML(next90Days)}</div><div class="sub">취소·삭제 제외</div></div>`
+  ].join('');
+  const months=Array.from({length:6},(_,index)=>{
+    const start=new Date(today.getFullYear(),today.getMonth()+index,1);
+    const end=new Date(start.getFullYear(),start.getMonth()+1,1);
+    return{
+      label:`${start.getFullYear()}.${String(start.getMonth()+1).padStart(2,'0')}`,
+      count:active.filter(entry=>entry.date>=start&&entry.date<end).length
+    };
+  });
+  document.getElementById('shootScheduleChart').innerHTML=renderHistoricalChart(months);
+}
 function getStatusClass(status){
   const s=String(status||'');
   if(s.includes('취소')||s.includes('×')||s.includes('❌'))return'cancel';
@@ -992,6 +1040,7 @@ function render(data,reservations){
     renderRevenueTable('예약금 결제수단별 수납',revenue.depositPaymentRevenue),
     renderRevenueTable('결제수단별 수납 비중',revenue.paymentRevenue)
   ].join('');
+  renderShootSchedule(reservations||[]);
 }
 function requireActiveAdminSession(data){
   const message=String((data&&data.message)||'');
