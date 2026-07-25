@@ -152,13 +152,49 @@
                                          "code":  "V212",
                                          "month":  12,
                                          "label":  "2022년 12월",
-                                         "count":  17
+                                         "count":  17,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V211",
                                          "month":  11,
                                          "label":  "2022년 11월",
-                                         "count":  7
+                                         "count":  7,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      }
                                  ],
                       "total":  24,
@@ -245,73 +281,313 @@
                                          "code":  "V309",
                                          "month":  9,
                                          "label":  "2023년 9월",
-                                         "count":  19
+                                         "count":  19,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V308",
                                          "month":  8,
                                          "label":  "2023년 8월",
-                                         "count":  27
+                                         "count":  27,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  6
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V307",
                                          "month":  7,
                                          "label":  "2023년 7월",
-                                         "count":  24
+                                         "count":  24,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  11
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V312",
                                          "month":  12,
                                          "label":  "2023년 12월",
-                                         "count":  25
+                                         "count":  25,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  4
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V311",
                                          "month":  11,
                                          "label":  "2023년 11월",
-                                         "count":  17
+                                         "count":  17,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V310",
                                          "month":  10,
                                          "label":  "2023년 10월",
-                                         "count":  20
+                                         "count":  20,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V303",
                                          "month":  3,
                                          "label":  "2023년 3월",
-                                         "count":  19
+                                         "count":  19,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  12
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  3
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V302",
                                          "month":  2,
                                          "label":  "2023년 2월",
-                                         "count":  24
+                                         "count":  24,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V301",
                                          "month":  1,
                                          "label":  "2023년 1월",
-                                         "count":  27
+                                         "count":  27,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "경남",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V306",
                                          "month":  6,
                                          "label":  "2023년 6월",
-                                         "count":  21
+                                         "count":  21,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V305",
                                          "month":  5,
                                          "label":  "2023년 5월",
-                                         "count":  24
+                                         "count":  24,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  3
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V304",
                                          "month":  4,
                                          "label":  "2023년 4월",
-                                         "count":  19
+                                         "count":  19,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "광주",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      }
                                  ],
                       "total":  266,
@@ -410,73 +686,353 @@
                                          "code":  "V409",
                                          "month":  9,
                                          "label":  "2024년 9월",
-                                         "count":  21
+                                         "count":  21,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V408",
                                          "month":  8,
                                          "label":  "2024년 8월",
-                                         "count":  33
+                                         "count":  33,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V407",
                                          "month":  7,
                                          "label":  "2024년 7월",
-                                         "count":  40
+                                         "count":  40,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  17
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V412",
                                          "month":  12,
                                          "label":  "2024년 12월",
-                                         "count":  28
+                                         "count":  28,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V411",
                                          "month":  11,
                                          "label":  "2024년 11월",
-                                         "count":  16
+                                         "count":  16,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "서울",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V410",
                                          "month":  10,
                                          "label":  "2024년 10월",
-                                         "count":  36
+                                         "count":  36,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "광주",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V403",
                                          "month":  3,
                                          "label":  "2024년 3월",
-                                         "count":  37
+                                         "count":  37,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  12
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "부산",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V402",
                                          "month":  2,
                                          "label":  "2024년 2월",
-                                         "count":  23
+                                         "count":  23,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V401",
                                          "month":  1,
                                          "label":  "2024년 1월",
-                                         "count":  27
+                                         "count":  27,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  14
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V406",
                                          "month":  6,
                                          "label":  "2024년 6월",
-                                         "count":  30
+                                         "count":  30,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "광주",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V405",
                                          "month":  5,
                                          "label":  "2024년 5월",
-                                         "count":  20
+                                         "count":  20,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "광주",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V404",
                                          "month":  4,
                                          "label":  "2024년 4월",
-                                         "count":  25
+                                         "count":  25,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "광주",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "서울",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      }
                                  ],
                       "total":  336,
@@ -571,73 +1127,353 @@
                                          "code":  "V509",
                                          "month":  9,
                                          "label":  "2025년 9월",
-                                         "count":  32
+                                         "count":  32,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  13
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  11
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V508",
                                          "month":  8,
                                          "label":  "2025년 8월",
-                                         "count":  25
+                                         "count":  25,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V507",
                                          "month":  7,
                                          "label":  "2025년 7월",
-                                         "count":  25
+                                         "count":  25,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V512",
                                          "month":  12,
                                          "label":  "2025년 12월",
-                                         "count":  19
+                                         "count":  19,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "경남",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V511",
                                          "month":  11,
                                          "label":  "2025년 11월",
-                                         "count":  26
+                                         "count":  26,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V510",
                                          "month":  10,
                                          "label":  "2025년 10월",
-                                         "count":  36
+                                         "count":  36,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  16
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "울산",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V503",
                                          "month":  3,
                                          "label":  "2025년 3월",
-                                         "count":  34
+                                         "count":  34,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "강원",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전남",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V502",
                                          "month":  2,
                                          "label":  "2025년 2월",
-                                         "count":  37
+                                         "count":  37,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  13
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  11
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V501",
                                          "month":  1,
                                          "label":  "2025년 1월",
-                                         "count":  34
+                                         "count":  34,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "전남",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V506",
                                          "month":  6,
                                          "label":  "2025년 6월",
-                                         "count":  36
+                                         "count":  36,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  13
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V505",
                                          "month":  5,
                                          "label":  "2025년 5월",
-                                         "count":  24
+                                         "count":  24,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  8
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  3
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V504",
                                          "month":  4,
                                          "label":  "2025년 4월",
-                                         "count":  30
+                                         "count":  30,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  13
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  3
+                                                         },
+                                                         {
+                                                             "name":  "광주",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      }
                                  ],
                       "total":  358,
@@ -736,37 +1572,181 @@
                                          "code":  "V604",
                                          "month":  4,
                                          "label":  "2026년 4월",
-                                         "count":  18
+                                         "count":  18,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  6
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "인천",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V605",
                                          "month":  5,
                                          "label":  "2026년 5월",
-                                         "count":  20
+                                         "count":  20,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  4
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V606",
                                          "month":  6,
                                          "label":  "2026년 6월",
-                                         "count":  14
+                                         "count":  14,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  9
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "경북",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V601",
                                          "month":  1,
                                          "label":  "2026년 1월",
-                                         "count":  30
+                                         "count":  30,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  11
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "경기",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V602",
                                          "month":  2,
                                          "label":  "2026년 2월",
-                                         "count":  24
+                                         "count":  24,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  10
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  5
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "인천",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      },
                                      {
                                          "code":  "V603",
                                          "month":  3,
                                          "label":  "2026년 3월",
-                                         "count":  37
+                                         "count":  37,
+                                         "regions":  [
+                                                         {
+                                                             "name":  "대전",
+                                                             "count":  14
+                                                         },
+                                                         {
+                                                             "name":  "세종",
+                                                             "count":  11
+                                                         },
+                                                         {
+                                                             "name":  "충남",
+                                                             "count":  7
+                                                         },
+                                                         {
+                                                             "name":  "충북",
+                                                             "count":  2
+                                                         },
+                                                         {
+                                                             "name":  "경남",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "광주",
+                                                             "count":  1
+                                                         },
+                                                         {
+                                                             "name":  "전북",
+                                                             "count":  1
+                                                         }
+                                                     ]
                                      }
                                  ],
                       "total":  143,

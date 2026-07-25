@@ -78,6 +78,9 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
 .history-years{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .history-chart{display:grid;gap:11px}
 .history-row{display:grid;grid-template-columns:88px minmax(0,1fr) 54px;gap:12px;align-items:center}
+.history-row-button{width:100%;min-height:44px;padding:8px 4px;border:0;background:transparent;text-align:left;letter-spacing:0}
+.history-row-button:hover,.history-row-button.active{background:rgba(215,187,134,.07)}
+.history-row-button.active .history-name,.history-row-button.active .history-count{color:var(--gold2)}
 .history-name{font-size:12px;color:var(--muted);white-space:nowrap}
 .history-track{height:7px;background:rgba(247,242,234,.07);overflow:hidden}
 .history-fill{height:100%;min-width:2px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
@@ -230,6 +233,7 @@ td:last-child,th:last-child{text-align:right;color:var(--paper);width:72px}
       <div class="section-title" id="historicalChartTitle">연도별 예약 접수 건수</div>
       <div class="history-chart" id="historicalChart"></div>
     </section>
+    <section id="historicalMonthRegions" aria-live="polite"></section>
     <div class="group-head history-subhead">
       <div class="group-title">지역·광고 인사이트</div>
       <div class="group-desc">완전한 연간 자료가 있는 2024년과 2025년을 비교합니다.</div>
@@ -264,6 +268,7 @@ let adminLoginLockRemaining=0;
 let historicalData=null;
 let historicalBaseData=null;
 let historicalYear='all';
+let historicalMonth='';
 const HISTORICAL_LIVE_START=new Date(2026,6,1);
 
 function getScriptUrl(){
@@ -634,7 +639,8 @@ function mergeLiveReservationsIntoHistory(base,reservations){
         code:'V'+String(year).slice(-1)+String(month).padStart(2,'0'),
         month,
         label:`${year}년 ${month}월`,
-        count:0
+        count:0,
+        regions:[]
       };
       yearData.months.push(monthData);
     }
@@ -644,6 +650,8 @@ function mergeLiveReservationsIntoHistory(base,reservations){
     merged.all.total=Number(merged.all.total||0)+1;
     const region=normalizeHistoricalRegion(item.address);
     const product=normalizeHistoricalProduct(item.product);
+    monthData.regions=monthData.regions||[];
+    addHistoricalCount(monthData.regions,region);
     addHistoricalCount(yearData.regions,region);
     addHistoricalCount(yearData.products,product);
     addHistoricalCount(merged.all.regions,region);
@@ -655,6 +663,7 @@ function mergeLiveReservationsIntoHistory(base,reservations){
   });
   (merged.years||[]).forEach(year=>{
     year.months=(year.months||[]).sort((a,b)=>Number(a.month)-Number(b.month));
+    year.months.forEach(month=>{month.regions=sortHistoricalCounts(month.regions||[]);});
     year.regions=sortHistoricalCounts(year.regions);
     year.products=sortHistoricalCounts(year.products);
     year.channels=sortHistoricalCounts(year.channels);
@@ -673,15 +682,20 @@ function getHistoricalSelection(data){
   if(historicalYear==='all')return Object.assign({months:[]},data.all||{});
   return (data.years||[]).find(item=>String(item.year)===String(historicalYear))||null;
 }
-function renderHistoricalChart(items){
+function renderHistoricalChart(items,selectable){
   const max=Math.max(1,...items.map(item=>Number(item.count||0)));
-  return items.map(item=>`
-    <div class="history-row">
+  return items.map(item=>{
+    const content=`
       <div class="history-name">${escapeHTML(item.label)}</div>
       <div class="history-track" aria-hidden="true"><div class="history-fill" style="width:${Math.max(2,Math.round((Number(item.count||0)/max)*100))}%"></div></div>
       <div class="history-count">${escapeHTML(item.count)}</div>
-    </div>
-  `).join('');
+    `;
+    if(selectable){
+      const month=String(item.month||'');
+      return `<button type="button" class="history-row history-row-button ${historicalMonth===month?'active':''}" data-history-month="${escapeHTML(month)}" aria-pressed="${historicalMonth===month}">${content}</button>`;
+    }
+    return `<div class="history-row">${content}</div>`;
+  }).join('');
 }
 function getHistoricalYear(data,year){
   return (data.years||[]).find(item=>Number(item.year)===Number(year))||{total:0,regions:[]};
@@ -772,6 +786,7 @@ function renderHistorical(data){
     document.getElementById('historicalMarketingInsights').innerHTML='';
     document.getElementById('historicalSeasonality').innerHTML='';
     document.getElementById('historicalTables').innerHTML='';
+    document.getElementById('historicalMonthRegions').innerHTML='';
     return;
   }
   historicalData=data;
@@ -792,9 +807,20 @@ function renderHistorical(data){
   ].join('');
   const chartItems=historicalYear==='all'
     ?(data.years||[]).map(item=>({label:String(item.year)+(item.partial?'*':''),count:item.total}))
-    :(selected.months||[]).map(item=>({label:item.month+'월',count:item.count}));
+    :(selected.months||[]).map(item=>({label:item.month+'월',month:String(item.month),count:item.count}));
   document.getElementById('historicalChartTitle').textContent=historicalYear==='all'?'연도별 예약 접수 건수':'월별 예약 접수 건수';
-  document.getElementById('historicalChart').innerHTML=renderHistoricalChart(chartItems);
+  document.getElementById('historicalChart').innerHTML=renderHistoricalChart(chartItems,historicalYear!=='all');
+  if(historicalYear==='all'){
+    document.getElementById('historicalMonthRegions').innerHTML='<div class="section"><div class="section-title">월별 방문 지역 순위</div><div class="empty">연도를 선택한 뒤 확인할 달을 눌러 주세요.</div></div>';
+  }else if(historicalMonth){
+    const monthData=(selected.months||[]).find(item=>String(item.month)===historicalMonth);
+    document.getElementById('historicalMonthRegions').innerHTML=renderTable(
+      `${historicalYear}년 ${historicalMonth}월 방문 지역 순위`,
+      (monthData&&monthData.regions)||[]
+    );
+  }else{
+    document.getElementById('historicalMonthRegions').innerHTML='<div class="section"><div class="section-title">월별 방문 지역 순위</div><div class="empty">위 월별 접수 건수에서 확인할 달을 눌러 주세요.</div></div>';
+  }
   renderHistoricalAdInsights(data);
   renderHistoricalMarketingInsights(data);
   document.getElementById('historicalTables').innerHTML=[
@@ -1107,6 +1133,13 @@ document.getElementById('historicalYearButtons').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-history-year]');
   if(!btn||!historicalData)return;
   historicalYear=btn.dataset.historyYear;
+  historicalMonth='';
+  renderHistorical(historicalData);
+});
+document.getElementById('historicalChart').addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-history-month]');
+  if(!btn||!historicalData)return;
+  historicalMonth=btn.dataset.historyMonth;
   renderHistorical(historicalData);
 });
 document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
