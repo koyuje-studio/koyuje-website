@@ -32,13 +32,13 @@
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);font-weight:300;line-height:1.7;min-height:100vh;}
 :where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 
-.nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.nav{background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);padding:12px 60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
 .nav-logo{display:flex;align-items:center;text-decoration:none;flex:0 0 auto;}
-.nav-logo img{display:block;width:132px;height:auto;}
-.nav-links-full{display:flex;gap:32px;list-style:none;}
-.nav-links-full a{font-size:12px;letter-spacing:0.18em;color:var(--muted);text-decoration:none;transition:color .3s;}
+.nav-logo img{display:block;width:136px;height:auto;}
+.nav-links-full{display:flex;gap:36px;list-style:none;}
+.nav-links-full a{font-size:13px;font-weight:400;letter-spacing:0.16em;color:var(--muted);text-decoration:none;transition:color .3s;}
 .nav-links-full a:hover,.nav-links-full a.active{color:var(--ink);}
-.nav-cta-btn{font-size:11px;letter-spacing:0.2em;border:0.5px solid var(--gold);color:var(--gold);padding:8px 20px;text-decoration:none;transition:all .3s;}
+.nav-cta-btn{font-size:12px;font-weight:400;letter-spacing:0.16em;border:0.5px solid var(--gold);color:var(--gold);padding:10px 22px;text-decoration:none;transition:all .3s;}
 .nav-cta-btn:hover{background:var(--gold);color:var(--paper);}
 .nav-toggle-btn{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:transparent;border:0;}
 .nav-toggle-btn span{display:block;width:22px;height:1px;background:var(--ink);transition:all .3s;}
@@ -99,8 +99,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .bottom-link a{color:var(--gold);text-decoration:underline;text-underline-offset:4px;}
 
 @media(max-width:900px){
-  .nav{padding:16px 20px;}
-  .nav-logo img{width:116px;}
+  .nav{padding:16px 24px;}
+  .nav-logo img{width:126px;}
   .nav-links-full,.nav-cta-btn{display:none;}
   .nav-toggle-btn{display:flex;}
   .hero{padding:40px 20px 36px;}

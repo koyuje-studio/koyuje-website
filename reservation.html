@@ -40,16 +40,22 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 /* NAV */
 .nav{
   background:rgba(247,242,234,0.97);border-bottom:0.5px solid var(--line);
-  padding:18px 40px;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 60px;display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:50;
 }
 .nav-logo{display:flex;align-items:center;text-decoration:none;flex:0 0 auto;}
-.nav-logo img{display:block;width:132px;height:auto;}
-.nav-back{font-size:12px;color:var(--muted);letter-spacing:0.12em;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.nav-logo img{display:block;width:136px;height:auto;}
+.nav-links-full{display:flex;gap:36px;list-style:none;}
+.nav-links-full a{font-size:13px;font-weight:400;letter-spacing:0.16em;color:var(--muted);text-decoration:none;transition:color .3s;}
+.nav-links-full a:hover{color:var(--ink);}
+.nav-cta-btn{font-size:12px;font-weight:400;letter-spacing:0.16em;border:0.5px solid var(--gold);color:var(--gold);padding:10px 22px;text-decoration:none;transition:all .3s;}
+.nav-cta-btn:hover{background:var(--gold);color:var(--paper);}
+.nav-back{display:none;font-size:12px;color:var(--muted);letter-spacing:0.12em;text-decoration:none;align-items:center;gap:6px;}
 .nav-back:hover{color:var(--ink);}
 
 /* GUIDE BANNER */
 .guide{background:var(--ink);padding:36px 40px;}
+.guide-inner{width:100%;max-width:1120px;margin:0 auto;}
 .guide-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold2);letter-spacing:0.28em;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
 .guide-label::before{content:'';width:24px;height:0.5px;background:var(--gold);}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:24px;}
@@ -220,8 +226,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:13px;color:var(--muted);letter-spacing:0.1em;}
 
+@media(max-width:900px){
+  .nav{padding:16px 24px;}
+  .nav-logo img{width:126px;}
+  .nav-links-full,.nav-cta-btn{display:none;}
+  .nav-back{display:flex;}
+}
 @media(max-width:600px){
-  .nav-logo img{width:116px;}
   .f-input,.f-select{min-height:46px;padding:12px 0;}
   .r-item,.c-item{min-height:44px;padding:8px 0;line-height:1.6;}
   .r-item input[type=radio],.c-item input[type=checkbox]{width:18px;height:18px;}
@@ -280,12 +291,21 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <!-- NAV -->
 <nav class="nav">
   <a href="/" class="nav-logo" aria-label="고유재 한옥스튜디오 홈"><img src="/assets/images/brand/koyuje-logo.png" alt="" width="1238" height="508" loading="eager" decoding="async"></a>
+  <ul class="nav-links-full">
+    <li><a href="/#about">스튜디오 소개</a></li>
+    <li><a href="/#gallery">갤러리</a></li>
+    <li><a href="/#packages">상품구성</a></li>
+    <li><a href="/board">공지·예약 현황</a></li>
+    <li><a href="/#location">오시는 길</a></li>
+  </ul>
+  <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="nav-cta-btn">예약 가능일 문의</a>
   <a href="/" class="nav-back">← 홈으로</a>
 </nav>
 
 <main id="mainContent">
 <!-- GUIDE BANNER -->
 <div class="guide">
+  <div class="guide-inner">
   <div class="guide-label">예약 접수 안내</div>
   <div class="steps">
     <div class="step">
@@ -316,6 +336,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       입금 후 48시간 이내 예약 확인 연락이 없으면<br>
       <span style="color:var(--gold2)">카카오톡 채널</span>로 문의 주세요.
     </div>
+  </div>
   </div>
 </div>
 
