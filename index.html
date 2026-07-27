@@ -291,7 +291,7 @@ body.gallery-opened{overflow:hidden}
 .empty-state a{display:inline-flex;margin-top:12px;color:var(--gold);text-decoration:none;border-bottom:.5px solid rgba(160,120,64,.35);padding-bottom:2px}
 
 .instagram{padding:80px 0}
-.insta-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:0 60px}
+.insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;padding:0 60px}
 .insta-item{aspect-ratio:1;overflow:hidden;background:#e8e0d4;position:relative;cursor:pointer}
 .insta-item:hover img{transform:scale(1.08)}
 .insta-overlay{position:absolute;inset:0;background:rgba(28,24,20,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
@@ -923,11 +923,12 @@ function initPortfolioGallery() {
 }
 
 const galleryFallback = [
-  { src:'/assets/images/gallery/webp/gallery_01.webp', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥 돌촬영 대표 장면' },
-  { src:'/assets/images/gallery/webp/0057.webp', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 한옥스튜디오 가족 돌사진' },
-  { src:'/assets/images/gallery/webp/0073.webp', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 전통 돌상 촬영 장면' },
-  { src:'/assets/images/gallery/webp/0075.webp', link:'https://www.instagram.com/koyuje_studio/', alt:'고유재 실크 한복 가족 촬영' },
-  { src:'/assets/images/gallery/webp/0138_.webp', link:'https://www.instagram.com/koyuje_studio/', alt:'공주 한옥스튜디오 프리미엄 돌사진' }
+  { src:'/assets/images/instagram/instagram-2026-07-26.webp', link:'https://www.instagram.com/koyuje_studio/p/DbQvehODusn/', alt:'한옥 처마 아래에서 함께한 가족사진' },
+  { src:'/assets/images/instagram/instagram-2026-07-23.webp', link:'https://www.instagram.com/koyuje_studio/p/DbIKk5Wn2ld/', alt:'전통 건축의 붉은 기둥 앞 가족사진' },
+  { src:'/assets/images/instagram/instagram-2026-07-19.webp', link:'https://www.instagram.com/koyuje_studio/p/Da-lLfhAZDg/', alt:'한옥 창호 앞 푸른 한복 아기사진' },
+  { src:'/assets/images/instagram/instagram-2026-07-17-a.webp', link:'https://www.instagram.com/koyuje_studio/p/Da7LM59geIG/', alt:'화사한 꽃빛 속 노란 한복 아기사진' },
+  { src:'/assets/images/instagram/instagram-2026-07-17-b.webp', link:'https://www.instagram.com/koyuje_studio/p/Da5aMuGgSvc/', alt:'전통 책상 앞에서 촬영한 아기 돌사진' },
+  { src:'/assets/images/instagram/instagram-2026-07-14.webp', link:'https://www.instagram.com/koyuje_studio/p/DaxxEwcgbiv/', alt:'가야금과 함께 촬영한 모자 한복사진' }
 ];
 
 function observeReveals(root = document) {
@@ -985,7 +986,7 @@ function renderGallery(images) {
   const grid = document.getElementById('instaGrid');
   if (!grid) return;
   const svgIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>';
-  grid.innerHTML = images.map((img, i) => `
+  grid.innerHTML = images.slice(0, 6).map((img, i) => `
     <a href="${escapeHTML(img.link)}" target="_blank" rel="noopener" class="insta-item reveal${i > 0 ? ' reveal-delay-' + Math.min(i, 4) : ''}">
       <img src="${escapeHTML(img.src)}" alt="${escapeHTML(img.alt)}" loading="lazy" decoding="async">
       <div class="insta-overlay"><div class="insta-icon">${svgIcon}</div></div>
@@ -994,12 +995,17 @@ function renderGallery(images) {
 }
 
 function loadInstagramGallery() {
+  renderGallery(galleryFallback);
   const boardUrl = getBoardUrl();
   if (!boardUrl) return;
   fetch(boardUrl + '?action=gallery')
     .then(r => r.json())
-    .then(data => renderGallery(data.result === 'success' && data.data && data.data.length > 0 ? data.data : galleryFallback))
-    .catch(() => renderGallery(galleryFallback));
+    .then(data => {
+      if (data.result === 'success' && data.data && data.data.length >= 6) {
+        renderGallery(data.data);
+      }
+    })
+    .catch(() => {});
 }
 
 function loadHomeNotice() {
