@@ -488,7 +488,8 @@ const requiredPageSnippets = {
     "통계 응답이 지연되고 있습니다",
     ".periods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))",
     ".grid,.insight-grid{grid-template-columns:repeat(2,minmax(0,1fr))",
-    ".nav-right>*{flex:0 0 auto",
+    ".nav-right .nav-primary{grid-column:1/-1",
+    ".revenue-grid{grid-template-columns:1fr",
   ],
   "웹사이트가이드.txt": [
     "최종 운영 전 체크리스트",

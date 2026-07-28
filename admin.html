@@ -302,8 +302,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
   .write-close{width:44px;height:44px;top:8px;right:8px;}
   .save-toast{left:16px;right:16px;bottom:18px;text-align:center;}
 }
-@media(max-width:480px){
+@media(max-width:520px){
+  .admin-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;padding-bottom:0;}
+  .admin-actions>*{width:100%;min-width:0;padding:9px 7px;letter-spacing:0.05em;}
+  .admin-actions .admin-action-wide,.admin-actions .btn-logout{grid-column:1/-1;}
   .stats-row{grid-template-columns:1fr 1fr;}
+  .monthly-revenue{text-align:left;}
   .detail-grid{grid-template-columns:1fr;}
   .status-select{min-width:104px;min-height:44px;padding:8px 10px;font-size:11px;}
   .res-card-head{padding:16px 14px;gap:10px;}
@@ -345,7 +349,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
       <div class="admin-actions" aria-label="관리자 주요 메뉴">
         <button class="btn-write" onclick="openWriteModal()">✎ 게시글 작성</button>
         <a href="/admin/analytics" class="btn-refresh" style="text-decoration:none;">통계 분석</a>
-        <button class="btn-qr" onclick="shareQrLink()">공주페이 QR 복사/열기</button>
+        <button class="btn-qr admin-action-wide" onclick="shareQrLink()">공주페이 QR 복사/열기</button>
         <button class="btn-refresh" onclick="openSecurityModal()">보안 설정</button>
         <button class="btn-refresh" onclick="loadData()">↻ 새로고침</button>
         <button class="btn-logout" onclick="doLogout()">로그아웃</button>
