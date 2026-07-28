@@ -227,8 +227,9 @@ body.gallery-opened{overflow:hidden}
 .booking-bridge-k{font-size:10px;letter-spacing:.24em;color:var(--gold);margin-bottom:10px}
 .booking-bridge-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:300;line-height:1.45;letter-spacing:.02em;margin-bottom:12px}
 .booking-bridge-copy{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:.04em;max-width:340px}
-.booking-bridge-list{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
-.booking-bridge-item{background:var(--paper);padding:18px 16px;min-height:126px}
+.booking-bridge-list{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line)}
+.booking-bridge-item{grid-column:span 2;background:var(--paper);padding:18px 16px;min-height:126px}
+.booking-bridge-item:nth-last-child(-n+2){grid-column:span 3}
 .booking-bridge-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18px;color:var(--gold);margin-bottom:12px}
 .booking-bridge-label{font-size:13px;letter-spacing:.04em;margin-bottom:6px}
 .booking-bridge-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:.03em}
@@ -417,7 +418,7 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.6);padding:64px 60px 40px}
   .hero-proof{margin-top:16px;gap:6px;opacity:1;animation:none}.hero-proof-item{font-size:9px;padding:7px 8px}.hero-scroll{display:none}
   .gallery{padding:64px 0}.gallery-grid{display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding:0 16px}.gallery-item:nth-child(n){width:100%;grid-column:auto;aspect-ratio:4/3;--gallery-drift:0px}.gallery-item:nth-child(2){width:78%;margin-left:auto;aspect-ratio:3/4}.gallery-item:nth-child(3){width:92%;aspect-ratio:16/11}.gallery-item:nth-child(4){width:84%;margin-left:auto;aspect-ratio:4/3}.gallery-item:nth-child(5){width:76%;aspect-ratio:3/4}.gallery-item:nth-child(6){width:100%;aspect-ratio:16/11}.gallery-item:nth-child(7){width:88%;margin-left:auto;aspect-ratio:4/3}.gallery-item.reveal{transform:translate3d(-14px,48px,0);transition:opacity 1s ease,transform 1.05s cubic-bezier(.22,.61,.36,1)}.gallery-item:nth-child(even).reveal{transform:translate3d(14px,48px,0)}.gallery-item.reveal.visible{transform:translate3d(0,0,0)}.gallery-item img{transform:translate3d(0,var(--gallery-drift),0) scale(1.08);transition:transform 1.5s cubic-bezier(.22,.61,.36,1)}.gallery-item.visible img{transform:translate3d(0,var(--gallery-drift),0) scale(1.045)}.gallery-item .gallery-overlay{opacity:1;background:linear-gradient(to top,rgba(24,20,16,.58) 0%,rgba(24,20,16,.08) 42%,transparent 68%)}.gallery-caption{display:block;opacity:0;transform:translateY(10px);transition:opacity .8s ease .28s,transform .8s ease .28s}.gallery-item.visible .gallery-caption{opacity:1;transform:translateY(0)}.gallery-footer{padding-top:30px}.gallery-open{width:100%;min-height:46px}.gallery-lightbox-head{padding:10px 12px}.gallery-lightbox-stage{padding:12px}.gallery-lightbox-image{max-height:calc(100dvh - 170px)}.gallery-lightbox-nav{top:auto;bottom:10px;width:46px;height:46px;background:rgba(20,17,14,.55);transform:none}.gallery-lightbox-prev{left:14px}.gallery-lightbox-next{right:14px}.gallery-lightbox-foot{padding:14px 18px calc(18px + env(safe-area-inset-bottom));font-size:10px}.insta-grid{grid-template-columns:repeat(2,1fr);padding:0 16px}
   .packages{padding:56px 18px}.packages-header{margin-bottom:34px}.pkg-card{padding:28px 22px}.pkg-name{font-size:21px}.pkg-price{font-size:34px}.pkg-price-note{margin-bottom:18px}.pkg-divider{margin-bottom:16px}.pkg-features li{font-size:13px;padding:5px 0}.pkg-recommend{font-size:12px;padding-top:14px}.pkg-details summary{font-size:10px}.btn-pkg{padding:13px 10px;font-size:10px;letter-spacing:.08em}
-  .booking-bridge{margin-top:24px;padding:22px 0}.booking-bridge-title{font-size:21px}.booking-bridge-list{grid-template-columns:1fr}.booking-bridge-item{min-height:auto;padding:16px 14px}.booking-bridge-actions{gap:8px}.booking-bridge-actions a{width:100%;min-height:44px}
+  .booking-bridge{margin-top:24px;padding:22px 0}.booking-bridge-title{font-size:21px}.booking-bridge-list{grid-template-columns:1fr}.booking-bridge-item,.booking-bridge-item:nth-last-child(-n+2){grid-column:auto;min-height:auto;padding:16px 14px}.booking-bridge-actions{gap:8px}.booking-bridge-actions a{width:100%;min-height:44px}
   .process-steps{grid-template-columns:1fr}.process-step .step-arrow{display:none}.process-actions{display:grid;grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr}
   .stat{border-right:none;border-bottom:.5px solid var(--line);padding:20px 0}
@@ -615,24 +616,34 @@ footer{background:#0e0c0a;color:rgba(247,242,234,.6);padding:64px 60px 40px}
   <div class="booking-bridge reveal" aria-label="예약 가능일 문의 전 준비 안내">
     <div>
       <div class="booking-bridge-k">BOOKING CHECK</div>
-      <h2 class="booking-bridge-title">가능일 문의 전, 이 세 가지만 알려주시면<br>더 빠르게 안내드릴 수 있어요</h2>
-      <p class="booking-bridge-copy">상품을 고르기 어렵더라도 괜찮습니다. 희망 날짜와 아기 정보, 함께 촬영할 가족만 알려주시면 가장 자연스러운 구성을 제안해 드립니다.</p>
+      <h2 class="booking-bridge-title">처음 문의하실 때, 이 다섯 가지만 알려주시면<br>더 빠르게 안내드릴 수 있어요</h2>
+      <p class="booking-bridge-copy">상품을 아직 정하지 못하셨어도 괜찮습니다. 가능한 항목만 보내주시면 일정과 촬영 구성에 맞춰 안내해 드립니다.</p>
     </div>
     <div class="booking-bridge-list">
       <div class="booking-bridge-item">
         <div class="booking-bridge-num">01</div>
-        <div class="booking-bridge-label">희망 촬영일</div>
-        <p class="booking-bridge-desc">1순위와 예비 날짜를 함께 알려주세요.</p>
+        <div class="booking-bridge-label">아기 생일·돌잔치 일정</div>
+        <p class="booking-bridge-desc">돌잔치가 없다면 아기 생일을 알려주세요.</p>
       </div>
       <div class="booking-bridge-item">
         <div class="booking-bridge-num">02</div>
-        <div class="booking-bridge-label">아기 개월 수</div>
-        <p class="booking-bridge-desc">생년월일 또는 촬영일 기준 개월 수를 알려주세요.</p>
+        <div class="booking-bridge-label">희망 촬영일</div>
+        <p class="booking-bridge-desc">1순위와 2순위를 함께 알려주세요.</p>
       </div>
       <div class="booking-bridge-item">
         <div class="booking-bridge-num">03</div>
-        <div class="booking-bridge-label">참여 가족</div>
-        <p class="booking-bridge-desc">부모님, 형제, 조부모님 참여 여부를 알려주세요.</p>
+        <div class="booking-bridge-label">희망 요일·시간대</div>
+        <p class="booking-bridge-desc">평일·주말, 오전·오후 중 알려주세요.</p>
+      </div>
+      <div class="booking-bridge-item">
+        <div class="booking-bridge-num">04</div>
+        <div class="booking-bridge-label">촬영 구성</div>
+        <p class="booking-bridge-desc">가족촬영 또는 아기 단독을 알려주세요.</p>
+      </div>
+      <div class="booking-bridge-item">
+        <div class="booking-bridge-num">05</div>
+        <div class="booking-bridge-label">출발 예정 지역</div>
+        <p class="booking-bridge-desc">촬영 당일 출발하실 지역을 알려주세요.</p>
       </div>
     </div>
     <div class="booking-bridge-actions">
