@@ -184,6 +184,7 @@ body.gallery-opened{overflow:hidden}
 .btn-more:hover{color:var(--ink);border-color:var(--ink)}
 
 .packages{padding:80px 60px}
+.packages>*{width:100%;max-width:1600px;margin-left:auto;margin-right:auto}
 .packages-header{margin-bottom:56px}
 .pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
 .pkg-card{border:.5px solid var(--line);padding:36px 32px;position:relative;transition:all .3s;display:flex;flex-direction:column}
@@ -223,7 +224,7 @@ body.gallery-opened{overflow:hidden}
 .pkg-note{padding:20px 24px;background:var(--paper2);border:.5px solid var(--line);font-size:12px;color:var(--muted);line-height:1.9;letter-spacing:.04em}
 .pkg-note strong,.pkg-desc strong{font-size:12px;color:var(--ink);letter-spacing:.08em}
 .pkg-wide-note{margin-top:2px}
-.booking-bridge{margin-top:34px;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);padding:28px 0;display:grid;grid-template-columns:1fr 1.35fr;gap:36px;align-items:center}
+.booking-bridge{margin-top:34px;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);padding:28px 0;display:grid;grid-template-columns:minmax(320px,.75fr) minmax(0,1.6fr);gap:36px;align-items:center}
 .booking-bridge-k{font-size:10px;letter-spacing:.24em;color:var(--gold);margin-bottom:10px}
 .booking-bridge-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:300;line-height:1.45;letter-spacing:.02em;margin-bottom:12px}
 .booking-bridge-copy{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:.04em;max-width:340px}
