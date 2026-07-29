@@ -85,17 +85,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 /* WRAP */
 .wrap{max-width:760px;margin:0 auto;padding:72px 40px 100px;}
 
-/* NOTICE BOX */
-.notice-box{
-  background:rgba(160,120,64,0.06);
-  border:0.5px solid rgba(160,120,64,0.25);
-  padding:24px 28px;margin-bottom:56px;
-  display:flex;gap:16px;align-items:flex-start;
-}
-.notice-icon{font-size:18px;margin-top:2px;flex-shrink:0;}
-.notice-text{font-size:13px;color:var(--muted);line-height:1.9;letter-spacing:0.04em;}
-.notice-text strong{color:var(--ink);font-weight:400;}
-
 .prep-panel{
   border-top:0.5px solid var(--line);
   border-bottom:0.5px solid var(--line);
@@ -110,7 +99,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .prep-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--gold);margin-bottom:12px;}
 .prep-label{font-size:13px;letter-spacing:0.04em;margin-bottom:6px;}
 .prep-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;}
-.message-panel{
+.prep-message{
   margin-top:20px;
   background:rgba(255,255,255,0.34);
   border:0.5px solid rgba(160,120,64,0.22);
@@ -131,16 +120,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   font-size:12px;color:var(--muted);
   line-height:1.85;letter-spacing:0.04em;
 }
-.message-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
-.message-actions a{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-height:38px;padding:10px 18px;font-size:11px;letter-spacing:0.1em;
-  text-decoration:none;transition:all .3s;
-}
-.message-actions .message-kakao{background:#FAE300;color:#3A1D1D;}
-.message-actions .message-kakao:hover{background:#f0d800;}
-.message-actions .message-status{border:0.5px solid rgba(160,120,64,0.35);color:var(--gold);}
-.message-actions .message-status:hover{background:var(--gold);color:var(--paper);}
 
 /* STEPS */
 .steps{display:flex;flex-direction:column;gap:0;}
@@ -323,9 +302,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .prep-grid{grid-template-columns:1fr 1fr;}
   .prep-item:last-child{grid-column:1/-1;}
   .prep-item{min-height:112px;padding:16px 14px;}
-  .message-panel{grid-template-columns:1fr;padding:20px 18px;}
+  .prep-message{grid-template-columns:1fr;padding:20px 18px;}
   .message-sample{min-width:0;}
-  .message-actions{display:grid;grid-template-columns:1fr;}
   .bottom-cta{padding:40px 20px 84px;}
   .account-num{font-size:22px;}
 }
@@ -354,14 +332,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 </div>
 
 <div class="wrap">
-
-  <!-- 안내 박스 -->
-  <div class="notice-box reveal">
-    <div class="notice-icon">💡</div>
-    <div class="notice-text">
-      고유재 한옥스튜디오는 <strong>예약 가능일 문의 → 날짜 확정 → 예약금 입금 → 예약확정서</strong> 순서로 진행됩니다. 원하시는 날짜가 있으시다면 먼저 카카오톡으로 문의해 주세요!
-    </div>
-  </div>
 
   <section class="prep-panel reveal" aria-label="예약 가능일 문의 전 준비 정보">
     <div class="prep-head">
@@ -398,24 +368,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <p class="prep-desc">촬영 당일 출발하실 지역을 알려주세요.</p>
       </div>
     </div>
-  </section>
-
-  <section class="message-panel reveal" aria-label="예약 가능일 문의 문구 안내">
-    <div>
-      <div class="message-k">MESSAGE GUIDE</div>
-      <h2 class="message-title">처음 문의하실 때는 이렇게 보내주세요</h2>
-      <p class="message-copy">가능한 항목만 보내주셔도 괜찮습니다. 아래 내용을 함께 알려주시면 더 빠르고 정확하게 안내해 드릴 수 있습니다.</p>
-      <div class="message-actions">
-        <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="message-kakao">예약 가능일 문의</a>
-        <a href="/status" class="message-status">예약 현황 확인</a>
+    <div class="prep-message" aria-label="예약 가능일 문의 문구 안내">
+      <div>
+        <div class="message-k">MESSAGE GUIDE</div>
+        <h2 class="message-title">처음 문의하실 때는 이렇게 보내주세요</h2>
+        <p class="message-copy">가능한 항목만 보내주셔도 괜찮습니다. 아래 내용을 함께 알려주시면 더 빠르고 정확하게 안내해 드릴 수 있습니다.</p>
       </div>
-    </div>
-    <div class="message-sample">
-      아기 생일 또는 돌잔치 일정 ·<br>
-      희망 촬영일 · 1순위 / 2순위<br>
-      요일·시간대 · 평일 / 주말 · 오전 / 오후<br>
-      촬영 구성 · 가족촬영 / 아기 단독<br>
-      출발 예정 지역 ·
+      <div class="message-sample">
+        아기 생일 또는 돌잔치 일정 ·<br>
+        희망 촬영일 · 1순위 / 2순위<br>
+        요일·시간대 · 평일 / 주말 · 오전 / 오후<br>
+        촬영 구성 · 가족촬영 / 아기 단독<br>
+        출발 예정 지역 ·
+      </div>
     </div>
   </section>
 
@@ -436,14 +401,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         </p>
         <div class="step-detail">
           <strong>운영시간</strong> · 평일 · 주말 AM 10:00 — PM 18:00<br>
-          <strong>문의 내용</strong> · 희망 날짜, 상품 종류, 아기 개월 수
+          <strong>문의 내용</strong> · 위 다섯 가지 항목 중 가능한 내용을 함께 보내주세요
         </div>
         <div class="step-btns">
           <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="step-cta">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#3A1D1D"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.887 1.67 5.424 4.236 6.977L5.5 21l3.838-2.026A11.3 11.3 0 0012 19c5.523 0 10-3.477 10-8S17.523 3 12 3z"/></svg>
             예약 가능일 문의하기
           </a>
-          <a href="/status" class="step-cta-ghost">예약 현황 확인</a>
         </div>
       </div>
     </div>
@@ -510,7 +474,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         </p>
         <div class="step-detail">
           <strong>주소</strong> · 충청남도 공주시 봉황로 88<br>
-          <strong>결제</strong> · 카드 및 현금 모두 가능<br>
+          <strong>결제</strong> · 계좌이체 · 카드 · 현금 · 공주페이<br>
           <strong>소요시간</strong> · 아기 앨범형 약 30분 · 가족 실내 앨범형 약 90분
         </div>
         <a href="https://kko.to/wbVqE4BGHD" target="_blank" rel="noopener" class="step-cta-ghost">카카오맵으로 길찾기 →</a>
@@ -534,7 +498,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
           <strong>데이터 보관</strong> · 발송일 기준 6개월 후 삭제<br>
           <strong>셀렉 기간</strong> · 원본 수령 후 3주 이내 부탁드립니다
         </div>
-        <a href="/status" class="step-cta-ghost">예약 현황 확인하기 →</a>
       </div>
     </div>
 
@@ -557,7 +520,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <span>쌍둥이나 형제 추가 촬영이 가능한가요?</span>
         <span class="faq-icon">+</span>
       </div>
-      <div class="faq-a">네, 가능합니다. 쌍둥이 추가는 50만원, 형제 추가는 실내 1인 10만원 / 야외 1인 20만원입니다. 남매 기념컷 추가는 1인 10만원이며 형제의 한복·신발·액세서리는 직접 준비해 오셔야 합니다.</div>
+      <div class="faq-a">네, 가능합니다. 쌍둥이 추가는 50만원, 친형제·친자매 기념컷 추가는 10만원입니다. 가족 촬영 자녀 추가는 실내 1인 10만원 / 야외 1인 20만원이며, 형제의 한복·신발·액세서리는 직접 준비해 오셔야 합니다.</div>
     </div>
 
     <div class="faq-item">

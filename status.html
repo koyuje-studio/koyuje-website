@@ -49,16 +49,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .hero-desc{font-size:13px;color:rgba(247,242,234,0.78);letter-spacing:0.05em;line-height:1.9;}
 .search-wrap{max-width:480px;margin:0 auto;padding:56px 40px;}
 .search-card{background:var(--paper);border:0.5px solid var(--line);padding:40px;text-align:center;}
-.inquiry-strip{border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.045);padding:18px 18px 16px;margin-bottom:30px;text-align:left;}
-.inquiry-k{font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:8px;}
-.inquiry-title{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:300;letter-spacing:0.04em;margin-bottom:8px;}
-.inquiry-copy{font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:0.04em;margin-bottom:14px;}
-.inquiry-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.inquiry-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 13px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
-.inquiry-actions .inquiry-kakao{background:#FAE300;color:#3A1D1D;}
-.inquiry-actions .inquiry-kakao:hover{background:#f0d800;}
-.inquiry-actions .inquiry-form{border:0.5px solid rgba(160,120,64,0.35);color:var(--gold);}
-.inquiry-actions .inquiry-form:hover{background:var(--gold);color:var(--paper);}
 .search-icon{font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--gold);margin-bottom:20px;line-height:1;}
 .search-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:300;margin-bottom:8px;}
 .search-desc{font-size:13px;color:var(--muted);margin-bottom:32px;line-height:1.8;}
@@ -89,9 +79,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .status-guide-item{background:var(--paper);padding:16px 18px;display:grid;grid-template-columns:74px 1fr;gap:14px;align-items:start;}
 .status-guide-label{font-size:11px;letter-spacing:0.16em;color:var(--gold);}
 .status-guide-copy{font-size:12px;color:var(--muted);line-height:1.75;letter-spacing:0.04em;}
-.support-box{margin-top:18px;border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.045);padding:18px 20px;text-align:left;}
-.support-k{font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:8px;}
-.support-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:14px;}
+.status-guide-link{display:inline-block;margin-top:8px;color:var(--gold);text-underline-offset:4px;}
 .support-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
 .support-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;font-size:11px;letter-spacing:0.1em;text-decoration:none;transition:all .3s;}
 .support-actions .support-kakao{background:#FAE300;color:#3A1D1D;}
@@ -142,8 +130,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .hero-title{font-size:26px;}
   .search-wrap{padding:32px 16px 24px;}
   .search-card{padding:28px 18px;}
-  .inquiry-strip{padding:16px;margin-bottom:26px;}
-  .inquiry-actions{display:grid;grid-template-columns:1fr;}
   .phone-row{gap:4px;justify-content:space-between;}
   .phone-fixed{height:50px;font-size:17px;padding:0 9px;}
   .phone-dash{font-size:14px;}
@@ -189,20 +175,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <div class="hero">
   <div class="hero-label">예약 현황 확인</div>
   <h1 class="hero-title">예약이 잘 접수되었는지<br>확인해보세요</h1>
-  <p class="hero-desc">예약확정서를 작성한 예약 정보는 48시간 이내에 확인 후 연락드립니다.<br>아직 날짜 확인 전이라면 먼저 예약 가능일을 문의해 주세요.</p>
+  <p class="hero-desc">예약확정서를 작성하신 뒤<br>접수 및 예약 확인 상태를 조회할 수 있습니다.</p>
 </div>
 
 <div class="search-wrap" id="searchSection">
   <div class="search-card">
-    <div class="inquiry-strip" aria-label="예약 전 안내">
-      <div class="inquiry-k">BEFORE RESERVATION</div>
-      <div class="inquiry-title">아직 예약 전이라면</div>
-      <p class="inquiry-copy">고유재는 하루 두 팀만 촬영합니다. 희망 날짜가 있으시다면 예약확정서 작성 전, 카카오톡으로 가능일을 먼저 확인해 주세요.</p>
-      <div class="inquiry-actions">
-        <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="inquiry-kakao">카톡 가능일 문의</a>
-        <a href="/reservation" class="inquiry-form">예약확정서</a>
-      </div>
-    </div>
     <div class="search-icon">✦</div>
     <div class="search-title">전화번호로 확인하기</div>
     <p class="search-desc">예약 시 입력하신 휴대폰 번호<br><strong style="color:var(--ink);font-weight:400;">010을 제외한 8자리</strong>를 입력해 주세요.</p>
@@ -245,19 +222,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <p class="status-guide-copy">예약확정서를 작성한 예약 정보와 입금 확인이 진행 중인 상태입니다. 보통 48시간 이내 예약 확인 연락을 드립니다.</p>
       </div>
       <div class="status-guide-item">
-        <div class="status-guide-label">완료</div>
+        <div class="status-guide-label">예약 확인 완료</div>
         <p class="status-guide-copy">일정과 예약 정보가 확인되어 촬영일이 확보된 상태입니다.</p>
       </div>
       <div class="status-guide-item">
         <div class="status-guide-label">미조회</div>
-        <p class="status-guide-copy">휴대폰 번호를 다시 확인해 주세요. 계속 조회되지 않으면 카카오톡으로 아기 이름과 촬영 예정일을 함께 알려주세요.</p>
-      </div>
-    </div>
-    <div class="support-box">
-      <div class="support-k">NEED HELP?</div>
-      <p class="support-copy">예약확정서를 작성한 예약 정보가 조회되지 않는다면, 작성 직후이거나 전화번호가 다르게 입력된 경우일 수 있습니다. 아기 이름과 촬영 예정일을 함께 알려주시면 빠르게 확인해 드립니다.</p>
-      <div class="support-actions">
-        <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="support-kakao">예약 상태 문의하기</a>
+        <p class="status-guide-copy">작성 직후 반영 전이거나 입력한 번호가 다를 수 있습니다. 번호를 다시 확인한 뒤 계속 조회되지 않으면 아기 이름과 촬영 예정일을 함께 알려주세요.<br><a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="status-guide-link">카카오톡으로 예약 상태 문의</a></p>
       </div>
     </div>
   </div>

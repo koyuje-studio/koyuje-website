@@ -80,13 +80,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .form-helper-k{font-size:10px;letter-spacing:0.22em;color:var(--gold);margin-bottom:8px;}
 .form-helper-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;letter-spacing:0.04em;margin-bottom:8px;}
 .form-helper-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:16px;}
-.form-helper-alert{border-left:1px solid var(--gold);background:rgba(255,255,255,0.38);padding:13px 15px;margin-bottom:16px;font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:0.04em;}
-.form-helper-alert strong{display:block;color:var(--ink);font-weight:400;margin-bottom:3px;}
 .form-helper-links{display:flex;gap:8px;flex-wrap:wrap;}
 .form-helper-links a{border:0.5px solid rgba(160,120,64,0.26);color:var(--muted);background:rgba(247,242,234,0.45);padding:9px 13px;font-size:11px;letter-spacing:0.08em;text-decoration:none;transition:all .25s;}
 .form-helper-links a:hover{border-color:var(--gold);color:var(--gold);}
-.form-helper-links .helper-kakao{background:#FAE300;color:#3A1D1D;border-color:#FAE300;}
-.form-helper-links .helper-kakao:hover{background:#f0d800;color:#3A1D1D;border-color:#f0d800;}
 
 .sec{margin-bottom:48px;}
 .sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden{display:none;}
@@ -167,6 +163,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .optional-consent-note{margin-top:8px;font-size:11px;color:var(--soft);line-height:1.7;letter-spacing:0.04em;}
 .review-guide{border-left:1px solid var(--gold);background:rgba(247,242,234,0.72);padding:18px 20px;margin-top:14px;}
 .review-guide-title{font-size:15px;margin-bottom:8px;}
+.success-review-guide{max-width:520px;margin:18px auto 28px;text-align:left;}
 
 .final-check{border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line);padding:24px 0;margin:0 0 32px;}
 .final-check-k{font-size:10px;letter-spacing:0.22em;color:var(--gold);margin-bottom:8px;}
@@ -246,7 +243,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .form-helper-title{font-size:17px;}
   .form-helper-links{gap:7px;}
   .form-helper-links a{flex:1 1 calc(50% - 7px);text-align:center;padding:10px 8px;min-height:44px;display:flex;align-items:center;justify-content:center;}
-  .form-helper-links .helper-kakao,.form-helper-links .helper-status{flex-basis:100%;}
   .address-search-row{display:grid;grid-template-columns:1fr;gap:8px;}
   .postcode-input{width:100%;}
   .address-search-btn{min-height:46px;}
@@ -334,8 +330,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     </div>
     <div class="account-note">
       예약금 20만원 입금 후 아래 양식을 작성해 주세요.<br>
-      입금 후 48시간 이내 예약 확인 연락이 없으면<br>
-      <span style="color:var(--gold2)">카카오톡 채널</span>로 문의 주세요.
+      입금자명은 예약확정서에 적으실 이름과<br>
+      동일하게 입력해 주세요.
     </div>
   </div>
   </div>
@@ -346,16 +342,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <div class="form-helper" aria-label="예약확정서 안내">
   <div class="form-helper-inner">
     <div class="form-helper-k">BEFORE YOU START</div>
-    <div class="form-helper-title">예약확정서 작성 양식입니다</div>
+    <div class="form-helper-title">예약확정서 작성 안내</div>
     <p class="form-helper-copy">아기 정보, 촬영 상품과 일정, 배송 주소를 차례대로 입력해 주세요. 부모님 키·한복·신발 사이즈는 가족 실내 앨범형 선택 시에만 작성합니다.</p>
-    <div class="form-helper-alert">
-      <strong>아직 촬영 가능일 확인 전이라면</strong>
-      이 양식 작성 전 카카오톡으로 희망 날짜를 먼저 문의해 주세요. 예약 가능일 확인과 예약금 입금 후 예약확정서를 작성하시면 가장 정확하게 접수됩니다.
-    </div>
     <div class="form-helper-links">
-      <a href="https://pf.kakao.com/_xiRxjhxj" target="_blank" rel="noopener" class="helper-kakao">예약 가능일 문의</a>
-      <a href="/status" class="helper-status">예약 현황 확인</a>
-      <a href="#babyInfo">처음부터 작성</a>
       <a href="#shootInfo">촬영 일정 확인</a>
       <a href="#deliveryInfo">배송 정보로 이동</a>
       <a href="#agreeInfo">약관 확인</a>
@@ -676,10 +665,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </label>
       <p class="optional-consent-note">체크하지 않으시면 미동의로 접수됩니다.</p>
     </div>
-    <div class="review-guide" aria-label="후기 참여 안내">
-      <h3 class="review-guide-title">후기 참여 안내</h3>
-      <p class="review-guide-copy">촬영 이후 소중한 후기를 작성해주시는 고객님께는 3만원 캐시백 혜택을 드립니다.<br>후기 참여는 선택 사항이며, 참여 방법과 지급 기준은 촬영 후 안내드리겠습니다.</p>
-    </div>
   </div>
 
   <!-- 제출 -->
@@ -721,6 +706,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   </p>
   <div class="success-next">
     <strong>접수 상태는 예약 현황에서 휴대폰 번호로 확인하실 수 있습니다.</strong> 수정이 필요한 내용이 있거나 급한 일정 확인이 필요하시면 카카오톡으로 아기 이름과 촬영 예정일을 함께 남겨주세요.
+  </div>
+  <div class="review-guide success-review-guide" aria-label="후기 참여 안내">
+    <h3 class="review-guide-title">후기 참여 안내</h3>
+    <p class="review-guide-copy">촬영 이후 소중한 후기를 작성해주시는 고객님께는 3만원 캐시백 혜택을 드립니다.<br>후기 참여는 선택 사항이며, 참여 방법과 지급 기준은 촬영 후 안내드리겠습니다.</p>
   </div>
   <div class="success-box">
     <div class="success-box-title">제출하신 예약확정서 요약</div>
