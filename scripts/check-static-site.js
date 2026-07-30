@@ -322,6 +322,15 @@ const requiredPageSnippets = {
     "if (needsSiblingDetail() && !val('siblingInfo'))",
     "document.getElementById('babyBirth').max = todayText",
     "document.getElementById('shootDate').min = todayText",
+    "enableFullDatePicker(document.getElementById('babyBirth'))",
+    "enableFullDatePicker(document.getElementById('shootDate'))",
+    "function enableFullDatePicker(input)",
+    "앨범 페이지 4p 추가 · 수정본 9장 추가",
+    "선택 구성 합계",
+    "selectedFamilyExtras * 4",
+    "selectedFamilyExtras * 9",
+    "const noneInput = extras.find(input => input.value === noneValue)",
+    "짧은 머리 가발이 필요한 경우 추가 비용이 발생하며, 별도로 안내드립니다.",
     "if (!getCheckboxArray('sibling').length)",
     'aria-label="형제 신발 사이즈"',
     'aria-label="상세 주소"',
@@ -967,10 +976,14 @@ if (fs.existsSync("apps-script-code.gs")) {
       weekday: "주말/공휴일",
       sibling: "쌍둥이",
       siblingShoes: "대여신청",
-      extra: "야외가족한옥스냅(+30만원)",
+      extra: "야외가족한옥스냅(+30만원), 야외가족문화재스냅(+30만원)",
     });
-    if (estimate.total !== 2020000) {
-      console.error(`Apps Script estimate regression: expected 2020000, received ${estimate.total}`);
+    if (estimate.total !== 2320000) {
+      console.error(`Apps Script estimate regression: expected 2320000, received ${estimate.total}`);
+      hasError = true;
+    }
+    if (!estimate.itemsText.includes("앨범 4p · 수정본 9장 추가")) {
+      console.error("Apps Script outdoor add-on detail regression");
       hasError = true;
     }
 
@@ -1007,6 +1020,21 @@ if (fs.existsSync("apps-script-code.gs")) {
     }
     if (appsScriptContext.validateReservationData({ ...validReservation, termsConsent: "미동의" }) !== "예약 약관 동의가 필요합니다.") {
       console.error("Apps Script terms consent validation regression");
+      hasError = true;
+    }
+    const doubleOutdoorReservation = {
+      ...validReservation,
+      product: "가족실내앨범형",
+      momHeight: "160",
+      momSize: "66",
+      momShoes: "235",
+      dadHeight: "175",
+      dadSize: "100",
+      dadShoes: "270",
+      extra: "야외가족한옥스냅(+30만원), 야외가족문화재스냅(+30만원)",
+    };
+    if (appsScriptContext.validateReservationData(doubleOutdoorReservation) !== "") {
+      console.error("Apps Script rejected two outdoor family add-ons");
       hasError = true;
     }
 

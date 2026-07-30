@@ -99,6 +99,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 }
 .f-input:focus,.f-select:focus,.f-textarea:focus{border-bottom-color:var(--gold);}
 .f-input::placeholder,.f-textarea::placeholder{color:rgba(28,24,20,0.22);}
+.f-input[type=date]{cursor:pointer;}
 .f-input:-webkit-autofill,
 .f-input:-webkit-autofill:hover,
 .f-input:-webkit-autofill:focus,
@@ -144,6 +145,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .add-card input:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);font-size:9px;color:var(--paper);}
 .add-name{font-size:13px;margin-bottom:2px;}
 .add-price{font-size:12px;color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;}
+.add-detail{font-size:11px;color:var(--muted);line-height:1.7;margin-top:5px;letter-spacing:0.03em;}
+.extra-selection-summary{display:none;border-left:1px solid var(--gold);background:rgba(160,120,64,0.045);padding:11px 14px;margin:10px 0 6px;font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:0.03em;}
+.extra-selection-summary.show{display:block;}
+.extra-selection-summary strong{color:var(--ink);font-weight:400;}
 
 .hint{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.04em;line-height:1.7;}
 .extra-in{border:none;border-bottom:0.5px solid var(--line);background:transparent;font-family:'Noto Sans KR',sans-serif;font-size:12px;color:var(--ink);font-weight:300;outline:none;padding:4px 0;width:160px;transition:border-color .3s;}
@@ -532,12 +537,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <p class="hint" style="margin-bottom:16px;">아기 컨디션 및 날씨에 따라 야외 촬영이 불가할 수 있습니다.</p>
     <label class="add-card" data-extra-for="family">
       <input type="checkbox" name="extra" value="야외가족한옥스냅(+30만원)">
-      <div><div class="add-name">야외 가족 한옥스냅</div><div class="add-price">+ 300,000원</div></div>
+      <div><div class="add-name">야외 가족 한옥스냅</div><div class="add-price">+ 300,000원</div><div class="add-detail">앨범 페이지 4p 추가 · 수정본 9장 추가</div></div>
     </label>
     <label class="add-card" data-extra-for="family">
       <input type="checkbox" name="extra" value="야외가족문화재스냅(+30만원)">
-      <div><div class="add-name">야외 가족 문화재스냅</div><div class="add-price">+ 300,000원</div></div>
+      <div><div class="add-name">야외 가족 문화재스냅</div><div class="add-price">+ 300,000원</div><div class="add-detail">앨범 페이지 4p 추가 · 수정본 9장 추가</div></div>
     </label>
+    <div class="extra-selection-summary" id="familyExtraSummary" aria-live="polite"></div>
     <label class="add-card" data-extra-for="baby">
       <input type="checkbox" name="extra" value="야외아기컨셉(+20만원)">
       <div><div class="add-name">야외 아기 컨셉</div><div class="add-price">+ 200,000원</div></div>
@@ -674,7 +680,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <div class="estimate-row"><strong>촬영 상품을 선택하면 예상 금액이 표시됩니다.</strong><span>-</span></div>
       </div>
       <p class="estimate-note">예상 금액은 선택하신 상품과 추가 구성 기준입니다. 최종 금액은 촬영 일정과 세부 상담 후 확정됩니다.</p>
-      <p class="estimate-payment-note" id="estimatePaymentNote"><strong>헤어·메이크업 비용은 예상 금액에 포함되어 있습니다.</strong><br>다만 해당 비용은 촬영 당일 외부 선생님께 별도로 이체해 주시면 됩니다.</p>
+      <p class="estimate-payment-note" id="estimatePaymentNote"><strong>헤어·메이크업 비용은 예상 금액에 포함되어 있습니다.</strong><br>다만 해당 비용은 촬영 당일 외부 선생님께 별도로 이체해 주시면 됩니다.<br>짧은 머리 가발이 필요한 경우 추가 비용이 발생하며, 별도로 안내드립니다.</p>
     </div>
   </div>
   <div class="submit-area">
@@ -787,6 +793,8 @@ document.addEventListener('DOMContentLoaded', function() {
   ].join('-');
   document.getElementById('babyBirth').max = todayText;
   document.getElementById('shootDate').min = todayText;
+  enableFullDatePicker(document.getElementById('babyBirth'));
+  enableFullDatePicker(document.getElementById('shootDate'));
   document.getElementById('addressDetail').addEventListener('input', updateAddress);
   document.querySelectorAll('input[name="product"]').forEach(input => {
     input.addEventListener('change', updateProductDependentSections);
@@ -838,6 +846,28 @@ function populateShootTimeOptions() {
     option.textContent = value;
     select.appendChild(option);
   }
+}
+
+function enableFullDatePicker(input) {
+  if (!input) return;
+  input.addEventListener('click', function() {
+    if (typeof input.showPicker !== 'function') return;
+    try {
+      input.showPicker();
+    } catch (error) {
+      // 브라우저 기본 날짜 선택 동작을 유지합니다.
+    }
+  });
+  input.addEventListener('keydown', function(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    if (typeof input.showPicker !== 'function') return;
+    event.preventDefault();
+    try {
+      input.showPicker();
+    } catch (error) {
+      // 브라우저 기본 날짜 선택 동작을 유지합니다.
+    }
+  });
 }
 
 function updateAddress() {
@@ -1090,9 +1120,8 @@ function normalizeExtraSelection(changedInput) {
     return;
   }
   if (changedInput.value !== noneValue && changedInput.checked) {
-    extras.filter(input => input !== changedInput).forEach(input => {
-      input.checked = false;
-    });
+    const noneInput = extras.find(input => input.value === noneValue);
+    if (noneInput) noneInput.checked = false;
   }
 }
 
@@ -1158,8 +1187,8 @@ function calculatePriceEstimate() {
   }
 
   const extraPrices = {
-    '야외가족한옥스냅(+30만원)': ['야외 가족 한옥스냅', 300000],
-    '야외가족문화재스냅(+30만원)': ['야외 가족 문화재스냅', 300000],
+    '야외가족한옥스냅(+30만원)': ['야외 가족 한옥스냅 · 앨범 4p · 수정본 9장 추가', 300000],
+    '야외가족문화재스냅(+30만원)': ['야외 가족 문화재스냅 · 앨범 4p · 수정본 9장 추가', 300000],
     '야외아기컨셉(+20만원)': ['야외 아기 컨셉', 200000]
   };
   getVisibleCheckboxArray('extra').forEach(value => {
@@ -1176,6 +1205,7 @@ function updatePriceEstimate() {
   const totalEl = document.getElementById('estimateTotal');
   const listEl = document.getElementById('estimateList');
   const paymentNoteEl = document.getElementById('estimatePaymentNote');
+  const familyExtraSummaryEl = document.getElementById('familyExtraSummary');
   if (!totalEl || !listEl) return;
 
   const estimate = calculatePriceEstimate();
@@ -1188,6 +1218,15 @@ function updatePriceEstimate() {
     ? rows.map(row => '<div class="estimate-row"><strong>' + escapeHTML(row.label) + '</strong><span>' + formatWon(row.amount) + '</span></div>').join('')
     : '<div class="estimate-row"><strong>촬영 상품을 선택하면 예상 금액이 표시됩니다.</strong><span>-</span></div>';
   if (paymentNoteEl) paymentNoteEl.classList.toggle('show', showPaymentNote);
+  if (familyExtraSummaryEl) {
+    const selectedFamilyExtras = getVisibleCheckboxArray('extra').filter(value =>
+      value === '야외가족한옥스냅(+30만원)' || value === '야외가족문화재스냅(+30만원)'
+    ).length;
+    familyExtraSummaryEl.classList.toggle('show', selectedFamilyExtras > 0);
+    familyExtraSummaryEl.innerHTML = selectedFamilyExtras > 0
+      ? '<strong>선택 구성 합계</strong> · 앨범 페이지 ' + (selectedFamilyExtras * 4) + 'p 추가 · 수정본 ' + (selectedFamilyExtras * 9) + '장 추가'
+      : '';
+  }
 }
 
 function getReservationRequestId() {
