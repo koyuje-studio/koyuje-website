@@ -79,10 +79,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .form-helper-inner{border:0.5px solid var(--line);background:rgba(160,120,64,0.045);padding:20px 22px;}
 .form-helper-k{font-size:10px;letter-spacing:0.22em;color:var(--gold);margin-bottom:8px;}
 .form-helper-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:300;letter-spacing:0.04em;margin-bottom:8px;}
-.form-helper-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:16px;}
-.form-helper-links{display:flex;gap:8px;flex-wrap:wrap;}
-.form-helper-links a{border:0.5px solid rgba(160,120,64,0.26);color:var(--muted);background:rgba(247,242,234,0.45);padding:9px 13px;font-size:11px;letter-spacing:0.08em;text-decoration:none;transition:all .25s;}
-.form-helper-links a:hover{border-color:var(--gold);color:var(--gold);}
+.form-helper-copy{font-size:12px;color:var(--muted);line-height:1.85;letter-spacing:0.04em;margin-bottom:0;}
 
 .sec{margin-bottom:48px;}
 .sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden,.sibling-fields.is-hidden,.sibling-shoes-field.is-hidden{display:none;}
@@ -241,8 +238,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   .form-helper{padding:24px 20px 0;}
   .form-helper-inner{padding:18px 18px;}
   .form-helper-title{font-size:17px;}
-  .form-helper-links{gap:7px;}
-  .form-helper-links a{flex:1 1 calc(50% - 7px);text-align:center;padding:10px 8px;min-height:44px;display:flex;align-items:center;justify-content:center;}
   .address-search-row{display:grid;grid-template-columns:1fr;gap:8px;}
   .postcode-input{width:100%;}
   .address-search-btn{min-height:46px;}
@@ -344,11 +339,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
     <div class="form-helper-k">BEFORE YOU START</div>
     <div class="form-helper-title">예약확정서 작성 안내</div>
     <p class="form-helper-copy">아기 정보, 촬영 상품과 일정, 배송 주소를 차례대로 입력해 주세요. 부모님 키·한복·신발 사이즈는 가족 실내 앨범형 선택 시에만 작성합니다.</p>
-    <div class="form-helper-links">
-      <a href="#shootInfo">촬영 일정 확인</a>
-      <a href="#deliveryInfo">배송 정보로 이동</a>
-      <a href="#agreeInfo">약관 확인</a>
-    </div>
   </div>
 </div>
 <form id="resForm" class="form-wrap" onsubmit="return false;">
