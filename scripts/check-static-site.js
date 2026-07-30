@@ -69,8 +69,8 @@ const requiredPublicMeta = [
   '<meta property="og:site_name"',
   '<meta property="og:title"',
   '<meta property="og:description"',
-  '<meta property="og:image" content="https://koyuje.com/assets/images/social/og-image.jpg">',
-  '<meta property="og:image:secure_url" content="https://koyuje.com/assets/images/social/og-image.jpg">',
+  '<meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">',
+  '<meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">',
   '<meta property="og:image:alt"',
   '<meta property="og:image:type" content="image/jpeg">',
   '<meta property="og:image:width" content="1200">',
@@ -308,6 +308,15 @@ const requiredPageSnippets = {
     ".sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden{display:none;}",
     "function updateExtraOptions()",
     "extra: getVisibleCheckboxes('extra')",
+    "extras.filter(input => input !== changedInput)",
+    "termsConsent: document.getElementById('agree').checked ? '동의' : '미동의'",
+    "document.getElementById('babyBirth').max = todayText",
+    "document.getElementById('shootDate').min = todayText",
+    "if (!getCheckboxArray('sibling').length)",
+    'aria-label="형제 신발 사이즈"',
+    'aria-label="상세 주소"',
+    'aria-label="소개자 이름"',
+    'aria-label="유입 경로 기타 내용"',
   ],
   "status.html": [
     ":where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--gold)",
@@ -334,7 +343,8 @@ const requiredPageSnippets = {
     "--gold:#8b642f;--gold2:#c49a58;--muted:#73675b",
     "function fetchWithTimeout(url,options,timeoutMs=20000)",
     "if(p.length!==8)",
-    "action:'reservationLookup',phone8:p",
+    "function getLookupClientId()",
+    "action:'reservationLookup',phone:'010'+p,clientId:getLookupClientId()",
     "throw new Error('INVALID_RESPONSE')",
     "restoreSearchButton();",
     "예약 조회 응답을 확인하지 못했습니다",
@@ -872,6 +882,12 @@ for (const file of htmlFiles) {
       hasError = true;
     }
 
+    const h1Count = (html.match(/<h1\b/gi) || []).length;
+    if (h1Count !== 1) {
+      console.error(`Public page should contain exactly one H1: ${file} (${h1Count})`);
+      hasError = true;
+    }
+
     for (const snippet of blockedPublicMeta) {
       if (html.includes(snippet)) {
         console.error(`Blocked public meta found in ${file}: ${snippet}`);
@@ -925,6 +941,83 @@ for (const file of htmlFiles) {
 if (fs.existsSync("apps-script-code.gs")) {
   const appsScriptSource = fs.readFileSync("apps-script-code.gs", "utf8");
 
+  try {
+    new vm.Script(appsScriptSource);
+  } catch (error) {
+    console.error(`Invalid Apps Script syntax: ${error.message}`);
+    hasError = true;
+  }
+
+  try {
+    const appsScriptContext = vm.createContext({ console });
+    new vm.Script(appsScriptSource).runInContext(appsScriptContext);
+
+    const estimate = appsScriptContext.calculateServerEstimate({
+      product: "가족실내앨범형",
+      weekday: "주말/공휴일",
+      sibling: "쌍둥이",
+      siblingShoes: "대여신청",
+      extra: "야외가족한옥스냅(+30만원)",
+    });
+    if (estimate.total !== 2020000) {
+      console.error(`Apps Script estimate regression: expected 2020000, received ${estimate.total}`);
+      hasError = true;
+    }
+
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 2);
+    while (futureDate.getDay() === 0 || futureDate.getDay() === 6) {
+      futureDate.setDate(futureDate.getDate() + 1);
+    }
+    const futureDateText = [
+      futureDate.getFullYear(),
+      String(futureDate.getMonth() + 1).padStart(2, "0"),
+      String(futureDate.getDate()).padStart(2, "0"),
+    ].join("-");
+    const validReservation = {
+      babyName: "점검",
+      babyGender: "남아",
+      babyBirth: "2025-01-01",
+      parentName: "보호자",
+      phone: "01012345678",
+      email: "test@example.com",
+      weekday: "평일",
+      shootDate: futureDateText,
+      shootTime: "09:00",
+      product: "아기앨범형",
+      sibling: "형제없음",
+      depositor: "보호자",
+      address: "점검 주소",
+      termsConsent: "동의",
+      photoUsageConsent: "미동의",
+    };
+    if (appsScriptContext.validateReservationData(validReservation) !== "") {
+      console.error("Apps Script rejected a valid reservation fixture");
+      hasError = true;
+    }
+    if (appsScriptContext.validateReservationData({ ...validReservation, termsConsent: "미동의" }) !== "예약 약관 동의가 필요합니다.") {
+      console.error("Apps Script terms consent validation regression");
+      hasError = true;
+    }
+
+    const rows = [
+      [],
+      [null, "활성 예약", null, null, null, null, null, null, null, null, null, null, null, null, null, null, futureDateText, "09:00", null, null, null, null, null, null, null, "확인중"],
+      [null, "취소 예약", null, null, null, null, null, null, null, null, null, null, null, null, null, null, futureDateText, "10:00", null, null, null, null, null, null, null, "취소"],
+    ];
+    if (appsScriptContext.findActiveScheduleConflict(rows, futureDateText, "09:00", -1) !== 1) {
+      console.error("Apps Script active schedule conflict regression");
+      hasError = true;
+    }
+    if (appsScriptContext.findActiveScheduleConflict(rows, futureDateText, "10:00", -1) !== -1) {
+      console.error("Apps Script cancelled reservation should not block a schedule");
+      hasError = true;
+    }
+  } catch (error) {
+    console.error(`Apps Script behavior check failed: ${error.message}`);
+    hasError = true;
+  }
+
   for (const pattern of blockedSensitiveSnippets) {
     if (pattern.test(appsScriptSource)) {
       console.error("Sensitive admin credential pattern found: apps-script-code.gs");
@@ -949,6 +1042,12 @@ if (fs.existsSync("apps-script-code.gs")) {
     "MailApp.sendEmail",
     "function cleanupExpiredAdminSessions",
     "function handleAdminPasswordChange",
+    "function findActiveScheduleConflict",
+    "function consumeReservationLookupRate",
+    "비공개 글은 공개 조회할 수 없습니다.",
+    "if (!isReservation && String(rows[i][5]) !== '공개') continue;",
+    "safeText(data.termsConsent) !== '동의'",
+    "calculateServerEstimate(reservationRowToEstimateData(updatedRow))",
   ]) {
     if (!appsScriptSource.includes(snippet)) {
       console.error(`Missing Apps Script credential property lookup: ${snippet}`);

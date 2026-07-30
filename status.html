@@ -15,8 +15,8 @@
 <meta property="og:title" content="예약 현황 확인 | 고유재 한옥스튜디오">
 <meta property="og:description" content="예약확정서를 작성한 예약 정보의 접수 확인중, 예약 확인 완료 상태를 확인하고 조회되지 않는 경우 카카오톡으로 문의할 수 있습니다.">
 <meta property="og:url" content="https://koyuje.com/status">
-<meta property="og:image" content="https://koyuje.com/assets/images/social/og-image.jpg">
-<meta property="og:image:secure_url" content="https://koyuje.com/assets/images/social/og-image.jpg">
+<meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
+<meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
 <meta property="og:image:alt" content="고유재 한옥스튜디오 예약 현황 대표 이미지">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
@@ -292,6 +292,22 @@ ids.forEach((id,i)=>{
 function getPhone8(){
   return ids.map(id=>document.getElementById(id).value.trim()).join('');
 }
+function getLookupClientId(){
+  const key='koyujeReservationLookupClientId';
+  try{
+    let clientId=localStorage.getItem(key);
+    if(!clientId){
+      const random=window.crypto&&window.crypto.getRandomValues
+        ? Array.from(window.crypto.getRandomValues(new Uint32Array(4))).map(value=>value.toString(36)).join('')
+        : Math.random().toString(36).slice(2)+Date.now().toString(36);
+      clientId='lookup_'+random;
+      localStorage.setItem(key,clientId);
+    }
+    return clientId;
+  }catch(err){
+    return 'lookup_session_'+Date.now().toString(36);
+  }
+}
 function escapeHTML(value){
   return String(value).replace(/[&<>"']/g,char=>({
     '&':'&amp;',
@@ -331,7 +347,7 @@ function doSearch(){
   document.getElementById('loading').classList.add('show');
   fetchWithTimeout(scriptUrl,{
     method:'POST',
-    body:JSON.stringify({action:'reservationLookup',phone8:p})
+    body:JSON.stringify({action:'reservationLookup',phone:'010'+p,clientId:getLookupClientId()})
   })
     .then(r=>r.text())
     .then(text=>{

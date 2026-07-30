@@ -191,7 +191,7 @@
     const eventName = ownEventName || String(metaEventName || "").toLowerCase();
     const payload = buildPayload(eventName, metaEventName, params);
     postOwnEvent(payload);
-    if (debugMode) {
+    if (debugMode && config.TRACKING_DEBUG) {
       console.log("[Koyuje tracking]", payload);
     }
     sendPixel(metaEventName, params, payload.event_id);

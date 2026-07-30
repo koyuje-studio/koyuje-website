@@ -15,8 +15,8 @@
 <meta property="og:title" content="예약확정서 | 고유재 한옥스튜디오">
 <meta property="og:description" content="예약 가능일 확인과 예약금 입금 후 아기 정보, 촬영 일정, 상품별 필요 정보를 작성하는 고유재 한옥스튜디오 예약 정보 접수 양식입니다.">
 <meta property="og:url" content="https://koyuje.com/reservation">
-<meta property="og:image" content="https://koyuje.com/assets/images/social/og-image.jpg">
-<meta property="og:image:secure_url" content="https://koyuje.com/assets/images/social/og-image.jpg">
+<meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
+<meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">
 <meta property="og:image:alt" content="고유재 한옥스튜디오 예약확정서 대표 이미지">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
@@ -303,7 +303,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <!-- GUIDE BANNER -->
 <div class="guide">
   <div class="guide-inner">
-  <div class="guide-label">예약 접수 안내</div>
+  <h1 class="guide-label">예약확정서</h1>
   <div class="steps">
     <div class="step">
       <div class="step-n">STEP 01</div>
@@ -418,7 +418,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       <div class="radio-group">
         <label class="r-item"><input type="radio" name="siblingShoes" value="필요없음" checked> 필요 없음</label>
         <label class="r-item"><input type="radio" name="siblingShoes" value="대여신청"> 대여 신청 <span class="price-tag">+ 2만원</span></label>
-        <label class="r-item"><input type="radio" name="siblingShoes" value="기타"> 기타 &nbsp;<input type="text" class="extra-in" id="siblingShoesSz" placeholder="발 사이즈"></label>
+        <label class="r-item"><input type="radio" name="siblingShoes" value="기타"> 기타 &nbsp;<input type="text" class="extra-in" id="siblingShoesSz" placeholder="발 사이즈" aria-label="형제 신발 사이즈"></label>
       </div>
     </div>
   </div>
@@ -570,7 +570,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
           <button type="button" id="addressSearchBtn" class="address-search-btn" onclick="searchAddress()">주소 검색</button>
         </div>
         <input type="text" class="f-input address-trigger" id="addressMain" placeholder="기본 주소" style="margin-bottom:8px;" readonly onclick="searchAddress()" aria-label="주소 검색 열기">
-        <input type="text" class="f-input" id="addressDetail" placeholder="상세 주소 입력 (동/호수 등)" autocomplete="address-line2">
+        <input type="text" class="f-input" id="addressDetail" placeholder="상세 주소 입력 (동/호수 등)" autocomplete="address-line2" aria-label="상세 주소">
         <input type="hidden" id="address">
       </div>
     </div>
@@ -581,8 +581,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <label class="c-item"><input type="checkbox" name="channel" value="맘카페"> 맘카페</label>
         <label class="c-item"><input type="checkbox" name="channel" value="포털검색"> 포털 검색</label>
         <label class="c-item"><input type="checkbox" name="channel" value="재방문"> 고유재 재방문</label>
-        <label class="c-item"><input type="checkbox" name="channel" value="지인소개"> 지인 소개&nbsp;<input type="text" class="extra-in" id="referralName" placeholder="소개자 이름"></label>
-        <label class="c-item"><input type="checkbox" name="channel" value="기타"> 기타&nbsp;<input type="text" class="extra-in" id="channelEtc" placeholder="직접 입력"></label>
+        <label class="c-item"><input type="checkbox" name="channel" value="지인소개"> 지인 소개&nbsp;<input type="text" class="extra-in" id="referralName" placeholder="소개자 이름" aria-label="소개자 이름"></label>
+        <label class="c-item"><input type="checkbox" name="channel" value="기타"> 기타&nbsp;<input type="text" class="extra-in" id="channelEtc" placeholder="직접 입력" aria-label="유입 경로 기타 내용"></label>
       </div>
     </div>
     <div class="field">
@@ -786,6 +786,14 @@ async function searchAddress() {
 // 상세주소 입력시 hidden address 업데이트
 document.addEventListener('DOMContentLoaded', function() {
   populateShootTimeOptions();
+  const today = new Date();
+  const todayText = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, '0'),
+    String(today.getDate()).padStart(2, '0')
+  ].join('-');
+  document.getElementById('babyBirth').max = todayText;
+  document.getElementById('shootDate').min = todayText;
   document.getElementById('addressDetail').addEventListener('input', updateAddress);
   document.querySelectorAll('input[name="product"]').forEach(input => {
     input.addEventListener('change', updateProductDependentSections);
@@ -1050,8 +1058,9 @@ function normalizeExtraSelection(changedInput) {
     return;
   }
   if (changedInput.value !== noneValue && changedInput.checked) {
-    const noneInput = extras.find(input => input.value === noneValue);
-    if (noneInput) noneInput.checked = false;
+    extras.filter(input => input !== changedInput).forEach(input => {
+      input.checked = false;
+    });
   }
 }
 
@@ -1239,6 +1248,13 @@ function submitForm() {
     focusRadioGroup('product');
     return;
   }
+  if (!getCheckboxArray('sibling').length) {
+    alert('형제/자매 구성을 선택해 주세요.');
+    const siblingInput = document.querySelector('input[name="sibling"]');
+    siblingInput.scrollIntoView({behavior:'smooth', block:'center'});
+    siblingInput.focus();
+    return;
+  }
   const isFamilyProduct = isFamilyAlbumSelected();
   if (isFamilyProduct) {
     const familyRequired = [
@@ -1343,6 +1359,7 @@ function submitForm() {
     address: val('address'),
     channel: channel,
     photoUsageConsent: document.getElementById('photoUsageConsent').checked ? '동의' : '미동의',
+    termsConsent: document.getElementById('agree').checked ? '동의' : '미동의',
     estimatedTotal: estimate.rows.length ? formatWon(estimate.total) : '-',
     estimatedTotalAmount: String(estimate.total || 0),
     estimatedItems: estimateItems || '-',
