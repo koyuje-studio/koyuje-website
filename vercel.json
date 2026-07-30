@@ -94,6 +94,19 @@
       ]
     },
     {
+      "source": "/:privatePage(board|board\\.html|reservation|reservation\\.html|status|status\\.html)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/assets/raw/(.*)",
       "headers": [
         {
@@ -120,12 +133,24 @@
     { "source": "/status/", "destination": "/status", "permanent": true },
     { "source": "/mvno/", "destination": "/mvno", "permanent": true },
     { "source": "/qr/", "destination": "/qr", "permanent": true },
+    { "source": "/baby/", "destination": "/baby", "permanent": true },
+    { "source": "/family/", "destination": "/family", "permanent": true },
+    { "source": "/hanok-snap/", "destination": "/hanok-snap", "permanent": true },
+    { "source": "/pricing/", "destination": "/pricing", "permanent": true },
+    { "source": "/faq/", "destination": "/faq", "permanent": true },
+    { "source": "/location/", "destination": "/location", "permanent": true },
     { "source": "/guide.html", "destination": "/guide", "permanent": true },
     { "source": "/reservation.html", "destination": "/reservation", "permanent": true },
     { "source": "/board.html", "destination": "/board", "permanent": true },
     { "source": "/status.html", "destination": "/status", "permanent": true },
     { "source": "/mvno.html", "destination": "/mvno", "permanent": true },
-    { "source": "/qr.html", "destination": "/qr", "permanent": true }
+    { "source": "/qr.html", "destination": "/qr", "permanent": true },
+    { "source": "/baby.html", "destination": "/baby", "permanent": true },
+    { "source": "/family.html", "destination": "/family", "permanent": true },
+    { "source": "/hanok-snap.html", "destination": "/hanok-snap", "permanent": true },
+    { "source": "/pricing.html", "destination": "/pricing", "permanent": true },
+    { "source": "/faq.html", "destination": "/faq", "permanent": true },
+    { "source": "/location.html", "destination": "/location", "permanent": true }
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
@@ -137,6 +162,12 @@
     { "source": "/reservation", "destination": "/reservation.html" },
     { "source": "/status", "destination": "/status.html" },
     { "source": "/guide", "destination": "/guide.html" },
+    { "source": "/baby", "destination": "/baby.html" },
+    { "source": "/family", "destination": "/family.html" },
+    { "source": "/hanok-snap", "destination": "/hanok-snap.html" },
+    { "source": "/pricing", "destination": "/pricing.html" },
+    { "source": "/faq", "destination": "/faq.html" },
+    { "source": "/location", "destination": "/location.html" },
     { "source": "/og-image.jpg", "destination": "/assets/images/social/og-image.jpg" },
     { "source": "/gallery_01.jpg", "destination": "/assets/images/gallery/gallery_01.jpg" },
     { "source": "/0057.jpg", "destination": "/assets/images/gallery/0057.jpg" },

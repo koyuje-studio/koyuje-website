@@ -265,6 +265,22 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     track("PageView", { page_title: document.title || "" }, "page_view");
+    const contentPages = {
+      "/baby": "아기 앨범형",
+      "/baby.html": "아기 앨범형",
+      "/family": "가족 실내 앨범형",
+      "/family.html": "가족 실내 앨범형",
+      "/hanok-snap": "야외 가족 스냅 추가",
+      "/hanok-snap.html": "야외 가족 스냅 추가",
+      "/pricing": "상품 가격 안내",
+      "/pricing.html": "상품 가격 안내"
+    };
+    if (contentPages[path]) {
+      track("ViewContent", {
+        content_name: contentPages[path],
+        content_category: "product"
+      }, "product_page_view");
+    }
     if (path === "/reservation" || path === "/reservation.html") {
       track("Lead", { content_name: "예약확정서 진입" }, "reservation_page_view");
     }

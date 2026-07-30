@@ -4,6 +4,13 @@ const vm = require("vm");
 const requiredFiles = [
   "index.html",
   "guide.html",
+  "baby.html",
+  "family.html",
+  "hanok-snap.html",
+  "pricing.html",
+  "faq.html",
+  "location.html",
+  "404.html",
   "reservation.html",
   "board.html",
   "status.html",
@@ -13,6 +20,7 @@ const requiredFiles = [
   "sitemap.xml",
   "assets/js/runtime-config.js",
   "assets/js/tracking.js",
+  "assets/css/content-pages.css",
   "scripts/generate-runtime-config.js",
   "assets/images/hero/_0049.jpg",
   "assets/images/hero/_0049_poster.webp",
@@ -40,6 +48,13 @@ const assetSizeLimits = {
 const htmlFiles = [
   "index.html",
   "guide.html",
+  "baby.html",
+  "family.html",
+  "hanok-snap.html",
+  "pricing.html",
+  "faq.html",
+  "location.html",
+  "404.html",
   "reservation.html",
   "board.html",
   "admin.html",
@@ -52,12 +67,23 @@ const htmlFiles = [
 const publicPages = {
   "index.html": "https://koyuje.com/",
   "guide.html": "https://koyuje.com/guide",
-  "reservation.html": "https://koyuje.com/reservation",
-  "board.html": "https://koyuje.com/board",
-  "status.html": "https://koyuje.com/status",
+  "baby.html": "https://koyuje.com/baby",
+  "family.html": "https://koyuje.com/family",
+  "hanok-snap.html": "https://koyuje.com/hanok-snap",
+  "pricing.html": "https://koyuje.com/pricing",
+  "faq.html": "https://koyuje.com/faq",
+  "location.html": "https://koyuje.com/location",
 };
 
-const internalPages = ["admin.html", "admin-analytics.html", "mvno.html", "qr.html"];
+const internalPages = [
+  "admin.html",
+  "admin-analytics.html",
+  "mvno.html",
+  "qr.html",
+  "board.html",
+  "reservation.html",
+  "status.html",
+];
 const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyAAe8It1LY5t6kGYXj2n-VfI9aTrDJsUHmGpWVKEp-D1ekjYN9nrawPwvtubpwZHRe/exec";
 const appsScriptPages = ["index.html", "reservation.html", "admin.html", "admin-analytics.html", "board.html", "status.html"];
 
@@ -70,11 +96,7 @@ const requiredPublicMeta = [
   '<meta property="og:title"',
   '<meta property="og:description"',
   '<meta property="og:image" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">',
-  '<meta property="og:image:secure_url" content="https://koyuje-website.vercel.app/assets/images/social/og-image.jpg">',
   '<meta property="og:image:alt"',
-  '<meta property="og:image:type" content="image/jpeg">',
-  '<meta property="og:image:width" content="1200">',
-  '<meta property="og:image:height" content="630">',
   '<meta name="theme-color" content="#f7f2ea">',
   '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
 ];
@@ -540,8 +562,8 @@ const requiredPageSnippets = {
 };
 
 const expectedSitemapUrls = Object.values(publicPages);
-const expectedSitemapLastmod = "2026-07-23";
-const blockedSitemapParts = [".html", "/admin", "/mvno", "/imweb-reservation-widget-full", "/assets/"];
+const expectedSitemapLastmod = "2026-07-31";
+const blockedSitemapParts = [".html", "/admin", "/mvno", "/board", "/reservation", "/status", "/imweb-reservation-widget-full", "/assets/"];
 const requiredRobotsLines = [
   "User-agent: *",
   "Allow: /",
@@ -584,21 +606,40 @@ const requiredVercelRedirects = [
   ["/status/", "/status"],
   ["/mvno/", "/mvno"],
   ["/qr/", "/qr"],
+  ["/baby/", "/baby"],
+  ["/family/", "/family"],
+  ["/hanok-snap/", "/hanok-snap"],
+  ["/pricing/", "/pricing"],
+  ["/faq/", "/faq"],
+  ["/location/", "/location"],
   ["/guide.html", "/guide"],
   ["/reservation.html", "/reservation"],
   ["/board.html", "/board"],
   ["/status.html", "/status"],
   ["/mvno.html", "/mvno"],
   ["/qr.html", "/qr"],
+  ["/baby.html", "/baby"],
+  ["/family.html", "/family"],
+  ["/hanok-snap.html", "/hanok-snap"],
+  ["/pricing.html", "/pricing"],
+  ["/faq.html", "/faq"],
+  ["/location.html", "/location"],
 ];
 
 const requiredVercelRewrites = [
   ["/", "/index.html"],
   ["/guide", "/guide.html"],
+  ["/baby", "/baby.html"],
+  ["/family", "/family.html"],
+  ["/hanok-snap", "/hanok-snap.html"],
+  ["/pricing", "/pricing.html"],
+  ["/faq", "/faq.html"],
+  ["/location", "/location.html"],
   ["/reservation", "/reservation.html"],
   ["/board", "/board.html"],
   ["/status", "/status.html"],
   ["/admin", "/admin.html"],
+  ["/admin/analytics", "/admin-analytics.html"],
   ["/mvno", "/mvno.html"],
   ["/qr", "/qr.html"],
   ["/og-image.jpg", "/assets/images/social/og-image.jpg"],
@@ -620,6 +661,7 @@ const requiredVercelHeaderSources = [
   "/assets/(.*)",
   "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|qr|qr\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
   "/admin/analytics",
+  "/:privatePage(board|board\\.html|reservation|reservation\\.html|status|status\\.html)",
   "/assets/raw/(.*)",
   "/assets/raw",
 ];
@@ -627,6 +669,7 @@ const requiredVercelHeaderSources = [
 const requiredNoindexHeaderSources = [
   "/:internal(admin|admin\\.html|admin-analytics\\.html|mvno|mvno\\.html|qr|qr\\.html|imweb-reservation-widget-full|imweb-reservation-widget-full\\.html)",
   "/admin/analytics",
+  "/:privatePage(board|board\\.html|reservation|reservation\\.html|status|status\\.html)",
   "/assets/raw/(.*)",
   "/assets/raw",
 ];
@@ -855,14 +898,15 @@ for (const file of htmlFiles) {
     const hasLocalBusiness = jsonLdBlocks.some((block) => {
       try {
         const data = JSON.parse(block);
+        const graph = Array.isArray(data["@graph"]) ? data["@graph"] : [data];
+        const business = graph.find((item) => item["@type"] === "LocalBusiness");
         return (
           data["@context"] === "https://schema.org" &&
-          data["@type"] === "LocalBusiness" &&
-          data.name === "고유재 한옥스튜디오" &&
-          data.url === "https://koyuje.com/" &&
-          Array.isArray(data.sameAs) &&
-          data.sameAs.includes("https://www.instagram.com/koyuje_studio/") &&
-          data.sameAs.includes("https://pf.kakao.com/_xiRxjhxj")
+          business?.name === "고유재 한옥스튜디오" &&
+          business?.url === "https://koyuje.com/" &&
+          Array.isArray(business?.sameAs) &&
+          business.sameAs.includes("https://www.instagram.com/koyuje_studio/") &&
+          business.sameAs.includes("https://pf.kakao.com/_xiRxjhxj")
         );
       } catch (error) {
         return false;
@@ -888,7 +932,7 @@ for (const file of htmlFiles) {
     const ogTitle = getMetaContent(html, 'property="og:title"');
     const ogDescription = getMetaContent(html, 'property="og:description"');
 
-    if (!publicTitle.includes("고유재 한옥스튜디오")) {
+    if (!publicTitle.includes("고유재")) {
       console.error(`Public title should include brand name: ${file}`);
       hasError = true;
     }
@@ -1271,6 +1315,85 @@ if (fs.existsSync("vercel.json")) {
   for (const [key, value] of requiredSecurityHeaders) {
     if (securityHeaders.get(key) !== value) {
       console.error(`Missing or invalid security header: ${key}`);
+      hasError = true;
+    }
+  }
+}
+
+const seenPublicTitles = new Map();
+const seenPublicDescriptions = new Map();
+for (const file of Object.keys(publicPages)) {
+  if (!fs.existsSync(file)) continue;
+  const html = fs.readFileSync(file, "utf8");
+  const title = getTitle(html);
+  const description = getMetaContent(html, 'name="description"');
+
+  if (!html.includes("<main")) {
+    console.error(`Public page is missing semantic main: ${file}`);
+    hasError = true;
+  }
+
+  if (seenPublicTitles.has(title)) {
+    console.error(`Duplicate public title: ${file} and ${seenPublicTitles.get(title)}`);
+    hasError = true;
+  }
+  if (seenPublicDescriptions.has(description)) {
+    console.error(`Duplicate public description: ${file} and ${seenPublicDescriptions.get(description)}`);
+    hasError = true;
+  }
+
+  seenPublicTitles.set(title, file);
+  seenPublicDescriptions.set(description, file);
+}
+
+const knownRoutes = new Set(requiredVercelRewrites.map(([source]) => source));
+knownRoutes.add("/");
+for (const file of htmlFiles) {
+  if (!fs.existsSync(file)) continue;
+  const html = fs.readFileSync(file, "utf8");
+
+  for (const tag of getAnchorTags(html)) {
+    const href = getAttribute(tag, "href");
+    if (!href || /^(?:https?:|mailto:|tel:|javascript:)/i.test(href)) continue;
+
+    if (href.startsWith("#")) {
+      const id = href.slice(1);
+      if (id && !new RegExp(`\\bid=(["'])${id}\\1`).test(html)) {
+        console.error(`Broken same-page anchor in ${file}: ${href}`);
+        hasError = true;
+      }
+      continue;
+    }
+
+    if (!href.startsWith("/")) continue;
+    const route = href.split(/[?#]/)[0] || "/";
+    if (!knownRoutes.has(route)) {
+      console.error(`Broken internal route in ${file}: ${href}`);
+      hasError = true;
+    }
+  }
+}
+
+if (fs.existsSync("faq.html")) {
+  const faqHtml = fs.readFileSync("faq.html", "utf8");
+  const hasFaqPage = getJsonLdBlocks(faqHtml).some((block) => {
+    try {
+      return JSON.parse(block)["@type"] === "FAQPage";
+    } catch (error) {
+      return false;
+    }
+  });
+  if (!hasFaqPage) {
+    console.error("Missing FAQPage JSON-LD on faq.html");
+    hasError = true;
+  }
+}
+
+if (fs.existsSync("assets/js/tracking.js")) {
+  const trackingJs = fs.readFileSync("assets/js/tracking.js", "utf8");
+  for (const snippet of ["product_page_view", '"/baby": "아기 앨범형"', '"/family": "가족 실내 앨범형"']) {
+    if (!trackingJs.includes(snippet)) {
+      console.error(`Missing product page tracking snippet: ${snippet}`);
       hasError = true;
     }
   }
