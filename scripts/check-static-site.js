@@ -20,6 +20,7 @@ const requiredFiles = [
   "sitemap.xml",
   "assets/js/runtime-config.js",
   "assets/js/tracking.js",
+  "assets/js/content-pages.js",
   "assets/css/content-pages.css",
   "scripts/generate-runtime-config.js",
   "assets/images/hero/_0049.jpg",
@@ -74,6 +75,7 @@ const publicPages = {
   "faq.html": "https://koyuje.com/faq",
   "location.html": "https://koyuje.com/location",
 };
+const contentPages = ["baby.html", "family.html", "hanok-snap.html", "pricing.html", "faq.html", "location.html"];
 
 const internalPages = [
   "admin.html",
@@ -1394,6 +1396,25 @@ if (fs.existsSync("assets/js/tracking.js")) {
   for (const snippet of ["product_page_view", '"/baby": "아기 앨범형"', '"/family": "가족 실내 앨범형"']) {
     if (!trackingJs.includes(snippet)) {
       console.error(`Missing product page tracking snippet: ${snippet}`);
+      hasError = true;
+    }
+  }
+}
+
+for (const file of contentPages) {
+  if (!fs.existsSync(file)) continue;
+  const html = fs.readFileSync(file, "utf8");
+  for (const snippet of [
+    'id="contentNavToggle"',
+    'id="contentMobileMenu"',
+    'id="contentMobileClose"',
+    'href="/#about"',
+    'href="/#gallery"',
+    'href="/#packages"',
+    'src="/assets/js/content-pages.js"',
+  ]) {
+    if (!html.includes(snippet)) {
+      console.error(`Missing shared content navigation in ${file}: ${snippet}`);
       hasError = true;
     }
   }
