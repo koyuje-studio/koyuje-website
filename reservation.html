@@ -85,7 +85,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .form-helper-links a:hover{border-color:var(--gold);color:var(--gold);}
 
 .sec{margin-bottom:48px;}
-.sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden{display:none;}
+.sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden,.sibling-fields.is-hidden,.sibling-shoes-field.is-hidden{display:none;}
 .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:14px;border-bottom:0.5px solid var(--line);}
 .sec-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--gold);letter-spacing:0.15em;min-width:24px;}
 .sec-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;letter-spacing:0.06em;}
@@ -138,7 +138,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .c-item input[type=checkbox]:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);font-size:9px;color:var(--paper);}
 .price-tag{color:var(--gold);font-size:11px;margin-left:4px;}
 .twin-toggle{margin-top:16px;padding-top:14px;border-top:0.5px solid rgba(28,24,20,0.08);}
-.twin-fields{margin-top:18px;padding:18px 18px 4px;border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.035);}
+.twin-fields,.sibling-fields{margin-top:18px;padding:18px 18px 4px;border:0.5px solid rgba(160,120,64,0.22);background:rgba(160,120,64,0.035);}
 
 .add-card{border:0.5px solid var(--line);padding:14px 16px;margin-bottom:6px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;}
 .add-card:hover{border-color:rgba(160,120,64,0.3);background:rgba(160,120,64,0.03);}
@@ -409,16 +409,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
         <label class="c-item"><input type="checkbox" name="sibling" value="가족촬영자녀추가야외"> 가족 촬영 자녀 추가 — 야외(가족컷) <span class="price-tag">+ 20만원 / 1인</span></label>
       </div>
     </div>
-    <div class="field">
-      <label class="f-label" for="siblingInfo">형제 정보 (이름 / 성별 / 나이)</label>
-      <input type="text" class="f-input" id="siblingInfo" placeholder="예) 홍길순 / 여 / 5세">
-    </div>
-    <div class="field">
-      <label class="f-label">야외 촬영 시 형제 신발 대여</label>
-      <div class="radio-group">
-        <label class="r-item"><input type="radio" name="siblingShoes" value="필요없음" checked> 필요 없음</label>
-        <label class="r-item"><input type="radio" name="siblingShoes" value="대여신청"> 대여 신청 <span class="price-tag">+ 2만원</span></label>
-        <label class="r-item"><input type="radio" name="siblingShoes" value="기타"> 기타 &nbsp;<input type="text" class="extra-in" id="siblingShoesSz" placeholder="발 사이즈" aria-label="형제 신발 사이즈"></label>
+    <div class="sibling-fields is-hidden" id="siblingFields" aria-hidden="true">
+      <div class="field">
+        <label class="f-label" for="siblingInfo">형제 정보 (이름 / 성별 / 나이) <span class="req">*</span></label>
+        <input type="text" class="f-input" id="siblingInfo" placeholder="예) 홍길순 / 여 / 5세">
+      </div>
+      <div class="field sibling-shoes-field is-hidden" id="siblingShoesField">
+        <label class="f-label">야외 촬영 시 형제 신발 대여</label>
+        <div class="radio-group">
+          <label class="r-item"><input type="radio" name="siblingShoes" value="필요없음" checked> 필요 없음</label>
+          <label class="r-item"><input type="radio" name="siblingShoes" value="대여신청"> 대여 신청 <span class="price-tag">+ 2만원</span></label>
+          <label class="r-item"><input type="radio" name="siblingShoes" value="기타"> 기타 &nbsp;<input type="text" class="extra-in" id="siblingShoesSz" placeholder="발 사이즈" aria-label="형제 신발 사이즈"></label>
+        </div>
       </div>
     </div>
   </div>
@@ -808,6 +810,7 @@ document.addEventListener('DOMContentLoaded', function() {
     input.addEventListener('change', () => {
       normalizeSiblingSelection(input);
       syncTwinFromSibling(input);
+      updateSiblingDependentFields();
       updatePriceEstimate();
     });
   });
@@ -823,6 +826,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   updateProductDependentSections();
   setTwinBabyMode(false);
+  updateSiblingDependentFields();
   updatePriceEstimate();
 });
 
@@ -878,6 +882,42 @@ function isTwinBabySelected() {
 function getSiblingTwinInput() {
   return Array.from(document.querySelectorAll('input[name="sibling"]')).find(input => input.value === '쌍둥이');
 }
+function getSelectedSiblingValues() {
+  return getCheckboxArray('sibling');
+}
+function needsSiblingDetail() {
+  return getSelectedSiblingValues().some(value => [
+    '형제자매기념컷추가',
+    '가족촬영자녀추가실내',
+    '가족촬영자녀추가야외'
+  ].includes(value));
+}
+function needsSiblingShoes() {
+  return getSelectedSiblingValues().includes('가족촬영자녀추가야외');
+}
+function updateSiblingDependentFields() {
+  const fields = document.getElementById('siblingFields');
+  const shoesField = document.getElementById('siblingShoesField');
+  const siblingInfo = document.getElementById('siblingInfo');
+  const siblingShoesSize = document.getElementById('siblingShoesSz');
+  const showDetails = needsSiblingDetail();
+  const showShoes = showDetails && needsSiblingShoes();
+
+  if (fields) {
+    fields.classList.toggle('is-hidden', !showDetails);
+    fields.setAttribute('aria-hidden', String(!showDetails));
+  }
+  if (siblingInfo) {
+    siblingInfo.required = showDetails;
+    if (!showDetails) siblingInfo.value = '';
+  }
+  if (shoesField) shoesField.classList.toggle('is-hidden', !showShoes);
+  if (!showShoes) {
+    const noneShoes = document.querySelector('input[name="siblingShoes"][value="필요없음"]');
+    if (noneShoes) noneShoes.checked = true;
+    if (siblingShoesSize) siblingShoesSize.value = '';
+  }
+}
 function setTwinBabyMode(isTwin) {
   const twinInput = document.getElementById('isTwinBaby');
   const twinFields = document.getElementById('twinFields');
@@ -901,6 +941,7 @@ function setTwinBabyMode(isTwin) {
     siblingTwin.checked = isTwin;
     normalizeSiblingSelection(siblingTwin);
   }
+  updateSiblingDependentFields();
 }
 function syncTwinFromSibling(input) {
   const siblingTwin = getSiblingTwinInput();
@@ -1255,6 +1296,11 @@ function submitForm() {
     siblingInput.focus();
     return;
   }
+  if (needsSiblingDetail() && !val('siblingInfo')) {
+    alert('형제/자매 이름, 성별, 나이를 입력해 주세요.');
+    focusField('siblingInfo');
+    return;
+  }
   const isFamilyProduct = isFamilyAlbumSelected();
   if (isFamilyProduct) {
     const familyRequired = [
@@ -1291,7 +1337,7 @@ function submitForm() {
       return;
     }
   }
-  if (getRadio('siblingShoes') === '기타' && !val('siblingShoesSz')) {
+  if (needsSiblingShoes() && getRadio('siblingShoes') === '기타' && !val('siblingShoesSz')) {
     alert('형제 신발 사이즈를 입력해 주세요.');
     focusField('siblingShoesSz');
     return;
@@ -1317,7 +1363,9 @@ function submitForm() {
   // 사이즈 기타 처리
   const momSize = getRadio('momSize') === '기타' ? '기타: ' + val('momSizeEtc') : getRadio('momSize');
   const dadSize = getRadio('dadSize') === '기타' ? '기타: ' + val('dadSizeEtc') : getRadio('dadSize');
-  const siblingShoes = getRadio('siblingShoes') === '기타' ? '기타: ' + val('siblingShoesSz') : getRadio('siblingShoes');
+  const siblingShoes = needsSiblingShoes()
+    ? (getRadio('siblingShoes') === '기타' ? '기타: ' + val('siblingShoesSz') : getRadio('siblingShoes'))
+    : '';
   // 체크박스 — 복수 선택
   const siblingChecked = getCheckboxes('sibling');
   const babyNameValue = isTwinBaby ? [val('babyName'), val('secondBabyName')].filter(Boolean).join(' / ') : val('babyName');

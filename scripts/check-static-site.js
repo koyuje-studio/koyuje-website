@@ -305,11 +305,14 @@ const requiredPageSnippets = {
     'data-extra-for="family"',
     'data-extra-for="baby"',
     'data-extra-for="all"',
-    ".sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden{display:none;}",
+    ".sec.is-hidden,.add-card.is-hidden,.twin-fields.is-hidden,.sibling-fields.is-hidden,.sibling-shoes-field.is-hidden{display:none;}",
     "function updateExtraOptions()",
     "extra: getVisibleCheckboxes('extra')",
     "extras.filter(input => input !== changedInput)",
     "termsConsent: document.getElementById('agree').checked ? '동의' : '미동의'",
+    'id="siblingFields" aria-hidden="true"',
+    "function updateSiblingDependentFields()",
+    "if (needsSiblingDetail() && !val('siblingInfo'))",
     "document.getElementById('babyBirth').max = todayText",
     "document.getElementById('shootDate').min = todayText",
     "if (!getCheckboxArray('sibling').length)",
@@ -1047,6 +1050,7 @@ if (fs.existsSync("apps-script-code.gs")) {
     "비공개 글은 공개 조회할 수 없습니다.",
     "if (!isReservation && String(rows[i][5]) !== '공개') continue;",
     "safeText(data.termsConsent) !== '동의'",
+    "형제/자매 상세 정보가 누락되었습니다.",
     "calculateServerEstimate(reservationRowToEstimateData(updatedRow))",
   ]) {
     if (!appsScriptSource.includes(snippet)) {
