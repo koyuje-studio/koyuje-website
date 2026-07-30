@@ -387,7 +387,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <!-- 02 형제 정보 -->
   <div class="sec">
     <div class="sec-head"><div class="sec-num">02</div><div class="sec-title">형제 / 자매 정보</div></div>
-    <p class="hint" style="margin-bottom:14px;">* 형제 한복은 직접 준비 (신발 포함)</p>
+    <p class="hint" style="margin-bottom:14px;">* 형제의 한복·신발·액세서리는 직접 준비해 주세요.</p>
     <div class="field">
       <label class="f-label">형제 관계 <span class="req">*</span></label>
       <p class="hint" style="margin-bottom:10px;">* 형제·자매 옵션은 같은 부모님의 자녀 기준입니다.</p>
@@ -451,7 +451,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
   <!-- 05 엄마 사이즈 -->
   <div class="sec is-hidden" id="momSizeSection" data-family-size-section>
     <div class="sec-head"><div class="sec-num">05</div><div class="sec-title">엄마 키·한복·신발</div></div>
-    <p class="hint" style="margin-bottom:16px;">가족 실내 앨범형 선택 시 필요한 항목입니다.</p>
+    <p class="hint" style="margin-bottom:6px;">가족 실내 앨범형 선택 시 필요한 항목입니다.</p>
+    <p class="hint" style="margin-bottom:16px;">* 짧은 머리 가발은 추가 비용이 발생합니다.</p>
     <div class="grid3">
       <div class="field">
         <label class="f-label" for="momHeight">엄마 키 (cm)</label>
@@ -1141,8 +1142,8 @@ function calculatePriceEstimate() {
   const siblingPrices = {
     '형제자매기념컷추가': ['친형제·친자매 기념컷 추가', 100000],
     '쌍둥이': ['쌍둥이 추가', 500000],
-    '가족촬영자녀추가실내': ['가족 촬영 자녀 추가 - 실내(돌상컷)', 100000],
-    '가족촬영자녀추가야외': ['가족 촬영 자녀 추가 - 야외(가족컷)', 200000]
+    '가족촬영자녀추가실내': ['가족 촬영 자녀 추가 — 실내(돌상컷)', 100000],
+    '가족촬영자녀추가야외': ['가족 촬영 자녀 추가 — 야외(가족컷)', 200000]
   };
   getCheckboxArray('sibling').forEach(value => {
     const item = siblingPrices[value];
