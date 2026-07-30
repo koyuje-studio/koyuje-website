@@ -7,10 +7,10 @@
   --gold:#8b642f;
   --gold2:#c49a58;
   --muted:#73675b;
-  --line:rgba(28,24,20,.12);
+  --line:rgba(28,24,20,.1);
 }
 html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:"Noto Sans KR",sans-serif;font-weight:300;line-height:1.8;overflow-x:hidden}
+body{background:var(--paper);color:var(--ink);font-family:"Noto Sans KR",sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden}
 body.menu-open{overflow:hidden}
 a{color:inherit}
 img{display:block;max-width:100%}
