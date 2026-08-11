@@ -365,7 +365,8 @@
       $('#btn-add').textContent = '수정 저장';
       $('#btn-cancel-edit').classList.remove('hide');
       $('#formCard').classList.add('mvno-editing');
-      $('#formCard').scrollIntoView({ behavior:'smooth', block:'start' });
+      // 목록이 길어도 수정 화면이 즉시 보여 버튼이 무반응처럼 느껴지지 않게 한다.
+      $('#formCard').scrollIntoView({ behavior:'auto', block:'start' });
     }
 
     function clearForm() {
