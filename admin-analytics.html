@@ -284,6 +284,34 @@ function fetchWithTimeout(url,options,timeoutMs=20000){
     .finally(()=>clearTimeout(timer));
 }
 
+function parseScriptJsonResponse(response){
+  return response.text().then(text=>{
+    try{return JSON.parse(text);}
+    catch(err){
+      const error=new Error('관리자 서버 응답이 일시적으로 불안정합니다. 잠시 후 다시 시도해 주세요.');
+      error.code='INVALID_SCRIPT_RESPONSE';
+      throw error;
+    }
+  });
+}
+
+function requestScriptJson(payload,timeoutMs=20000,retries=0){
+  const scriptUrl=getScriptUrl();
+  if(!scriptUrl)return Promise.reject(new Error('관리자 시스템 연결 정보가 없습니다.'));
+  return fetchWithTimeout(scriptUrl,{
+    method:'POST',
+    body:JSON.stringify(payload)
+  },timeoutMs)
+    .then(parseScriptJsonResponse)
+    .catch(err=>{
+      if(retries>0&&(err.code==='INVALID_SCRIPT_RESPONSE'||err.name==='TypeError')){
+        return new Promise(resolve=>setTimeout(resolve,500))
+          .then(()=>requestScriptJson(payload,timeoutMs,retries-1));
+      }
+      throw err;
+    });
+}
+
 function getToken(){
   try{
     const stored=JSON.parse(localStorage.getItem('koyujeAdminSession')||'null');
@@ -303,13 +331,9 @@ function clearAdminSession(){
   sessionStorage.removeItem('koyujeAdminToken');
 }
 function adminApi(payload){
-  const scriptUrl=getScriptUrl();
-  if(!scriptUrl)return Promise.reject(new Error('관리자 시스템 연결 정보가 없습니다.'));
   const timeoutMs=payload&&['analytics','admin'].includes(payload.action)?30000:20000;
-  return fetchWithTimeout(scriptUrl,{
-    method:'POST',
-    body:JSON.stringify(Object.assign({},payload,{adminToken:getToken()}))
-  },timeoutMs).then(r=>r.json());
+  const retries=payload&&['analytics','admin'].includes(payload.action)?1:0;
+  return requestScriptJson(Object.assign({},payload,{adminToken:getToken()}),timeoutMs,retries);
 }
 function showApp(){
   document.getElementById('loginBox').classList.remove('booting');
@@ -377,8 +401,7 @@ function login(){
     : adminEmailChallengeId
       ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
       : {action:'adminLogin',password:pw,clientId:getAdminClientId()};
-  fetchWithTimeout(scriptUrl,{method:'POST',body:JSON.stringify(payload)})
-    .then(r=>r.json())
+  requestScriptJson(payload)
     .then(data=>{
       if(data.requiresEmailOtp&&data.challengeId){
         adminEmailChallengeId=data.challengeId;
@@ -481,11 +504,7 @@ function beginAdminPasswordReset(){
   const recovery=document.getElementById('passwordRecoveryBtn');
   recovery.disabled=true;
   recovery.textContent='인증코드 요청 중...';
-  fetchWithTimeout(scriptUrl,{
-    method:'POST',
-    body:JSON.stringify({action:'adminBeginPasswordReset'})
-  })
-    .then(r=>r.json())
+  requestScriptJson({action:'adminBeginPasswordReset'})
     .then(data=>{
       if(!data.requiresEmailOtp||!data.challengeId)throw new Error(data.message||'비밀번호 재설정을 시작하지 못했습니다.');
       adminPasswordResetMode=true;
@@ -528,11 +547,7 @@ function resendAdminEmailCode(){
   if(!adminEmailChallengeId)return;
   const button=document.getElementById('emailOtpResend');
   button.disabled=true;
-  fetchWithTimeout(getScriptUrl(),{
-    method:'POST',
-    body:JSON.stringify({action:'adminResendEmailOtp',challengeId:adminEmailChallengeId})
-  })
-    .then(r=>r.json())
+  requestScriptJson({action:'adminResendEmailOtp',challengeId:adminEmailChallengeId})
     .then(data=>{
       if(data.result!=='success')throw Object.assign(new Error(data.message||'인증코드를 다시 보내지 못했습니다.'),{codeExpired:data.codeExpired,retryAfter:data.retryAfter});
       document.getElementById('emailOtpInput').value='';
