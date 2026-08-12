@@ -1121,7 +1121,7 @@ if (fs.existsSync("apps-script-code.gs")) {
     "ADMIN_AUTH_VERSION_PROPERTY",
     "ADMIN_LOGIN_EMAIL",
     "ADMIN_SESSION_TTL_SECONDS = 24 * 60 * 60",
-    "ADMIN_EMAIL_CODE_TTL_SECONDS = 5 * 60",
+    "ADMIN_EMAIL_CODE_TTL_SECONDS = 10 * 60",
     "ADMIN_LOGIN_MAX_ATTEMPTS = 5",
     "ADMIN_LOGIN_WINDOW_SECONDS = 15 * 60",
     "PropertiesService.getScriptProperties().getProperty",

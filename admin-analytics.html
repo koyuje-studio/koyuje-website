@@ -267,6 +267,7 @@ let adminEmailResendTimer=0;
 let adminPasswordResetMode=false;
 let adminLoginLockTimer=0;
 let adminLoginLockRemaining=0;
+let adminWarmPromise=null;
 let historicalData=null;
 let historicalBaseData=null;
 let historicalYear='all';
@@ -310,6 +311,16 @@ function requestScriptJson(payload,timeoutMs=20000,retries=0){
       }
       throw err;
     });
+}
+
+function warmAdminService(){
+  if(adminWarmPromise)return adminWarmPromise;
+  const scriptUrl=getScriptUrl();
+  if(!scriptUrl)return Promise.resolve(false);
+  adminWarmPromise=fetchWithTimeout(scriptUrl+'?action=admin&warm='+Date.now(),{cache:'no-store'},45000)
+    .then(()=>true)
+    .catch(()=>false);
+  return adminWarmPromise;
 }
 
 function getToken(){
@@ -401,7 +412,8 @@ function login(){
     : adminEmailChallengeId
       ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
       : {action:'adminLogin',password:pw,clientId:getAdminClientId()};
-  requestScriptJson(payload,60000)
+  warmAdminService()
+    .then(()=>requestScriptJson(payload,60000,1))
     .then(data=>{
       if(data.requiresEmailOtp&&data.challengeId){
         adminEmailChallengeId=data.challengeId;
@@ -1250,6 +1262,7 @@ function bootAnalyticsSession(){
   if(getToken()){
     loadAnalytics();
   }else{
+    warmAdminService();
     showLogin();
   }
 }

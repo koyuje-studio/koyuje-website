@@ -514,7 +514,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
       <div class="security-section-title">이메일 2단계 인증</div>
       <p class="security-copy">비밀번호 확인 후 관리자 이메일로 발송되는 6자리 코드를 입력해야 로그인됩니다.</p>
       <div class="security-status enabled" id="emailOtpStatus">사용 중 · 상태 확인 중</div>
-      <p class="security-copy" id="emailOtpSummary">인증코드는 5분 동안 유효하며, 로그인은 인증 후 24시간 유지됩니다.</p>
+      <p class="security-copy" id="emailOtpSummary">인증코드는 10분 동안 유효하며, 로그인은 인증 후 24시간 유지됩니다.</p>
     </section>
     <div class="security-message" id="securityMessage" role="alert" aria-live="polite"></div>
   </div>
@@ -543,6 +543,7 @@ let adminEmailResendTimer=0;
 let adminPasswordResetMode=false;
 let adminLoginLockTimer=0;
 let adminLoginLockRemaining=0;
+let adminWarmPromise=null;
 
 function fetchWithTimeout(url,options,timeoutMs=20000){
   const controller=new AbortController();
@@ -577,6 +578,16 @@ function requestScriptJson(payload,timeoutMs=20000,retries=0){
       }
       throw err;
     });
+}
+
+function warmAdminService(){
+  if(adminWarmPromise)return adminWarmPromise;
+  const scriptUrl=getScriptUrl();
+  if(!scriptUrl)return Promise.resolve(false);
+  adminWarmPromise=fetchWithTimeout(scriptUrl+'?action=admin&warm='+Date.now(),{cache:'no-store'},45000)
+    .then(()=>true)
+    .catch(()=>false);
+  return adminWarmPromise;
 }
 
 function getAdminClientId(){
@@ -636,7 +647,8 @@ function doLogin(){
     : adminEmailChallengeId
       ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
       : {action:'adminLogin',password:pw,clientId:getAdminClientId()};
-  requestScriptJson(payload,60000)
+  warmAdminService()
+    .then(()=>requestScriptJson(payload,60000,1))
     .then(data=>{
       if(data.requiresEmailOtp&&data.challengeId){
         adminEmailChallengeId=data.challengeId;
@@ -656,6 +668,7 @@ function doLogin(){
       saveAdminSession(data.token,data.expiresIn);
       sessionStorage.removeItem('koyujeAdminPw');
       resetAdminEmailLogin();
+      if(Array.isArray(data.data))return {result:'success',data:data.data};
       return fetchAdminData();
     })
     .then(data=>{
@@ -803,6 +816,7 @@ function bootAdminSession(){
   const savedToken=getAdminToken();
   sessionStorage.removeItem('koyujeAdminPw');
   if(!savedToken){
+    warmAdminService();
     showLoginShell();
     return;
   }
@@ -905,7 +919,7 @@ function loadSecurityStatus(){
       requireActiveAdminSession(data);
       if(data.result!=='success')throw new Error(data.message||'보안 상태를 확인하지 못했습니다.');
       document.getElementById('emailOtpStatus').textContent='사용 중 · '+(data.maskedEmail||'관리자 이메일');
-      document.getElementById('emailOtpSummary').textContent='인증코드는 5분 동안 유효하며, 로그인은 인증 후 '+(data.sessionHours||24)+'시간 유지됩니다.';
+      document.getElementById('emailOtpSummary').textContent='인증코드는 '+(data.emailOtpMinutes||10)+'분 동안 유효하며, 로그인은 인증 후 '+(data.sessionHours||24)+'시간 유지됩니다.';
     })
     .catch(err=>{if(err.code!=='ADMIN_SESSION_EXPIRED')setSecurityMessage(err.message||'보안 상태를 확인하지 못했습니다.');});
 }
