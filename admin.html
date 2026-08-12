@@ -636,7 +636,7 @@ function doLogin(){
     : adminEmailChallengeId
       ? {action:'adminVerifyEmailOtp',challengeId:adminEmailChallengeId,emailCode}
       : {action:'adminLogin',password:pw,clientId:getAdminClientId()};
-  requestScriptJson(payload)
+  requestScriptJson(payload,60000)
     .then(data=>{
       if(data.requiresEmailOtp&&data.challengeId){
         adminEmailChallengeId=data.challengeId;
@@ -718,7 +718,7 @@ function beginAdminPasswordReset(){
   const recovery=document.getElementById('passwordRecoveryBtn');
   recovery.disabled=true;
   recovery.textContent='인증코드 요청 중...';
-  requestScriptJson({action:'adminBeginPasswordReset'})
+  requestScriptJson({action:'adminBeginPasswordReset'},60000)
     .then(data=>{
       if(!data.requiresEmailOtp||!data.challengeId)throw new Error(data.message||'비밀번호 재설정을 시작하지 못했습니다.');
       adminPasswordResetMode=true;
@@ -763,7 +763,7 @@ function resendAdminEmailCode(){
   const scriptUrl=getScriptUrl();
   const button=document.getElementById('emailOtpResend');
   button.disabled=true;
-  requestScriptJson({action:'adminResendEmailOtp',challengeId:adminEmailChallengeId})
+  requestScriptJson({action:'adminResendEmailOtp',challengeId:adminEmailChallengeId},60000)
     .then(data=>{
       if(data.result!=='success')throw Object.assign(new Error(data.message||'인증코드를 다시 보내지 못했습니다.'),{codeExpired:data.codeExpired,retryAfter:data.retryAfter});
       document.getElementById('emailOtpInput').value='';
@@ -1139,7 +1139,8 @@ function syncAdminViewControls(){
 function adminApi(payload){
   const slowActions=['updateReservation','updateStatus','deleteReservation','syncCalendar'];
   const retryActions=['admin','adminSecurityStatus'];
-  const timeoutMs=payload&&slowActions.includes(payload.action)?60000:20000;
+  const readActions=['admin','adminSecurityStatus'];
+  const timeoutMs=payload&&(slowActions.includes(payload.action)||readActions.includes(payload.action))?60000:30000;
   const retries=payload&&retryActions.includes(payload.action)?1:0;
   return requestScriptJson(Object.assign({},payload,{adminToken:getAdminToken()}),timeoutMs,retries);
 }
