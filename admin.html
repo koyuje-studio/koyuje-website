@@ -1671,7 +1671,14 @@ function updateStatus(select){
       if(item)item.status=newStatus;
       select.dataset.prevStatus=newStatus;
       updateStats();
-      showToast('✓ 상태가 저장되었습니다');
+      if(data.calendarSync&&data.calendarSync.result==='error'){
+        showToast('상태 저장 완료 · 캘린더 연동 확인 필요');
+        alert('예약 상태는 저장되었지만 Google 캘린더 반영에 실패했습니다.\n\n'+(data.calendarSync.message||'Apps Script 권한을 확인해 주세요.'));
+      }else if(data.calendarSync&&['created','updated','deleted'].includes(data.calendarSync.action)){
+        showToast('✓ 상태와 Google 캘린더가 반영되었습니다');
+      }else{
+        showToast('✓ 상태가 저장되었습니다');
+      }
     } else {
       restoreStatusSelect(select,previousStatus);
       alert('저장 실패: '+(data.message||'다시 시도해 주세요.'));
@@ -2165,7 +2172,14 @@ function submitReservationEdit(){
     closeEditModal();
     updateStats();
     renderCards();
-    showToast('✓ 예약 정보가 수정되었습니다');
+    if(data.calendarSync&&data.calendarSync.result==='error'){
+      showToast('예약 수정 완료 · 캘린더 연동 확인 필요');
+      alert('예약 정보는 저장되었지만 Google 캘린더 반영에 실패했습니다.\n\n'+(data.calendarSync.message||'Apps Script 권한을 확인해 주세요.'));
+    }else if(data.calendarSync&&data.calendarSync.action==='updated'){
+      showToast('✓ 예약 정보와 Google 캘린더가 수정되었습니다');
+    }else{
+      showToast('✓ 예약 정보가 수정되었습니다');
+    }
   })
   .catch(err=>{
     if(err.code==='ADMIN_SESSION_EXPIRED')return;
