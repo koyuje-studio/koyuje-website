@@ -275,7 +275,7 @@ let historicalMonth='';
 const HISTORICAL_LIVE_START=new Date(2026,6,1);
 
 function getScriptUrl(){
-  return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+  return '/api/admin';
 }
 
 function fetchWithTimeout(url,options,timeoutMs=20000){
@@ -317,7 +317,12 @@ function warmAdminService(){
   if(adminWarmPromise)return adminWarmPromise;
   const scriptUrl=getScriptUrl();
   if(!scriptUrl)return Promise.resolve(false);
-  adminWarmPromise=fetchWithTimeout(scriptUrl+'?action=admin&warm='+Date.now(),{cache:'no-store'},45000)
+  adminWarmPromise=fetchWithTimeout(scriptUrl,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'adminSecurityStatus'}),
+    cache:'no-store'
+  },45000)
     .then(()=>true)
     .catch(()=>false);
   return adminWarmPromise;

@@ -524,7 +524,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#1a1714;color:var(--paper)
 <script src="/assets/js/runtime-config.js" defer></script>
 <script>
 function getScriptUrl(){
-  return (window.KOYUJE_RUNTIME_CONFIG||{}).APPS_SCRIPT_URL||'';
+  return '/api/admin';
 }
 const ADMIN_VIEW_STATE_KEY='koyujeAdminViewState';
 const savedAdminViewState=(()=>{
@@ -584,7 +584,12 @@ function warmAdminService(){
   if(adminWarmPromise)return adminWarmPromise;
   const scriptUrl=getScriptUrl();
   if(!scriptUrl)return Promise.resolve(false);
-  adminWarmPromise=fetchWithTimeout(scriptUrl+'?action=admin&warm='+Date.now(),{cache:'no-store'},45000)
+  adminWarmPromise=fetchWithTimeout(scriptUrl,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'adminSecurityStatus'}),
+    cache:'no-store'
+  },45000)
     .then(()=>true)
     .catch(()=>false);
   return adminWarmPromise;
