@@ -195,7 +195,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 .btn-submit:disabled{background:var(--muted);cursor:not-allowed;}
 
 /* SUCCESS PAGE */
-.success-wrap{display:none;max-width:500px;margin:80px auto;padding:0 40px;text-align:center;}
+.success-wrap{display:none;max-width:500px;margin:64px auto 80px;padding:0 40px;text-align:center;scroll-margin-top:96px;}
 .success-icon{font-size:48px;margin-bottom:24px;color:var(--gold);}
 .success-title{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:300;margin-bottom:16px;line-height:1.4;}
 .success-desc{font-size:14px;color:var(--muted);line-height:2;letter-spacing:0.04em;margin-bottom:40px;}
@@ -301,7 +301,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 
 <main id="mainContent">
 <!-- GUIDE BANNER -->
-<div class="guide">
+<div class="guide" id="reservationGuide">
   <div class="guide-inner">
   <h1 class="guide-label">예약확정서</h1>
   <div class="steps">
@@ -697,7 +697,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
 <!-- SUCCESS -->
 <div class="success-wrap" id="successSection">
   <div class="success-icon">✦</div>
-  <h2 class="success-title">예약확정서가<br>정상 접수되었습니다</h2>
+  <h2 class="success-title" id="successTitle" tabindex="-1">예약확정서가<br>정상 접수되었습니다</h2>
   <p class="success-desc">
     소중한 촬영 일정을 남겨주셔서 감사합니다.<br>
     입금자명과 예약 정보를 확인한 뒤<br>
@@ -1479,11 +1479,15 @@ function submitForm() {
         });
       }
       // 성공 화면
+      document.getElementById('reservationGuide').style.display = 'none';
       document.getElementById('formSection').style.display = 'none';
       const s = document.getElementById('successSection');
       s.style.display = 'block';
       document.getElementById('successInfo').innerHTML = buildSuccessInfo(payload);
-      window.scrollTo({top:0, behavior:'smooth'});
+      requestAnimationFrame(() => {
+        s.scrollIntoView({behavior:'smooth', block:'start'});
+        document.getElementById('successTitle').focus({preventScroll:true});
+      });
     } else {
       alert('오류가 발생했습니다. 다시 시도해 주시고, 계속 반복되면 카카오톡 채널로 문의 주세요.\n' + (data.message || ''));
       restoreSubmitButton();
