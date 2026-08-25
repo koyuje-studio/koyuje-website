@@ -1408,7 +1408,7 @@ if (fs.existsSync("faq.html")) {
 
 if (fs.existsSync("assets/js/tracking.js")) {
   const trackingJs = fs.readFileSync("assets/js/tracking.js", "utf8");
-  for (const snippet of ["product_page_view", '"/baby": "아기 앨범형"', '"/family": "가족 실내 앨범형"', "trackSchedule", "getAttribution", "claimMetaPurchase"]) {
+  for (const snippet of ["product_page_view", '"/baby": "아기 앨범형"', '"/family": "가족 실내 앨범형"', "trackSchedule", "getAttribution", "claimMetaPurchase", '"koyuje-website.vercel.app"']) {
     if (!trackingJs.includes(snippet)) {
       console.error(`Missing product page tracking snippet: ${snippet}`);
       hasError = true;
@@ -1416,6 +1416,29 @@ if (fs.existsSync("assets/js/tracking.js")) {
   }
   if (/track\(\s*["']Lead["'][\s\S]{0,160}reservation_(?:page_view|form_start)/.test(trackingJs)) {
     console.error("Lead must not fire on reservation page view or form start");
+    hasError = true;
+  }
+  const purchaseTrackIndex = trackingJs.indexOf('track("Purchase"');
+  const purchaseReadyIndex = trackingJs.indexOf('if (data.status === "ready" && data.eventId)');
+  if (purchaseTrackIndex < 0 || purchaseReadyIndex < 0 || purchaseTrackIndex < purchaseReadyIndex) {
+    console.error("Purchase must only fire after a verified server claim");
+    hasError = true;
+  }
+  if ((trackingJs.match(/track\("Purchase"/g) || []).length !== 1) {
+    console.error("Purchase browser tracking must have exactly one guarded call site");
+    hasError = true;
+  }
+}
+
+for (const file of ["baby.html", "board.html", "family.html", "faq.html", "guide.html", "hanok-snap.html", "index.html", "location.html", "pricing.html", "reservation.html", "status.html", "thankyou.html"]) {
+  if (!fs.existsSync(file)) continue;
+  const html = fs.readFileSync(file, "utf8");
+  if (!html.includes('/assets/js/tracking.js?v=20260825-meta3')) {
+    console.error(`Missing versioned Meta tracking loader: ${file}`);
+    hasError = true;
+  }
+  if (file === "thankyou.html" && /\bPurchase\b/.test(html)) {
+    console.error("thankyou.html must not fire Purchase directly");
     hasError = true;
   }
 }
