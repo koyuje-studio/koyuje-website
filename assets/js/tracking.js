@@ -77,7 +77,13 @@
   function getCookie(name) {
     const prefix = `${name}=`;
     const item = String(document.cookie || "").split(";").map((value) => value.trim()).find((value) => value.indexOf(prefix) === 0);
-    return item ? decodeURIComponent(item.slice(prefix.length)) : "";
+    if (!item) return "";
+    const rawValue = item.slice(prefix.length);
+    try {
+      return decodeURIComponent(rawValue);
+    } catch (err) {
+      return rawValue;
+    }
   }
 
   function getSafeLandingUrl() {
