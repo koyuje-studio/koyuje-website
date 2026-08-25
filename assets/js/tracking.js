@@ -210,14 +210,42 @@
     track("ViewContent", { content_name: "상품 구성 보기", content_category: "product", trigger: trigger || "view" }, "product_view_click");
   }
 
+  function trackProductSelect(value) {
+    const labels = {
+      "아기앨범형": "아기 앨범형",
+      "가족실내앨범형": "가족 실내 앨범형"
+    };
+    track("CustomizeProduct", {
+      content_name: labels[value] || value || "촬영 상품",
+      content_category: "reservation_product"
+    }, "product_select");
+  }
+
+  function trackContentReaction(name, trigger) {
+    track("ViewContent", {
+      content_name: String(name || "content").trim().slice(0, 120),
+      content_category: "engagement",
+      trigger: trigger || "click"
+    }, "content_reaction");
+  }
+
   function bindInteractions() {
     document.addEventListener("click", function (event) {
+      const galleryControl = event.target.closest && event.target.closest("[data-gallery-index], [data-open-gallery]");
+      if (galleryControl) trackContentReaction("갤러리 작품 보기", "gallery_click");
+
+      const summary = event.target.closest && event.target.closest("summary");
+      if (summary && !summary.closest(".pkg-details")) {
+        trackContentReaction(summary.textContent || "상세 안내", "details_open");
+      }
+
       const link = event.target.closest && event.target.closest("a");
       if (!link) return;
       const href = link.getAttribute("href") || "";
       if (href.indexOf("pf.kakao.com/_xiRxjhxj") !== -1) trackKakaoClick();
       if (href.indexOf("tel:") === 0) trackPhoneClick();
       if (href === "#packages" || href === "/#packages") trackProductView("anchor_click");
+      if (href.indexOf("instagram.com/koyuje_studio") !== -1) trackContentReaction("인스타그램 이동", "outbound_click");
     }, true);
 
     document.querySelectorAll(".pkg-details summary, .btn-pkg").forEach(function (el) {
@@ -232,6 +260,10 @@
         if (formStarted) return;
         formStarted = true;
         track("Lead", { content_name: "예약확정서 작성 시작" }, "reservation_form_start");
+      }, true);
+      reservationForm.addEventListener("change", function (event) {
+        const target = event.target;
+        if (target && target.name === "product" && target.checked) trackProductSelect(target.value);
       }, true);
     }
 
