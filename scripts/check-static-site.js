@@ -1024,6 +1024,16 @@ if (fs.existsSync("apps-script-code.gs")) {
     const appsScriptContext = vm.createContext({ console });
     new vm.Script(appsScriptSource).runInContext(appsScriptContext);
 
+    const reservationHeaderCount = new vm.Script("RESERVATION_HEADERS.length").runInContext(appsScriptContext);
+    if (reservationHeaderCount !== 67) {
+      console.error(`Apps Script reservation header regression: expected 67, received ${reservationHeaderCount}`);
+      hasError = true;
+    }
+    if (appsScriptContext.normalizeMetaPhone("010-1234-5678") !== "821012345678") {
+      console.error("Apps Script Meta phone normalization regression");
+      hasError = true;
+    }
+
     const estimate = appsScriptContext.calculateServerEstimate({
       product: "가족실내앨범형",
       weekday: "주말/공휴일",
@@ -1066,6 +1076,7 @@ if (fs.existsSync("apps-script-code.gs")) {
       address: "점검 주소",
       termsConsent: "동의",
       photoUsageConsent: "미동의",
+      metaAttributionConsent: "미동의",
     };
     if (appsScriptContext.validateReservationData(validReservation) !== "") {
       console.error("Apps Script rejected a valid reservation fixture");
@@ -1140,6 +1151,10 @@ if (fs.existsSync("apps-script-code.gs")) {
     "safeText(data.termsConsent) !== '동의'",
     "형제/자매 상세 정보가 누락되었습니다.",
     "calculateServerEstimate(reservationRowToEstimateData(updatedRow))",
+    "function sendMetaCapiEvent",
+    "function attemptMetaPurchaseEvent",
+    "function claimMetaPurchaseForBrowser",
+    "MetaPurchase전송상태",
   ]) {
     if (!appsScriptSource.includes(snippet)) {
       console.error(`Missing Apps Script credential property lookup: ${snippet}`);
@@ -1393,11 +1408,15 @@ if (fs.existsSync("faq.html")) {
 
 if (fs.existsSync("assets/js/tracking.js")) {
   const trackingJs = fs.readFileSync("assets/js/tracking.js", "utf8");
-  for (const snippet of ["product_page_view", '"/baby": "아기 앨범형"', '"/family": "가족 실내 앨범형"']) {
+  for (const snippet of ["product_page_view", '"/baby": "아기 앨범형"', '"/family": "가족 실내 앨범형"', "trackSchedule", "getAttribution", "claimMetaPurchase"]) {
     if (!trackingJs.includes(snippet)) {
       console.error(`Missing product page tracking snippet: ${snippet}`);
       hasError = true;
     }
+  }
+  if (/track\(\s*["']Lead["'][\s\S]{0,160}reservation_(?:page_view|form_start)/.test(trackingJs)) {
+    console.error("Lead must not fire on reservation page view or form start");
+    hasError = true;
   }
 }
 

@@ -664,6 +664,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--i
       </label>
       <p class="optional-consent-note">체크하지 않으시면 미동의로 접수됩니다.</p>
     </div>
+    <div class="optional-consent" aria-label="Meta 광고 성과 측정 선택 동의">
+      <h3 class="optional-consent-title">광고 성과 측정 선택 동의</h3>
+      <div class="optional-consent-copy">
+        <p>고유재는 광고 성과 확인과 중복 집계 방지를 위해 광고 유입 정보와 예약번호를 저장할 수 있습니다.</p>
+        <p>동의하신 경우 이메일과 연락처는 원문이 아닌 SHA-256 해시값으로 변환되어 Meta에 전송될 수 있습니다. 동의하지 않으셔도 예약 및 촬영 진행에는 불이익이 없습니다.</p>
+      </div>
+      <label class="c-item optional-consent-check" style="gap:10px;">
+        <input type="checkbox" id="metaAttributionConsent">
+        <span style="font-size:14px;letter-spacing:0.03em;">[선택] 광고 성과 측정을 위한 정보 처리에 동의합니다.</span>
+      </label>
+      <p class="optional-consent-note">체크하지 않으면 이메일·연락처는 Meta 전환 측정에 사용하지 않습니다.</p>
+    </div>
   </div>
 
   <!-- 제출 -->
@@ -1045,6 +1057,7 @@ function buildSuccessInfo(payload) {
       successRow('주소', payload.address),
       successRow('유입 경로', payload.channel),
       successRow('사진 활용', payload.photoUsageConsent),
+      successRow('광고 성과 측정', payload.metaAttributionConsent),
       successRow('요청 사항', payload.memo)
     ])
   ].join('');
@@ -1437,11 +1450,15 @@ function submitForm() {
     address: val('address'),
     channel: channel,
     photoUsageConsent: document.getElementById('photoUsageConsent').checked ? '동의' : '미동의',
+    metaAttributionConsent: document.getElementById('metaAttributionConsent').checked ? '동의' : '미동의',
     termsConsent: document.getElementById('agree').checked ? '동의' : '미동의',
     estimatedTotal: estimate.rows.length ? formatWon(estimate.total) : '-',
     estimatedTotalAmount: String(estimate.total || 0),
     estimatedItems: estimateItems || '-',
-    memo: val('memo')
+    memo: val('memo'),
+    attribution: window.KoyujeTracking && window.KoyujeTracking.getAttribution
+      ? window.KoyujeTracking.getAttribution()
+      : {}
   };
 
   // 로딩 표시
@@ -1472,10 +1489,17 @@ function submitForm() {
     loading.setAttribute('aria-hidden','true');
     if (data.result === 'success') {
       clearReservationRequestId();
-      if (window.KoyujeTracking) {
-        window.KoyujeTracking.trackCompleteRegistration({
-          content_name: '예약확정서 제출 완료',
-          content_category: payload.product || 'reservation'
+      if (window.KoyujeTracking && window.KoyujeTracking.trackSchedule && (data.scheduleEventId || data.reservationId)) {
+        window.KoyujeTracking.trackSchedule({
+          content_name: '촬영 희망 일정 접수 완료',
+          content_category: payload.product || 'reservation',
+          order_id: data.reservationId || ''
+        }, data.scheduleEventId || ('schedule_' + data.reservationId));
+      }
+      if (window.KoyujeTracking && window.KoyujeTracking.beginPurchaseClaim && data.purchaseClaimToken) {
+        window.KoyujeTracking.beginPurchaseClaim({
+          reservationId: data.reservationId,
+          token: data.purchaseClaimToken
         });
       }
       // 성공 화면
@@ -1484,6 +1508,9 @@ function submitForm() {
       const s = document.getElementById('successSection');
       s.style.display = 'block';
       document.getElementById('successInfo').innerHTML = buildSuccessInfo(payload);
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState({reservationComplete:true}, '', '/thankyou');
+      }
       requestAnimationFrame(() => {
         s.scrollIntoView({behavior:'smooth', block:'start'});
         document.getElementById('successTitle').focus({preventScroll:true});

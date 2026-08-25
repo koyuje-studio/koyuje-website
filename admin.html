@@ -1613,7 +1613,7 @@ function renderCards(){
         <div class="res-date">${shootDate} ${shootTime}</div>
         <div class="res-name-wrap">
           <div class="res-name">${escapeHTML(item.babyName||'-')} <span style="font-size:11px;color:rgba(247,242,234,0.35);font-family:'Cormorant Garamond',serif;font-style:italic;">아기</span>${badges}</div>
-          <div class="res-sub">${escapeHTML(item.parentName||'')} · ${escapeHTML(item.phone||'')}</div>
+          <div class="res-sub">${escapeHTML(item.parentName||'')} · ${escapeHTML(item.phone||'')}${item.utmContent?' · 광고 '+escapeHTML(item.utmContent):''}</div>
         </div>
         <div>
           <div class="res-product">${escapeHTML(item.product||'')}</div>
@@ -1669,9 +1669,24 @@ function renderCards(){
           <div class="detail-item"><div class="detail-key">예약금 입금 확인일</div><div class="detail-val">${escapeHTML(fPlainDate(item.depositConfirmedAt)||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">관리자 메모</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.adminMemo||'-')}</div></div>
 
+          <div class="detail-section">광고 / 전환 추적</div>
+          <div class="detail-item priority"><div class="detail-key">광고 소재</div><div class="detail-val">${escapeHTML(item.utmContent||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">유입 소스 · 매체</div><div class="detail-val">${escapeHTML([item.utmSource,item.utmMedium].filter(Boolean).join(' / ')||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">캠페인</div><div class="detail-val">${escapeHTML(item.utmCampaign||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">검색어</div><div class="detail-val">${escapeHTML(item.utmTerm||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">상담 신청일</div><div class="detail-val">${escapeHTML(item.consultationAt||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">예약 신청일</div><div class="detail-val">${escapeHTML(item.reservationAppliedAt||item.submittedAt||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">예약금 입금일</div><div class="detail-val">${escapeHTML(fPlainDate(item.depositConfirmedAt)||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">예약 확정일</div><div class="detail-val">${escapeHTML(item.reservationConfirmedAt||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">실제 예약금</div><div class="detail-val estimate">${escapeHTML(formatWon(settlement.deposit))}</div></div>
+          <div class="detail-item"><div class="detail-key">Meta Schedule</div><div class="detail-val" style="font-size:11px;word-break:break-all;">${escapeHTML(item.metaScheduleEventId||'-')} · ${escapeHTML(item.metaScheduleStatus||'-')}</div></div>
+          <div class="detail-item wide"><div class="detail-key">Meta Purchase event_id</div><div class="detail-val" style="font-size:11px;word-break:break-all;">${escapeHTML(item.metaPurchaseEventId||'-')} · ${escapeHTML(item.metaPurchaseStatus||'-')}</div></div>
+          <div class="detail-item full"><div class="detail-key">최초 랜딩 URL</div><div class="detail-val" style="font-size:11px;word-break:break-all;">${escapeHTML(item.firstLandingUrl||'-')}</div></div>
+
           <div class="detail-section">관리 정보</div>
           <div class="detail-item"><div class="detail-key">유입 경로</div><div class="detail-val">${escapeHTML(item.channel||'-')}</div></div>
           <div class="detail-item"><div class="detail-key">사진 활용</div><div class="detail-val">${escapeHTML(item.photoUsageConsent||'-')}</div></div>
+          <div class="detail-item"><div class="detail-key">Meta 광고 측정</div><div class="detail-val">${escapeHTML(item.metaAttributionConsent||'미동의')}</div></div>
           <div class="detail-item full"><div class="detail-key">주소</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.address||'-')}</div></div>
           <div class="detail-item full"><div class="detail-key">요청 사항</div><div class="detail-val" style="font-size:12px;">${escapeHTML(item.memo||'-')}</div></div>
           <div class="detail-actions">

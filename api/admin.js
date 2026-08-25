@@ -119,7 +119,9 @@ async function fetchMetaAdsInsights(payload) {
       cpc: Number(item.cost_per_inline_link_click || item.cpc || 0),
       cpm: Number(item.cpm || 0),
       leads: sumActionValue(item.actions, ['lead', 'offsite_conversion.fb_pixel_lead']),
-      registrations: sumActionValue(item.actions, ['complete_registration', 'offsite_conversion.fb_pixel_complete_registration'])
+      schedules: sumActionValue(item.actions, ['schedule', 'offsite_conversion.fb_pixel_schedule']),
+      purchases: sumActionValue(item.actions, ['purchase', 'offsite_conversion.fb_pixel_purchase']),
+      purchaseValue: sumActionValue(item.action_values, ['purchase', 'offsite_conversion.fb_pixel_purchase'])
     }));
     const summary = daily.reduce((total, item) => {
       total.spend += item.spend;
@@ -127,12 +129,15 @@ async function fetchMetaAdsInsights(payload) {
       total.reach += item.reach;
       total.clicks += item.clicks;
       total.leads += item.leads;
-      total.registrations += item.registrations;
+      total.schedules += item.schedules;
+      total.purchases += item.purchases;
+      total.purchaseValue += item.purchaseValue;
       return total;
-    }, { spend: 0, impressions: 0, reach: 0, clicks: 0, leads: 0, registrations: 0 });
+    }, { spend: 0, impressions: 0, reach: 0, clicks: 0, leads: 0, schedules: 0, purchases: 0, purchaseValue: 0 });
     summary.ctr = summary.impressions ? (summary.clicks / summary.impressions) * 100 : 0;
     summary.cpc = summary.clicks ? summary.spend / summary.clicks : 0;
     summary.cpm = summary.impressions ? (summary.spend / summary.impressions) * 1000 : 0;
+    summary.roas = summary.spend ? summary.purchaseValue / summary.spend : 0;
     return { configured: true, status: 'success', range, summary, daily };
   } catch (err) {
     return {

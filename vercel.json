@@ -112,6 +112,19 @@
       ]
     },
     {
+      "source": "/:thankyouPage(thankyou|thankyou\\.html)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/assets/raw/(.*)",
       "headers": [
         {
@@ -136,6 +149,7 @@
     { "source": "/reservation/", "destination": "/reservation", "permanent": true },
     { "source": "/board/", "destination": "/board", "permanent": true },
     { "source": "/status/", "destination": "/status", "permanent": true },
+    { "source": "/thankyou/", "destination": "/thankyou", "permanent": true },
     { "source": "/mvno/", "destination": "/mvno", "permanent": true },
     { "source": "/qr/", "destination": "/qr", "permanent": true },
     { "source": "/baby/", "destination": "/baby", "permanent": true },
@@ -148,6 +162,7 @@
     { "source": "/reservation.html", "destination": "/reservation", "permanent": true },
     { "source": "/board.html", "destination": "/board", "permanent": true },
     { "source": "/status.html", "destination": "/status", "permanent": true },
+    { "source": "/thankyou.html", "destination": "/thankyou", "permanent": true },
     { "source": "/mvno.html", "destination": "/mvno", "permanent": true },
     { "source": "/qr.html", "destination": "/qr", "permanent": true },
     { "source": "/baby.html", "destination": "/baby", "permanent": true },
@@ -166,6 +181,7 @@
     { "source": "/qr", "destination": "/qr.html" },
     { "source": "/reservation", "destination": "/reservation.html" },
     { "source": "/status", "destination": "/status.html" },
+    { "source": "/thankyou", "destination": "/thankyou.html" },
     { "source": "/guide", "destination": "/guide.html" },
     { "source": "/baby", "destination": "/baby.html" },
     { "source": "/family", "destination": "/family.html" },
