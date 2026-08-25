@@ -3,7 +3,7 @@
 
   const config = window.KOYUJE_RUNTIME_CONFIG || {};
   const SCRIPT_URL = String(config.APPS_SCRIPT_URL || "").trim();
-  const ALLOWED_PIXEL_HOSTS = ["koyuje.com", "www.koyuje.com"];
+  const ALLOWED_PIXEL_HOSTS = ["koyuje.com", "www.koyuje.com", "koyuje-website.vercel.app"];
   const ADMIN_PATHS = ["/admin", "/admin.html", "/admin/analytics", "/admin-analytics.html"];
   const STORAGE_PREFIX = "koyuje_";
   const DAY = 24 * 60 * 60 * 1000;
